@@ -1,0 +1,329 @@
+ <!DOCTYPE html>
+
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S7avelii Airlines</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+  .container {
+    max-width: 1400px;
+    margin: 0 auto; /* центрирует */
+  }
+  body {
+    overflow-x: hidden; /* убирает горизонтальный скролл */
+  }
+</style>
+  <style>
+    body {
+      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+    }
+    .gradient-green {
+      background: linear-gradient(90deg, rgb(163, 213, 13) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+      color: white;
+    }
+   <style>
+    body {
+      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+    }
+    .gradient-green {
+      background: linear-gradient(90deg, rgb(165, 214, 15) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+      color: white;
+    }
+    <style>
+  body {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    min-width: 160px;
+  }
+
+  .group:hover .dropdown-menu {
+    display: block;
+  }
+</style>
+</head>
+
+<body class="text-gray-900 font-sans">
+   <!-- Header -->
+  <header class="flex justify-between items-center px-6 py-4 border-b">
+    <div class="flex items-center space-x-2">
+      <img src="images/photo_5238163653918846596_y (3).avif" alt="Savelii Airlines Logo" style="height: 60px;"
+    </div>
+    <nav class="space-x-20 text-sm flex items-center relative" >
+      <div class="relative group inline-block">
+      <a href="Index.html" class="hover:underline">Покупка и управление</a>
+      <div class="dropdown-menu mt-2 py-2">
+        <a href="HOTEL.html" class="block px-4 py-2 hover:bg-gray-100">Отели</a>
+        <a href="arrivel.html" class="block px-4 py-2 hover:bg-gray-100">Направления</a>
+        <a href="class.html" class="block px-4 py-2 hover:bg-gray-100">Выбор класса</a>
+      </div>
+      </div>
+      <a href="priority.html" class="text-gray-700 hover:text-green-600">S7avelii Priority</a>
+       <div class="relative group inline-block">
+      <a href="infom.html" class="hover:underline">Информация</a>
+      <div class="dropdown-menu mt-2 py-2">
+        <a href="body.html" class="text-gray-700 hover:text-green-600">О нас</a>
+        <a href="office.html" class="block px-4 py-2 hover:bg-gray-100">Представительство</a>
+        <a href="plane.html" class="block px-4 py-2 hover:bg-gray-100">Наш Флот</a>
+        <a href="eat.html" class="block px-4 py-2 hover:bg-gray-100">Питание</a>
+        <a href="VIP.html" class="block px-4 py-2 hover:bg-gray-100">VIP-залы</a>
+      </div>
+      </div>>
+      <a href="s7hop.html" class="text-gray-700 hover:text-green-600">S7avelii Shop</a>
+      <a href="busines.html" class="hover:underline">Бизнесу</a>
+      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <a href="https://t.me/S7avelii7plane7" class="block px-4 py-2 hover:bg-gray-100">7PLANE7</a>
+    </nav>
+    <div class="flex items-center space-x-4">
+      <button class="text-gray-500"></button>
+      <nav class="space-x-50 text-sm flex items-center relative" ></nav>
+      <span>RUB</span>
+      <span id="userArea"></span>
+  </nav>
+</header>
+
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    const userArea = document.getElementById("userArea");
+
+    const fio = localStorage.getItem("fio");
+    const avatar = localStorage.getItem("avatar"); // если пользователь загружал картинку
+    const username = localStorage.getItem("username");
+
+    if (fio && localStorage.getItem("phone")) {
+      // Пользователь вошёл
+      if (avatar) {
+        userArea.innerHTML = `
+          <img src="${avatar}" alt="avatar" 
+            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
+            onclick="window.location.href='cabinet.html'" 
+          />
+        `;
+      } else {
+        userArea.innerHTML = `
+          <span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">
+            ${username || fio.split(" ")[0]}
+          </span>
+        `;
+      }
+    } else {
+      // Не вошёл
+      userArea.innerHTML = `<a href="auth.html" style="padding:8px 14px;border:1px solid #2196f3;border-radius:6px;color:#2196f3;text-decoration:none;">Вход</a>`;
+    }
+  });
+</script>
+  </header>
+
+<!-- Фоновое изображение -->
+<div style="position: relative; width: 100%; height: auto;">
+  <img src="images/photo_5253869756614833466_y.avif" alt="S7avelii Airlines" style="width: 100%; height: auto; display: block;">
+</div>
+
+<!-- Текстовая секция -->
+<section style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: sans-serif; font-size: 18px; line-height: 1.6;">
+  <p><strong>S7avelii Airlines</strong> — частная авиакомпания России с самым современным парком воздушных судов на российском рынке авиаперевозок.</p>
+  <p>Наша цель — подарить вам незабываемые впечатления от каждого перелёта.</p>
+  <p>Мы предоставляем широкий спектр услуг и обладаем разветвлённой сетью маршрутов, выстроенных на базе авиатранспортного узла в городе <strong>Савелий</strong>.
+  В S7avelii Airlines мы предлагаем высококачественное обслуживание, надёжную поддержку и регулярные мероприятия, а также обучающие программы для пилотов.</p>
+  <p><strong>Наша миссия</strong> — сделать ваше путешествие уникальным, комфортным и запоминающимся. В компании ценят профессионализм, дружелюбие и постоянное стремление к совершенству.</p>
+  <p><strong>Присоединяйтесь к S7avelii Airlines и откройте для себя мир авиации с новой стороны — живой, увлекательной и динамичной!</strong></p>
+</section>
+
+<section class="max-w-6xl mx-auto px-4 mb-12">
+  <h2 class="text-2xl font-bold mb-6">Актуальное</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="flex items-start space-x-4 p-4 bg-gray-100 rounded-lg">
+      <img src="images/photo_5398063018606193773_y.avif" alt="Казань" class="rounded-md w-24 h-24 object-cover">
+      <div>
+        <h3 class="text-lg font-semibold">Наш Флот</h3>
+        <p class="text-sm text-gray-600">S7avelii Airlines получает современные лайнеры напрямую с заводов — Airbus A320neo, Boeing 737 MAX и Boeing 777. Пассажиры S7avelii ценят комфорт и технологии нового поколения на борту наших самолётов. </p>
+        <button class="gradient-green p-2 col-span-1 md:col-span-2 hover:opacity-90 rounded inline-block">Забронировать</button>
+      </div>
+    </div>
+    <div class="flex items-start space-x-4 p-4 bg-gray-100 rounded-lg">
+      <img src="images/photo_5458525257506877556_m.avif" alt="Сочи" class="rounded-md w-24 h-24 object-cover">
+      <div>
+        <h3 class="text-lg font-semibold">Технологии</h3>
+        <p class="text-sm text-gray-600">S7avelii Airlines внедряет современные технологии и предлагает пассажирам самые актуальные услуги: мобильный посадочный талон, самостоятельная регистрация и отслеживание статуса багажа.</p>
+        <button class="gradient-green p-2 col-span-1 md:col-span-2 hover:opacity-90 rounded inline-block">Забронировать</button>
+      </div>
+    </div>
+    <div class="flex items-start space-x-4 p-4 bg-gray-100 rounded-lg">
+      <img src="images/photo_5458525257506877554_m.avif" alt="Иркутск" class="rounded-md w-24 h-24 object-cover">
+      <div>
+        <h3 class="text-lg font-semibold">Программа лояльности </h3>
+        <p class="text-sm text-gray-600">Пассажиры авиакомпании могут получать еще больше преимуществ после регистрации в программе лояльности S7avelii Priority. Участники программы могут накапливать мили за перелеты и дополнительные услуги и покупать за мили билеты на рейсы S7avelii Airlines и партнеров. </p>
+        <button class="gradient-green p-2 col-span-1 md:col-span-2 hover:opacity-90 rounded inline-block">Забронировать</button>
+      </div>
+    </div>
+  </div>
+  <section class="job-section">
+  <button class="text-2xl font-bold mb-6">Работа S7avelii Airlines</button>
+  <p>
+    Каждый год мы перевозим более 9 987 000 человек. От нашего профессионализма зависят комфорт и безопасность пассажиров, четкость и скорость наземного обслуживания самолета и регулярность рейсов. Присоединяйтесь к команде S7avelii, получайте удовольствие от новых задач и интересных проектов, находите друзей и проявите себя!
+  </p>
+
+  <div class="info-block">
+    <div class="info-item">
+      <h3>Представительство</h3>
+      <p>Посмотрите, где находятся наши офисы</p>
+    </div>
+    <div class="info-item">
+      <h3>Магазин</h3>
+      <p>Покупайте нашу продукцию</p>
+    </div>
+  </div>
+</section>
+
+<head>
+<meta charset="UTF-8">
+<title>Политика безопасности</title>
+<style>
+    .collapsible {
+        background-color: #f1f1f1;
+        color: #000;
+        cursor: pointer;
+        padding: 15px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .active, .collapsible:hover {
+        background-color: #ddd;
+    }
+
+    .content {
+        padding: 0 15px;
+        display: none;
+        overflow: hidden;
+        background-color: #fafafa;
+        border-left: 4px solid #ccc;
+    }
+</style>
+</head>
+<body>
+
+<h2>Документы</h2>
+
+<button class="collapsible">Политика в области безопасности полётов S7avelii Airlines</button>
+<div class="content">
+    <p>
+        Руководство АО «Авиакомпания Савелий» считает безопасность полётов основой повседневной деятельности и устойчивого развития авиакомпании.
+    </p>
+    <p>
+        Для этого все руководители и работники авиакомпании руководствуются в своей деятельности 7 принципами безопасности полётов:
+    </p>
+    <ol>
+        <li><strong>Ответственность</strong><br>
+        Мы считаем обеспечение безопасности полётов основной обязанностью всех руководителей и работников авиакомпании. Обеспечиваем достаточное количество квалифицированного и подготовленного персонала для обеспечения безопасности полётов, четко распределяем обязанности и сферы ответственности в вопросах внедрения, совершенствования и результативного функционирования системы управления безопасностью полётов (СУБП). Добиваемся неукоснительного выполнения АО «Авиакомпания Савелий» и каждой компанией-партнером требований в области безопасности полётов.
+        </li>
+        <li><strong>Аура полётов</strong><br>
+        Мы развиваем и пропагандируем позитивную ауру безопасности, характеризующуюся высокой ответственностью каждого работника авиакомпании за свои действия и осознанием их влияния на безопасность полётов. Поощряем предоставление информации о безопасности полётов в системе обязательных, добровольных и конфиденциальных сообщений, в том числе через внутрикорпоративный портал. Гарантируем неприменение мер наказания в случае непреднамеренной ошибки. Допускаем применение дисциплинарных мер при выявлении неприемлемого поведения работников (намеренное нарушение, сокрытие авиационных событий, несоблюдение законодательства). Мы ни при каких обстоятельствах не допускаем до выполнения работы персонал, находящийся под воздействием алкоголя, наркотических или психоактивных веществ.
+        </li>
+        <li><strong>Управление рисками</strong><br>
+        Мы проводим целенаправленную методическую и профилактическую работу по предотвращению авиационных событий в целях обеспечения безопасности полётов. Применяем работоспособную систему управления рисками для идентификации факторов опасности, оценки и уменьшения рисков до приемлемого уровня. Внедряем систему управления рисками, связанными с утомляемостью.
+        </li>
+        <li><strong>Обеспечение ресурсами</strong><br>
+        Руководство авиакомпании гарантирует всестороннюю оценку и предоставление ресурсов, необходимых для реализации политики в области безопасности полётов.
+        </li>
+        <li><strong>Информирование</strong><br>
+        Мы гарантируем предоставление всем работникам актуальной и надлежащей информации о безопасности полётов.
+        </li>
+        <li><strong>Стандартизация</strong><br>
+        Мы обеспечиваем документирование и стандартизацию всех производственных процессов, актуальность всех необходимых документов, легкий доступ к ним и удобство их использования персоналом.
+        </li>
+        <li><strong>Совершенствование</strong><br>
+        Мы обеспечиваем достижение установленных целей и показателей в области безопасности полётов и качества. Постоянно совершенствуем СУБП посредством внешних и внутренних аудитов, актуализации процессов и процедур.
+        </li>
+    </ol>
+</div>
+
+<script>
+    const coll = document.querySelector(".collapsible");
+    const content = document.querySelector(".content");
+
+    coll.addEventListener("click", function() {
+        this.classList.toggle("active");
+        if (content.style.display === "block") {
+            content.style.display = "none";
+        } else {
+            content.style.display = "block";
+        }
+    });
+</script>
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-left">
+      © 2025. S7avelii Airlines — Все права защищены
+    </div>
+    <div class="footer-right">
+      <a href="https://vk.com/savelii577" target="_blank"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
+      <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1" target="_blank"><img src="images/icons8-tiktok-logo-50 (1).avif" alt="Tik Tok"></a>
+      <a href="www.youtube.com/@S7avelii_Airlines" target="_blank"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
+      <a href="https://t.me/S7saveliiairlines" target="_blank"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: #f1f4f9; /* как на скрине */
+    padding: 20px 40px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-left {
+    font-size: 14px;
+    color: #667;
+  }
+
+  .footer-right a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+    border-radius: 50%;
+    background: white;
+    transition: transform 0.2s;
+  }
+
+  .footer-right a:hover {
+    transform: scale(1.1);
+  }
+
+  .footer-right img {
+    width: 20px;
+    height: 20px;
+  }
+</style>
+</body>
+</html>

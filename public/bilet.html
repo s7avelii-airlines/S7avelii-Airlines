@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Твой полёт - твой Выбор</title>
+  <style>
+  .container {
+    max-width: 1400px;
+    margin: 0 auto; /* центрирует */
+  }
+  body {
+    overflow-x: hidden; /* убирает горизонтальный скролл */
+  }
+</style>
+  <style>
+    body {
+      background-color: rgb(45, 44, 44);
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 5em;
+      text-shadow: 0 0 20px white;
+      margin: 0;
+    }
+
+    h2 {
+      font-size: 4em;
+      text-shadow: 0 0 20px white;
+      margin: 0;
+    }
+
+    .search-container {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .input-container input {
+      padding: 10px;
+      font-size: 1.5em;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .search-button {
+      padding: 10px 20px;
+      font-size: 1.5em;
+      color: black;
+      background-color: rgb(200, 239, 5);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .search-button:hover {
+      background-color: rgb(198, 241, 4);
+      color: white;
+    }
+
+    /* ===== Блок подписки ===== */
+    .subscribe-section {
+      position: relative;
+      width: 100%;
+      height: 600px;
+      margin-top: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      overflow: hidden;
+    }
+
+    .subscribe-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.85));
+      z-index: 1;
+    }
+
+    .subscribe-section img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .subscribe-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1000px;
+      padding: 20px;
+      text-align: left;
+    }
+
+    .subscribe-title {
+      font-size: 4em;
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.2;
+      text-shadow: 0 0 20px rgba(255,255,255,0.8);
+    }
+
+    .subscribe-card {
+      margin-top: 30px;
+      background: rgba(0, 0, 0, 0.65);
+      border-radius: 20px;
+      padding: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .subscribe-left {
+      flex: 1 1 50%;
+    }
+
+    .subscribe-left div {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .subscribe-left span {
+      color: rgb(200, 239, 5);
+      font-size: 1.5em;
+    }
+
+    .subscribe-right {
+      flex: 1 1 40%;
+    }
+
+    .subscribe-form {
+      display: flex;
+    }
+
+    .subscribe-form input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 10px 0 0 10px;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      font-size: 1em;
+    }
+
+    .subscribe-form input::placeholder {
+      color: #ddd;
+    }
+
+    .subscribe-form button {
+      padding: 0 20px;
+      border: none;
+      background: rgb(200, 239, 5);
+      color: black;
+      font-weight: bold;
+      border-radius: 0 10px 10px 0;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .subscribe-form button:hover {
+      background: rgb(198, 241, 4);
+    }
+
+    .subscribe-form button::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 0 10px 10px 0;
+      background: rgb(200, 239, 5);
+      filter: blur(10px);
+      opacity: 0.6;
+      z-index: -1;
+    }
+
+    .subscribe-checkbox {
+      margin-top: 15px;
+      font-size: 0.8em;
+      color: #ccc;
+    }
+
+    .subscribe-checkbox a {
+      color: #ccc;
+      text-decoration: underline;
+    }
+
+    /* Footer */
+    .footer {
+      background-color: #444546;
+      padding: 20px 40px;
+      position: relative;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .footer-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-left {
+      font-size: 14px;
+      color: rgb(255, 255, 255);
+    }
+
+    .footer-right a {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      margin-left: 10px;
+      border-radius: 50%;
+      background: white;
+      transition: transform 0.2s;
+    }
+
+    .footer-right a:hover {
+      transform: scale(1.1);
+    }
+
+    .footer-right img {
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+</head>
+  <!-- 🔹 Контент -->
+  <h1>140 НАПРАВЛЕНИЙ</h1>
+  <h2>10 СТРАН МИРА</h2>
+
+  <div class="search-container">
+    <div class="input-container">
+      <input type="text" placeholder="Откуда" />
+      <span>→</span>
+      <input type="text" placeholder="Куда" />
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZzmTce2fp-65_t9hS8de9JvoTv9YUWAoW4GgwMsqq1Yc4VQ/viewform?usp=header">
+        <button class="search-button">НАЙТИ БИЛЕТЫ</button>
+      </a>
+    </div>
+  </div>
+
+  <!-- 🔹 Подписка -->
+  <section class="subscribe-section">
+    <img src="images/photo_5278432678875623428_y.avif" alt="Фон">
+    <div class="subscribe-content">
+      <h2 class="subscribe-title">ПОДПИСЫВАЙТЕСЬ<br>НА РАССЫЛКУ</h2>
+      <div class="subscribe-card">
+        <div class="subscribe-left">
+          <div>
+            <span>?</span>
+            <p>Будете всегда в курсе наших акций и обновлений</p>
+          </div>
+          <div>
+            <span>%</span>
+            <p>Будем присылать <b>новости о скидках и распродажах</b>, а также идеи для путешествий</p>
+          </div>
+        </div>
+        <div class="subscribe-right">
+          <form class="subscribe-form" action="https://docs.google.com/forms/d/e/1FAIpQLScQd1PcjVsdhixtw3oEuyaspZKNVNbES7xjNVbp7kuBNFAPRA/viewform?usp=header" method="get">
+            <input type="email" name="email" placeholder="Ваша почта" required>
+            <button type="submit" class="search-button">➝</button>
+          </form>
+        </div>
+        <div class="subscribe-checkbox">
+          <label>
+            <input type="checkbox">
+            Хочу получать новости и подтверждаю согласие на 
+            <a href="#">обработку персональных данных</a>
+          </label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🔹 Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        © 2025. S7avelii Airlines — Все права защищены
+      </div>
+      <div class="footer-right">
+        <a href="https://vk.com/savelii577" target="_blank"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
+        <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1" target="_blank"><img src="images/icons8-tiktok-logo-50 (1).avif" alt="Tik Tok"></a>
+        <a href="https://www.youtube.com/@S7avelii_Airlines" target="_blank"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
+        <a href="https://t.me/S7saveliiairlines" target="_blank"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

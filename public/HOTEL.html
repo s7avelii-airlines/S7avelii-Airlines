@@ -1,0 +1,383 @@
+ <!DOCTYPE html>
+
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S7avelii Airlines</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+  .container {
+    max-width: 1400px;
+    margin: 0 auto; /* центрирует */
+  }
+  body {
+    overflow-x: hidden; /* убирает горизонтальный скролл */
+  }
+</style>
+  <style>
+    body {
+      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+    }
+    .gradient-green {
+      background: linear-gradient(90deg, rgb(163, 213, 13) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+      color: white;
+    }
+   <style>
+    body {
+      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+    }
+    .gradient-green {
+      background: linear-gradient(90deg, rgb(165, 214, 15) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+      color: white;
+    }
+    <style>
+  body {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    min-width: 160px;
+  }
+
+  .group:hover .dropdown-menu {
+    display: block;
+  }
+</style>
+</head>
+
+<body class="text-gray-900 font-sans">
+   <!-- Header -->
+  <header class="flex justify-between items-center px-6 py-4 border-b">
+    <div class="flex items-center space-x-2">
+      <img src="images/photo_5238163653918846596_y (3).avif" alt="Savelii Airlines Logo" style="height: 60px;"
+    </div>
+    <nav class="space-x-20 text-sm flex items-center relative" >
+      <div class="relative group inline-block">
+      <a href="Index.html" class="hover:underline">Покупка и управление</a>
+      <div class="dropdown-menu mt-2 py-2">
+        <a href="HOTEL.html" class="block px-4 py-2 hover:bg-gray-100">Отели</a>
+        <a href="arrivel.html" class="block px-4 py-2 hover:bg-gray-100">Направления</a>
+        <a href="class.html" class="block px-4 py-2 hover:bg-gray-100">Выбор класса</a>
+      </div>
+      </div>
+      <a href="priority.html" class="text-gray-700 hover:text-green-600">S7avelii Priority</a>
+       <div class="relative group inline-block">
+      <a href="infom.html" class="hover:underline">Информация</a>
+      <div class="dropdown-menu mt-2 py-2">
+        <a href="body.html" class="text-gray-700 hover:text-green-600">О нас</a>
+        <a href="office.html" class="block px-4 py-2 hover:bg-gray-100">Представительство</a>
+        <a href="plane.html" class="block px-4 py-2 hover:bg-gray-100">Наш Флот</a>
+        <a href="eat.html" class="block px-4 py-2 hover:bg-gray-100">Питание</a>
+        <a href="VIP.html" class="block px-4 py-2 hover:bg-gray-100">VIP-залы</a>
+      </div>
+      </div>>
+      <a href="s7hop.html" class="text-gray-700 hover:text-green-600">S7avelii Shop</a>
+      <a href="busines.html" class="hover:underline">Бизнесу</a>
+      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <a href="https://t.me/S7avelii7plane7" class="block px-4 py-2 hover:bg-gray-100">7PLANE7</a>
+    </nav>
+    <div class="flex items-center space-x-4">
+      <button class="text-gray-500"></button>
+      <nav class="space-x-50 text-sm flex items-center relative" ></nav>
+      <span>RUB</span>
+      <span id="userArea"></span>
+  </nav>
+</header>
+
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    const userArea = document.getElementById("userArea");
+
+    const fio = localStorage.getItem("fio");
+    const avatar = localStorage.getItem("avatar"); // если пользователь загружал картинку
+    const username = localStorage.getItem("username");
+
+    if (fio && localStorage.getItem("phone")) {
+      // Пользователь вошёл
+      if (avatar) {
+        userArea.innerHTML = `
+          <img src="${avatar}" alt="avatar" 
+            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
+            onclick="window.location.href='cabinet.html'" 
+          />
+        `;
+      } else {
+        userArea.innerHTML = `
+          <span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">
+            ${username || fio.split(" ")[0]}
+          </span>
+        `;
+      }
+    } else {
+      // Не вошёл
+      userArea.innerHTML = `<a href="auth.html" style="padding:8px 14px;border:1px solid #2196f3;border-radius:6px;color:#2196f3;text-decoration:none;">Вход</a>`;
+    }
+  });
+</script>
+  </header>
+
+  <!-- Прямоугольное изображение во всю ширину -->
+   <div class="relative w-full h-[400px] overflow-hidden">
+    <div id="slider" class="absolute w-full h-full">
+      <img src="images/photo_5256121556428519035_y (1).avif" class="w-full h-full object-cover absolute" style="hero">
+   </div>
+   <!-- Пробел между слайдером и акциями -->
+  <div class="h-10"></div>
+
+  <!-- Окно бронирования -->
+    <div class="absolute top-[110%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-xl rounded-xl p-6 w-11/12 md:w-3/4 lg:w-1/2">
+      <h2 class="text-xl font-semibold mb-4"></h2>
+      <form class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <select class="border p-2 rounded">
+          <option value="economy">Эконом</option>
+          <option value="business">Бизнес</option>
+          <option value="first">Первый класс</option>
+        </select>
+        <input type="number" min="1" value="1" placeholder="Пассажиры" class="border p-2 rounded">
+        <label class="md:col-span-2 flex items-center space-x-2">
+          <input type="checkbox" class="border rounded"> <span>Оплатить милями</span>
+        </label>
+        <a href= class="gradient-green p-2 rounded inline-block col-span-1 md:col-span-2 hover:opacity-90">Найти билет</a>
+      </form>
+    </div>
+  </div>
+  <!-- Окно бронирования -->
+    <div class="absolute top-[80%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-xl rounded-xl p-6 w-11/12 md:w-3/4 lg:w-2/3">
+      <h2 class="text-xl font-semibold mb-4">Бронь отеля</h2>
+      <div class="mb-4 flex flex-wrap gap-4">
+        <a href="bilet.html" class="px-4 py-2 rounded inline-block bg-white border text-sm shadow">Авиабилеты</button>
+        <a href="priority.html" class="px-4 py-2 rounded inline-block bg-white border text-sm shadow">S7avelii Priority</button>
+        <a href="s7hop.html" class="px-4 py-2 rounded inline-block bg-white border text-sm shadow">S7avelii Shop</a>
+      </div>
+      <form class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="text" placeholder="Город,Страна" class="border p-2 rounded">
+        <input type="date" class="border p-2 rounded">
+        <input type="date" class="border p-2 rounded">
+        <select class="border p-2 rounded">
+          <option value="economy">Отдых</option>
+          <option value="business">Работа</option>
+        </select>
+        <div class="flex items-center space-x-2">
+          <input type="checkbox" id="miles" class="border rounded">
+          <label for="miles">Оплата милями</label>
+        </div>
+      <a href="bilet.html" class="gradient-green p-2 col-span-1 md:col-span-2 hover:opacity-90 rounded inline-block">Забронировать</a>
+      </form>
+    </div>
+  </div>
+
+    <title>Как потратить мили</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: white;
+            text-align: center;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c2c2c;
+        }
+        .icons {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .item {
+            text-align: center;
+            max-width: 140px;
+        }
+        .circle {
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #e9f4dc, #ffffff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+        .circle img {
+            width: 40px;
+            height: 40px;
+        }
+        p {
+            font-size: 15px;
+            color: #333;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+
+  <!-- Пробел между слайдером и акциями -->
+  <div class="h-80"></div>
+
+    <h1>Как потратить мили</h1>
+
+    <div class="icons">
+        <div class="item">
+            <div class="circle">
+                <img src="images/photo_5398063018606193774_y.avif" alt="Билет">
+            </div>
+            <p>Билет S7avelii Airlines</p>
+        </div>
+        <div class="item">
+            <div class="circle">
+                <img src="images/photo_5398063018606193773_y.avif" alt="Повышение класса">
+            </div>
+            <p>Повышение класса обслуживания</p>
+        </div>
+        <div class="item">
+            <div class="circle">
+                <img src="images/photo_5398063018606193772_y.avif" alt="Extra Space">
+            </div>
+            <p>Товары в магазине</p>
+        </div>
+    </div>
+</body>
+
+<head>
+<meta charset="UTF-8">
+<title>Отели</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: white;
+        margin: 0;
+        padding: 20px;
+    }
+    .hotels {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 20px;
+    }
+    .hotel {
+        flex: 1 1 calc(50% - 20px);
+        box-sizing: border-box;
+        text-align: center;
+    }
+    .hotel img {
+        width: 100%;
+        height: auto;
+    }
+    .hotel h3 {
+        color: #4f7d00;
+        font-size: 20px;
+        margin: 15px 0 10px;
+    }
+    .btn {
+        background-color: #c3d900;
+        color: black;
+        text-decoration: none;
+        padding: 12px 0;
+        display: inline-block;
+        width: 80%;
+        font-size: 18px;
+        border-radius: 3px;
+    }
+    .btn:hover {
+        background-color: #b0c300;
+    }
+</style>
+</head>
+<body>
+
+ <!-- Пробел между слайдером и акциями -->
+  <div class="h-20"></div>
+
+  <h1>Рекомендуемые отели</h1>
+
+<div class="hotels">
+    <div class="hotel">
+        <img src="images/hotelspb.avif" alt="Radisson Sonya Hotel, Санкт-Петербург">
+        <h3>Radisson Sonya Hotel, Санкт-Петербург</h3>
+        <a href="bilet.html" class="btn">Забронировать</a>
+    </div>
+    <div class="hotel">
+        <img src="images/2025-08-14_09-37-55.avif" alt="Ривьера Отель, Казань">
+        <h3>Ривьера Отель, Казань</h3>
+        <a href="bilet.html" class="btn">Забронировать</a>
+    </div>
+    <div class="hotel" style="flex-basis: 100%; display: flex; align-items: center; gap: 20px;">
+        <img src="images/2025-08-14_09-49-14.avif" alt="Lotte Hotel, Москва" style="width: 50%;">
+        <div style="flex: 1; text-align: left;">
+            <h3>Lotte Hotel, Москва</h3>
+            <a href="bilet.html" class="btn">Забронировать</a>
+        </div>
+    </div>
+</div>
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-left">
+      © 2025. S7avelii Airlines — Все права защищены
+    </div>
+    <div class="footer-right">
+      <a href="https://vk.com/savelii577" target="_blank"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
+      <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1" target="_blank"><img src="images/icons8-tiktok-logo-50 (1).avif" alt="Tik Tok"></a>
+      <a href="www.youtube.com/@S7avelii_Airlines" target="_blank"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
+      <a href="https://t.me/S7saveliiairlines" target="_blank"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: #f1f4f9; /* как на скрине */
+    padding: 20px 40px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-left {
+    font-size: 14px;
+    color: #667;
+  }
+
+  .footer-right a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+    border-radius: 50%;
+    background: white;
+    transition: transform 0.2s;
+  }
+
+  .footer-right a:hover {
+    transform: scale(1.1);
+  }
+
+  .footer-right img {
+    width: 20px;
+    height: 20px;
+  }
+</style>
+</body>
+</html>

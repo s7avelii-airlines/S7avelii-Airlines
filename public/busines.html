@@ -1,0 +1,329 @@
+ <!DOCTYPE html>
+
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S7avelii Airlines</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+  .container {
+    max-width: 1400px;
+    margin: 0 auto; /* центрирует */
+  }
+  body {
+    overflow-x: hidden; /* убирает горизонтальный скролл */
+  }
+</style>
+  <style>
+    body {
+      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+    }
+    .gradient-green {
+      background: linear-gradient(90deg, rgb(163, 213, 13) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+      color: white;
+    }
+   <style>
+    body {
+      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+    }
+    .gradient-green {
+      background: linear-gradient(90deg, rgb(165, 214, 15) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+      color: white;
+    }
+    <style>
+  body {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    min-width: 160px;
+  }
+
+  .group:hover .dropdown-menu {
+    display: block;
+  }
+</style>
+</head>
+
+<body class="text-gray-900 font-sans">
+   <!-- Header -->
+  <header class="flex justify-between items-center px-6 py-4 border-b">
+    <div class="flex items-center space-x-2">
+      <img src="images/photo_5238163653918846596_y (3).avif" alt="Savelii Airlines Logo" style="height: 60px;"
+    </div>
+    <nav class="space-x-20 text-sm flex items-center relative" >
+      <div class="relative group inline-block">
+      <a href="Index.html" class="hover:underline">Покупка и управление</a>
+      <div class="dropdown-menu mt-2 py-2">
+        <a href="HOTEL.html" class="block px-4 py-2 hover:bg-gray-100">Отели</a>
+        <a href="arrivel.html" class="block px-4 py-2 hover:bg-gray-100">Направления</a>
+        <a href="class.html" class="block px-4 py-2 hover:bg-gray-100">Выбор класса</a>
+      </div>
+      </div>
+      <a href="priority.html" class="text-gray-700 hover:text-green-600">S7avelii Priority</a>
+       <div class="relative group inline-block">
+      <a href="infom.html" class="hover:underline">Информация</a>
+      <div class="dropdown-menu mt-2 py-2">
+        <a href="body.html" class="text-gray-700 hover:text-green-600">О нас</a>
+        <a href="office.html" class="block px-4 py-2 hover:bg-gray-100">Представительство</a>
+        <a href="plane.html" class="block px-4 py-2 hover:bg-gray-100">Наш Флот</a>
+        <a href="eat.html" class="block px-4 py-2 hover:bg-gray-100">Питание</a>
+        <a href="VIP.html" class="block px-4 py-2 hover:bg-gray-100">VIP-залы</a>
+      </div>
+      </div>>
+      <a href="s7hop.html" class="text-gray-700 hover:text-green-600">S7avelii Shop</a>
+      <a href="busines.html" class="hover:underline">Бизнесу</a>
+      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <a href="https://t.me/S7avelii7plane7" class="block px-4 py-2 hover:bg-gray-100">7PLANE7</a>
+    </nav>
+    <div class="flex items-center space-x-4">
+      <button class="text-gray-500"></button>
+      <nav class="space-x-50 text-sm flex items-center relative" ></nav>
+      <span>RUB</span>
+      <span id="userArea"></span>
+  </nav>
+</header>
+
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    const userArea = document.getElementById("userArea");
+
+    const fio = localStorage.getItem("fio");
+    const avatar = localStorage.getItem("avatar"); // если пользователь загружал картинку
+    const username = localStorage.getItem("username");
+
+    if (fio && localStorage.getItem("phone")) {
+      // Пользователь вошёл
+      if (avatar) {
+        userArea.innerHTML = `
+          <img src="${avatar}" alt="avatar" 
+            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
+            onclick="window.location.href='cabinet.html'" 
+          />
+        `;
+      } else {
+        userArea.innerHTML = `
+          <span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">
+            ${username || fio.split(" ")[0]}
+          </span>
+        `;
+      }
+    } else {
+      // Не вошёл
+      userArea.innerHTML = `<a href="auth.html" style="padding:8px 14px;border:1px solid #2196f3;border-radius:6px;color:#2196f3;text-decoration:none;">Вход</a>`;
+    }
+  });
+</script>
+  </header>
+
+  <!-- Прямоугольное изображение во всю ширину -->
+  <img src="images/photo_5253869756614833432_y.avif" alt="Header Banner" class="hero">
+
+  <!-- Пробел между слайдером и акциями -->
+  <div class="h-20"></div>
+
+ <head>
+<meta charset="UTF-8">
+<title>Программа лояльности для бизнеса</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f3f3;
+    margin: 0;
+    padding: 20px;
+    color: #1c2e40;
+  }
+  h1 {
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+  h2 {
+    font-size: 20px;
+    margin: 0 0 8px 0;
+    font-weight: bold;
+  }
+  .item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 40px;
+  }
+  .item img {
+    width: 250px;
+    height: auto;
+    margin-right: 20px;
+    border-radius: 4px;
+  }
+  .item p {
+    margin: 0;
+    font-size: 14px;
+    color: #3a4a5a;
+  }
+  .footer-text {
+    font-size: 14px;
+    color: #3a4a5a;
+    margin-top: 20px;
+  }
+  .green-text {
+    color: #2d6a2d;
+  }
+</style>
+</head>
+<body>
+
+<h1>Программа лояльности для бизнеса</h1>
+
+<div class="item">
+  <img src="images/photo_5398063018606193772_y.avif" alt="Привилегии">
+  <div>
+    <h2>Привилегии для сотрудников</h2>
+    <p>Статусные и бонусные мили S7avelii Priority на личном счёте за заказ сайта</p>
+  </div>
+</div>
+
+<div class="item">
+  <img src="images/photo_5398063018606193774_y.avif" alt="Сервис и поддержка">
+  <div>
+    <h2>Сервис и поддержка</h2>
+    <p>Выделенная линия Контактного центра и персональный менеджер</p>
+  </div>
+</div>
+
+<div>
+  <h2>Настройте как удобно</h2>
+  <p class="footer-text">
+    Выбирайте то, что нужно для бизнеса: закажите сайт и получите баллы. И дополнительные привилегии — вне зависимости от того, что выберете.*
+  </p>
+</div>
+
+<hr style="margin:40px 0; border:none; border-top:1px solid #ccc;">
+
+<h1>Наши возможности</h1>
+
+<div class="item">
+  <img src="site-development.png" alt="Разработка сайтов">
+  <div>
+    <h2>Разработка сайтов с нуля для вашего дела</h2>
+    <p class="green-text">Свяжемся с вами, уточним все детали и сделаем для вас хороший сайт.</p>
+  </div>
+</div>
+
+<div class="item">
+  <img src="site-improvement.png" alt="Улучшение сайтов">
+  <div>
+    <h2>Улучшение сайтов</h2>
+    <p class="green-text">Улучшим уже существующий сайт</p>
+  </div>
+</div>
+
+<div class="item">
+  <img src="exclusive-discounts.png" alt="Эксклюзивные скидки">
+  <div>
+    <h2>Эксклюзивные скидки и акции для сотрудников</h2>
+    <p class="green-text">
+      Заключите с нами сотрудничество и ваши сотрудники будут иметь эксклюзивные скидки
+    </p>
+  </div>
+</div>
+
+<hr style="margin:40px 0; border:none; border-top:1px solid #ccc;">
+
+<h1>Услуги</h1>
+<ul style="list-style:none; padding:0; font-size:16px;">
+  <li>
+    <a href="#" style="color:#1c2e40; font-weight:bold; text-decoration:underline;">
+      Разработка сайта с нуля
+    </a> - от 45 777 ₽
+  </li>
+  <li>
+    <a href="#" style="color:#1c2e40; font-weight:bold; text-decoration:underline;">
+      Редактирование и улучшение сайта
+    </a> - от 30 300 ₽
+  </li>
+  <li>
+    <a href="#" style="color:#1c2e40; font-weight:bold; text-decoration:underline;">
+      Эксклюзивные подписки и сотрудничество
+    </a> - от 5 500 ₽
+  </li>
+</ul>
+
+<div class="rounded-xl shadow-md bg-white p-6 flex flex-col justify-between">
+        <h3 class="text-xl font-bold mb-4">Мы вам напишем</h3>
+        <p class="text-gray-600 mb-4">Сообщим о скидках, поделимся идеями путешествий</p>
+        <input type="email" name="email" id="email" required class="border p-2 rounded mb-2">
+        <label class="text-sm text-gray-600 mb-2 block">
+          <input type="checkbox" class="mr-2">Хочу узнавать про скидки и идеи путешествий и соглашаюсь на
+          <a href="#" class="text-blue-600 underline">обработку персональных данных</a>
+        </label>
+  <button type="submit" class="gradient-green p-2 col-span-1 md:col-span-2 hover:opacity-90 rounded inline-block">Подписаться</button>
+</form>
+      </div>
+      <!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-left">
+      © 2025. S7avelii Airlines — Все права защищены
+    </div>
+    <div class="footer-right">
+      <a href="https://vk.com/savelii577" target="_blank"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
+      <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1" target="_blank"><img src="images/icons8-tiktok-logo-50 (1).avif" alt="Tik Tok"></a>
+      <a href="www.youtube.com/@S7avelii_Airlines" target="_blank"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
+      <a href="https://t.me/S7saveliiairlines" target="_blank"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: #f1f4f9; /* как на скрине */
+    padding: 20px 40px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-left {
+    font-size: 14px;
+    color: #667;
+  }
+
+  .footer-right a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+    border-radius: 50%;
+    background: white;
+    transition: transform 0.2s;
+  }
+
+  .footer-right a:hover {
+    transform: scale(1.1);
+  }
+
+  .footer-right img {
+    width: 20px;
+    height: 20px;
+  }
+</style>
+</body>
+</html>

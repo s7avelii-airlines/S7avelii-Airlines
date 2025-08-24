@@ -1,0 +1,501 @@
+  <!DOCTYPE html>
+
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S7avelii Airlines</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+  .container {
+    max-width: 1400px;
+    margin: 0 auto; /* центрирует */
+  }
+  body {
+    overflow-x: hidden; /* убирает горизонтальный скролл */
+  }
+</style>
+  <style>
+    body {
+      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+    }
+    .gradient-green {
+      background: linear-gradient(90deg, rgb(215, 230, 6) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+      color: white;
+    }
+   <style>
+    body {
+      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+    }
+    .gradient-green {
+      background: linear-gradient(90deg, rgb(203, 230, 6) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+      color: white;
+    }
+    <style>
+  body {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    min-width: 160px;
+  }
+
+  .group:hover .dropdown-menu {
+    display: block;
+  }
+</style>
+</head>
+
+<body class="text-gray-900 font-sans">
+   <!-- Header -->
+  <header class="flex justify-between items-center px-6 py-4 border-b">
+    <div class="flex items-center space-x-2">
+      <img src="images/photo_5238163653918846596_y (3).avif" alt="Savelii Airlines Logo" style="height: 60px;"
+    </div>
+    <nav class="space-x-20 text-sm flex items-center relative" >
+      <div class="relative group inline-block">
+      <a href="Index.html" class="hover:underline">Покупка и управление</a>
+      <div class="dropdown-menu mt-2 py-2">
+        <a href="HOTEL.html" class="block px-4 py-2 hover:bg-gray-100">Отели</a>
+        <a href="arrivel.html" class="block px-4 py-2 hover:bg-gray-100">Направления</a>
+        <a href="class.html" class="block px-4 py-2 hover:bg-gray-100">Выбор класса</a>
+      </div>
+      </div>
+      <a href="priority.html" class="text-gray-700 hover:text-green-600">S7avelii Priority</a>
+       <div class="relative group inline-block">
+      <a href="infom.html" class="hover:underline">Информация</a>
+      <div class="dropdown-menu mt-2 py-2">
+        <a href="body.html" class="text-gray-700 hover:text-green-600">О нас</a>
+        <a href="office.html" class="block px-4 py-2 hover:bg-gray-100">Представительство</a>
+        <a href="plane.html" class="block px-4 py-2 hover:bg-gray-100">Наш Флот</a>
+        <a href="eat.html" class="block px-4 py-2 hover:bg-gray-100">Питание</a>
+        <a href="VIP.html" class="block px-4 py-2 hover:bg-gray-100">VIP-залы</a>
+      </div>
+      </div>>
+      <a href="s7hop.html" class="text-gray-700 hover:text-green-600">S7avelii Shop</a>
+      <a href="busines.html" class="hover:underline">Бизнесу</a>
+      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <a href="https://t.me/S7avelii7plane7" class="block px-4 py-2 hover:bg-gray-100">7PLANE7</a>
+    </nav>
+    <div class="flex items-center space-x-3">
+      <button class="text-gray-500"></button>
+      <nav class="space-x-50 text-sm flex items-center relative" ></nav>
+      <span id="userArea"></span>
+  </nav>
+</header>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    const userArea = document.getElementById("userArea");
+
+    const fio = localStorage.getItem("fio");
+    const avatar = localStorage.getItem("avatar"); // если пользователь загружал картинку
+    const username = localStorage.getItem("username");
+
+    if (fio && localStorage.getItem("phone")) {
+      // Пользователь вошёл
+      if (avatar) {
+        userArea.innerHTML = `
+          <img src="${avatar}" alt="avatar" 
+            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
+            onclick="window.location.href='cabinet.html'" 
+          />
+        `;
+      } else {
+        userArea.innerHTML = `
+          <span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">
+            ${username || fio.split(" ")[0]}
+          </span>
+        `;
+      }
+    } else {
+      // Не вошёл
+      userArea.innerHTML = `<a href="auth.html" style="padding:8px 14px;border:1px solid #2196f3;border-radius:6px;color:#2196f3;text-decoration:none;">Вход</a>`;
+    }
+  });
+</script>
+  </header>
+
+<!-- Слайд-шоу -->
+  <div class="relative w-full h-[300px] overflow-hidden">
+    <div id="slider" class="absolute w-full h-full">
+      <img src="images/Airbrush-Image-Enhancer-1755100579590.avif" class="w-full h-full object-cover absolute" style="opacity: 0; transition: opacity 1s;">
+      <img src="images/Airbrush-Image-Enhancer-1755150432038.avif" class="w-full h-full object-cover absolute" style="opacity: 0; transition: opacity 1s;">
+      <img src="images/photo_5278432678875623665_y.avif" class="w-full h-full object-cover absolute" style="opacity: 0; transition: opacity 1s;">
+      <img src="images/photo_5253869756614833476_y.avif" class="w-full h-full object-cover absolute" style="opacity: 0; transition: opacity 1s;">
+    </div>
+
+ <!-- Окно бронирования -->
+    <div class="absolute top-[110%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-xl rounded-xl p-6 w-11/12 md:w-3/4 lg:w-1/2">
+      <h2 class="text-xl font-semibold mb-4"></h2>
+      <form class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <select class="border p-2 rounded">
+        </select>
+    </div>
+  </div>
+  <section class="max-w-6xl mx-auto mt-10">
+
+<!-- Окно бронирования --> 
+<div class="absolute top-[75%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-xl rounded-xl p-6 w-11/12 md:w-3/4 lg:w-2/3"> 
+  <div class="mb-4 flex flex-wrap gap-4"> 
+     <div class="flex space-x-6 mb-4 text-sm font-medium">
+        <a href="Index.html" class="text-green-600 border-b-2 border-green-600 pb-1">Покупка</a>
+        <a href="HOTEL.html" class="text-gray-600 hover:text-green-600">Отели</a>
+        <a href="s7hop.html" class="text-gray-600 hover:text-green-600">Shop</a>
+        <a href="phone.html" class="text-gray-600 hover:text-green-600">Мобильная версия</a>
+      </div>
+  </div> <form class="grid grid-cols-1 md:grid-cols-2 gap-4"> 
+    <input type="text" placeholder="Савелий,GSV" class="flex-1 border rounded-lg px-4 py-2">
+        <input type="text" placeholder="Куда" class="flex-1 border rounded-lg px-4 py-2">
+    <div class="flex items-center space-x-2"> 
+      <input type="date" class="border p-2 rounded"> 
+    <input type="date" class="border p-2 rounded"> 
+    <select class="border p-2 rounded"> 
+      <option value="economy">1,Эконом</option> 
+      <option value="business">1,Бизнес</option> 
+      <option value="first"> 1,Первый класс</option> 
+    </select> 
+    </div> 
+     <label class="flex items-center space-x-1">
+            <input type="checkbox" class="form-checkbox">
+            <span>Оплата милями</span>
+          </label>
+    <a href="bilet.html" class="gradient-green p-2 col-span-1 md:col-span-2 hover:opacity-90 rounded inline-block">Найти билет</a> 
+  </form> 
+</div> 
+</div>
+
+  <!-- Пробел между слайдером и акциями -->
+  <div class="h-80"></div>
+
+  <script>
+    const slides = document.querySelectorAll("#slider img");
+    let current = 0;
+    setInterval(() => {
+      slides[current].style.opacity = 0;
+      current = (current + 1) % slides.length;
+      slides[current].style.opacity = 1;
+    }, 7000);
+  </script>
+</body>
+
+</html>
+
+<!-- Веселые рейсы из Савелий -->
+ <section class="py-10">
+  <h2 class="text-2xl font-bold text-center mb-10">Специальные предложения</h2>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 max-w-6xl mx-auto px-6">
+    
+    <!-- Екатеринбург -->
+    <div class="flex items-center space-x-4">
+      <img src="images/moskva-650x379.avif" alt="Москва" class="w-20 h-20 rounded-full object-cover">
+      <div>
+        <h3 class="text-lg font-semibold">Москва</h3>
+        <p class="text-gray-500 text-sm">из Савелий и обратно</p>
+        <p class="text-lime-600 font-semibold">ежедневно</p>
+      </div>
+    </div>
+
+    <!-- Новосибирск -->
+    <div class="flex items-center space-x-4">
+      <img src="images/Beregovoe-plyazh-feodosiya-1220.avif" alt="Симферополь" class="w-20 h-20 rounded-full object-cover">
+      <div>
+        <h3 class="text-lg font-semibold">Симферополь</h3>
+        <p class="text-gray-500 text-sm">из Савелий и обратно</p>
+        <p class="text-lime-600 font-semibold">ежедневно</p>
+      </div>
+    </div>
+
+    <!-- Казань -->
+    <div class="flex items-center space-x-4">
+      <img src="images/photo_5253869756614833538_y.avif" alt="Казань" class="w-20 h-20 rounded-full object-cover">
+      <div>
+        <h3 class="text-lg font-semibold">Казань</h3>
+        <p class="text-gray-500 text-sm">из Савелий и обратно</p>
+        <p class="text-lime-600 font-semibold">ежедневно</p>
+      </div>
+    </div>
+
+    <!-- Санкт-Петербург -->
+    <div class="flex items-center space-x-4">
+      <img src="images/2014-08-20-panteon-01.avif" alt="Пула" class="w-20 h-20 rounded-full object-cover">
+      <div>
+        <h3 class="text-lg font-semibold">Пула</h3>
+        <p class="text-gray-500 text-sm">из Савелий и обратно</p>
+        <p class="text-lime-600 font-semibold">ежедневно</p>
+      </div>
+    </div>
+
+    <!-- Иркутск -->
+    <div class="flex items-center space-x-4">
+      <img src="images/images.avif" alt="Рим" class="w-20 h-20 rounded-full object-cover">
+      <div>
+        <h3 class="text-lg font-semibold">Рим</h3>
+        <p class="text-gray-500 text-sm">из Савелий и обратно</p>
+       <p class="text-lime-600 font-semibold">ежедневно</p>
+      </div>
+    </div>
+
+    <!-- Калининград -->
+    <div class="flex items-center space-x-4">
+      <img src="images/01-1 DSC_6846.avif" alt="Калининград" class="w-20 h-20 rounded-full object-cover">
+      <div>
+        <h3 class="text-lg font-semibold">Калининград</h3>
+        <p class="text-gray-500 text-sm">из Савелий и обратно</p>
+        <p class="text-lime-600 font-semibold">ежедневно</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+  <!-- Акции -->
+  <section class="max-w-7xl mx-auto px-4 py-12">
+    <h2 class="text-3xl font-bold mb-8">Акции</h2>
+    <div class="grid grid-cols-3 gap-6">
+      <div class="rounded-xl shadow-md bg-white p-6 flex flex-col justify-between">
+        <img src="images/photo_5253869756614833558_x.avif" alt="Телеграм-канал" class="rounded-t-lg mb-4">
+        <div>
+          <h3 class="text-xl font-semibold mb-2">Телеграм-канал</h3>
+          <p class="text-gray-600 mb-4">Новости и специальные предложения S7avelii Airlines</p>
+          <a href="https://t.me/S7saveliiairlines" class="gradient-green p-2 col-span-1 md:col-span-2 hover:opacity-90 rounded inline-block">Подробнее</a>
+          </a>
+        </div>
+      </div>
+      <div class="rounded-xl shadow-md bg-white p-6 flex flex-col justify-between">
+        <img src="images/2025-08-13_17-34-29.avif" alt="Отели для отпуска" class="rounded-t-lg mb-4">
+        <div>
+          <h3 class="text-xl font-semibold mb-2">S7avelii Shop</h3>
+          <p class="text-gray-600 mb-4">Покупайте мерч и получайте кэшбэк S7avelii Priority</p>
+          <a href="s7hop.html" class="gradient-green p-2 col-span-1 md:col-span-2 hover:opacity-90 rounded inline-block">Подробнее</a>
+        </div>
+      </div>
+      <div class="rounded-xl shadow-md bg-white p-6 flex flex-col justify-between">
+        <h3 class="text-xl font-bold mb-4">Мы вам напишем</h3>
+        <p class="text-gray-600 mb-4">Сообщим о скидках, поделимся идеями путешествий</p>
+        <input type="email" name="email" id="email" required class="border p-2 rounded mb-2">
+        <label class="text-sm text-gray-600 mb-2 block">
+          <input type="checkbox" class="mr-2">Хочу узнавать про скидки и идеи путешествий и соглашаюсь на
+          <a href="#" class="text-blue-600 underline">обработку персональных данных</a>
+        </label>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScQd1PcjVsdhixtw3oEuyaspZKNVNbES7xjNVbp7kuBNFAPRA/viewform?usp=header" class="gradient-green p-2 col-span-1 md:col-span-2 hover:opacity-90 rounded inline-block">Подписаться</a>
+</form>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const slides = document.querySelectorAll("#slider img");
+    let current = 0;
+    setInterval(() => {
+      slides[current].style.opacity = 0;
+      current = (current + 1) % slides.length;
+      slides[current].style.opacity = 1;
+    }, 7000);
+  </script>
+</body>
+
+</html>
+
+<!-- Новости S7avelii Airlines -->
+<section class="max-w-7xl mx-auto px-4 py-12">
+  <div class="flex justify-between items-center mb-8">
+    <h2 class="text-3xl font-bold">Новости S7avelii Airlines</h2>
+    <a href="#" class="text-blue-900 text-sm hover:underline flex items-center">
+      <svg class="ml-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 3a1 1 0 011.707-.707l6 6a1 1 0 010 1.414l-6 6A1 1 0 0110 15V3z" />
+      </svg>
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Карточка 1 -->
+    <div class="rounded-2xl border p-6 shadow-sm">
+      <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-orange-400 to-pink-400"></div>
+      <h3 class="font-bold text-lg mb-2">S7avelii Airlines возобнавила рейсы Хорватию</h3>
+      <p class="text-gray-600 mb-4">С 1 сентября мы запустили рейсы на регулярной основе в город Пула.</p>
+      <span class="text-sm text-gray-400">2 СЕН 2025</span>
+    </div>
+
+    <!-- Карточка 2 -->
+    <div class="rounded-2xl border p-6 shadow-sm">
+      <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-yellow-300 to-green-400"></div>
+      <h3 class="font-bold text-lg mb-2">S7avelii Airlines запускает в работу новый сайт</h3>
+      <p class="text-gray-600 mb-4">Новый сайт уникален, написан на базе HTML .</p>
+      <span class="text-sm text-gray-400">30 АВГ 2025</span>
+    </div>
+
+    <!-- Карточка 3 -->
+    <div class="rounded-2xl border p-6 shadow-sm">
+      <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-sky-300 to-blue-600"></div>
+      <h3 class="font-bold text-lg mb-2">S7avelii и запустили программу для помощи в создании сайтов</h3>
+      <p class="text-gray-600 mb-4">Поможем создать свой уникальный сайт.</p>
+      <span class="text-sm text-gray-400">29 АВГ 2025</span>
+    </div>
+  </div>
+</section>
+
+<div class="grid grid-cols-3 gap-6">
+
+   <!-- Gate 7 Раздел -->
+    <section class="max-w-6xl mx-auto px-4 mb-12">
+  <div class="flex justify-between items-center mb-8">
+    <h2 class="text-3xl font-bold">7PLANE7</h2>
+    <a href="#" class="text-blue-900 text-sm hover:underline flex items-center">
+      <svg class="ml-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 3a1 1 0 011.707-.707l6 6a1 1 0 010 1.414l-6 6A1 1 0 0110 15V3z" />
+      </svg>
+    </a>
+  </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-screen px-4">
+      <div class="bg-white rounded-xl shadow-md overflow-hidden">
+        <img src="images/photo_5253869756614833583_x.avif" alt="Карта сокровищ" class="w-full h-48 object-cover">
+        <div class="p-6">
+          <h3 class="text-xl font-bold mb-2">Греция с новой стороны</h3>
+          <p class="text-gray-600 mb-4">Как на счёт того, чтобы провести остаток лета в прекрасной европейской стране, у побережья средиземного моря</p>
+          <a href="https://t.me/S7avelii7plane7" class="bg-gray-100 px-4 py-2 rounded hover:bg-gray-200">Читать</a>
+        </div>
+      </div>
+    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+        <img src="images/photo_5253869756614833582_x.avif" alt="Лето, волны, эчпочмак" class="w-full h-48 object-cover">
+        <div class="p-6">
+          <h3 class="text-xl font-bold mb-2">Лето, волны, Геленджик</h3>
+          <p class="text-gray-600 mb-4">Российский курортный городок не уступающий заграничным аналогам</p>
+          <a href="https://t.me/S7avelii7plane7" class="bg-gray-100 px-4 py-2 rounded hover:bg-gray-200">Читать</a>
+        </div>
+      </div>
+  </section>
+
+  <div class="max-w-[1400px] mx-auto">
+      <!-- ВЕСЬ ТВОЙ САЙТ -->
+  </div>
+ <!-- Модалка Вход -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close" data-close="loginModal">&times;</span>
+    <h2>Вход</h2>
+    <form id="loginForm">
+      <label>ФИО</label>
+      <input type="text" name="fio" required>
+
+      <label>Пароль</label>
+      <input type="password" name="password" required>
+
+      <button type="submit">Войти</button>
+    </form>
+    <p>
+      Нет аккаунта? <a href="#" id="openRegister">Зарегистрироваться</a>
+    </p>
+  </div>
+</div>
+
+<!-- Модалка Регистрация -->
+<div id="registerModal" class="modal">
+  <div class="modal-content">
+    <span class="close" data-close="registerModal">&times;</span>
+    <h2>Регистрация</h2>
+    <form id="registerForm">
+      <label>ФИО</label>
+      <input type="text" name="fio" required>
+
+      <label>Телефон</label>
+      <input type="tel" name="phone" required>
+
+      <label>Номер карты S7avelii Priority</label>
+      <input type="text" name="card" required>
+
+      <label>Пароль</label>
+      <input type="password" name="password" required>
+
+      <button type="submit">Зарегистрироваться</button>
+    </form>
+  </div>
+</div>
+
+<!-- Стили -->
+<style>
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+  background: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  width: 350px;
+  border-radius: 10px;
+}
+.close {
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+}
+input, button {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  padding: 8px;
+}
+</style>
+
+<!-- JS -->
+<script>
+const loginModal = document.getElementById('loginModal');
+const registerModal = document.getElementById('registerModal');
+
+document.getElementById('loginBtn').addEventListener('click', () => {
+  loginModal.style.display = 'block';
+});
+
+document.getElementById('openRegister').addEventListener('click', (e) => {
+  e.preventDefault();
+  loginModal.style.display = 'none';
+  registerModal.style.display = 'block';
+});
+
+document.querySelectorAll('.close').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.getElementById(btn.dataset.close).style.display = 'none';
+  });
+});
+
+// Закрытие при клике вне окна
+window.addEventListener('click', (e) => {
+  if (e.target === loginModal) loginModal.style.display = 'none';
+  if (e.target === registerModal) registerModal.style.display = 'none';
+});
+
+// Обработчики отправки форм
+document.getElementById('loginForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  alert('Вход выполнен (пока без сервера)');
+});
+
+document.getElementById('registerForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  alert('Регистрация выполнена (пока без сервера)');
+});
+</script>
+
+  <script>document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const fullname = this.fullname.value;
+  localStorage.setItem('fullname', fullname);
+  window.location.href = 'my-cabinet.html';
+});
+</script>
+</body>
+</html>

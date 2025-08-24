@@ -1,0 +1,118 @@
+ <!DOCTYPE html>
+
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S7avelii Airlines</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+    }
+    .gradient-green {
+      background: linear-gradient(90deg, rgb(163, 213, 13) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+      color: white;
+    }
+   <style>
+    body {
+      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+    }
+    .gradient-green {
+      background: linear-gradient(90deg, rgb(165, 214, 15) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+      color: white;
+    }
+    <style>
+  body {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    min-width: 160px;
+  }
+
+  .group:hover .dropdown-menu {
+    display: block;
+  }
+</style>
+</head>
+
+<body class="text-gray-900 font-sans">
+   <!-- Header -->
+  <header class="flex justify-between items-center px-6 py-4 border-b">
+    <div class="flex items-center space-x-2">
+      <img src="images/photo_5238163653918846596_y (3).avif" alt="Savelii Airlines Logo" style="height: 60px;"
+    </div>
+    <nav class="space-x-20 text-sm flex items-center relative" >
+      <div class="relative group inline-block">
+      <a href="Index.html" class="hover:underline">Покупка и управление</a>
+      <div class="dropdown-menu mt-2 py-2">
+        <a href="HOTEL.html" class="block px-4 py-2 hover:bg-gray-100">Отели</a>
+        <a href="arrivel.html" class="block px-4 py-2 hover:bg-gray-100">Направления</a>
+        <a href="class.html" class="block px-4 py-2 hover:bg-gray-100">Выбор класса</a>
+      </div>
+      </div>
+      <a href="priority.html" class="text-gray-700 hover:text-green-600">S7avelii Priority</a>
+       <div class="relative group inline-block">
+      <a href="infom.html" class="hover:underline">Информация</a>
+      <div class="dropdown-menu mt-2 py-2">
+        <a href="body.html" class="text-gray-700 hover:text-green-600">О нас</a>
+        <a href="office.html" class="block px-4 py-2 hover:bg-gray-100">Представительство</a>
+        <a href="plane.html" class="block px-4 py-2 hover:bg-gray-100">Наш Флот</a>
+        <a href="eat.html" class="block px-4 py-2 hover:bg-gray-100">Питание</a>
+        <a href="VIP.html" class="block px-4 py-2 hover:bg-gray-100">VIP-залы</a>
+      </div>
+      </div>>
+      <a href="s7hop.html" class="text-gray-700 hover:text-green-600">S7avelii Shop</a>
+      <a href="busines.html" class="hover:underline">Бизнесу</a>
+      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <a href="https://t.me/S7avelii7plane7" class="block px-4 py-2 hover:bg-gray-100">7PLANE7</a>
+    </nav>
+    <div class="flex items-center space-x-4">
+      <button class="text-gray-500"></button>
+      <nav class="space-x-50 text-sm flex items-center relative" ></nav>
+      <span>RUB</span>
+      <span id="userArea"></span>
+  </nav>
+</header>
+
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    const userArea = document.getElementById("userArea");
+
+    const fio = localStorage.getItem("fio");
+    const avatar = localStorage.getItem("avatar"); // если пользователь загружал картинку
+    const username = localStorage.getItem("username");
+
+    if (fio && localStorage.getItem("phone")) {
+      // Пользователь вошёл
+      if (avatar) {
+        userArea.innerHTML = `
+          <img src="${avatar}" alt="avatar" 
+            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
+            onclick="window.location.href='cabinet.html'" 
+          />
+        `;
+      } else {
+        userArea.innerHTML = `
+          <span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">
+            ${username || fio.split(" ")[0]}
+          </span>
+        `;
+      }
+    } else {
+      // Не вошёл
+      userArea.innerHTML = `<a href="auth.html" style="padding:8px 14px;border:1px solid #2196f3;border-radius:6px;color:#2196f3;text-decoration:none;">Вход</a>`;
+    }
+  });
+</script>
+  </header>
