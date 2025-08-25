@@ -10,15 +10,19 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ✅ Подключение к PostgreSQL (только через DATABASE_URL)
+// Подключение к PostgreSQL (Render требует SSL)
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: {
+    require: true,
+    rejectUnauthorized: false, // важно для Render
+  },
 });
 
-// Проверка соединения
+// Проверка соединения при старте
 (async () => {
   try {
+    console.log("⏳ Подключение к базе...");
     const client = await pool.connect();
     console.log("✅ Подключение к базе данных установлено");
 
@@ -27,9 +31,23 @@ const pool = new Pool({
 
     client.release();
   } catch (err) {
-    console.error("❌ Ошибка подключения:", err);
+    console.error("❌ Ошибка подключения к БД при старте:", err.message);
   }
 })();
+
+// Middleware для проверки токена
+function authMiddleware(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) return res.status(401).json({ error: "Нет токена" });
+
+  jwt.verify(token, process.env.JWT_SECRET || "secret", (err, user) => {
+    if (err) return res.status(403).json({ error: "Неверный токен" });
+    req.user = user;
+    next();
+  });
+}
 
 // 🔹 Тестовый маршрут
 app.get("/", (req, res) => {
@@ -38,20 +56,20 @@ app.get("/", (req, res) => {
 
 // 🔹 Регистрация
 app.post("/register", async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
+  const { username, password, email, phone } = req.body;
+  if (!username || !password || !email || !phone) {
     return res.status(400).json({ error: "Заполните все поля" });
   }
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     await pool.query(
-      "INSERT INTO users (username, password) VALUES ($1, $2)",
-      [username, hashedPassword]
+      "INSERT INTO users (username, password, email, phone) VALUES ($1, $2, $3, $4)",
+      [username, hashedPassword, email, phone]
     );
     res.json({ message: "✅ Пользователь зарегистрирован" });
   } catch (err) {
-    console.error(err);
+    console.error("❌ Ошибка регистрации:", err.message);
     res.status(500).json({ error: "Ошибка регистрации" });
   }
 });
@@ -70,15 +88,29 @@ app.post("/login", async (req, res) => {
     if (!match) return res.status(400).json({ error: "Неверный пароль" });
 
     const token = jwt.sign(
-      { id: user.id },
+      { id: user.id, username: user.username },
       process.env.JWT_SECRET || "secret",
       { expiresIn: "1h" }
     );
 
     res.json({ message: "✅ Успешный вход", token });
   } catch (err) {
-    console.error(err);
+    console.error("❌ Ошибка входа:", err.message);
     res.status(500).json({ error: "Ошибка входа" });
+  }
+});
+
+// 🔹 Пример защищённого маршрута
+app.get("/profile", authMiddleware, async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT id, username, email, phone, created_at FROM users WHERE id = $1",
+      [req.user.id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error("❌ Ошибка получения профиля:", err.message);
+    res.status(500).json({ error: "Ошибка получения профиля" });
   }
 });
 
