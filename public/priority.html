@@ -1,379 +1,197 @@
  <!DOCTYPE html>
-
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>S7avelii Airlines</title>
- <!-- Иконка сайта (favicon) -->
-  <link rel="icon" href="images/favicon.png" type="image/favicon.png">
+  <link rel="icon" href="images/favicon.png" type="image/png">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-  .container {
-    max-width: 1400px;
-    margin: 0 auto; /* центрирует */
-  }
-  body {
-    overflow-x: hidden; /* убирает горизонтальный скролл */
-  }
-</style>
-  <style>
-    body {
-      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+    body { overflow-x: hidden; }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 0.25rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      min-width: 160px;
+      z-index: 50;
     }
-    .gradient-green {
-      background: linear-gradient(90deg, rgb(163, 213, 13) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-      color: white;
-    }
-   <style>
-    body {
-      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-    }
-    .gradient-green {
-      background: linear-gradient(90deg, rgb(165, 214, 15) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-      color: white;
-    }
-    <style>
-  body {
-    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-  }
-
-  .dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 0.25rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 50;
-    min-width: 160px;
-  }
-
-  .group:hover .dropdown-menu {
-    display: block;
-  }
-</style>
-</head>
-
-<body class="text-gray-900 font-sans">
-   <!-- Header -->
-  <header class="flex justify-between items-center px-6 py-4 border-b">
-    <div class="flex items-center space-x-2">
-      <img src="images/photo_5238163653918846596_y (3).avif" alt="Savelii Airlines Logo" style="height: 60px;"
-    </div>
-    <nav class="space-x-20 text-sm flex items-center relative" >
-      <div class="relative group inline-block">
-      <a href="Index.html" class="hover:underline">Покупка и управление</a>
-      <div class="dropdown-menu mt-2 py-2">
-        <a href="HOTEL.html" class="block px-4 py-2 hover:bg-gray-100">Отели</a>
-        <a href="arrivel.html" class="block px-4 py-2 hover:bg-gray-100">Направления</a>
-        <a href="class.html" class="block px-4 py-2 hover:bg-gray-100">Выбор класса</a>
-      </div>
-      </div>
-      <a href="priority.html" class="text-gray-700 hover:text-green-600">S7avelii Priority</a>
-       <div class="relative group inline-block">
-      <a href="infom.html" class="hover:underline">Информация</a>
-      <div class="dropdown-menu mt-2 py-2">
-        <a href="body.html" class="text-gray-700 hover:text-green-600">О нас</a>
-        <a href="office.html" class="block px-4 py-2 hover:bg-gray-100">Представительство</a>
-        <a href="plane.html" class="block px-4 py-2 hover:bg-gray-100">Наш Флот</a>
-        <a href="eat.html" class="block px-4 py-2 hover:bg-gray-100">Питание</a>
-        <a href="VIP.html" class="block px-4 py-2 hover:bg-gray-100">VIP-залы</a>
-      </div>
-      </div>>
-      <a href="s7hop.html" class="text-gray-700 hover:text-green-600">S7avelii Shop</a>
-      <a href="busines.html" class="hover:underline">Бизнесу</a>
-      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-    <a href="https://t.me/S7avelii7plane7" class="block px-4 py-2 hover:bg-gray-100">7PLANE7</a>
-    </nav>
-    <div class="flex items-center space-x-4">
-      <button class="text-gray-500"></button>
-      <nav class="space-x-50 text-sm flex items-center relative" ></nav>
-      <span>RUB</span>
-      <span id="userArea"></span>
-  </nav>
-</header>
-
-<script>
-  window.addEventListener("DOMContentLoaded", () => {
-    const userArea = document.getElementById("userArea");
-
-    const fio = localStorage.getItem("fio");
-    const avatar = localStorage.getItem("avatar"); // если пользователь загружал картинку
-    const username = localStorage.getItem("username");
-
-    if (fio && localStorage.getItem("phone")) {
-      // Пользователь вошёл
-      if (avatar) {
-        userArea.innerHTML = `
-          <img src="${avatar}" alt="avatar" 
-            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
-            onclick="window.location.href='cabinet.html'" 
-          />
-        `;
-      } else {
-        userArea.innerHTML = `
-          <span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">
-            ${username || fio.split(" ")[0]}
-          </span>
-        `;
-      }
-    } else {
-      // Не вошёл
-      userArea.innerHTML = `<a href="auth.html" style="padding:8px 14px;border:1px solid #2196f3;border-radius:6px;color:#2196f3;text-decoration:none;">Вход</a>`;
-    }
-  });
-</script>
-  </header>
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background-color: #f6f6f6;
-    }
-
-    .hero {
-      width: 100%;
-      height: auto;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 40px 20px;
-    }
-
-    h1 {
-      text-align: center;
-      color: #001233;
-    }
-
-    p.subtitle {
-      text-align: center;
-      margin-bottom: 40px;
-      color: #333;
-    }
-
-    .card {
-      display: flex;
-      align-items: center;
-      margin-bottom: 60px;
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      transition: box-shadow 0.3s ease;
-    }
-
-    .card:hover {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    .card img {
-      width: 220px;
-      height: auto;
-      margin-right: 30px;
-      border-radius: 4px;
-    }
-
-    .card a {
-      text-decoration: none;
-      color: #1c5f1f;
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-    .card a:hover {
-      text-decoration: underline;
-    }
-
-    .description {
-      font-size: 16px;
-      color: #333;
-      margin-top: 10px;
-    }
+    .group:hover .dropdown-menu { display: block; }
   </style>
 </head>
-<body>
+<body class="text-gray-900 font-sans">
 
-  <!-- Прямоугольное изображение во всю ширину -->
-  <img src="images/photo_5253869756614833471_y.avif" alt="Header Banner" class="hero">
+  <!-- Header -->
+  <header class="flex flex-wrap justify-between items-center px-4 py-3 border-b">
+    <div class="flex items-center space-x-2">
+      <img src="images/photo_5238163653918846596_y (3).avif" alt="Logo" class="h-12">
+    </div>
 
-  <!-- Верхний блок -->
-  <section class="text-center py-10">
-    <h1 class="text-2xl font-bold text-lime-600">Карта S7avelii Priority</h1>
-    <p class="text-lg font-semibold mt-2">Получайте кэшбэк за покупки в S7avelii Shop</p>
-    <div class="mt-6 flex justify-center">
-      <a href="https://t.me/s7aveliishop" target="_blank" class="bg-lime-400 hover:bg-lime-500 text-black font-semibold py-3 px-8 rounded-md">
-        Оформить карту
+    <!-- Десктоп меню -->
+    <nav class="hidden md:flex space-x-6 text-sm items-center relative">
+      <div class="relative group">
+        <a href="Index.html" class="hover:underline">Покупка и управление</a>
+        <div class="dropdown-menu mt-2 py-2">
+          <a href="HOTEL.html" class="block px-4 py-2 hover:bg-gray-100">Отели</a>
+          <a href="arrivel.html" class="block px-4 py-2 hover:bg-gray-100">Направления</a>
+          <a href="class.html" class="block px-4 py-2 hover:bg-gray-100">Выбор класса</a>
+        </div>
+      </div>
+      <a href="priority.html" class="hover:text-green-600">S7avelii Priority</a>
+      <div class="relative group">
+        <a href="infom.html" class="hover:underline">Информация</a>
+        <div class="dropdown-menu mt-2 py-2">
+          <a href="body.html" class="block px-4 py-2 hover:bg-gray-100">О нас</a>
+          <a href="office.html" class="block px-4 py-2 hover:bg-gray-100">Представительство</a>
+          <a href="plane.html" class="block px-4 py-2 hover:bg-gray-100">Наш Флот</a>
+          <a href="eat.html" class="block px-4 py-2 hover:bg-gray-100">Питание</a>
+          <a href="VIP.html" class="block px-4 py-2 hover:bg-gray-100">VIP-залы</a>
+        </div>
+      </div>
+      <a href="s7hop.html" class="hover:text-green-600">S7avelii Shop</a>
+      <a href="busines.html" class="hover:underline">Бизнесу</a>
+      <a href="https://t.me/S7avelii7plane7" class="hover:underline">7PLANE7</a>
+    </nav>
+
+    <!-- Бургер для мобилы -->
+    <button id="menuBtn" class="md:hidden text-2xl">&#9776;</button>
+
+    <!-- Авторизация -->
+    <div class="flex items-center space-x-4 text-sm">
+      <span>RUB</span>
+      <span id="userArea"></span>
+    </div>
+  </header>
+
+  <!-- Мобильное меню -->
+  <div id="mobileMenu" class="hidden flex-col space-y-2 px-4 py-3 border-b md:hidden">
+    <a href="Index.html">Покупка и управление</a>
+    <a href="priority.html">S7avelii Priority</a>
+    <a href="infom.html">Информация</a>
+    <a href="s7hop.html">S7avelii Shop</a>
+    <a href="busines.html">Бизнесу</a>
+    <a href="https://t.me/S7avelii7plane7">7PLANE7</a>
+  </div>
+
+  <!-- Hero -->
+  <img src="images/1000035559.avif" alt="Header Banner" class="w-full h-auto">
+
+  <!-- Intro -->
+  <section class="text-center py-10 px-4">
+    <h1 class="text-2xl md:text-3xl font-bold text-lime-600">Карта S7avelii Priority</h1>
+    <p class="text-lg mt-2">Получайте кэшбэк за покупки в S7avelii Shop</p>
+    <a href="https://t.me/s7aveliishop" target="_blank" class="inline-block mt-6 bg-lime-400 hover:bg-lime-500 text-black font-semibold py-3 px-6 rounded-md">
+      Оформить карту
+    </a>
+  </section>
+
+  <!-- Описание -->
+  <section class="bg-gray-100 py-8 px-4 text-center md:text-left md:px-20">
+    <p class="text-lg max-w-4xl mx-auto">
+      Получайте кэшбэк за покупки картой <strong>S7avelii Priority</strong> в магазине <strong>S7avelii Shop</strong> и меняйте их на авиабилеты и деньги.
+      Для вас <strong>более 140 направлений</strong> маршрутной сети! Владельцы карт получают
+      <a href="#" class="text-lime-600 underline">закрытые распродажи</a>, <strong>двойные мили</strong> и все привилегии программы.
+    </p>
+  </section>
+
+  <!-- Привилегии -->
+  <section class="py-12 px-4 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+    <div class="flex space-x-4">
+      <div class="w-14 h-14 rounded-full bg-green-600 text-white flex items-center justify-center text-xl font-bold">₽</div>
+      <div>
+        <h3 class="font-bold">Бонусный кэшбэк</h3>
+        <p class="text-gray-600">До 1% кэшбэка с покупок</p>
+      </div>
+    </div>
+    <div class="flex space-x-4">
+      <div class="w-14 h-14 rounded-full bg-green-600 text-white flex items-center justify-center text-xl font-bold">%</div>
+      <div>
+        <h3 class="font-bold">Закрытые распродажи</h3>
+        <p class="text-gray-600">Только для участников программы</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIP -->
+  <section class="bg-gray-100 py-8 text-center">
+    <h2 class="text-xl md:text-2xl font-bold text-green-700">По картам S7avelii Priority VIP</h2>
+  </section>
+
+  <!-- VIP преимущества -->
+  <section class="py-12 px-4 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+    <div class="flex space-x-4">
+      <div class="w-14 h-14 rounded-full bg-green-600 text-white flex items-center justify-center">₽₽</div>
+      <div><h3 class="font-bold">Удвоенный кэшбэк</h3></div>
+    </div>
+    <div class="flex space-x-4">
+      <div class="w-14 h-14 rounded-full bg-gray-700 text-white flex items-center justify-center">★</div>
+      <div><h3 class="font-bold">Приоритетное обслуживание</h3></div>
+    </div>
+    <div class="flex space-x-4">
+      <div class="w-14 h-14 rounded-full bg-gray-700 text-white flex items-center justify-center">👤</div>
+      <div><h3 class="font-bold">Доступ к ивентам</h3></div>
+    </div>
+  </section>
+
+  <!-- Карты -->
+  <section class="bg-gray-50 py-14 px-4 text-center">
+    <h2 class="text-2xl md:text-3xl font-bold">Выберите свою карту</h2>
+    <p class="mt-2 text-gray-700">Оформите онлайн и получите за 5 дней</p>
+
+    <div class="mt-10 space-y-10">
+      <a href="https://forms.yandex.ru/cloud/67d9a11a90fa7bedd501abc8" target="_blank" class="block">
+        <div class="flex flex-col md:flex-row items-center gap-4">
+          <img src="images/photo_5390993038580515190_y.avif" class="w-56 rounded shadow">
+          <div class="text-left">
+            <span class="text-xl font-bold underline block">S7avelii Priority VIP</span>
+            <p class="text-green-700">7% кэшбэк и привилегии</p>
+          </div>
+        </div>
+      </a>
+      <a href="https://forms.yandex.ru/cloud/67d9a021d04688f0a4d873f3" target="_blank" class="block">
+        <div class="flex flex-col md:flex-row items-center gap-4">
+          <img src="images/photo_5391198234938043960_y.avif" class="w-56 rounded shadow">
+          <div class="text-left">
+            <span class="text-xl font-bold underline block">S7avelii Priority Classic</span>
+            <p class="text-green-700">1% кэшбэк</p>
+          </div>
+        </div>
       </a>
     </div>
   </section>
 
-  <!-- Описание карты -->
-  <section class="bg-gray-100 py-8 px-4 text-center md:text-left md:px-32">
-    <p class="text-lg max-w-4xl mx-auto">
-      Получайте кэшбэк за покупки картой <strong>S7avelii Priority</strong> в магазине <strong>S7avelii Shop</strong> и меняйте их на авиабилеты и деньги.
-      Для вас <strong>более 140 направлений</strong> маршрутной сети S7avelii Airlines! Владельцы карт S7avelii Priority получают доступ к
-      <a href="#" class="text-lime-600 underline">закрытым распродажам</a>, <strong>двойные мили за покупки</strong> и все привилегии программы лояльности авиакомпании.
-    </p>
+  <!-- Условия -->
+  <section class="py-12 text-center">
+    <h2 class="text-green-500 text-2xl font-bold">Условия оформления</h2>
+    <h3 class="mt-6 font-bold">VIP</h3>
+    <p>Стоимость выпуска — 150 ₽</p>
+    <p>Обслуживание бесплатно при покупках, иначе 10 ₽/мес</p>
+    <h3 class="mt-6 font-bold">Classic</h3>
+    <p>Бесплатная карта</p>
+    <p>Выпуск — 150 ₽</p>
   </section>
 
-  <!-- Блоки привилегий -->
-  <section class="py-12 px-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-    <div class="flex items-start space-x-4">
-      <div class="w-14 h-14 rounded-full bg-green-600 text-white flex items-center justify-center text-2xl font-bold">₽</div>
-      <div>
-        <h3 class="font-bold mb-1">Бонусный и статусный кэшбэк за ежедневные покупки</h3>
-        <p class="text-gray-600">До 1% кэшбэка с покупок</p>
+  <!-- Footer -->
+  <footer class="bg-gray-100 px-4 py-6 mt-10">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 max-w-5xl mx-auto">
+      <div class="text-sm text-gray-600">© 2025. S7avelii Airlines — Все права защищены</div>
+      <div class="flex gap-3">
+        <a href="https://vk.com/savelii577"><img src="images/icons8-vk-logo-30.avif" class="w-6 h-6"></a>
+        <a href="https://www.tiktok.com/@s7avelii"><img src="images/icons8-tiktok-logo-50 (1).avif" class="w-6 h-6"></a>
+        <a href="https://youtube.com/@S7avelii_Airlines"><img src="images/icons8-youtube-logo-50.avif" class="w-6 h-6"></a>
+        <a href="https://t.me/S7saveliiairlines"><img src="images/icons8-telegram-logo-50 (1).avif" class="w-6 h-6"></a>
       </div>
     </div>
+  </footer>
 
-    <div class="flex items-start space-x-4">
-      <div class="w-14 h-14 rounded-full bg-green-600 text-white flex items-center justify-center text-xl font-bold">%</div>
-      <div>
-        <h3 class="font-bold mb-1">Закрытые распродажи в Telegram-канале S7avelii Airlines</h3>
-        <p class="text-gray-600">Скидки и акции доступны только участникам программы</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Второй блок -->
-  <section class="bg-gray-100 py-6 text-center">
-    <h2 class="text-xl font-bold text-green-700">По картам S7avelii Priority VIP</h2>
-  </section>
-
-  <!-- VIP преимущества -->
-  <section class="py-12 px-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-    <div class="flex items-start space-x-4">
-      <div class="w-14 h-14 rounded-full bg-green-600 text-white flex items-center justify-center text-2xl font-bold">₽₽</div>
-      <div>
-        <h3 class="font-bold mb-1">Удвоите кэшбэк</h3>
-        <p class="text-gray-600">Бонусный кэшбэк накапливается при совершении покупок в S7avelii Shop</p>
-      </div>
-    </div>
-
-    <div class="flex items-start space-x-4">
-      <div class="w-14 h-14 rounded-full bg-gray-700 text-white flex items-center justify-center text-xl font-bold">★</div>
-      <div>
-        <h3 class="font-bold mb-1">Приоритетное обслуживание</h3>
-        <p class="text-gray-600">Выделенная линия поддержки — повышенная конфиденциальность, 7% кэшбэка с покупок</p>
-      </div>
-    </div>
-
-    <div class="flex items-start space-x-4">
-      <div class="w-14 h-14 rounded-full bg-gray-700 text-white flex items-center justify-center text-xl font-bold">👤</div>
-      <div>
-        <h3 class="font-bold mb-1">2 бесплатных посещения высших мероприятий</h3>
-        <p class="text-gray-600">Доступ к эксклюзивным ивентам в году</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Выбор карты -->
-<section class="bg-gray-50 py-14 px-6 text-center">
-  <h2 class="text-2xl md:text-3xl font-bold text-gray-900">Выберите свою карту</h2>
-  <p class="mt-2 text-gray-700 text-lg">Оцените преимущества карты, оформите её онлайн и получите за 5 дней</p>
-
-  <div class="mt-12 max-w-5xl mx-auto space-y-12">
-
-    <!-- Карта VIP -->
-    <a href="https://forms.yandex.ru/cloud/67d9a11a90fa7bedd501abc8" target="_blank" class="block hover:opacity-90 transition">
-      <div class="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
-        <img src="images/photo_5390993038580515190_y.avif" alt="S7avelii Priority VIP" class="w-56 rounded-md shadow-md">
-        <div class="text-left">
-          <span class="text-xl font-bold underline text-black hover:text-lime-700 block mb-1">S7avelii Priority VIP</span>
-          <p class="text-green-700">7 % кэшбэк и множество других привилегий</p>
-        </div>
-      </div>
-    </a>
-
-     <!-- Карта Classic -->
-    <div class="card">
-      <img src="images/photo_5391198234938043960_y.avif" alt="S7avelii Priority Classic">
-      <div>
-        <a href="https://forms.yandex.ru/cloud/67d9a021d04688f0a4d873f3" target="_blank">
-          S7avelii Priority Classic
-        </a>
-        <p class="description">1% кэшбэк</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Условия оформления -->
-    <div style="text-align: center; margin-top: 50px;">
-  <h2 style="color: #92ff05;">Условия оформления</h2>
-
-  <h3>VIP</h3>
-  <p>Чтобы получить её, нужно заплатить 50 ₽</p>
-  <p>Карта электронная, выпуск стоит 150 ₽.</p>
-  <p>Бесплатное обслуживание при ежемесячных покупках на S7avelii Shop. Иначе 10 ₽ в месяц.</p>
-
-  <h3>Classic</h3>
-  <p>Карта бесплатная</p>
-  <p>Карта электронная, выпуск стоит 150 ₽.</p>
-  <p>Бесплатное обслуживание.</p>
-</div>
-<!-- Footer -->
-<footer class="footer">
-  <div class="footer-container">
-    <div class="footer-left">
-      © 2025. S7avelii Airlines — Все права защищены
-    </div>
-    <div class="footer-right">
-      <a href="https://vk.com/savelii577" target="_blank"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
-      <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1" target="_blank"><img src="images/icons8-tiktok-logo-50 (1).avif" alt="Tik Tok"></a>
-      <a href="www.youtube.com/@S7avelii_Airlines" target="_blank"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
-      <a href="https://t.me/S7saveliiairlines" target="_blank"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
-    </div>
-  </div>
-</footer>
-
-<style>
-  .footer {
-    background-color: #f1f4f9; /* как на скрине */
-    padding: 20px 40px;
-    position: relative;
-    bottom: 0;
-    width: 100%;
-  }
-
-  .footer-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .footer-left {
-    font-size: 14px;
-    color: #667;
-  }
-
-  .footer-right a {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    margin-left: 10px;
-    border-radius: 50%;
-    background: white;
-    transition: transform 0.2s;
-  }
-
-  .footer-right a:hover {
-    transform: scale(1.1);
-  }
-
-  .footer-right img {
-    width: 20px;
-    height: 20px;
-  }
-</style>
+<script>
+  document.getElementById("menuBtn").addEventListener("click", () => {
+    document.getElementById("mobileMenu").classList.toggle("hidden");
+  });
+</script>
 </body>
 </html>
