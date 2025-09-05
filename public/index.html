@@ -49,12 +49,12 @@
 
 <body class="text-gray-900 font-sans">
 </style>
-  <style>
+   <style>
     body {
       background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
     }
     .gradient-green {
-      background: linear-gradient(90deg, rgb(215, 230, 6) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+      background: linear-gradient(90deg, rgb(155, 209, 8) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
       color: white;
     }
    <style>
@@ -62,7 +62,7 @@
       background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
     }
     .gradient-green {
-      background: linear-gradient(90deg, rgb(203, 230, 6) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
+      background: linear-gradient(90deg, rgb(155, 209, 8) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
       color: white;
     }
     <style>
@@ -324,7 +324,125 @@
       </div>
     </div>
   </section>
-  
+
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Рейсы из Москвы</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f9fc;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 30px;
+      background-color: #fafafa; /* тёмно-серый фон */
+      border-radius: 12px;       /* скруглим углы для красоты */
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .header h2 {
+      font-size: 28px;
+      color: #0d141a; /* белый текст */
+      margin: 0;
+      font-weight: bold;
+    }
+    .header a {
+      font-size: 14px;
+      color: #6c6e71; /* светло-серый */
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .flights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 30px;
+    }
+    .flight {
+      padding: 10px 0;
+      border-bottom: 1px solid #cccfd7; /* тёмная линия */
+    }
+    .flight h3 {
+      margin: 0;
+      font-size: 18px;
+      color: #1f2235; /* белый текст */
+      font-weight: bold;
+    }
+    .flight p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #7f8185; /* светло-серый */
+    }
+    .flight .status {
+      color: #a3ce09; /* зелёный как на скрине */
+      font-weight: bold;
+      font-size: 15px;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>Рейсы из Савелий</h2>
+      <a href="#">Расписание рейсов</a>
+    </div>
+    <div class="flights-grid">
+      <div class="flight">
+        <h3>Уфа</h3>
+        <p>из Савелий и обратно</p>
+        <div class="status">ежедневно</div>
+      </div>
+      <div class="flight">
+        <h3>Барнаул</h3>
+        <p>из Савелий и обратно</p>
+        <div class="status">ежедневно</div>
+      </div>
+      <div class="flight">
+        <h3>Горно-Алтайск</h3>
+        <p>из Савелий и обратно</p>
+        <div class="status">ежедневно</div>
+      </div>
+      <div class="flight">
+        <h3>Челябинск</h3>
+        <p>из Савелий и обратно</p>
+        <div class="status">ежедневно</div>
+      </div>
+      <div class="flight">
+        <h3>Краснодар</h3>
+        <p>из Савелий и обратно</p>
+        <div class="status">ежедневно</div>
+      </div>
+      <div class="flight">
+        <h3>Вена</h3>
+        <p>из Савелий и обратно</p>
+        <div class="status">ежедневно</div>
+      </div>
+      <div class="flight">
+        <h3>Новосибирск</h3>
+        <p>из Савелий и обратно</p>
+        <div class="status">ежедневно</div>
+      </div>
+      <div class="flight">
+        <h3>Благовещенск</h3>
+        <p>из Савелий и обратно</p>
+        <div class="status">ежедневно</div>
+      </div>
+      <div class="flight">
+        <h3>Пенза</h3>
+        <p>из Савелий и обратно</p>
+        <div class="status">ежедневно</div>
+      </div>
+      <div class="flight">
+    </div>
+  </div>
 <!-- Новости S7avelii Airlines -->
 <section class="max-w-7xl mx-auto px-4 py-12">
   <div class="flex justify-between items-center mb-8">
@@ -340,25 +458,25 @@
     <!-- Карточка 1 -->
     <div class="rounded-2xl border p-6 shadow-sm">
       <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-orange-400 to-pink-400"></div>
-      <h3 class="font-bold text-lg mb-2">S7avelii Airlines начала разработку нового проекта</h3>
-      <p class="text-gray-600 mb-4"></p>
-      <span class="text-sm text-gray-400">5 СЕН 2025</span>
+      <h3 class="font-bold text-lg mb-2">S7avelii Airlines запустил проект S7avelii-IT</h3>
+      <p class="text-gray-600 mb-4">Сегодня мы запускаем проект S7avelii-IT. Заказывайте у нас сайты и телеграмм-боты</p>
+      <span class="text-sm text-gray-400">7 СЕН 2025</span>
     </div>
 
     <!-- Карточка 2 -->
     <div class="rounded-2xl border p-6 shadow-sm">
       <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-yellow-300 to-green-400"></div>
-      <h3 class="font-bold text-lg mb-2">"Ваши впечатления": приложение S7avelii Airlines снова для APK </h3>
-      <p class="text-gray-600 mb-4">Сегодя мы обновили наше официальное мобильное приложение, успейте первыми его опробовать </p>
-      <span class="text-sm text-gray-400">4 СЕН 2025</span>
+      <h3 class="font-bold text-lg mb-2">S7avelii Airlines начала подгатовку квартальных отчётов</h3>
+      <p class="text-gray-600 mb-4"></p>
+      <span class="text-sm text-gray-400">5 СЕН 2025</span>
     </div>
 
     <!-- Карточка 3 -->
     <div class="rounded-2xl border p-6 shadow-sm">
       <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-sky-300 to-blue-600"></div>
-      <h3 class="font-bold text-lg mb-2">S7avelii Airlines разместила билеты на рейсы на Тенерифе</h3>
-      <p class="text-gray-600 mb-4">S7avelii Airlines смогла договорится о рейсах на Испанский остров Тенерифе</p>
-      <span class="text-sm text-gray-400">3 СЕН 2025</span>
+      <h3 class="font-bold text-lg mb-2">"Ваши впечатления": приложение S7avelii Airlines снова для APK</h3>
+      <p class="text-gray-600 mb-4">Сегодя мы обновили наше официальное мобильное приложение, успейте первыми его опробовать</p>
+      <span class="text-sm text-gray-400">4 СЕН 2025</span>
     </div>
   </div>
 </section>
@@ -380,14 +498,14 @@
         <img src="images/photo_5253869756614833583_x.avif" alt="Карта сокровищ" class="w-full h-48 object-cover">
         <div class="p-6">
           <h3 class="text-xl font-bold mb-2">Греция с новой стороны</h3>
-          <p class="text-gray-600 mb-4">Как на счёт того, чтобы провести остаток лета в прекрасной европейской стране, у побережья средиземного моря</p>
+          <p class="text-gray-600 mb-4">Как на счёт того, чтобы провести начало осени в прекрасной европейской стране, у побережья средиземного моря</p>
           <a href="https://t.me/S7avelii7plane7" class="bg-gray-100 px-4 py-2 rounded hover:bg-gray-200">Читать</a>
         </div>
       </div>
     <div class="bg-white rounded-xl shadow-md overflow-hidden">
         <img src="images/photo_5253869756614833582_x.avif" alt="Лето, волны, эчпочмак" class="w-full h-48 object-cover">
         <div class="p-6">
-          <h3 class="text-xl font-bold mb-2">Лето, волны, Геленджик</h3>
+          <h3 class="text-xl font-bold mb-2">Горы, осень, Геленджик</h3>
           <p class="text-gray-600 mb-4">Российский курортный городок не уступающий заграничным аналогам</p>
           <a href="https://t.me/S7avelii7plane7" class="bg-gray-100 px-4 py-2 rounded hover:bg-gray-200">Читать</a>
         </div>
