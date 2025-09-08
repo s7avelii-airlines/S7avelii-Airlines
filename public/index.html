@@ -425,6 +425,127 @@
     </div>
   </div>
 </body>
+
+<head>
+  <meta charset="UTF-8">
+  <title>S7 Shop</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 40px 0; /* убрал боковые отступы, чтобы контейнер сам центрировался */
+      background: #ffffff;
+      color: #1c232b;
+    }
+
+    .container {
+      max-width: 1100px; /* ограничиваем ширину */
+      margin: 0 auto;   /* центрируем */
+      padding: 0 20px;  /* чуть воздуха по бокам */
+    }
+
+    .shop-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .shop-header h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .shop-header a {
+      font-size: 14px;
+      font-weight: 500;
+      color: #1a1a1a;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #ffffff;
+      padding: 6px 12px;
+      border-radius: 50px;
+    }
+
+    .shop-header a:hover {
+      background: #ffffff;
+    }
+
+    .products {
+      display: flex;
+      gap: 30px;
+      justify-content: center; /* карточки по центру */
+    }
+
+    .product-card {
+      width: 250px;
+      text-align: left;
+    }
+
+    .product-card img {
+      width: 100%;
+      border-radius: 16px;
+      background: #ffffff;
+      margin-bottom: 12px;
+    }
+
+    .price {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .price del {
+      color: #d32f2f;
+      margin-left: 8px;
+      font-size: 14px;
+    }
+
+    .product-card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="shop-header">
+      <h2>S7avelii Shop</h2>
+      <a href="s7hop.html">Все товары ➝</a>
+    </div>
+
+    <div class="products">
+      <div class="product-card">
+        <img src="images/photo_5330078908990750483_y.avif" alt="Несессер">
+        <div class="price">4 500 ₽</div>
+        <h3>Комбо "Путешественник"</h3>
+      </div>
+
+      <div class="product-card">
+        <img src="images/photo_5330078908990750484_y.avif" alt="Сумка">
+        <div class="price">2 350 ₽</div>
+        <h3>Комбо Блокнот + Футболка</h3>
+      </div>
+
+      <div class="product-card">
+        <img src="images/photo_5330078908990750485_y.avif" alt="Модель самолета">
+        <a href="" class="price"> 500 ₽ <del> 650 ₽</del></a>
+        <h3>Блокнот S7avelii</h3>
+      </div>
+    </div>
+  </div>
+</body>
       
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -497,51 +618,50 @@
     </div>
     <div class="flights-grid">
       <div class="flight">
-        <h3>Уфа</h3>
+        <h3>Ставрополь</h3>
         <p>из Савелий и обратно</p>
         <div class="status">ежедневно</div>
       </div>
       <div class="flight">
-        <h3>Барнаул</h3>
+        <h3>Архангельск</h3>
         <p>из Савелий и обратно</p>
         <div class="status">ежедневно</div>
       </div>
       <div class="flight">
-        <h3>Горно-Алтайск</h3>
+        <h3>Пафос</h3>
         <p>из Савелий и обратно</p>
         <div class="status">ежедневно</div>
       </div>
       <div class="flight">
-        <h3>Челябинск</h3>
+        <h3>Южно-Сахалинск</h3>
         <p>из Савелий и обратно</p>
         <div class="status">ежедневно</div>
       </div>
       <div class="flight">
-        <h3>Краснодар</h3>
+        <h3>Минеральные Воды</h3>
         <p>из Савелий и обратно</p>
         <div class="status">ежедневно</div>
       </div>
       <div class="flight">
-        <h3>Вена</h3>
+        <h3>Чита</h3>
         <p>из Савелий и обратно</p>
         <div class="status">ежедневно</div>
       </div>
       <div class="flight">
-        <h3>Новосибирск</h3>
+        <h3>Тенерифе</h3>
         <p>из Савелий и обратно</p>
         <div class="status">ежедневно</div>
       </div>
       <div class="flight">
-        <h3>Благовещенск</h3>
+        <h3>Грозный</h3>
         <p>из Савелий и обратно</p>
         <div class="status">ежедневно</div>
       </div>
       <div class="flight">
-        <h3>Пенза</h3>
+        <h3>Ереван</h3>
         <p>из Савелий и обратно</p>
         <div class="status">ежедневно</div>
       </div>
-      <div class="flight">
     </div>
   </div>
 </body>
