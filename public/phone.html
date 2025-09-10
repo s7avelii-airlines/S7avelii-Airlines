@@ -13,6 +13,15 @@
   </style>
 </head>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const isMobile = /Android|iPhone|iPad|iPod|Windows Phone|Mobi/i.test(navigator.userAgent);
+  if (!isMobile) {
+    window.location.href = "index.html"; // редирект обратно на ПК-версию
+  }
+});
+</script>
+  
 <body class="text-gray-900">
   <!-- Шапка -->
   <header class="flex justify-between items-center p-4 bg-white shadow">
