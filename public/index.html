@@ -679,25 +679,25 @@ document.addEventListener("DOMContentLoaded", () => {
     <!-- Карточка 1 -->
     <div class="rounded-2xl border p-6 shadow-sm">
       <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-orange-400 to-pink-400"></div>
-      <h3 class="font-bold text-lg mb-2">S7avelii Airlines запустила огромную распродажу</h3>
-      <p class="text-gray-600 mb-4">Скидки в S7avelii Shop до 40% 3 дня</p>
-      <span class="text-sm text-gray-400">10 СЕН 2025</span>
+      <h3 class="font-bold text-lg mb-2">S7avelii Airlines возобнавляет рейсы по маршруту Савелий - Краснодар</h3>
+      <p class="text-gray-600 mb-4">Спустя несколько лет застоя аэропорт Краснодара открыт, мы одни из первых, кто запустит рейсы</p>
+      <span class="text-sm text-gray-400">12 СЕН 2025</span>
     </div>
 
     <!-- Карточка 2 -->
     <div class="rounded-2xl border p-6 shadow-sm">
       <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-yellow-300 to-green-400"></div>
-      <h3 class="font-bold text-lg mb-2">S7avelii Airlines запустил проект S7avelii-IT</h3>
-      <p class="text-gray-600 mb-4">Сегодня мы запускаем проект S7avelii-IT. Заказывайте у нас сайты и телеграмм-боты</p>
-      <span class="text-sm text-gray-400">7 СЕН 2025</span>
+      <h3 class="font-bold text-lg mb-2">S7avelii Airlines запустила огромную распродажу</h3>
+      <p class="text-gray-600 mb-4">Скидки в S7avelii Shop до 40% 3 дня</p>
+      <span class="text-sm text-gray-400">10 СЕН 2025</span>
     </div>
 
     <!-- Карточка 3 -->
     <div class="rounded-2xl border p-6 shadow-sm">
       <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-sky-300 to-blue-600"></div>
-      <h3 class="font-bold text-lg mb-2">"Ваши впечатления": приложение S7avelii Airlines снова для APK</h3>
-      <p class="text-gray-600 mb-4">Сегодя мы обновили наше официальное мобильное приложение, успейте первыми его опробовать</p>
-      <span class="text-sm text-gray-400">4 СЕН 2025</span>
+      <h3 class="font-bold text-lg mb-2">S7avelii Airlines запустил проект S7avelii-IT</h3>
+      <p class="text-gray-600 mb-4">Сегодня мы запускаем проект S7avelii-IT. Заказывайте у нас сайты и телеграмм-боты</p>
+      <span class="text-sm text-gray-400">7 СЕН 2025</span>
     </div>
   </div>
 </section>
@@ -723,6 +723,8 @@ document.addEventListener("DOMContentLoaded", () => {
       max-width: 1200px;
       margin: 40px auto;
       padding: 0 20px;
+      display: flex;
+      justify-content: center; /* центрируем по горизонтали */
     }
 
     /* Сетка */
@@ -744,7 +746,8 @@ document.addEventListener("DOMContentLoaded", () => {
       font-weight: 700;
       line-height: 1.2;
       color: #111;
-      white-space: pre-line; /* переносы как в макете */
+      white-space: pre-line;
+      text-align: left;
     }
 
     .art {
@@ -757,7 +760,7 @@ document.addEventListener("DOMContentLoaded", () => {
       flex-direction: column;
       gap: 16px;
       flex: 1;
-      max-width: 100%;
+      max-width: 500px;
     }
 
     .text-block {
@@ -778,16 +781,12 @@ document.addEventListener("DOMContentLoaded", () => {
       font-weight: 500;
       color: #222;
       margin-bottom: 8px;
-      white-space: normal !important;
-      word-break: break-word;
     }
 
     .faq-item a {
       text-decoration: none;
       color: inherit;
       transition: color .2s;
-      white-space: normal !important;
-      word-break: break-word;
     }
     .faq-item a:hover {
       color: #0078d4;
@@ -799,8 +798,6 @@ document.addEventListener("DOMContentLoaded", () => {
       font-size: 16px;
       line-height: 1.4;
       color: #333;
-      white-space: normal !important;
-      word-break: break-word;
     }
 
     /* адаптивность */
@@ -810,9 +807,9 @@ document.addEventListener("DOMContentLoaded", () => {
         text-align: center;
       }
       .left { align-items: center; }
-      .headline { font-size: 32px; }
+      .headline { font-size: 32px; text-align: center; }
       .art { max-width: 200px; }
-      .right { align-items: center; }
+      .right { align-items: center; max-width: 100%; }
       .text-block { text-align: center; }
     }
   </style>
