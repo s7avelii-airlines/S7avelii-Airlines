@@ -733,6 +733,145 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
   </section>
 
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Справочный центр — макет</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --page-bg: #ffffff;
+    --text: #14202b;
+  }
+
+  body{
+    margin:0;
+    background:var(--page-bg);
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+    color:var(--text);
+  }
+
+  .page {
+    max-width:1200px;
+    margin:40px auto;
+    padding:20px 32px;
+  }
+
+  .columns {
+    display:flex;
+    align-items:flex-start;
+    gap:60px;
+  }
+
+  .left {
+    width:360px;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .headline {
+    font-weight:700;
+    font-size:44px;
+    line-height:1.05;
+    letter-spacing:-0.01em;
+    margin:14px 0 10px 0;
+    white-space:pre-line;
+  }
+
+  .art-wrap {
+    margin-top:16px;
+  }
+
+  .art {
+    width:320px;
+    height:auto;
+    display:block;
+  }
+
+  .right {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    padding-top:6px;
+  }
+
+  .faq-list {
+    list-style:none;
+    padding:0;
+    margin:0;
+  }
+
+  .faq-item{
+    font-size:20px;
+    line-height:1.9;
+    font-weight:500;
+    margin:4px 0;
+  }
+
+  .faq-item a{
+    color:#1f2b33;
+    text-decoration:none;
+    transition:color .2s;
+  }
+  .faq-item a:hover{
+    color:#0078d4; /* синий при наведении */
+    text-decoration:underline;
+  }
+
+  .long {
+    font-size:18px;
+    line-height:1.5;
+    margin-top:18px;
+    max-width:680px;
+  }
+
+  @media (max-width:900px){
+    .columns{flex-direction:column;gap:20px;}
+    .left{width:100%;}
+    .art{width:260px;}
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="columns">
+      <div class="left">
+        <div class="headline">
+Найти ответ
+в Справочном
+центре
+        </div>
+        <div class="art-wrap">
+          <img class="art" src="images/1757601548123.avif" alt="иллюстрация вопроса">
+        </div>
+      </div>
+
+      <div class="right">
+        <ul class="faq-list" aria-label="Список вопросов">
+          <li class="faq-item"><a href="faq1.html">Можно ли взять чемодан в самолёт?</a></li>
+          <li class="faq-item"><a href="arrivel.html">В какие города вы летаете?</a></li>
+          <li class="faq-item"><a href="https://t.me/s7aveliihelper">Что даёт карта S7avelii Priority?</a></li>
+          <li class="faq-item"><a href="https://t.me/s7aveliihelper">Где узнать статус заказа S7avelii Shop?</a></li>
+          <li class="faq-item"><a href="https://t.me/s7aveliihelper">Как разобраться с личным кабинетом?</a></li>
+          <li class="faq-item"><a href="https://t.me/s7aveliihelper">Как можно накопить мили S7avelii?</a></li>
+          <li class="faq-item"><a href="https://t.me/s7aveliihelper">Как работает оплата «Милями»?</a></li>
+          <li class="faq-item"><a href="https://t.me/s7aveliihelper">Как я могу заказать билет на сайте?</a></li>
+        </ul>
+
+        <div class="long">
+          Я никак не могу понять как работает ваш сайт, запутался не могу . 
+          <a href="https://t.me/s7aveliihelper">Служба поддержки?</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
   <div class="max-w-[1400px] mx-auto">
       <!-- ВЕСЬ ТВОЙ САЙТ -->
   </div>
