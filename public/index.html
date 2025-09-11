@@ -725,10 +725,10 @@ document.addEventListener("DOMContentLoaded", () => {
       padding: 0 20px;
     }
 
-    /* Сетка для правильного расположения */
+    /* Сетка */
     .columns {
       display: grid;
-      grid-template-columns: 1fr 2fr; /* левая и правая колонка */
+      grid-template-columns: minmax(280px, 1fr) minmax(400px, 2fr);
       gap: 40px;
       align-items: start;
     }
@@ -756,16 +756,19 @@ document.addEventListener("DOMContentLoaded", () => {
       display: flex;
       flex-direction: column;
       gap: 16px;
-      max-width: 500px; /* ограничиваем ширину колонки */
+      flex: 1;
+      max-width: 100%;
     }
 
     .text-block {
       line-height: 1.6;
       text-align: left;
+      white-space: normal !important;
+      word-break: break-word;
     }
 
     .faq-list {
-      list-style: none;     /* убираем маркеры */
+      list-style: none;
       padding: 0;
       margin: 0;
     }
@@ -775,12 +778,16 @@ document.addEventListener("DOMContentLoaded", () => {
       font-weight: 500;
       color: #222;
       margin-bottom: 8px;
+      white-space: normal !important;
+      word-break: break-word;
     }
 
     .faq-item a {
       text-decoration: none;
       color: inherit;
       transition: color .2s;
+      white-space: normal !important;
+      word-break: break-word;
     }
     .faq-item a:hover {
       color: #0078d4;
@@ -792,6 +799,8 @@ document.addEventListener("DOMContentLoaded", () => {
       font-size: 16px;
       line-height: 1.4;
       color: #333;
+      white-space: normal !important;
+      word-break: break-word;
     }
 
     /* адаптивность */
@@ -843,6 +852,7 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     </div>
   </div>
+  
   <div class="max-w-[1400px] mx-auto">
       <!-- ВЕСЬ ТВОЙ САЙТ -->
   </div>
