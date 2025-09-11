@@ -791,6 +791,13 @@ document.addEventListener("DOMContentLoaded", () => {
     .art { max-width: 200px; }
     .right { align-items: center; }
   }
+  .text-block {
+  max-width: 400px;   /* ширина колонки */
+  line-height: 1.5;   /* расстояние между строками */
+  text-align: left;   /* выравнивание по левому краю */
+  white-space: normal; /* чтобы текст переносился */
+  word-wrap: break-word; /* перенос длинных слов */
+}
 </style>
 </head>
 <body>
@@ -808,6 +815,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       <!-- правая колонка -->
      <div class="right">
+        <div class="text-block">
         <ul class="faq-list" aria-label="Список вопросов">
           <li class="faq-item"><a href="faq1.html">Можно ли взять чемодан в самолёт?</a></li>
           <li class="faq-item"><a href="arrivel.html">В какие города вы летаете?</a></li>
