@@ -704,35 +704,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <div class="grid grid-cols-3 gap-6">
 
-   <!-- Gate 7 Раздел -->
-    <section class="max-w-6xl mx-auto px-4 mb-12">
-  <div class="flex justify-between items-center mb-8">
-    <h2 class="text-3xl font-bold">7PLANE7</h2>
-    <a href="#" class="text-blue-900 text-sm hover:underline flex items-center">
-      <svg class="ml-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10 3a1 1 0 011.707-.707l6 6a1 1 0 010 1.414l-6 6A1 1 0 0110 15V3z" />
-      </svg>
-    </a>
-  </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-screen px-4">
-      <div class="bg-white rounded-xl shadow-md overflow-hidden">
-        <img src="images/photo_5253869756614833583_x.avif" alt="Карта сокровищ" class="w-full h-48 object-cover">
-        <div class="p-6">
-          <h3 class="text-xl font-bold mb-2">Греция с новой стороны</h3>
-          <p class="text-gray-600 mb-4">Как на счёт того, чтобы провести начало осени в прекрасной европейской стране, у побережья средиземного моря</p>
-          <a href="https://t.me/S7avelii7plane7" class="bg-gray-100 px-4 py-2 rounded hover:bg-gray-200">Читать</a>
-        </div>
-      </div>
-    <div class="bg-white rounded-xl shadow-md overflow-hidden">
-        <img src="images/photo_5253869756614833582_x.avif" alt="Лето, волны, эчпочмак" class="w-full h-48 object-cover">
-        <div class="p-6">
-          <h3 class="text-xl font-bold mb-2">Горы, осень, Геленджик</h3>
-          <p class="text-gray-600 mb-4">Российский курортный городок не уступающий заграничным аналогам</p>
-          <a href="https://t.me/S7avelii7plane7" class="bg-gray-100 px-4 py-2 rounded hover:bg-gray-200">Читать</a>
-        </div>
-      </div>
-  </section>
-
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -832,7 +803,7 @@ document.addEventListener("DOMContentLoaded", () => {
 в Справочном
 центре
         </div>
-        <img class="art" src="./art.png" alt="иллюстрация вопроса">
+        <img class="art" src="images/1757601548123.avif" alt="иллюстрация вопроса">
       </div>
 
       <!-- правая колонка -->
@@ -860,4 +831,125 @@ document.addEventListener("DOMContentLoaded", () => {
   <div class="max-w-[1400px] mx-auto">
       <!-- ВЕСЬ ТВОЙ САЙТ -->
   </div>
+ <!-- Модалка Вход -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close" data-close="loginModal">&times;</span>
+    <h2>Вход</h2>
+    <form id="loginForm">
+      <label>ФИО</label>
+      <input type="text" name="fio" required>
+
+      <label>Пароль</label>
+      <input type="password" name="password" required>
+
+      <button type="submit">Войти</button>
+    </form>
+    <p>
+      Нет аккаунта? <a href="#" id="openRegister">Зарегистрироваться</a>
+    </p>
+  </div>
+</div>
+
+<!-- Модалка Регистрация -->
+<div id="registerModal" class="modal">
+  <div class="modal-content">
+    <span class="close" data-close="registerModal">&times;</span>
+    <h2>Регистрация</h2>
+    <form id="registerForm">
+      <label>ФИО</label>
+      <input type="text" name="fio" required>
+
+      <label>Телефон</label>
+      <input type="tel" name="phone" required>
+
+      <label>Номер карты S7avelii Priority</label>
+      <input type="text" name="card" required>
+
+      <label>Пароль</label>
+      <input type="password" name="password" required>
+
+      <button type="submit">Зарегистрироваться</button>
+    </form>
+  </div>
+</div>
+
+<!-- Стили -->
+<style>
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+  background: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  width: 350px;
+  border-radius: 10px;
+}
+.close {
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+}
+input, button {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  padding: 8px;
+}
+</style>
+
+<!-- JS -->
+<script>
+const loginModal = document.getElementById('loginModal');
+const registerModal = document.getElementById('registerModal');
+
+document.getElementById('loginBtn').addEventListener('click', () => {
+  loginModal.style.display = 'block';
+});
+
+document.getElementById('openRegister').addEventListener('click', (e) => {
+  e.preventDefault();
+  loginModal.style.display = 'none';
+  registerModal.style.display = 'block';
+});
+
+document.querySelectorAll('.close').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.getElementById(btn.dataset.close).style.display = 'none';
+  });
+});
+
+// Закрытие при клике вне окна
+window.addEventListener('click', (e) => {
+  if (e.target === loginModal) loginModal.style.display = 'none';
+  if (e.target === registerModal) registerModal.style.display = 'none';
+});
+
+// Обработчики отправки форм
+document.getElementById('loginForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  alert('Вход выполнен (пока без сервера)');
+});
+
+document.getElementById('registerForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  alert('Регистрация выполнена (пока без сервера)');
+});
+</script>
+
+  <script>document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const fullname = this.fullname.value;
+  localStorage.setItem('fullname', fullname);
+  window.location.href = 'my-cabinet.html';
+});
+</script>
+</body>
 </html>
+
