@@ -733,127 +733,131 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
   </section>
 
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Справочный центр</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background: #fff;
+  }
+
+  .page {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+
+  /* Сетка для правильного расположения */
+  .columns {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* левая и правая колонка */
+    gap: 40px;
+    align-items: start;
+  }
+
+  .left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .headline {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #111;
+    white-space: pre-line; /* переносы как в макете */
+  }
+
+  .art {
+    max-width: 280px;
+    height: auto;
+  }
+
+  .right {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .faq-item {
+    font-size: 18px;
+    font-weight: 500;
+    color: #222;
+  }
+
+  .faq-item a {
+    text-decoration: none;
+    color: inherit;
+    transition: color .2s;
+  }
+  .faq-item a:hover {
+    color: #0078d4;
+    text-decoration: underline;
+  }
+
+  .long {
+    margin-top: 16px;
+    font-size: 16px;
+    line-height: 1.4;
+    color: #333;
+  }
+
+  /* адаптивность */
+  @media (max-width: 900px) {
+    .columns {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .left { align-items: center; }
+    .headline { font-size: 32px; }
+    .art { max-width: 200px; }
+    .right { align-items: center; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="columns">
+      <!-- левая колонка -->
+      <div class="left">
+        <div class="headline">
+Найти ответ
+в Справочном
+центре
+        </div>
+        <img class="art" src="./art.png" alt="иллюстрация вопроса">
+      </div>
+
+      <!-- правая колонка -->
+     <div class="right">
+        <ul class="faq-list" aria-label="Список вопросов">
+          <li class="faq-item"><a href="faq1.html">Можно ли взять чемодан в самолёт?</a></li>
+          <li class="faq-item"><a href="arrivel.html">В какие города вы летаете?</a></li>
+          <li class="faq-item"><a href="https://t.me/s7aveliihelper">Что даёт карта S7avelii Priority?</a></li>
+          <li class="faq-item"><a href="https://t.me/s7aveliihelper">Где узнать статус заказа S7avelii Shop?</a></li>
+          <li class="faq-item"><a href="https://t.me/s7aveliihelper">Как разобраться с личным кабинетом?</a></li>
+          <li class="faq-item"><a href="https://t.me/s7aveliihelper">Как можно накопить мили S7avelii?</a></li>
+          <li class="faq-item"><a href="https://t.me/s7aveliihelper">Как работает оплата «Милями»?</a></li>
+          <li class="faq-item"><a href="https://t.me/s7aveliihelper">Как я могу заказать билет на сайте?</a></li>
+        </ul>
+
+        <div class="long">
+          Я никак не могу понять как работает ваш сайт, запутался не могу . 
+          <a href="https://t.me/s7aveliihelper">Служба поддержки?</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
   <div class="max-w-[1400px] mx-auto">
       <!-- ВЕСЬ ТВОЙ САЙТ -->
   </div>
- <!-- Модалка Вход -->
-<div id="loginModal" class="modal">
-  <div class="modal-content">
-    <span class="close" data-close="loginModal">&times;</span>
-    <h2>Вход</h2>
-    <form id="loginForm">
-      <label>ФИО</label>
-      <input type="text" name="fio" required>
-
-      <label>Пароль</label>
-      <input type="password" name="password" required>
-
-      <button type="submit">Войти</button>
-    </form>
-    <p>
-      Нет аккаунта? <a href="#" id="openRegister">Зарегистрироваться</a>
-    </p>
-  </div>
-</div>
-
-<!-- Модалка Регистрация -->
-<div id="registerModal" class="modal">
-  <div class="modal-content">
-    <span class="close" data-close="registerModal">&times;</span>
-    <h2>Регистрация</h2>
-    <form id="registerForm">
-      <label>ФИО</label>
-      <input type="text" name="fio" required>
-
-      <label>Телефон</label>
-      <input type="tel" name="phone" required>
-
-      <label>Номер карты S7avelii Priority</label>
-      <input type="text" name="card" required>
-
-      <label>Пароль</label>
-      <input type="password" name="password" required>
-
-      <button type="submit">Зарегистрироваться</button>
-    </form>
-  </div>
-</div>
-
-<!-- Стили -->
-<style>
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 999;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  background-color: rgba(0,0,0,0.5);
-}
-.modal-content {
-  background: #fff;
-  margin: 10% auto;
-  padding: 20px;
-  width: 350px;
-  border-radius: 10px;
-}
-.close {
-  float: right;
-  font-size: 20px;
-  cursor: pointer;
-}
-input, button {
-  display: block;
-  width: 100%;
-  margin: 8px 0;
-  padding: 8px;
-}
-</style>
-
-<!-- JS -->
-<script>
-const loginModal = document.getElementById('loginModal');
-const registerModal = document.getElementById('registerModal');
-
-document.getElementById('loginBtn').addEventListener('click', () => {
-  loginModal.style.display = 'block';
-});
-
-document.getElementById('openRegister').addEventListener('click', (e) => {
-  e.preventDefault();
-  loginModal.style.display = 'none';
-  registerModal.style.display = 'block';
-});
-
-document.querySelectorAll('.close').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.getElementById(btn.dataset.close).style.display = 'none';
-  });
-});
-
-// Закрытие при клике вне окна
-window.addEventListener('click', (e) => {
-  if (e.target === loginModal) loginModal.style.display = 'none';
-  if (e.target === registerModal) registerModal.style.display = 'none';
-});
-
-// Обработчики отправки форм
-document.getElementById('loginForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  alert('Вход выполнен (пока без сервера)');
-});
-
-document.getElementById('registerForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  alert('Регистрация выполнена (пока без сервера)');
-});
-</script>
-
-  <script>document.getElementById('loginForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const fullname = this.fullname.value;
-  localStorage.setItem('fullname', fullname);
-  window.location.href = 'my-cabinet.html';
-});
-</script>
-</body>
 </html>
