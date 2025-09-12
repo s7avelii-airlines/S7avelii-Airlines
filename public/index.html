@@ -51,93 +51,256 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 </script>
-
-
-<body class="text-gray-900 font-sans">
-</style>
-   <style>
-    body {
-      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-    }
-    .gradient-green {
-      background: linear-gradient(90deg, rgb(155, 209, 8) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-      color: white;
-    }
-   <style>
-    body {
-      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-    }
-    .gradient-green {
-      background: linear-gradient(90deg, rgb(155, 209, 8) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-      color: white;
-    }
-    <style>
-  body {
-    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-  }
-
-  .dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 0.25rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 50;
-    min-width: 160px;
-  }
-
-  .group:hover .dropdown-menu {
-    display: block;
-  }
-</style>
 </head>
 
 <body class="text-gray-900 font-sans">
-   <!-- Header -->
-  <header class="flex justify-between items-center px-6 py-4 border-b">
-    <div class="flex items-center space-x-2">
-      <img src="images/photo_5238163653918846596_y (3).avif" alt="Savelii Airlines Logo" style="height: 60px;"
-    </div>
-    <nav class="space-x-20 text-sm flex items-center relative" >
-      <div class="relative group inline-block">
-      <a href="Index.html" class="hover:underline">Покупка и управление</a>
-      <div class="dropdown-menu mt-2 py-2">
-        <a href="HOTEL.html" class="block px-4 py-2 hover:bg-gray-100">Отели</a>
-        <a href="arrivel.html" class="block px-4 py-2 hover:bg-gray-100">Направления</a>
-        <a href="class.html" class="block px-4 py-2 hover:bg-gray-100">Выбор класса</a>
-      </div>
-      </div>
-      <a href="priority.html" class="text-gray-700 hover:text-green-600">S7avelii Priority</a>
-       <div class="relative group inline-block">
-      <a href="infom.html" class="hover:underline">Информация</a>
-      <div class="dropdown-menu mt-2 py-2">
-        <a href="body.html" class="text-gray-700 hover:text-green-600">О нас</a>
-        <a href="office.html" class="block px-4 py-2 hover:bg-gray-100">Представительство</a>
-        <a href="plane.html" class="block px-4 py-2 hover:bg-gray-100">Наш Флот</a>
-        <a href="eat.html" class="block px-4 py-2 hover:bg-gray-100">Питание</a>
-        <a href="VIP.html" class="block px-4 py-2 hover:bg-gray-100">VIP-залы</a>
-      </div>
-      </div>>
-      <a href="s7hop.html" class="text-gray-700 hover:text-green-600">S7avelii Shop</a>
-      <a href="busines.html" class="hover:underline">Бизнесу</a>
-      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-    <a href="https://t.me/S7avelii7plane7" class="block px-4 py-2 hover:bg-gray-100">7PLANE7</a>
-    </nav>
-    <div class="flex items-center space-x-3">
-      <button class="text-gray-500"></button>
-      <nav class="space-x-50 text-sm flex items-center relative" ></nav>
-      <span id="userArea"></span>
+</style>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      padding: 0 60px;
+      height: 80px;
+      border-bottom: 1px solid #ccc;
+      position: relative;
+      z-index: 1000;
+      background: #fff;
+    }
+
+    .logo-img {
+  height: 70px; /* подгоняешь по высоте под шапку */
+  width: auto;
+  cursor: pointer;
+}
+
+    .logo-circle {
+      background-color: #b3c900;
+      color: white;
+      font-weight: 700;
+      font-size: 20px;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 9px;
+      font-family: Arial, sans-serif;
+    }
+
+    nav {
+      display: flex;
+      flex-grow: 1;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 40px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    nav li {
+      position: relative;
+    }
+
+    nav a {
+      position: relative;
+      color: #000;
+      text-decoration: none;
+      font-size: 16px;
+      padding: 28px 0;
+    }
+
+    /* Салатовая полоска */
+    nav a::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background-color: #b3c900;
+      transition: width 0.3s ease;
+    }
+    nav li:hover > a::after {
+      width: 100%;
+    }
+
+    /* Подменю */
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #fff;
+      padding: 20px;
+      border-top: 2px solid #b3c900;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+      min-width: 240px;
+      z-index: 999;
+
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    nav li:hover .dropdown {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .dropdown a {
+      display: block;
+      padding: 8px 0;
+      color: #000;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .dropdown a:hover {
+      color: #b3c900;
+    }
+
+    .right-menu {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 16px;
+    }
+
+    .right-menu button,
+    .right-menu select {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .right-menu select {
+      border-left: 1px solid #ccc;
+      padding-left: 12px;
+      margin-left: 12px;
+      appearance: none;
+      background: none;
+    }
+
+    .icon-search {
+      width: 20px;
+      height: 20px;
+      stroke: black;
+      stroke-width: 2;
+      cursor: pointer;
+    }
+
+    .flag {
+      width: 20px;
+      height: 14px;
+      border-radius: 2px;
+      overflow: hidden;
+      box-shadow: 0 0 2px rgba(0,0,0,0.15);
+    }
+
+    .flag img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* userArea фикс */
+    #userArea {
+      display: flex;
+      align-items: center;
+    }
+    #userArea a {
+      padding: 8px 14px;
+      border: 1px solid #7ad30d;
+      border-radius: 6px;
+      color: #6dd808;
+      text-decoration: none;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    /* Пример контента */
+    main {
+      height: 2000px;
+      background: linear-gradient(to bottom, #f9f9f9, #e1e1e1);
+      padding: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+  <a href="index.html">
+    <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
+  </a>
+</div>
+
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Покупка и управление</a>
+        <div class="dropdown">
+          <a href="bilet.html">Купить билет</a>
+          <a href="auth.html">Управление бронированием</a>
+          <a href="arrivel.html">Направления</a>
+          <a href="HOTEL.html">Отели</a>
+          <a href="class.html">Выбор класса</a>
+        </div>
+      </li>
+      <li>
+        <a href="priority.html">S7avelii Priority</a>
+        <div class="dropdown">
+          <a href="priority.html">О программе</a>
+          <a href="https://t.me/s7aveliihelper">Как копить</a>
+        </div>
+      </li>
+      <li>
+        <a href="#">Информация</a>
+        <div class="dropdown">
+          <a href="body.html">О нас</a>
+          <a href="office.html">Представительство</a>
+          <a href="plane.html">Наш флот</a>
+          <a href="eat.html">Питание</a>
+          <a href="https://t.me/s7aveliihelper">Контакты</a>
+        </div>
+      </li>
+      <li><a href="busines.html">Бизнесу</a></li>
+      <li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
+    </ul>
   </nav>
+
+  <div class="right-menu">
+    <button aria-label="Search">
+      
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </button>
+    <button>RUB</button>
+    <div class="flag" title="Russian flag">
+      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" />
+    </div>
+    <!-- userArea вместо кнопки Войти -->
+    <div id="userArea"></div>
+  </div>
 </header>
-<script>
+    <script>
   window.addEventListener("DOMContentLoaded", () => {
     const userArea = document.getElementById("userArea");
 
     const fio = localStorage.getItem("fio");
-    const avatar = localStorage.getItem("avatar"); // если пользователь загружал картинку
+    const avatar = localStorage.getItem("avatar");
     const username = localStorage.getItem("username");
 
     if (fio && localStorage.getItem("phone")) {
@@ -158,11 +321,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } else {
       // Не вошёл
-      userArea.innerHTML = `<a href="auth.html" style="padding:8px 14px;border:1px solid #2196f3;border-radius:6px;color:#2196f3;text-decoration:none;">Вход</a>`;
+      userArea.innerHTML = `<a href="auth.html">Вход</a>`;
     }
   });
 </script>
-  </header>
+
 <!-- Слайд-шоу -->
  <div class="relative w-full h-[400px] overflow-hidden">
   <div id="slider" class="absolute w-full h-full">
