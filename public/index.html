@@ -519,35 +519,21 @@ document.addEventListener("DOMContentLoaded", () => {
   <!-- ВСТАВЛЕННОЕ ОКНО БРОНИРОВАНИЯ -->
   <div class="widget" role="region" aria-label="Окно бронирования">
 
-    <div class="top-overlay flex gap-4">
-  <a href="Index.html" class="active">Покупка</a>
-  <a href="HOTEL.html">Отели</a>
-  <a href="s7hop.html">Shop</a>
-  <a href="priority.html">Priority</a>
-  <a href="register.html" class="btn-tab">Регистрация</a>
-  <a href="booking.html" class="btn-tab">Бронь</a>
-  <a href="transfer.html" class="btn-tab">Трансфер</a>
+   <!-- Верхние вкладки -->
+<div class="top-overlay flex justify-center gap-8 text-gray-600 font-semibold border-b pb-2 mb-4">
+  <a href="Index.html" class="hover:text-black active">Покупка</a>
+  <a href="HOTEL.html" class="hover:text-black">Отели</a>
+  <a href="priority.html" class="hover:text-black">Priority</a>
+  <a href="s7hop.html" class="hover:text-black">Shop</a>
 </div>
 
-<style>
-  .top-overlay a {
-    font-weight: 500;
-    padding: 6px 12px;
-    border-radius: 6px;
-    transition: 0.2s;
-  }
-  .top-overlay a.active {
-    border: 1px solid #97ba1e;
-    background: #f9fff0;
-  }
-  .btn-tab {
-    border: 1px solid #ccc;
-    background: #f8f8f8;
-  }
-  .btn-tab:hover {
-    background: #eee;
-  }
-</style>
+<!-- Нижние вкладки -->
+<div class="tabs flex gap-6 text-sm text-gray-700 mb-4">
+  <button class="active border-b-2 border-black pb-1">Авиабилеты</button>
+  <button>Регистрация</button>
+  <button>Бронь</button>
+  <button>Трансфер</button>
+</div>
 
     <!-- форма — при submit переходит на search.html с GET-параметрами -->
     <form id="searchForm" action="bilet.html" method="get" style="margin:0;">
