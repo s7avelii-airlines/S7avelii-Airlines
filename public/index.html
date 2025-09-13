@@ -343,128 +343,51 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   </div>
   <section class="max-w-6xl mx-auto mt-10">
-
-<!-- Окно бронирования -->
-    <div class="absolute top-[110%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-xl rounded-xl p-6 w-11/12 md:w-3/4 lg:w-1/2">
-      <h2 class="text-xl font-semibold mb-4"></h2>
-      <form class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <select class="border p-2 rounded">
-        </select>
-    </div>
-  </div>
-  <section class="max-w-6xl mx-auto mt-10">
-
-  <!-- Окно бронирования -->
-<div class="absolute top-[72%] left-1/2 -translate-x-1/2 -translate-y-1/2 widget w-[1000px] bg-white rounded-xl shadow-xl p-4">
-  
-  <div class="top-overlay">
-    <a href="Index.html" class="active">Покупка</a>
-    <a href="HOTEL.html">Отели</a>
-    <a href="s7hop.html">Shop</a>
-    <a href="priority.html">Priority</a>
-  </div>
-
-  <div class="tabs">
-    <button class="active">Авиабилеты</button>
-    <button>Регистрация</button>
-    <button>Выбор места</button>
-    <button>Бронирование</button>
-  </div>
-
-  <!-- Форма -->
-  <form action="bilet.html" method="get" style="margin:0; padding:0;">
-
-   <!-- НОВЫЙ РОВНЫЙ РЯД -->
-<div class="form-row" style="display:flex;align-items:center;gap:0;width:100%;height:70px;">
-
-<!-- форма — при submit переходит на search.html с GET-параметрами -->
-    <form id="searchForm" action="index.html" method="get" style="margin:0;">
-      <div class="form-row" role="group" aria-label="Поля поиска">
-
-  <!-- Откуда -->
-  <div class="cell" style="flex:1;min-width:160px;">
-    <input type="text" placeholder="Савелий, GSV">
-  </div>
-
-  <!-- Стрелка -->
-  <div class="cell" style="flex:0 0 44px;display:flex;align-items:center;justify-content:center;color:#97ba1e;">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M17 7l4 4-4 4M21 11H7"></path>
-      <path d="M7 17l-4-4 4-4M3 13h14"></path>
-    </svg>
-  </div>
-
-  <!-- Куда (растягивается) -->
-        <div class="cell" style="flex:1;min-width:160px; position:relative;">
-          <input type="text" id="toInput" name="to" placeholder="Куда" autocomplete="off" aria-autocomplete="list" aria-controls="suggestionsList" aria-expanded="false" />
-          <div id="suggestions" class="suggestions" role="listbox" aria-label="Подсказки направлений"></div>
-        </div>
-
-
-  <!-- Дата туда -->
-  <div class="cell date-cell" style="flex:0 0 140px;display:flex;align-items:center;gap:6px;">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
-      <rect x="3" y="5" width="18" height="16" rx="2"></rect>
-      <path d="M16 3v4M8 3v4M3 11h18"></path>
-    </svg>
-    <input id="date1" type="date" style="flex:1;">
-  </div>
-
-  <!-- Дата обратно -->
-  <div class="cell date-cell" style="flex:0 0 140px;display:flex;align-items:center;gap:6px;">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
-      <rect x="3" y="5" width="18" height="16" rx="2"></rect>
-      <path d="M16 3v4M8 3v4M3 11h18"></path>
-    </svg>
-    <input id="date2" type="date" style="flex:1;">
-  </div>
-
-  <!-- Пассажиры -->
-  <div class="cell" style="flex:0 0 120px;display:flex;align-items:center;gap:6px;">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
-      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"></path>
-      <path d="M6 20v-1c0-2.21 2.686-4 6-4s6 1.79 6 4v1"></path>
-    </svg>
-    <select id="passengers" style="flex:1;">
-      <option>1, Эконом</option>
-      <option>2, Эконом</option>
-      <option>3, Эконом</option>
-      <option>4, Эконом</option>
-      <option>5, Эконом</option>
-      <option>6, Эконом</option>
-      <option>7, Эконом</option>
-      <option>8, Эконом</option>
-      <option>9, Эконом</option>
-      <option>1, Бизнес</option>
-      <option>1, Первый класс</option>
-    </select>
-  </div>
-
-  <!-- Кнопка поиска -->
-  <button type="submit" class="search-btn" style="flex:0 0 60px; height:60px; background:#97ba1e; border:none; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; margin-left:6px;">
-  <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
-    <circle cx="11" cy="11" r="7"></circle>
-    <path d="M21 21l-4.35-4.35"></path>
-  </svg>
-</button>
-
+<!-- Окно бронирования --> 
+<div class="absolute top-[80%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-xl rounded-xl p-6 w-11/12 md:w-3/4 lg:w-2/3"> 
+  <div class="mb-4 flex flex-wrap gap-4"> 
+     <div class="flex space-x-6 mb-4 text-sm font-medium">
+        <a href="Index.html" class="text-green-600 border-b-2 border-green-600 pb-1">Покупка</a>
+        <a href="HOTEL.html" class="text-gray-600 hover:text-green-600">Отели</a>
+        <a href="s7hop.html" class="text-gray-600 hover:text-green-600">Shop</a>
+        <a href="priority.html" class="text-gray-600 hover:text-green-600">Priority</a>
+      </div>
+  </div> <form class="grid grid-cols-1 md:grid-cols-2 gap-4"> 
+    <input type="text" placeholder="Савелий,GSV" class="flex-1 border rounded-lg px-4 py-2">
+        <input type="text" placeholder="Куда" class="flex-1 border rounded-lg px-4 py-2">
+    <div class="flex items-center space-x-2"> 
+      <input type="date" class="border p-2 rounded"> 
+    <input type="date" class="border p-2 rounded"> 
+    <select class="border p-2 rounded"> 
+      <option value="economy">1,Эконом</option> 
+      <option value="business">1,Бизнес</option> 
+      <option value="first"> 1,Первый класс</option> 
+    </select> 
+    </div> 
+     <label class="flex items-center space-x-1">
+            <input type="checkbox" class="form-checkbox">
+            <span>Оплата милями</span>
+          </label>
+    <a href="bilet.html" class="gradient-green p-2 col-span-1 md:col-span-2 hover:opacity-90 rounded inline-block">Найти билет</a> 
+  </form> 
+</div> 
 </div>
-  </form>
-  <!-- Нижние ссылки -->
-  <div class="bottom">
-    <a href="#">Составить сложный маршрут</a>
-    <a href="#"><span class="new-label">NEW</span> Групповой перелет</a>
-    <label><span class="checkbox"></span>Лечу с питомцем</label>
-    <label><span class="checkbox"></span>Оплата милями</label>
-  </div>
-</div>
-
- <!-- Пробел между слайдером и акциями -->
-  <div class="h-60"></div>
-
 
   <!-- Пробел между слайдером и акциями -->
-  <div class="h-20"></div>
+  <div class="h-60"></div>
+
+  <script>
+    const slides = document.querySelectorAll("#slider img");
+    let current = 0;
+    setInterval(() => {
+      slides[current].style.opacity = 0;
+      current = (current + 1) % slides.length;
+      slides[current].style.opacity = 1;
+    }, 7000);
+  </script>
+</body>
+
+</html>
 
   <script>
     const slides = document.querySelectorAll("#slider img");
