@@ -523,12 +523,13 @@ document.addEventListener("DOMContentLoaded", () => {
       <a href="auth.html">Мои бронирования</a>
       <a href="priority.html">Priority</a>
     </div>
-<div class="tabs">
-      <button class="active" type="button">Авиабилеты</button>
-      <button type="button">Регистрация</button>
-      <button type="button">Бронь</button>
-      <button type="button">Трансфер</button>
-    </div>
+    
+<div class="tabs flex gap-4 text-sm text-gray-700 mt-8">
+  <button class="active border-b-2 border-black pb-1">Авиабилеты</button>
+  <button>Отели</button>
+  <button>Экскурсии</button>
+  <button>Трансфер</button>
+</div>
 
     <!-- форма — при submit переходит на search.html с GET-параметрами -->
     <form id="searchForm" action="search.html" method="get" style="margin:0;">
@@ -1394,7 +1395,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       <!-- Карточка 3 -->
       <div class="card">
-        <img src="img/3.jpg" alt="Турецкая античность">
+        <img src="images/IMG_20250913_122149.avif" alt="Турецкая античность">
         <div class="card-content">
           <h3>Саратов - столица S7avelii Airlines</h3>
           <p>Что посмотреть на малой родине S7avelii Airlines</p>
