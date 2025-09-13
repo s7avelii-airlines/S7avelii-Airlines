@@ -517,6 +517,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <section class="max-w-6xl mx-auto mt-10">
    
   <!-- ВСТАВЛЕННОЕ ОКНО БРОНИРОВАНИЯ -->
+  <div class="absolute top-[76%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-xl rounded-xl p-6 w-11/12 md:w-3/4 lg:w-1/2"> 
   <div class="widget" role="region" aria-label="Окно бронирования">
 
     <div class="top-overlay">
@@ -526,12 +527,13 @@ document.addEventListener("DOMContentLoaded", () => {
       <a href="priority.html">Priority</a>
     </div>
 
-    <div class="tabs">
-      <button class="active">Авиабилеты</button>
-      <button>Регистрация</button>
-      <button>Бронь</button>
-      <button>Трансфер</button>
-    </div>
+    <!-- Вкладки -->
+<div class="tabs" style="display:flex;gap:6px;position:absolute;top:10px;left:10px;">
+  <button style="padding:4px 8px;font-size:12px;border:1px solid #97ba1e;border-radius:6px;background:#fff;color:#333;cursor:pointer;">Авиабилеты</button>
+  <button style="padding:4px 8px;font-size:12px;border:1px solid #ccc;border-radius:6px;background:#f9f9f9;color:#333;cursor:pointer;">Регистрация</button>
+  <button style="padding:4px 8px;font-size:12px;border:1px solid #ccc;border-radius:6px;background:#f9f9f9;color:#333;cursor:pointer;">Бронь</button>
+  <button style="padding:4px 8px;font-size:12px;border:1px solid #ccc;border-radius:6px;background:#f9f9f9;color:#333;cursor:pointer;">Трансфер</button>
+</div>
 
     <!-- форма — при submit переходит на search.html с GET-параметрами -->
     <form id="searchForm" action="bilet.html" method="get" style="margin:0;">
