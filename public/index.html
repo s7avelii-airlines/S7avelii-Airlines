@@ -520,22 +520,22 @@ document.addEventListener("DOMContentLoaded", () => {
   <div class="widget" role="region" aria-label="Окно бронирования">
 
     
-<!-- Верхние вкладки -->
-<div class="top-overlay flex gap-6 text-gray-500 text-sm font-medium mb-2 absolute top-2 left-4">
-  <a href="Index.html" class="hover:text-black active">Покупка</a>
-  <a href="checkin.html" class="hover:text-black">Отель</a>
-  <a href="booking.html" class="hover:text-black">Priority</a>
-  <a href="status.html" class="hover:text-black">Shop</a>
-</div>
+<div class="widget" style="position:relative; max-width:950px; width:90%; margin:40px auto; background:#fff; border-radius:12px; box-shadow:0 8px 20px rgba(15,20,25,0.08); padding:12px;">
+  <!-- Верхняя широкая панель (по всей ширине) -->
+  <div class="top-overlay" style="display:flex; gap:30px; align-items:center; font-size:15px; color:#6b7280; border-bottom:1px solid #e9eef0; padding:10px 16px; border-radius:8px 8px 0 0;">
+    <a href="Index.html" style="text-decoration:none; color:inherit; font-weight:600;">Покупка</a>
+    <a href="HOTEL.html" style="text-decoration:none; color:inherit;">Отели</a>
+    <a href="auth.html" style="text-decoration:none; color:inherit;">Мои бронирования</a>
+    <a href="priority.html" style="text-decoration:none; color:inherit;">Priority</a>
+  </div>
 
-<!-- Нижние вкладки -->
-<div class="tabs flex gap-4 text-sm text-gray-700 mt-8">
-  <button class="active border-b-2 border-black pb-1">Авиабилеты</button>
-  <button>Регистрация</button>
-  <button>Бронь</button>
-  <button>Трансфер</button>
-</div>
-
+  <!-- Маленькие вкладки (компактные, слева под верхней панелью) -->
+  <div class="small-tabs" style="display:inline-flex; gap:8px; margin-top:12px; margin-left:8px;">
+    <button class="small-tab active" style="padding:6px 10px; font-size:13px; border-radius:16px; border:1px solid #e6e9eb; background:#f3f6f7; color:#2f3740; cursor:pointer;">Авиабилеты</button>
+    <button class="small-tab"        style="padding:6px 10px; font-size:13px; border-radius:16px; border:1px solid #e6e9eb; background:#fff; color:#6b7280; cursor:pointer;">Бронь<</button>
+    <button class="small-tab"        style="padding:6px 10px; font-size:13px; border-radius:16px; border:1px solid #e6e9eb; background:#fff; color:#6b7280; cursor:pointer;">Регистрация</button>
+    <button class="small-tab"        style="padding:6px 10px; font-size:13px; border-radius:16px; border:1px solid #e6e9eb; background:#fff; color:#6b7280; cursor:pointer;">Трансфер</button>
+  </div>
 
     <!-- форма — при submit переходит на search.html с GET-параметрами -->
     <form id="searchForm" action="bilet.html" method="get" style="margin:0;">
@@ -1378,7 +1378,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="cards">
       <!-- Карточка 1 -->
       <div class="card">
-        <img src="img/1.jpg" alt="Ключи от прошлого">
+        <img src="images/IMG_20250913_122057.avif" alt="Ключи от прошлого">
         <div class="card-content">
           <h3>Что нужно посмотреть в Ереване?</h3>
           <p>Рассказали в новой статье, главные места для посещения</p>
