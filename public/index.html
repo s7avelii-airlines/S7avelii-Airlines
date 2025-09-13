@@ -326,7 +326,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 </script>
 
-
 <!doctype html>
 <html lang="ru">
 <head>
@@ -497,7 +496,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <body>
 
 <div class="hero">
-  <!-- Слайдер -->
+ <!-- Слайдер -->
  <div class="relative w-full h-[390px] overflow-hidden">
   <div id="slider" class="absolute w-full h-full">
     <img src="images/Airbrush-Image-Enhancer-1757149612827 (1).avif" class="w-full h-full object-cover absolute" style="opacity: 1; transition: opacity 1s;">
@@ -515,101 +514,98 @@ document.addEventListener("DOMContentLoaded", () => {
    </div> 
  </div> 
 <section class="max-w-6xl mx-auto mt-10">
-   
   <!-- ВСТАВЛЕННОЕ ОКНО БРОНИРОВАНИЯ -->
   <div class="widget" role="region" aria-label="Окно бронирования">
-<!-- Виджет -->
-<div class="widget" style="
-  position: relative;
-  max-width: 950px;
-  width: 90%;
-  margin: 0 auto;            /* центрируем по ширине */
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(15,20,25,0.08);
-  padding: 12px;
-">
 
-  <!-- Верхняя широкая панель -->
-  <div class="top-overlay" style="
-    display: flex;
-    gap: 30px;
-    align-items: center;
-    font-size: 15px;
-    color: #6b7280;
-    border-bottom: 1px solid #e9eef0;
-    padding: 10px 16px;
-    border-radius: 8px 8px 0 0;
-  ">
-    
-  <!-- Верхняя широкая панель (по всей ширине) -->
-  <div class="top-overlay" style="display:flex; gap:30px; align-items:center; font-size:15px; color:#6b7280; border-bottom:1px solid #e9eef0; padding:10px 16px; border-radius:8px 8px 0 0;">
-    <a href="Index.html" style="text-decoration:none; color:inherit; font-weight:600;">Покупка</a>
-    <a href="HOTEL.html" style="text-decoration:none; color:inherit;">Отели</a>
-    <a href="auth.html" style="text-decoration:none; color:inherit;">Мои бронирования</a>
-    <a href="priority.html" style="text-decoration:none; color:inherit;">Priority</a>
-  </div>
+    <div class="top-overlay">
+      <a href="Index.html" class="active">Покупка</a>
+      <a href="HOTEL.html">Отели</a>
+      <a href="auth.html">Мои бронирования</a>
+      <a href="priority.html">Priority</a>
+    </div>
 
-  <!-- Маленькие вкладки (компактные, слева под верхней панелью) -->
-  <div class="small-tabs" style="display:inline-flex; gap:8px; margin-top:12px; margin-left:8px;">
-    <button class="small-tab active" style="padding:6px 10px; font-size:13px; border-radius:16px; border:1px solid #e6e9eb; background:#f3f6f7; color:#2f3740; cursor:pointer;">Авиабилеты</button>
-    <button class="small-tab"        style="padding:6px 10px; font-size:13px; border-radius:16px; border:1px solid #e6e9eb; background:#fff; color:#6b7280; cursor:pointer;">Бронь<</button>
-    <button class="small-tab"        style="padding:6px 10px; font-size:13px; border-radius:16px; border:1px solid #e6e9eb; background:#fff; color:#6b7280; cursor:pointer;">Регистрация</button>
-    <button class="small-tab"        style="padding:6px 10px; font-size:13px; border-radius:16px; border:1px solid #e6e9eb; background:#fff; color:#6b7280; cursor:pointer;">Трансфер</button>
-  </div>
+    <div class="tabs">
+      <button class="active" type="button">Авиабилеты</button>
+      <button type="button">Отели</button>
+      <button type="button">Экскурсии</button>
+      <button type="button">Трансфер</button>
+    </div>
 
     <!-- форма — при submit переходит на search.html с GET-параметрами -->
-    <form id="searchForm" action="bilet.html" method="get" style="margin:0;">
+    <form id="searchForm" action="search.html" method="get" style="margin:0;">
       <div class="form-row" role="group" aria-label="Поля поиска">
 
-         <!-- Форма (ряд полей в одну линию) -->
-  <form action="search.html" method="get" style="margin-top:14px;">
-    <div class="form-row" style="display:flex; align-items:center; gap:0; height:70px; padding:8px 8px; border-radius:8px;">
-      <div class="cell" style="flex:1; min-width:160px; padding:0 16px; border-right:1px solid rgba(0,0,0,0.05);">
-        <input type="text" name="from" placeholder="Омск, OMS" style="border:0;outline:0;width:100%;font-size:15px;color:#101112;background:transparent;">
-      </div>
+        <!-- Откуда (растягивается) -->
+        <div class="cell" style="flex:1;min-width:160px;">
+          <input type="text" name="from" placeholder="Омск, OMS" aria-label="Откуда">
+        </div>
 
-      <div class="cell" style="flex:0 0 44px; justify-content:center; color:#97ba1e; border-right:1px solid rgba(0,0,0,0.05);">
-        <svg style="width:18px;height:18px" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2"><path d="M17 7l4 4-4 4M21 11H7"></path><path d="M7 17l-4-4 4-4M3 13h14"></path></svg>
-      </div>
+        <!-- Стрелка -->
+        <div class="cell" style="flex:0 0 44px; justify-content:center; color:#97ba1e;">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 7l4 4-4 4M21 11H7"></path>
+            <path d="M7 17l-4-4 4-4M3 13h14"></path>
+          </svg>
+        </div>
 
-      <div class="cell" style="flex:1; min-width:160px; position:relative; padding:0 16px; border-right:1px solid rgba(0,0,0,0.05);">
-        <input id="toInput" name="to" type="text" placeholder="Куда" autocomplete="off" style="border:0;outline:0;width:100%;font-size:15px;color:#101112;background:transparent;">
-        <div id="suggestions" style="position:absolute; top:100%; left:16px; right:16px; display:none; background:#fff; border:1px solid #e5e7eb; border-radius:8px; box-shadow:0 8px 22px rgba(0,0,0,0.08); z-index:999; max-height:200px; overflow:auto;"></div>
-      </div>
+        <!-- Куда (растягивается) -->
+        <div class="cell" style="flex:1;min-width:160px; position:relative;">
+          <input type="text" id="toInput" name="to" placeholder="Куда" autocomplete="off" aria-autocomplete="list" aria-controls="suggestionsList" aria-expanded="false" />
+          <div id="suggestions" class="suggestions" role="listbox" aria-label="Подсказки направлений"></div>
+        </div>
 
-      <div class="cell" style="flex:0 0 140px; padding:0 12px; border-right:1px solid rgba(0,0,0,0.05);">
-        <svg style="width:18px;height:18px;margin-right:8px" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M16 3v4M8 3v4M3 11h18"></path></svg>
-        <input id="date1" name="date1" type="date" style="border:0;outline:0;background:#f9fafb;padding:8px 10px;border-radius:6px;height:40px;">
-      </div>
+        <!-- Дата туда -->
+        <div class="cell date-cell" style="flex:0 0 140px;">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+            <path d="M16 3v4M8 3v4M3 11h18"></path>
+          </svg>
+          <input id="date1" name="date1" type="date" aria-label="Дата туда">
+        </div>
 
-      <div class="cell" style="flex:0 0 140px; padding:0 12px; border-right:1px solid rgba(0,0,0,0.05);">
-        <svg style="width:18px;height:18px;margin-right:8px" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M16 3v4M8 3v4M3 11h18"></path></svg>
-        <input id="date2" name="date2" type="date" style="border:0;outline:0;background:#f9fafb;padding:8px 10px;border-radius:6px;height:40px;">
-      </div>
+        <!-- Дата обратно -->
+        <div class="cell date-cell" style="flex:0 0 140px;">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+            <path d="M16 3v4M8 3v4M3 11h18"></path>
+          </svg>
+          <input id="date2" name="date2" type="date" aria-label="Дата обратно">
+        </div>
 
-      <div class="cell" style="flex:0 0 120px; padding:0 12px; border-right:1px solid rgba(0,0,0,0.05);">
-        <svg style="width:18px;height:18px;margin-right:8px" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"></path><path d="M6 20v-1c0-2.21 2.686-4 6-4s6 1.79 6 4v1"></path></svg>
-        <select id="passengers" name="passengers" style="border:0;outline:0;background:transparent;">
-          <option value="1_econom">1, Эконом</option>
-          <option value="2_econom">2, Эконом</option>
-          <option value="3_econom">3, Эконом</option>
-          <option value="4_econom">4, Эконом</option>
-        </select>
-      </div>
+        <!-- Пассажиры -->
+        <div class="cell" style="flex:0 0 120px;">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"></path>
+            <path d="M6 20v-1c0-2.21 2.686-4 6-4s6 1.79 6 4v1"></path>
+          </svg>
+          <select id="passengers" name="passengers" aria-label="Пассажиры">
+            <option value="1_econom">1, Эконом</option>
+            <option value="2_econom">2, Эконом</option>
+            <option value="3_econom">3, Эконом</option>
+            <option value="4_econom">4, Эконом</option>
+            <option value="5_econom">5, Эконом</option>
+            <option value="1_business">1, Бизнес</option>
+            <option value="1_first">1, Первый класс</option>
+          </select>
+        </div>
 
-      <button type="submit" class="search-btn" style="flex:0 0 60px; height:60px; margin-left:8px; background:#97ba1e; border-radius:8px; border:0; display:flex; align-items:center; justify-content:center; cursor:pointer;">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.35-4.35"></path></svg>
-      </button>
+        <!-- Поиск -->
+        <button type="submit" class="search-btn" aria-label="Найти">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M21 21l-4.35-4.35"></path>
+          </svg>
+        </button>
+
+      </div>
+    </form>
+
+    <div class="bottom">
+      <a href="#">Составить сложный маршрут</a>
+      <a href="#"><span class="new-label">NEW</span> Групповой перелет</a>
+      <label><span class="checkbox"></span>Лечу с питомцем</label>
+      <label><span class="checkbox"></span>Оплата милями</label>
     </div>
-  </form>
-
-  <!-- Нижняя строка ссылок -->
-  <div class="bottom" style="margin-top:14px; padding-left:8px;">
-    <a href="#" style="color:#3f8b2b; text-decoration:none; margin-right:10px;">Составить сложный маршрут</a>
-    <span class="new-label" style="margin-right:12px; background:#ffb965; color:#fff; padding:3px 6px; border-radius:6px; font-weight:700;">NEW</span>
-    <label style="color:#495057; margin-right:12px;"><input type="checkbox"> Лечу с питомцем</label>
-    <label style="color:#495057;"><input type="checkbox"> Оплата милями</label>
   </div>
 </div>
 
@@ -741,9 +737,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })(); 
 </script>
-
-</body>
-</html>
 
   <!-- Пробел между слайдером и акциями -->
   <div class="h-20"></div>
