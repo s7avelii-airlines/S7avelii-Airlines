@@ -497,7 +497,6 @@ document.addEventListener("DOMContentLoaded", () => {
 <head>
   <meta charset="UTF-8">
   <title>Впечатления</title>
-  <!-- Подключаем Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -515,7 +514,8 @@ document.addEventListener("DOMContentLoaded", () => {
       color: #1f2d3d;
     }
 
-    .card {
+    /* Уникальный класс */
+    .impressions-card {
       display: flex;
       align-items: stretch;
       width: 100%;
@@ -526,14 +526,14 @@ document.addEventListener("DOMContentLoaded", () => {
       background: #fff;
     }
 
-    .card img {
+    .impressions-card img {
       width: 60%;
-      height: auto;
+      max-height: 300px;
       object-fit: cover;
       display: block;
     }
 
-    .card-content {
+    .impressions-content {
       padding: 30px 25px;
       width: 40%;
       display: flex;
@@ -541,7 +541,7 @@ document.addEventListener("DOMContentLoaded", () => {
       justify-content: center;
     }
 
-    .card-content h2 {
+    .impressions-content h2 {
       font-size: 20px;
       font-weight: 500;
       margin: 0 0 12px;
@@ -549,7 +549,7 @@ document.addEventListener("DOMContentLoaded", () => {
       color: #1a1a1a;
     }
 
-    .card-content p {
+    .impressions-content p {
       font-size: 15px;
       font-weight: 400;
       color: #333;
@@ -578,14 +578,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* 📱 Адаптив */
     @media (max-width: 768px) {
-      .card {
+      .impressions-card {
         flex-direction: column;
       }
-      .card img {
+      .impressions-card img {
         width: 100%;
         height: 200px;
       }
-      .card-content {
+      .impressions-content {
         width: 100%;
         padding: 20px;
       }
@@ -594,9 +594,9 @@ document.addEventListener("DOMContentLoaded", () => {
 </head>
 <body>
   <h1>Впечатления</h1>
-  <div class="card">
+  <div class="impressions-card">
     <img src="images/5332515869139529753.avif" alt="Путешествие">
-    <div class="card-content">
+    <div class="impressions-content">
       <h2>Делитесь с нами вашими впечатления и путешествиями</h2>
       <p>Делитесь своими путешествиями, для вас сделали для этого отдельное место</p>
       <a href="https://t.me/S7saveliiairlines" class="btn">Вперед!</a>
