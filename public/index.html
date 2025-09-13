@@ -518,9 +518,30 @@ document.addEventListener("DOMContentLoaded", () => {
    
   <!-- ВСТАВЛЕННОЕ ОКНО БРОНИРОВАНИЯ -->
   <div class="widget" role="region" aria-label="Окно бронирования">
+<!-- Виджет -->
+<div class="widget" style="
+  position: relative;
+  max-width: 950px;
+  width: 90%;
+  margin: 0 auto;            /* центрируем по ширине */
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(15,20,25,0.08);
+  padding: 12px;
+">
 
+  <!-- Верхняя широкая панель -->
+  <div class="top-overlay" style="
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    font-size: 15px;
+    color: #6b7280;
+    border-bottom: 1px solid #e9eef0;
+    padding: 10px 16px;
+    border-radius: 8px 8px 0 0;
+  ">
     
-<div class="widget" style="position:relative; max-width:950px; width:90%; margin:40px auto; background:#fff; border-radius:12px; box-shadow:0 8px 20px rgba(15,20,25,0.08); padding:12px;">
   <!-- Верхняя широкая панель (по всей ширине) -->
   <div class="top-overlay" style="display:flex; gap:30px; align-items:center; font-size:15px; color:#6b7280; border-bottom:1px solid #e9eef0; padding:10px 16px; border-radius:8px 8px 0 0;">
     <a href="Index.html" style="text-decoration:none; color:inherit; font-weight:600;">Покупка</a>
