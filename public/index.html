@@ -367,19 +367,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* Виджет бронирования */
   .widget {
-    position:absolute;
-    left:50%;
-    transform:translateX(-50%);
-    top:78%;                /* можно подправить */
-    max-width:950px;
-    width:90%;
-    background:#fff;
-    border-radius:12px;
-    box-shadow:0 8px 20px rgba(15,20,25,0.08);
-    padding:14px;
-    z-index:50; /* выше слайдера */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 320px; /* регулируй высоту блока от верха страницы */
+    max-width: 950px;
+    width: 90%;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(15, 20, 25, 0.08);
+    padding: 14px;
+    z-index: 50;
   }
-
   .top-overlay {
     background:rgba(255,255,255,0.9);
     backdrop-filter: blur(4px);
