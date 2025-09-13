@@ -866,52 +866,168 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
 </section>
 
-<!-- 🔹 Секция статей Gate 7 -->
-<section class="articles">
-  <div class="articles-header">
-    <h1>7PLANE7</h1>
-    <a href="#">Все статьи →</a>
-  </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gate 7</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: #1c1c1c;
+    }
 
-  <div class="cards">
-    <!-- Карточка 1 -->
-    <div class="card">
-      <img src="https://i.ibb.co/nRZTHrk/1.jpg" alt="Ключи от прошлого">
-      <div class="card-content">
-        <h3>Ключи от прошлого</h3>
-        <p>11 усадеб Москвы и Подмосковья для семейного отдыха</p>
-      </div>
-      <div class="card-footer">
-        <a href="#" class="read-link">Читать</a>
-      </div>
+    .articles {
+      max-width: 1200px;
+      margin: 0 auto 60px auto;
+      padding: 0 20px;
+    }
+
+    .articles-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .articles-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .articles-header a {
+      text-decoration: none;
+      color: #3a3f63;
+      font-weight: 600;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* 3 карточки в ряд */
+      gap: 20px;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 16px;
+      flex-grow: 1;
+    }
+
+    .card h3 {
+      font-size: 18px;
+      margin: 0 0 10px;
+      font-weight: 700;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #444;
+      margin: 0;
+    }
+
+    .card-footer {
+      padding: 16px;
+    }
+
+    .read-link {
+      display: inline-block;
+      text-decoration: none;
+      background: #f0f2f5;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1c1c1c;
+      transition: background 0.2s ease;
+    }
+
+    .read-link:hover {
+      background: #dcdfe4;
+    }
+
+    /* 📱 Адаптив */
+    @media (max-width: 1024px) {
+      .cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔹 Секция Gate 7 -->
+  <section class="articles">
+    <div class="articles-header">
+      <h1>7PLANE7</h1>
+      <a href="#">Все статьи →</a>
     </div>
 
-    <!-- Карточка 2 -->
-    <div class="card">
-      <img src="https://i.ibb.co/NZTSgHp/2.jpg" alt="(Не)детский Петербург">
-      <div class="card-content">
-        <h3>(Не)детский Петербург</h3>
-        <p>Куда идти с ребенком в Санкт-Петербурге? Список модных мест...</p>
+    <div class="cards">
+      <!-- Карточка 1 -->
+      <div class="card">
+        <img src="img/1.jpg" alt="Ключи от прошлого">
+        <div class="card-content">
+          <h3>Ключи от прошлого</h3>
+          <p>11 усадеб Москвы и Подмосковья для семейного отдыха</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="read-link">Читать</a>
+        </div>
       </div>
-      <div class="card-footer">
-        <a href="#" class="read-link">Читать</a>
-      </div>
-    </div>
 
-    <!-- Карточка 3 -->
-    <div class="card">
-      <img src="https://i.ibb.co/02WPT7F/3.jpg" alt="Турецкая античность">
-      <div class="card-content">
-        <h3>Турецкая античность</h3>
-        <p>Эгейское море, античные руины и черепахи — гид по нетипичному...</p>
+      <!-- Карточка 2 -->
+      <div class="card">
+        <img src="img/2.jpg" alt="(Не)детский Петербург">
+        <div class="card-content">
+          <h3>(Не)детский Петербург</h3>
+          <p>Куда идти с ребенком в Санкт-Петербурге? Список модных мест...</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="read-link">Читать</a>
+        </div>
       </div>
-      <div class="card-footer">
-        <a href="#" class="read-link">Читать</a>
+
+      <!-- Карточка 3 -->
+      <div class="card">
+        <img src="img/3.jpg" alt="Турецкая античность">
+        <div class="card-content">
+          <h3>Турецкая античность</h3>
+          <p>Эгейское море, античные руины и черепахи — гид по нетипичному...</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="read-link">Читать</a>
+        </div>
       </div>
     </div>
-  </div>
-</section>
-<!-- 🔹 Конец блока Gate 7 -->
+  </section>
+  <!-- 🔹 Конец блока Gate 7 -->
 
 
 <div class="grid grid-cols-3 gap-6">
