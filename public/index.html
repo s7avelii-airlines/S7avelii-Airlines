@@ -523,13 +523,12 @@ document.addEventListener("DOMContentLoaded", () => {
       <a href="auth.html">Мои бронирования</a>
       <a href="priority.html">Priority</a>
     </div>
-
-    <div class="tabs">
-      <button class="active" type="button">Авиабилеты</button>
-      <button type="button">Отели</button>
-      <button type="button">Экскурсии</button>
-      <button type="button">Трансфер</button>
-    </div>
+<div class="top-overlay flex gap-6 text-gray-500 text-sm font-medium mb-2 absolute top-2 left-4">
+    <button class="active border-b-2 border-black pb-1">Авиабилеты</button>
+    <button>Регистрация</button>
+    <button>Бронь</button>
+    <button>Трансфер</button>
+</div>
 
     <!-- форма — при submit переходит на search.html с GET-параметрами -->
     <form id="searchForm" action="search.html" method="get" style="margin:0;">
