@@ -504,7 +504,7 @@ document.addEventListener("DOMContentLoaded", () => {
       font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
       background: #fff;
       margin: 0;
-      padding: 40px 80px;
+      padding: 40px 20px;
       color: #1a1a1a;
     }
 
@@ -519,16 +519,16 @@ document.addEventListener("DOMContentLoaded", () => {
       display: flex;
       align-items: stretch;
       width: 100%;
-      height: 220px; /* поуже по высоте */
       border: 1px solid #e9edf2;
       border-radius: 20px;
       overflow: hidden;
       box-sizing: border-box;
+      background: #fff;
     }
 
     .card img {
       width: 60%;
-      height: 100%;
+      height: auto;
       object-fit: cover;
       display: block;
     }
@@ -543,7 +543,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     .card-content h2 {
       font-size: 20px;
-      font-weight: 500; /* средней толщины */
+      font-weight: 500;
       margin: 0 0 12px;
       line-height: 1.4;
       color: #1a1a1a;
@@ -551,7 +551,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     .card-content p {
       font-size: 15px;
-      font-weight: 400; /* обычный текст */
+      font-weight: 400;
       color: #333;
       margin: 0 0 22px;
       line-height: 1.6;
@@ -575,6 +575,21 @@ document.addEventListener("DOMContentLoaded", () => {
     .btn:hover {
       background: #79ac36;
     }
+
+    /* 📱 Адаптив */
+    @media (max-width: 768px) {
+      .card {
+        flex-direction: column;
+      }
+      .card img {
+        width: 100%;
+        height: 200px;
+      }
+      .card-content {
+        width: 100%;
+        padding: 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -588,6 +603,7 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   </div>
 </body>
+
 
 <head>
   <meta charset="UTF-8">
