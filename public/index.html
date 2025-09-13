@@ -524,19 +524,12 @@ document.addEventListener("DOMContentLoaded", () => {
       <a href="priority.html">Priority</a>
     </div>
     
-<div style="display:flex; gap:8px; padding:10px 16px;">
-  <button style="padding:6px 12px; font-size:13px; border-radius:6px; border:1px solid #ccc; background:#f3f6f7; cursor:pointer; font-weight:600;">
-    Авиабилеты
-  </button>
-  <button style="padding:6px 12px; font-size:13px; border-radius:6px; border:1px solid #ccc; background:#fff; cursor:pointer;">
-    Регистрация
-  </button>
-  <button style="padding:6px 12px; font-size:13px; border-radius:6px; border:1px solid #ccc; background:#fff; cursor:pointer;">
-    Бронь
-  </button>
-  <button style="padding:6px 12px; font-size:13px; border-radius:6px; border:1px solid #ccc; background:#fff; cursor:pointer;">
-    Трансфер
-  </button>
+<!-- Кнопки внутри блока -->
+<div class="flex items-center gap-2 px-4 py-2" style="justify-content:flex-start; width:50%;">
+  <button class="px-3 py-1 text-sm rounded-md border bg-gray-100 font-semibold">Авиабилеты</button>
+  <button class="px-3 py-1 text-sm rounded-md border bg-white">Регистрация</button>
+  <button class="px-3 py-1 text-sm rounded-md border bg-white">Бронь</button>
+  <button class="px-3 py-1 text-sm rounded-md border bg-white">Трансфер</button>
 </div>
 
     <!-- форма — при submit переходит на search.html с GET-параметрами -->
