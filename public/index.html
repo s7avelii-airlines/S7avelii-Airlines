@@ -326,6 +326,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 </script>
 
+<main class="content">
+  
 <!doctype html>
 <html lang="ru">
 <head>
@@ -1574,12 +1576,14 @@ document.addEventListener("DOMContentLoaded", () => {
  
     <!-- Пробел между слайдером и акциями -->
   <div class="h-40"></div>
-
-  <footer class="footer">
+</main>
+<footer class="footer">
   <!-- Верх -->
   <div class="footer-top">
     <div class="footer-actions">
-      <a href="https://t.me/s7aveliihelper" class="action"><img src="icons/chat.svg" alt=""> Чат</a>
+      <a href="https://t.me/s7aveliihelper" class="action">
+        <img src="icons/chat.svg" alt=""> Чат
+      </a>
     </div>
     <div class="footer-phone">
       <div class="label">тел: Бесплатно по России</div>
@@ -1591,16 +1595,16 @@ document.addEventListener("DOMContentLoaded", () => {
   <div class="footer-subscribe">
     <h3>Подпишитесь на рассылку S7avelii</h3>
     <p>Будьте в курсе акций, открывайте новые маршруты</p>
-   <form class="subscribe-form">
-  <input 
-    type="email" 
-    placeholder="Ваша почта" 
-    required
-    pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-    title="Введите правильный email, например: name@example.com"
-  >
-  <button type="submit">→</button>
-</form>
+    <form class="subscribe-form">
+      <input 
+        type="email" 
+        placeholder="Ваша почта" 
+        required
+        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        title="Введите правильный email, например: name@example.com"
+      >
+      <button type="submit">→</button>
+    </form>
     <label class="checkbox">
       <input type="checkbox">
       Хочу узнавать про скидки и идеи путешествий по почте и соглашаюсь на 
@@ -1613,7 +1617,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
     <div class="socials">
       <a href="https://vk.com/s7avelii"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
-      <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1 "><img src="images/icons8-tiktok-logo-50 (1).avif" alt="OK"></a>
+      <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1 "><img src="images/icons8-tiktok-logo-50 (1).avif" alt="TikTok"></a>
       <a href="https://youtu.be/Dy31uUCFaWw?si=2gyqNYaT3ZVO8WJa"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
       <a href="https://t.me/S7saveliiairlines"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
     </div>
@@ -1622,10 +1626,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <style>
 .footer {
-  background:#f1f5f9;
-  padding:40px 20px;
-  font-family:Inter,sans-serif;
-  color:#111;
+  width: 100%;       /* всегда на всю ширину */
+  clear: both;       /* сбрасывает обтекание */
+  display: block;    /* точно блочный */
 }
 
 /* Верх */
