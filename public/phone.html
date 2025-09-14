@@ -307,10 +307,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <style>
 .footer {
-  background:#f1f5f9;
-  padding:40px 20px;
-  font-family:Inter,sans-serif;
-  color:#111;
+  background: #f1f5f9;
+  padding: 40px 20px;
+  font-family: Inter, sans-serif;
+  color: #111;
+  width: 100%;          /* ✅ на всю ширину */
+  box-sizing: border-box; /* ✅ учитывает padding в ширину */
+  margin: 0;             /* ✅ убираем смещение */
 }
 
 /* Верх */
