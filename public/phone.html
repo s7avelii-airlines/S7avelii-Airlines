@@ -41,8 +41,37 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     </header>
 
-    <!-- Прямоугольное изображение во всю ширину -->
-    <img src="images/Airbrush-Image-Enhancer-1757149612827 (1).avif" alt="Header Banner" class="hero">
+    <!-- Слайд-шоу -->
+<div class="relative w-full max-w-[400px] h-[250px] overflow-hidden rounded-2xl mx-auto">
+  <div id="slider" class="absolute w-full h-full">
+    <img src="images/Airbrush-Image-Enhancer-1757149612827 (1).avif" 
+         class="w-full h-full object-cover absolute" style="opacity:1;transition:opacity 1s;">
+    <img src="images/photo_5278432678875623665_y.avif" 
+         class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
+    <img src="images/Без названия144_20250825174413 (1).avif" 
+         class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
+    <img src="images/1000035559.avif" 
+         class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
+  </div>
+</div>
+
+<script>
+  const slides = document.querySelectorAll("#slider img");
+  let currentIndex = 0;
+
+  function showSlide(nextIndex) {
+    slides[currentIndex].style.opacity = "0";
+    slides[nextIndex].style.opacity = "1";
+    currentIndex = nextIndex;
+  }
+
+  function autoSlide() {
+    let nextIndex = (currentIndex + 1) % slides.length;
+    showSlide(nextIndex);
+  }
+
+  setInterval(autoSlide, 4000); // каждые 4 секунды
+</script>
 
     <!-- Кнопки -->
     <section class="px-4 space-y-3">
