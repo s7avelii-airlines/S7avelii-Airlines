@@ -1440,13 +1440,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     .page {
-      max-width: 1200px;
-      margin: 40px auto;
-      padding: 0 20px;
-      display: flex;
-      justify-content: center; /* центрируем по горизонтали */
-    }
-
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  
+  display: flex;
+  justify-content: center;   /* центр по горизонтали */
+  align-items: center;       /* центр по вертикали */
+  min-height: 100vh;         /* занимаем всю высоту экрана */
+}
     /* Сетка */
     .columns {
       display: grid;
