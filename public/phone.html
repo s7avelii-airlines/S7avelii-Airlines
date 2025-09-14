@@ -10,6 +10,13 @@
       font-family: sans-serif;
       background: #f9f9f9;
     }
+    .mobile-wrapper {
+      width: 100%;
+      max-width: 430px; /* максимум */
+      min-width: 320px; /* минимум */
+      background: #fff;
+      min-height: 100vh;
+    }
   </style>
 </head>
 
@@ -22,42 +29,44 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
   
-<body class="text-gray-900">
-  <!-- Шапка -->
-  <header class="flex justify-between items-center p-4 bg-white shadow">
-    <img src="images/photo_5276207082657412564_y.avif" alt="S7" class="w-10 h-10">
-    <div class="flex gap-2">
-      <a href="auth.html" class="px-4 py-2 rounded-xl border">Войти</a>
-      <a href="inform.html" class="px-4 py-2 rounded-xl border">IT</a>
-    </div>
-  </header>
+<body class="text-gray-900 flex justify-center bg-gray-100">
+  <div class="mobile-wrapper shadow-lg">
+    
+    <!-- Шапка -->
+    <header class="flex justify-between items-center p-4 bg-white shadow">
+      <img src="images/photo_5276207082657412564_y.avif" alt="S7" class="w-10 h-10">
+      <div class="flex gap-2">
+        <a href="auth.html" class="px-4 py-2 rounded-xl border">Войти</a>
+        <a href="inform.html" class="px-4 py-2 rounded-xl border">IT</a>
+      </div>
+    </header>
 
-   <!-- Прямоугольное изображение во всю ширину -->
-  <img src="images/Airbrush-Image-Enhancer-1757149612827 (1).avif" alt="Header Banner" class="hero">
+    <!-- Прямоугольное изображение во всю ширину -->
+    <img src="images/Airbrush-Image-Enhancer-1757149612827 (1).avif" alt="Header Banner" class="hero">
 
     <!-- Кнопки -->
-  <section class="px-4 space-y-3">
-    <a href="bilet.html"class="w-full bg-lime-500 text-white font-bold py-3 rounded-xl">Купить билет</a>
+    <section class="px-4 space-y-3">
+      <a href="bilet.html"class="w-full bg-lime-500 text-white font-bold py-3 rounded-xl">Купить билет</a>
 
-    <div class="bg-white rounded-xl p-4 flex items-center shadow">
-      <a href="arrivel.html" class="w-10 h-10 flex items-center justify-center bg-green-100 rounded-lg mr-4"><img src="images/photo_5398063018606193773_y.avif" alt=""></a>
-      <p class="font-medium">Направления</p>
-    </div>
+      <div class="bg-white rounded-xl p-4 flex items-center shadow">
+        <a href="arrivel.html" class="w-10 h-10 flex items-center justify-center bg-green-100 rounded-lg mr-4"><img src="images/photo_5398063018606193773_y.avif" alt=""></a>
+        <p class="font-medium">Направления</p>
+      </div>
 
-    <div class="bg-white rounded-xl p-4 flex items-center shadow">
-      <a href="HOTEL.html" class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-lg mr-4"><img src="images/photo_5398063018606193774_y.avif" alt=""></a>
-      <p class="font-medium">Отели</p>
-    </div>
+      <div class="bg-white rounded-xl p-4 flex items-center shadow">
+        <a href="HOTEL.html" class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-lg mr-4"><img src="images/photo_5398063018606193774_y.avif" alt=""></a>
+        <p class="font-medium">Отели</p>
+      </div>
 
-    <div class="bg-white rounded-xl p-4 flex items-center shadow">
-      <a  href="s7hop.html" class="w-10 h-10 flex items-center justify-center bg-purple-100 rounded-lg mr-4"> <img src="images/photo_5398063018606193772_y.avif" alt=""></a>
-      <p class="font-medium">Магазин</p>
-    </div>
-  </section>
+      <div class="bg-white rounded-xl p-4 flex items-center shadow">
+        <a  href="s7hop.html" class="w-10 h-10 flex items-center justify-center bg-purple-100 rounded-lg mr-4"> <img src="images/photo_5398063018606193772_y.avif" alt=""></a>
+        <p class="font-medium">Магазин</p>
+      </div>
+    </section>
 
-<!-- Пробел между слайдером и акциями -->
-  <div class="h-10"></div>
-
+    <!-- Пробел между слайдером и акциями -->
+    <div class="h-10"></div>
+    
   <!-- Самые актуальные предложения -->
   <section class="mt-8 px-4">
     <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full">Хит</span>
@@ -219,48 +228,6 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       </div>
   </section>
-<style>
-  .footer {
-    background-color: #f1f4f9; /* как на скрине */
-    padding: 20px 40px;
-    position: relative;
-    bottom: 0;
-    width: 100%;
-  }
-
-  .footer-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .footer-left {
-    font-size: 14px;
-    color: #667;
-  }
-
-  .footer-right a {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    margin-left: 10px;
-    border-radius: 50%;
-    background: white;
-    transition: transform 0.2s;
-  }
-
-  .footer-right a:hover {
-    transform: scale(1.1);
-  }
-
-  .footer-right img {
-    width: 20px;
-    height: 20px;
-  }
-</style>
+</div>
 </body>
 </html>
