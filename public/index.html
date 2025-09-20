@@ -749,10 +749,29 @@ document.addEventListener("DOMContentLoaded", () => {
 })(); 
 </script>
 <script>
-/* Определяем город по геолокации и подставляем в "Откуда" */
-(async function detectLocation(){
+// Глобальный массив аэропортов
+const airports = [
+  {city:"Савелий", code:"GSV"}
+  {city:"Москва", code:"SVO"},
+  {city:"Москва", code:"DME"},
+  {city:"Москва", code:"ZIA"},
+  {city:"Санкт-Петербург", code:"LED"},
+  {city:"Новосибирск", code:"OVB"},
+  {city:"Екатеринбург", code:"SVX"},
+  {city:"Казань", code:"KZN"},
+  {city:"Сочи", code:"AER"},
+  {city:"Краснодар", code:"KRR"}
+];
+
+/* Геолокация + автоподстановка */
+(function detectLocation(){
   const fromInput = document.getElementById('fromInput');
-  if (!navigator.geolocation) return;
+  if (!fromInput) return;
+
+  if (!navigator.geolocation) {
+    setDefaultCity(fromInput);
+    return;
+  }
 
   navigator.geolocation.getCurrentPosition(async (pos) => {
     const lat = pos.coords.latitude;
@@ -763,29 +782,89 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch(url, {headers:{'User-Agent':'BookingWidget/1.0'}});
       const data = await res.json();
 
-      // Определяем населённый пункт
-      const city = data.address.city || data.address.town || data.address.village;
-      if(!city) return;
+      const addr = data.address || {};
+      const city = addr.city || addr.town || addr.village || addr.municipality || addr.county;
+      if(!city) {
+        setDefaultCity(fromInput);
+        return;
+      }
 
-      // ищем город в списке аэропортов
-      const match = airports.find(a => a.city.toLowerCase() === city.toLowerCase());
+      // ищем все аэропорты для города
+      const matches = airports.filter(a => a.city.toLowerCase() === city.toLowerCase());
 
-      if(match){
-        fromInput.value = match.code ? `${match.city} (${match.code})` : match.city;
-      } else {
+      if(matches.length === 1){
+        // один аэропорт — автозаполняем
+        fromInput.value = `${matches[0].city} (${matches[0].code})`;
+      }
+      else if(matches.length > 1){
+        // несколько — выбор
+        showAirportSelector(fromInput, matches);
+      }
+      else {
+        // нет в базе — только название города
         fromInput.value = city;
       }
+
     } catch(err){
       console.error("Ошибка при получении города:", err);
+      setDefaultCity(fromInput);
     }
   }, (err)=>{
-    console.warn("Пользователь отклонил геолокацию:", err);
+    console.warn("Геолокация отклонена:", err);
+    setDefaultCity(fromInput);
   });
 })();
+
+/* Рисуем мини-список выбора аэропорта */
+function showAirportSelector(input, list){
+  const box = document.createElement('div');
+  box.className = 'suggestions';
+  box.style.display = 'block';
+  box.style.position = 'absolute';
+  box.style.top = '100%';
+  box.style.left = '0';
+  box.style.right = '0';
+  box.style.zIndex = '10000';
+
+  list.forEach(it => {
+    const div = document.createElement('div');
+    div.className = 'suggestion-item';
+    div.innerHTML = `<span class="suggestion-city">${it.city}</span>
+                     <span class="suggestion-code">${it.code}</span>`;
+    div.addEventListener('click', () => {
+      input.value = `${it.city} (${it.code})`;
+      box.remove();
+    });
+    box.appendChild(div);
+  });
+
+  // убираем старый, если есть
+  const old = input.parentElement.querySelector('.suggestions');
+  if(old) old.remove();
+
+  input.parentElement.appendChild(box);
+}
+
+/* Дефолт — Москва (SVO) */
+function setDefaultCity(input){
+  input.value = "Москва (SVO)";
+}
 </script>
-  
+
+  <!-- Пробел между слайдером и акциями -->
+  <div class="h-190"></div>
+
+  <script>
+    const slides = document.querySelectorAll("#slider img");
+    let current = 0;
+    setInterval(() => {
+      slides[current].style.opacity = 0;
+      current = (current + 1) % slides.length;
+      slides[current].style.opacity = 1;
+    }, 7000);
+  </script>
     <!-- Пробел между слайдером и акциями -->
-  <div class="h-50"></div>
+  <div class="h-56"></div>
   
 <!-- Веселые рейсы из Савелий -->
    <section class="max-w-7xl mx-auto px-4 py-12">
