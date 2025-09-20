@@ -365,20 +365,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* Виджет бронирования */
   .widget {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 325px; /* регулируй высоту блока от верха страницы */
-    max-width: 950px;
-    width: 90%;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(15, 20, 25, 0.08);
-    padding: 14px;
-    z-index: 50;
-    transform: scale(1.1) translateX(-45.0%); /* масштабируем и сдвигаем чуть влево */
-  transform-origin: top center;      
-  }
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) scale(1.1); /* сразу и центр, и масштаб */
+  bottom: -40px;          /* прижимаем к низу слайдера, чуть нависает */
+  max-width: 950px;
+  width: 90%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(15, 20, 25, 0.08);
+  padding: 14px;
+  z-index: 50;
+  transform-origin: top center;
+}
   .top-overlay {
     background:rgba(255,255,255,0.9);
     backdrop-filter: blur(4px);
@@ -1419,7 +1418,8 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   </section>
   <!-- 🔹 Конец блока Gate 7 -->
-
+   <!-- Пробел между слайдером и акциями -->
+  <div class="h-20"></div>
 
 <head>
   <meta charset="utf-8" />
@@ -1568,7 +1568,9 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     </div>
   </div>
-
+    <!-- Пробел между слайдером и акциями -->
+  <div class="h-20"></div>
+  
 <footer class="footer">
   <!-- Верх -->
   <div class="footer-top">
