@@ -62,24 +62,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     header {
-  display: flex;
-  align-items: center;
-  padding: 0 60px;
-  height: 80px;
-  border-bottom: 1px solid #ccc;
-  position: fixed;      /* фиксируем */
-  top: 0;               /* прижимаем к верхнему краю */
-  left: 0;
-  width: 100%;          /* на всю ширину */
-  z-index: 1000;        /* поверх всего */
-  background: #fff;
-}
+      display: flex;
+      align-items: center;
+      padding: 0 60px;
+      height: 80px;
+      border-bottom: 1px solid #ccc;
+      position: fixed;      /* фиксируем */
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: #fff;
+    }
 
     .logo-img {
-  height: 70px; /* подгоняешь по высоте под шапку */
-  width: auto;
-  cursor: pointer;
-}
+      height: 70px;
+      width: auto;
+      cursor: pointer;
+    }
 
     .logo-circle {
       background-color: #93bd0a;
@@ -121,7 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
       padding: 28px 0;
     }
 
-    /* Салатовая полоска */
     nav a::after {
       content: "";
       position: absolute;
@@ -136,7 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
       width: 100%;
     }
 
-    /* Подменю */
     .dropdown {
       position: absolute;
       top: 100%;
@@ -217,7 +215,6 @@ document.addEventListener("DOMContentLoaded", () => {
       object-fit: cover;
     }
 
-    /* userArea фикс */
     #userArea {
       display: flex;
       align-items: center;
@@ -232,23 +229,26 @@ document.addEventListener("DOMContentLoaded", () => {
       line-height: 1;
     }
 
-    /* Пример контента */
-   main {
-  margin-top: 80px;     /* равен высоте header */
-  height: 2000px;
-  background: linear-gradient(to bottom, #f9f9f9, #e1e1e1);
-  padding: 40px;
-}
+    /* фикс перекрытия */
+    .hero {
+      padding-top: 80px; /* отступ равен высоте header */
+    }
+
+    main {
+      height: 2000px;
+      background: linear-gradient(to bottom, #f9f9f9, #e1e1e1);
+      padding: 40px;
+    }
   </style>
 </head>
 <body>
 
 <header>
   <div class="logo">
-  <a href="index.html">
-    <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
-  </a>
-</div>
+    <a href="index.html">
+      <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
+    </a>
+  </div>
 
   <nav>
     <ul>
@@ -286,20 +286,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   <div class="right-menu">
     <button aria-label="Search">
-      
-        <circle cx="11" cy="11" r="7"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
+      <circle cx="11" cy="11" r="7"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
     </button>
     <button>RUB</button>
     <div class="flag" title="Russian flag">
       <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" />
     </div>
-    <!-- userArea вместо кнопки Войти -->
     <div id="userArea"></div>
   </div>
 </header>
-    <script>
+
+<script>
   window.addEventListener("DOMContentLoaded", () => {
     const userArea = document.getElementById("userArea");
 
@@ -308,7 +306,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const username = localStorage.getItem("username");
 
     if (fio && localStorage.getItem("phone")) {
-      // Пользователь вошёл
       if (avatar) {
         userArea.innerHTML = `
           <img src="${avatar}" alt="avatar" 
@@ -324,11 +321,10 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
       }
     } else {
-      // Не вошёл
       userArea.innerHTML = `<a href="auth.html">Вход</a>`;
     }
   });
-</script> 
+</script>
 
 <head>
 <meta charset="utf-8" />
@@ -500,7 +496,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <div class="hero">
  <!-- Слайдер -->
- <div class="relative w-full h-[430px] overflow-hidden">
+ <div class="relative w-full h-[380px] overflow-hidden">
   <div id="slider" class="absolute w-full h-full">
     <img src="images/Beige_Black_Minimalist_Event_Music_Festival_Concert_Ticket_20250914.avif" class="w-full h-full object-cover absolute" style="opacity: 1; transition: opacity 1s;">
     <img src="images/Airbrush-Image-Enhancer-1757834656611.avif" class="w-full h-full object-cover absolute" style="opacity: 0; transition: opacity 1s;">
@@ -638,7 +634,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const airports = [
     {city:"Все направления", code:""},
-    {city:"Москва", code:"SVO"},
+    {city:"Москва", code:"ZIA"},
+    {city:"Москва", code:"DME"},
     {city:"Санкт-Петербург", code:"LED"},
     {city:"Волгоград", code:""},
     {city:"Ашхабат", code:""},
@@ -764,7 +761,7 @@ document.addEventListener("DOMContentLoaded", () => {
   </script>
   
     <!-- Пробел между слайдером и акциями -->
-  <div class="h-40"></div>
+  <div class="h-30"></div>
   
 <!-- Веселые рейсы из Савелий -->
    <section class="max-w-7xl mx-auto px-4 py-12">
