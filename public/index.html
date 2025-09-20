@@ -62,15 +62,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     header {
-      display: flex;
-      align-items: center;
-      padding: 0 60px;
-      height: 80px;
-      border-bottom: 1px solid #ccc;
-      position: relative;
-      z-index: 1000;
-      background: #fff;
-    }
+  display: flex;
+  align-items: center;
+  padding: 0 60px;
+  height: 80px;
+  border-bottom: 1px solid #ccc;
+  position: fixed;      /* фиксируем */
+  top: 0;               /* прижимаем к верхнему краю */
+  left: 0;
+  width: 100%;          /* на всю ширину */
+  z-index: 1000;        /* поверх всего */
+  background: #fff;
+}
 
     .logo-img {
   height: 70px; /* подгоняешь по высоте под шапку */
@@ -230,11 +233,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* Пример контента */
-    main {
-      height: 2000px;
-      background: linear-gradient(to bottom, #f9f9f9, #e1e1e1);
-      padding: 40px;
-    }
+   main {
+  margin-top: 80px;     /* равен высоте header */
+  height: 2000px;
+  background: linear-gradient(to bottom, #f9f9f9, #e1e1e1);
+  padding: 40px;
+}
   </style>
 </head>
 <body>
@@ -1233,25 +1237,25 @@ document.addEventListener("DOMContentLoaded", () => {
     <!-- Карточка 1 -->
     <div class="rounded-2xl border p-6 shadow-sm">
       <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-orange-400 to-pink-400"></div>
-      <h3 class="font-bold text-lg mb-2">S7avelii Airlines совершила первый рейс по маршруту Савелий - Вена</h3>
-      <p class="text-gray-600 mb-4"></p>
-      <span class="text-sm text-gray-400">14 СЕН 2025</span>
+      <h3 class="font-bold text-lg mb-2">S7avelii Airlines открыли новый хаб в Москве</h3>
+      <p class="text-gray-600 mb-4">Будем летать из Москвы в Санкт-Петербург и Сочи</p>
+      <span class="text-sm text-gray-400">20 СЕН 2025</span>
     </div>
 
     <!-- Карточка 2 -->
     <div class="rounded-2xl border p-6 shadow-sm">
       <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-yellow-300 to-green-400"></div>
-      <h3 class="font-bold text-lg mb-2">S7avelii Airlines возобнавляет рейсы по маршруту Савелий - Краснодар</h3>
+      <h3 class="font-bold text-lg mb-2">S7avelii Airlines совершила первый рейс Савелий - Тенерифе</h3>
       <p class="text-gray-600 mb-4">Спустя несколько лет застоя аэропорт Краснодара открыт, мы одни из первых, кто запустит рейсы</p>
-      <span class="text-sm text-gray-400">12 СЕН 2025</span>
+      <span class="text-sm text-gray-400">18 СЕН 2025</span>
     </div>
 
     <!-- Карточка 3 -->
     <div class="rounded-2xl border p-6 shadow-sm">
       <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-sky-300 to-blue-600"></div>
-      <h3 class="font-bold text-lg mb-2">S7avelii Airlines запустила огромную распродажу</h3>
-      <p class="text-gray-600 mb-4">Скидки в S7avelii Shop до 40% 3 дня</p>
-      <span class="text-sm text-gray-400">10 СЕН 2025</span>
+      <h3 class="font-bold text-lg mb-2">S7avelii Priority - обновлённые условия для новых клиентов и приятные бонусы для прежних</h3>
+      <p class="text-gray-600 mb-4"></p>
+      <span class="text-sm text-gray-400">16 СЕН 2025</span>
     </div>
   </div>
 </section>
