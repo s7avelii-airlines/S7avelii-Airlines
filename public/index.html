@@ -536,9 +536,12 @@ document.addEventListener("DOMContentLoaded", () => {
     <form id="searchForm" action="search.html" method="get" style="margin:0;">
       <div class="form-row" role="group" aria-label="Поля поиска">
 
-        <!-- Откуда (растягивается) -->
-<div class="cell" style="flex:1;min-width:160px;">
-  <input type="text" name="from" placeholder="Савелий, GSV" aria-label="Откуда" required>
+       <!-- Откуда (растягивается) -->
+<div class="cell" style="flex:1;min-width:160px; position:relative;">
+  <input type="text" id="fromInput" name="from" placeholder="Савелий, GSV" 
+         autocomplete="off" aria-autocomplete="list" aria-controls="fromSuggestions" 
+         aria-expanded="false" required>
+  <div id="fromSuggestions" class="suggestions" role="listbox" aria-label="Подсказки отправления"></div>
 </div>
 
 <!-- Стрелка -->
@@ -745,22 +748,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })(); 
 </script>
+<script>
+/* Определяем город по геолокации и подставляем в "Откуда" */
+(async function detectLocation(){
+  const fromInput = document.getElementById('fromInput');
+  if (!navigator.geolocation) return;
 
-  <!-- Пробел между слайдером и акциями -->
-  <div class="h-190"></div>
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    const lat = pos.coords.latitude;
+    const lon = pos.coords.longitude;
 
-  <script>
-    const slides = document.querySelectorAll("#slider img");
-    let current = 0;
-    setInterval(() => {
-      slides[current].style.opacity = 0;
-      current = (current + 1) % slides.length;
-      slides[current].style.opacity = 1;
-    }, 7000);
-  </script>
+    try {
+      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=ru`;
+      const res = await fetch(url, {headers:{'User-Agent':'BookingWidget/1.0'}});
+      const data = await res.json();
+
+      // Определяем населённый пункт
+      const city = data.address.city || data.address.town || data.address.village;
+      if(!city) return;
+
+      // ищем город в списке аэропортов
+      const match = airports.find(a => a.city.toLowerCase() === city.toLowerCase());
+
+      if(match){
+        fromInput.value = match.code ? `${match.city} (${match.code})` : match.city;
+      } else {
+        fromInput.value = city;
+      }
+    } catch(err){
+      console.error("Ошибка при получении города:", err);
+    }
+  }, (err)=>{
+    console.warn("Пользователь отклонил геолокацию:", err);
+  });
+})();
+</script>
   
     <!-- Пробел между слайдером и акциями -->
-  <div class="h-60"></div>
+  <div class="h-50"></div>
   
 <!-- Веселые рейсы из Савелий -->
    <section class="max-w-7xl mx-auto px-4 py-12">
