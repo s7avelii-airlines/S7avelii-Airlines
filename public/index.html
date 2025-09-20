@@ -618,6 +618,166 @@ document.addEventListener("DOMContentLoaded", () => {
 <div style="height:56px"></div>
 
 <script>
+// Глобальный массив аэропортов
+const airports = [
+  {city:"Москва", code:"SVO"},
+  {city:"Москва", code:"DME"},
+  {city:"Москва", code:"ZIA"},
+  {city:"Санкт-Петербург", code:"LED"},
+  {city:"Новосибирск", code:"OVB"},
+  {city:"Екатеринбург", code:"SVX"},
+  {city:"Казань", code:"KZN"},
+  {city:"Сочи", code:"AER"},
+  {city:"Краснодар", code:"KRR"}
+];
+
+// Автокомплит
+function autocomplete(input, arr) {
+  let currentFocus;
+  input.addEventListener("input", function () {
+    let val = this.value;
+    closeAllLists();
+    if (!val) return false;
+    currentFocus = -1;
+
+    const box = document.createElement("div");
+    box.setAttribute("class", "suggestions");
+
+    arr.forEach(item => {
+      if (item.city.toLowerCase().startsWith(val.toLowerCase())) {
+        const div = document.createElement("div");
+        div.className = "suggestion-item";
+        div.innerHTML = `<span class="suggestion-city">${item.city}</span>
+                         <span class="suggestion-code">${item.code}</span>`;
+        div.addEventListener("click", () => {
+          input.value = `${item.city} (${item.code})`;
+          closeAllLists();
+        });
+        box.appendChild(div);
+      }
+    });
+
+    this.parentNode.appendChild(box);
+  });
+
+  input.addEventListener("keydown", function (e) {
+    let list = document.querySelector(".suggestions");
+    if (!list) return;
+    let items = list.getElementsByTagName("div");
+
+    if (e.keyCode == 40) {
+      currentFocus++;
+      addActive(items);
+    } else if (e.keyCode == 38) {
+      currentFocus--;
+      addActive(items);
+    } else if (e.keyCode == 13) {
+      e.preventDefault();
+      if (currentFocus > -1 && items[currentFocus]) items[currentFocus].click();
+    }
+  });
+
+  function addActive(items) {
+    if (!items) return;
+    removeActive(items);
+    if (currentFocus >= items.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = items.length - 1;
+    items[currentFocus].classList.add("autocomplete-active");
+  }
+
+  function removeActive(items) {
+    for (let item of items) item.classList.remove("autocomplete-active");
+  }
+
+  function closeAllLists(elmnt) {
+    let lists = document.getElementsByClassName("suggestions");
+    for (let list of lists) {
+      if (elmnt != list && elmnt != input) list.parentNode.removeChild(list);
+    }
+  }
+
+  document.addEventListener("click", function (e) {
+    closeAllLists(e.target);
+  });
+}
+
+// Подключаем автокомплит для поля "Куда"
+autocomplete(document.getElementById("toInput"), airports);
+
+/* Геолокация + автозаполнение "Откуда" */
+(function detectLocation(){
+  const fromInput = document.getElementById('fromInput');
+  if (!fromInput) return;
+
+  if (!navigator.geolocation) {
+    setDefaultCity(fromInput);
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    const lat = pos.coords.latitude;
+    const lon = pos.coords.longitude;
+
+    try {
+      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=ru`;
+      const res = await fetch(url, {headers:{'User-Agent':'BookingWidget/1.0'}});
+      const data = await res.json();
+
+      const addr = data.address || {};
+      const city = addr.city || addr.town || addr.village || addr.municipality || addr.county;
+      if(!city) { setDefaultCity(fromInput); return; }
+
+      const matches = airports.filter(a => a.city.toLowerCase() === city.toLowerCase());
+
+      if(matches.length === 1){
+        fromInput.value = `${matches[0].city} (${matches[0].code})`;
+      }
+      else if(matches.length > 1){
+        showAirportSelector(fromInput, matches);
+      }
+      else {
+        fromInput.value = city;
+      }
+
+    } catch(err){
+      console.error("Ошибка при получении города:", err);
+      setDefaultCity(fromInput);
+    }
+  }, (err)=>{
+    console.warn("Геолокация отклонена:", err);
+    setDefaultCity(fromInput);
+  });
+})();
+
+/* Выпадающий список выбора аэропорта */
+function showAirportSelector(input, list){
+  const box = document.createElement('div');
+  box.className = 'suggestions';
+  list.forEach(it => {
+    const div = document.createElement('div');
+    div.className = 'suggestion-item';
+    div.innerHTML = `<span class="suggestion-city">${it.city}</span>
+                     <span class="suggestion-code">${it.code}</span>`;
+    div.addEventListener('click', () => {
+      input.value = `${it.city} (${it.code})`;
+      box.remove();
+    });
+    box.appendChild(div);
+  });
+
+  const old = input.parentElement.querySelector('.suggestions');
+  if(old) old.remove();
+
+  input.parentElement.appendChild(box);
+}
+
+/* Дефолт */
+function setDefaultCity(input){
+  input.value = "Москва (SVO)";
+}
+</script>
+  
+<script>
 /* slider auto fade (small helpful enhancement) */
 (function sliderInit(){
   const imgs = document.querySelectorAll('.slider img');
@@ -748,109 +908,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })(); 
 </script>
-<script>
-// Глобальный массив аэропортов
-const airports = [
-  {city:"Савелий", code:"GSV"}
-  {city:"Москва", code:"SVO"},
-  {city:"Москва", code:"DME"},
-  {city:"Москва", code:"ZIA"},
-  {city:"Санкт-Петербург", code:"LED"},
-  {city:"Новосибирск", code:"OVB"},
-  {city:"Екатеринбург", code:"SVX"},
-  {city:"Казань", code:"KZN"},
-  {city:"Сочи", code:"AER"},
-  {city:"Краснодар", code:"KRR"}
-];
-
-/* Геолокация + автоподстановка */
-(function detectLocation(){
-  const fromInput = document.getElementById('fromInput');
-  if (!fromInput) return;
-
-  if (!navigator.geolocation) {
-    setDefaultCity(fromInput);
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(async (pos) => {
-    const lat = pos.coords.latitude;
-    const lon = pos.coords.longitude;
-
-    try {
-      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=ru`;
-      const res = await fetch(url, {headers:{'User-Agent':'BookingWidget/1.0'}});
-      const data = await res.json();
-
-      const addr = data.address || {};
-      const city = addr.city || addr.town || addr.village || addr.municipality || addr.county;
-      if(!city) {
-        setDefaultCity(fromInput);
-        return;
-      }
-
-      // ищем все аэропорты для города
-      const matches = airports.filter(a => a.city.toLowerCase() === city.toLowerCase());
-
-      if(matches.length === 1){
-        // один аэропорт — автозаполняем
-        fromInput.value = `${matches[0].city} (${matches[0].code})`;
-      }
-      else if(matches.length > 1){
-        // несколько — выбор
-        showAirportSelector(fromInput, matches);
-      }
-      else {
-        // нет в базе — только название города
-        fromInput.value = city;
-      }
-
-    } catch(err){
-      console.error("Ошибка при получении города:", err);
-      setDefaultCity(fromInput);
-    }
-  }, (err)=>{
-    console.warn("Геолокация отклонена:", err);
-    setDefaultCity(fromInput);
-  });
-})();
-
-/* Рисуем мини-список выбора аэропорта */
-function showAirportSelector(input, list){
-  const box = document.createElement('div');
-  box.className = 'suggestions';
-  box.style.display = 'block';
-  box.style.position = 'absolute';
-  box.style.top = '100%';
-  box.style.left = '0';
-  box.style.right = '0';
-  box.style.zIndex = '10000';
-
-  list.forEach(it => {
-    const div = document.createElement('div');
-    div.className = 'suggestion-item';
-    div.innerHTML = `<span class="suggestion-city">${it.city}</span>
-                     <span class="suggestion-code">${it.code}</span>`;
-    div.addEventListener('click', () => {
-      input.value = `${it.city} (${it.code})`;
-      box.remove();
-    });
-    box.appendChild(div);
-  });
-
-  // убираем старый, если есть
-  const old = input.parentElement.querySelector('.suggestions');
-  if(old) old.remove();
-
-  input.parentElement.appendChild(box);
-}
-
-/* Дефолт — Москва (SVO) */
-function setDefaultCity(input){
-  input.value = "Москва (SVO)";
-}
-</script>
-
   <!-- Пробел между слайдером и акциями -->
   <div class="h-190"></div>
 
@@ -864,7 +921,7 @@ function setDefaultCity(input){
     }, 7000);
   </script>
     <!-- Пробел между слайдером и акциями -->
-  <div class="h-56"></div>
+  <div class="h-53"></div>
   
 <!-- Веселые рейсы из Савелий -->
    <section class="max-w-7xl mx-auto px-4 py-12">
