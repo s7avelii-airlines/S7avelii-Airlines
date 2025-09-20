@@ -628,7 +628,8 @@ const airports = [
   {city:"Екатеринбург", code:"SVX"},
   {city:"Казань", code:"KZN"},
   {city:"Сочи", code:"AER"},
-  {city:"Краснодар", code:"KRR"}
+  {city:"Краснодар", code:"KRR"},
+  {city:"Саратов", code:"GSV"} // особый случай
 ];
 
 // Автокомплит
@@ -644,11 +645,13 @@ function autocomplete(input, arr) {
     box.setAttribute("class", "suggestions");
 
     arr.forEach(item => {
-      if (item.city.toLowerCase().startsWith(val.toLowerCase())) {
+      if (
+        item.city.toLowerCase().startsWith(val.toLowerCase()) ||
+        item.code.toLowerCase().startsWith(val.toLowerCase())
+      ) {
         const div = document.createElement("div");
         div.className = "suggestion-item";
-        div.innerHTML = `<span class="suggestion-city">${item.city}</span>
-                         <span class="suggestion-code">${item.code}</span>`;
+        div.innerHTML = `<span class="suggestion-city">${item.city} (${item.code})</span>`;
         div.addEventListener("click", () => {
           input.value = `${item.city} (${item.code})`;
           closeAllLists();
@@ -724,8 +727,14 @@ autocomplete(document.getElementById("toInput"), airports);
       const data = await res.json();
 
       const addr = data.address || {};
-      const city = addr.city || addr.town || addr.village || addr.municipality || addr.county;
+      let city = addr.city || addr.town || addr.village || addr.municipality || addr.county;
       if(!city) { setDefaultCity(fromInput); return; }
+
+      // особый случай Саратов
+      if(city.toLowerCase() === "саратов"){
+        fromInput.value = "Савелий, GSV";
+        return;
+      }
 
       const matches = airports.filter(a => a.city.toLowerCase() === city.toLowerCase());
 
@@ -756,8 +765,7 @@ function showAirportSelector(input, list){
   list.forEach(it => {
     const div = document.createElement('div');
     div.className = 'suggestion-item';
-    div.innerHTML = `<span class="suggestion-city">${it.city}</span>
-                     <span class="suggestion-code">${it.code}</span>`;
+    div.innerHTML = `<span class="suggestion-city">${it.city} (${it.code})</span>`;
     div.addEventListener('click', () => {
       input.value = `${it.city} (${it.code})`;
       box.remove();
@@ -776,7 +784,7 @@ function setDefaultCity(input){
   input.value = "Москва (SVO)";
 }
 </script>
-  
+
 <script>
 /* slider auto fade (small helpful enhancement) */
 (function sliderInit(){
@@ -889,7 +897,7 @@ function setDefaultCity(input){
       if(currentIndex >= 0) { e.preventDefault(); selectItem(currentIndex); }
     } else if(e.key === 'Escape'){
       suggestions.style.display = 'none';
-      toInput.setAttribute('aria-expanded','false');
+      toInput.setAttribute('a','false');
     }
   });
 
@@ -921,7 +929,7 @@ function setDefaultCity(input){
     }, 7000);
   </script>
     <!-- Пробел между слайдером и акциями -->
-  <div class="h-53"></div>
+  <div class="h-55"></div>
   
 <!-- Веселые рейсы из Савелий -->
    <section class="max-w-7xl mx-auto px-4 py-12">
