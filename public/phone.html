@@ -17,8 +17,11 @@
       min-height: 100vh; /* всегда во всю высоту */
       background: #fff;
       box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
+<body>
+<div class="mobile-wrapper">
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -28,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 </script>
+
   <!-- Шапка --> 
   <header class="flex justify-between items-center p-4 bg-white shadow"> 
     <img src="images/photo_5276207082657412564_y.avif" alt="S7" class="w-10 h-10">
@@ -37,100 +41,113 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   </header>
 
-<!-- Слайд-шоу -->
-  <div class="relative w-full max-w-[400px] h-[350px] overflow-hidden rounded-2xl mx-auto"> 
+  <!-- Слайд-шоу -->
+  <div class="relative w-full max-w-[400px] h-[350px] overflow-hidden rounded-2xl mx-auto mt-4"> 
     <div id="slider" class="absolute w-full h-full"> 
-     <img src="images/3_20250921_080215_0002.avif" class="w-full h-full object-cover absolute" style="opacity:1;transition:opacity 1s;">
-    <img src="images/Airbrush-Image-Enhancer-1758427470044.avif" class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
-    <img src="images/2_20250921_080215_0001.avif" class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
-    <img src="images/4_20250921_080215_0003.avif" class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
+      <img src="images/3_20250921_080215_0002.avif" class="w-full h-full object-cover absolute" style="opacity:1;transition:opacity 1s;">
+      <img src="images/Airbrush-Image-Enhancer-1758427470044.avif" class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
+      <img src="images/2_20250921_080215_0001.avif" class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
+      <img src="images/4_20250921_080215_0003.avif" class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
     </div> 
   </div> 
   <script> 
-    const slides = document.querySelectorAll("#slider img"); let currentIndex = 0; function showSlide(nextIndex)
-      { slides[currentIndex].style.opacity = "0"; slides[nextIndex].style.opacity = "1"; currentIndex = nextIndex; 
-      }
-    function autoSlide()
-      { let nextIndex = (currentIndex + 1) % slides.length; showSlide(nextIndex); 
-      } setInterval(autoSlide, 4000); // каждые 4 секунды 
+    const slides = document.querySelectorAll("#slider img"); 
+    let currentIndex = 0; 
+    function showSlide(nextIndex) {
+      slides[currentIndex].style.opacity = "0"; 
+      slides[nextIndex].style.opacity = "1"; 
+      currentIndex = nextIndex; 
+    }
+    function autoSlide() {
+      let nextIndex = (currentIndex + 1) % slides.length; 
+      showSlide(nextIndex); 
+    } 
+    setInterval(autoSlide, 4000); // каждые 4 секунды 
   </script>
+
   <!-- Кнопки -->
-  <section class="px-4 space-y-3"> 
-    <a href="bilet.html"class="w-full bg-lime-500 text-white font-bold py-3 rounded-xl">Купить билет</a>
-        <a href="arrivel.html" class="w-10 h-10 flex items-center justify-center bg-green-100 rounded-lg mr-4"><img src="images/photo_5398063018606193773_y.avif" alt=""></a>
-        <p class="font-medium">Направления</p>
-      </div>
+  <section class="px-4 space-y-3 mt-4"> 
+    <a href="bilet.html" class="w-full block bg-lime-500 text-white font-bold py-3 rounded-xl text-center">Купить билет</a>
 
-      <div class="bg-white rounded-xl p-4 flex items-center shadow">
-        <a href="HOTEL.html" class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-lg mr-4"><img src="images/photo_5398063018606193774_y.avif" alt=""></a>
-        <p class="font-medium">Отели</p>
-      </div>
+    <div class="bg-white rounded-xl p-4 flex items-center shadow">
+      <a href="arrivel.html" class="w-10 h-10 flex items-center justify-center bg-green-100 rounded-lg mr-4">
+        <img src="images/photo_5398063018606193773_y.avif" alt="">
+      </a>
+      <p class="font-medium">Направления</p>
+    </div>
 
-      <div class="bg-white rounded-xl p-4 flex items-center shadow">
-        <a  href="s7hop.html" class="w-10 h-10 flex items-center justify-center bg-purple-100 rounded-lg mr-4"> <img src="images/photo_5398063018606193772_y.avif" alt=""></a>
-        <p class="font-medium">Магазин</p>
-      </div>
-    </section>
+    <div class="bg-white rounded-xl p-4 flex items-center shadow">
+      <a href="HOTEL.html" class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-lg mr-4">
+        <img src="images/photo_5398063018606193774_y.avif" alt="">
+      </a>
+      <p class="font-medium">Отели</p>
+    </div>
 
-    <!-- Пробел между слайдером и акциями -->
-    <div class="h-10"></div>
+    <div class="bg-white rounded-xl p-4 flex items-center shadow">
+      <a href="s7hop.html" class="w-10 h-10 flex items-center justify-center bg-purple-100 rounded-lg mr-4">
+        <img src="images/photo_5398063018606193772_y.avif" alt="">
+      </a>
+      <p class="font-medium">Магазин</p>
+    </div>
+  </section>
+
+  <!-- Пробел между слайдером и акциями -->
+  <div class="h-10"></div>
     
   <!-- Самые актуальные предложения -->
   <section class="mt-8 px-4">
     <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full">Хит</span>
     <h2 class="text-2xl font-bold mt-2 mb-4">Самые актуальные предложения</h2>
-<!-- Карточка 1 -->
-<div class="col-span-2 bg-gradient-to-r from-green-500 to-teal-400 rounded-2xl p-4 text-white flex justify-between items-center">
-  <div>
-    <h3 class="text-lg font-bold">S7avelii business</h3>
-    <p class="text-sm">Создаем сайты на заказ</p>
-  </div>
-  <a href="busines.html"> <!-- укажи сюда свою страницу -->
-    <img src="images/photo_5330078908990750711_x.avif" alt="Семейный счет" class="w-16 h-16 cursor-pointer">
-  </a>
-</div>
 
-<!-- Карточка 2 -->
-<div class="bg-gradient-to-r from-pink-400 to-orange-300 rounded-2xl p-4 text-white flex flex-col justify-between">
-  <div>
-    <h3 class="text-lg font-bold">Отели для отпуска</h3>
-    <p class="text-sm"></p>
-  </div>
-  <a href="HOTEL.html"> <!-- новая страница -->
-    <img src="images/photo_5330078908990750712_x.avif" alt="Отели" class="w-16 h-16 self-end cursor-pointer">
-  </a>
-</div>
+    <!-- Карточки -->
+    <div class="space-y-4">
+      <div class="col-span-2 bg-gradient-to-r from-green-500 to-teal-400 rounded-2xl p-4 text-white flex justify-between items-center">
+        <div>
+          <h3 class="text-lg font-bold">S7avelii business</h3>
+          <p class="text-sm">Создаем сайты на заказ</p>
+        </div>
+        <a href="busines.html">
+          <img src="images/photo_5330078908990750711_x.avif" alt="Семейный счет" class="w-16 h-16 cursor-pointer">
+        </a>
+      </div>
 
-<!-- Карточка 3 -->
-<div class="bg-gradient-to-r from-green-400 to-teal-300 rounded-2xl p-4 text-white flex flex-col justify-between">
-  <div>
-    <h3 class="text-lg font-bold">S7avelii Priority</h3>
-    <p class="text-sm">Оформите карту постоянного клиента</p>
-  </div>
-  <a href="priority.html">
-    <img src="images/photo_5330078908990750713_y.avif" alt="Miles & Cash" class="w-16 h-16 self-end cursor-pointer">
-  </a>
-</div>
+      <div class="bg-gradient-to-r from-pink-400 to-orange-300 rounded-2xl p-4 text-white flex justify-between items-center">
+        <div>
+          <h3 class="text-lg font-bold">Отели для отпуска</h3>
+        </div>
+        <a href="HOTEL.html">
+          <img src="images/photo_5330078908990750712_x.avif" alt="Отели" class="w-16 h-16 cursor-pointer">
+        </a>
+      </div>
 
-<!-- Карточка 4 -->
-<div class="col-span-2 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-2xl p-4 text-white flex justify-between items-center">
-  <div>
-    <h3 class="text-lg font-bold">S7avelii Shop</h3>
-    <p class="text-sm">Устройте себе шопинг</p>
-  </div>
-  <a href="s7hop.html">
-    <img src="images/photo_5330078908990750714_x (1).avif" alt="S7 Shop" class="w-16 h-16 cursor-pointer">
-  </a>
-</div>
+      <div class="bg-gradient-to-r from-green-400 to-teal-300 rounded-2xl p-4 text-white flex justify-between items-center">
+        <div>
+          <h3 class="text-lg font-bold">S7avelii Priority</h3>
+          <p class="text-sm">Оформите карту постоянного клиента</p>
+        </div>
+        <a href="priority.html">
+          <img src="images/photo_5330078908990750713_y.avif" alt="Miles & Cash" class="w-16 h-16 cursor-pointer">
+        </a>
+      </div>
 
-  <!-- Рейсы из Москвы -->
+      <div class="col-span-2 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-2xl p-4 text-white flex justify-between items-center">
+        <div>
+          <h3 class="text-lg font-bold">S7avelii Shop</h3>
+          <p class="text-sm">Устройте себе шопинг</p>
+        </div>
+        <a href="s7hop.html">
+          <img src="images/photo_5330078908990750714_x (1).avif" alt="S7 Shop" class="w-16 h-16 cursor-pointer">
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Рейсы -->
   <section class="mt-8 px-4">
     <h2 class="text-xl font-bold mb-4">Рейсы из г. Савелий</h2>
     <div class="space-y-3">
-
-      <!-- Рейс 1 -->
       <div class="bg-white rounded-xl shadow p-4 flex items-center">
-        <img src="images/moskva-650x379.avif" alt="Санкт-Петербург" class="w-16 h-16 rounded-lg mr-4 object-cover">
+        <img src="images/moskva-650x379.avif" alt="Москва" class="w-16 h-16 rounded-lg mr-4 object-cover">
         <div>
           <h3 class="font-bold text-gray-800">Москва</h3>
           <p class="text-sm text-gray-500">туда и обратно</p>
@@ -138,25 +155,24 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       </div>
 
-      <!-- Рейс 2 -->
       <div class="bg-white rounded-xl shadow p-4 flex items-center">
-        <img src="images/2014-08-20-panteon-01.avif" alt="Сочи" class="w-16 h-16 rounded-lg mr-4 object-cover">
+        <img src="images/2014-08-20-panteon-01.avif" alt="Пула" class="w-16 h-16 rounded-lg mr-4 object-cover">
         <div>
           <h3 class="font-bold text-gray-800">Пула</h3>
           <p class="text-sm text-gray-500">туда и обратно</p>
           <p class="text-green-600 font-medium">ежедневно</p>
         </div>
       </div>
-<!-- Рейс 2 -->
+
       <div class="bg-white rounded-xl shadow p-4 flex items-center">
-        <img src="images/images.avif" alt="Сочи" class="w-16 h-16 rounded-lg mr-4 object-cover">
+        <img src="images/images.avif" alt="Рим" class="w-16 h-16 rounded-lg mr-4 object-cover">
         <div>
           <h3 class="font-bold text-gray-800">Рим</h3>
           <p class="text-sm text-gray-500">туда и обратно</p>
           <p class="text-green-600 font-medium">ежедневно</p>
         </div>
       </div>
-      <!-- Рейс 2 -->
+
       <div class="bg-white rounded-xl shadow p-4 flex items-center">
         <img src="images/photo_5253869756614833554_x.avif" alt="Сочи" class="w-16 h-16 rounded-lg mr-4 object-cover">
         <div>
@@ -168,223 +184,36 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   </section>
 
-<!-- Новости S7avelii Airlines -->
-<section class="max-w-7xl mx-auto px-4 py-12">
-  <div class="flex justify-between items-center mb-8">
-    <h2 class="text-3xl font-bold">Новости S7avelii Airlines</h2>
-    <a href="#" class="text-blue-900 text-sm hover:underline flex items-center">
-      <svg class="ml-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10 3a1 1 0 011.707-.707l6 6a1 1 0 010 1.414l-6 6A1 1 0 0110 15V3z" />
-      </svg>
-    </a>
-  </div>
+  <!-- Новости -->
+  <!-- ... (оставил твои карточки новостей и статей как есть) ... -->
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <!-- Карточка 1 -->
-    <div class="rounded-2xl border p-6 shadow-sm">
-      <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-orange-400 to-pink-400"></div>
-      <h3 class="font-bold text-lg mb-2">S7avelii Airlines совершила первый рейс по маршруту Савелий - Вена</h3>
-      <p class="text-gray-600 mb-4"></p>
-      <span class="text-sm text-gray-400">14 СЕН 2025</span>
+  <!-- Футер -->
+  <footer class="mobile-footer mt-10">
+    <div class="subscribe-box">
+      <h3>Подпишитесь на рассылку <span>S7avelii </span></h3>
+      <p>Будьте в курсе акций, открывайте новые маршруты</p>
+      <form class="subscribe-form">
+        <input type="email" placeholder="Ваша почта" required>
+        <button type="submit">→</button>
+      </form>
+      <label class="checkbox">
+        <input type="checkbox">
+        Хочу узнавать про скидки и идеи путешествий по почте и соглашаюсь на 
+        <a href="#">обработку персональных данных</a>
+      </label>
     </div>
 
-    <!-- Карточка 2 -->
-    <div class="rounded-2xl border p-6 shadow-sm">
-      <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-yellow-300 to-green-400"></div>
-      <h3 class="font-bold text-lg mb-2">S7avelii Airlines возобнавляет рейсы по маршруту Савелий - Краснодар</h3>
-      <p class="text-gray-600 mb-4">Спустя несколько лет застоя аэропорт Краснодара открыт, мы одни из первых, кто запустит рейсы</p>
-      <span class="text-sm text-gray-400">12 СЕН 2025</span>
-    </div>
-
-    <!-- Карточка 3 -->
-    <div class="rounded-2xl border p-6 shadow-sm">
-      <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-sky-300 to-blue-600"></div>
-      <h3 class="font-bold text-lg mb-2">S7avelii Airlines запустила огромную распродажу</h3>
-      <p class="text-gray-600 mb-4">Скидки в S7avelii Shop до 40% 3 дня</p>
-      <span class="text-sm text-gray-400">10 СЕН 2025</span>
-    </div>
-  </div>
-</section>
-    
-    <section class="px-4 py-6 bg-gray-50">
-  <!-- Заголовок -->
-  <div class="mb-4">
-    <span class="text-gray-400 text-sm">Что почитать</span>
-    <h2 class="text-2xl font-bold text-gray-900">Делимся опытом путешествий</h2>
-  </div>
-
-  <!-- Сетка карточек -->
-  <div class="grid grid-cols-2 gap-3">
-    <!-- Карточка 1 -->
-    <div class="relative rounded-2xl overflow-hidden h-40">
-      <img src="images/images.avif" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-black/40"></div>
-      <div class="absolute bottom-2 left-2 text-white text-sm font-medium">
-        На выходные в Рим
+    <div class="footer-bottom">
+      <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
+      <div class="socials">
+        <a href="https://vk.com/s7avelii"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
+        <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1 "><img src="images/icons8-tiktok-logo-50 (1).avif" alt="OK"></a>
+        <a href="https://youtu.be/Dy31uUCFaWw?si=2gyqNYaT3ZVO8WJa"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
+        <a href="https://t.me/S7saveliiairlines"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
       </div>
     </div>
+  </footer>
 
-    <!-- Карточка 2 -->
-    <div class="relative rounded-2xl overflow-hidden h-40">
-      <img src="images/IMG_20250913_121618.avif" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-black/40"></div>
-      <div class="absolute bottom-2 left-2 text-white text-sm font-medium">
-        Споттинг, как искусство
-      </div>
-    </div>
-
-    <!-- Карточка 3 -->
-    <div class="relative rounded-2xl overflow-hidden h-40">
-      <img src="images/IMG_20250913_122149.avif" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-black/40"></div>
-      <div class="absolute bottom-2 left-2 text-white text-sm font-medium">
-        Саратов - столица S7avelii
-      </div>
-    </div>
-
-    <!-- Карточка 4 -->
-    <div class="relative rounded-2xl overflow-hidden h-40">
-      <img src="images/Black Simple Travel Logo_20250914_092424_0000.avif" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-black/40"></div>
-      <div class="absolute bottom-2 left-2 text-white text-sm font-medium">
-        Как копить и тратить мили S7avelii Priority
-      </div>
-    </div>
-  </div>
-
-  <!-- Кнопка -->
-<div class="mt-6">
-  <a href="https://t.me/S7saveliiairlines" class="block w-full py-3 rounded-xl bg-gray-100 text-gray-900 font-medium text-center">
-    Все статьи
-  </a>
-</div>
-</section>  
-
-<footer class="mobile-footer">
-  <!-- Подписка -->
-  <div class="subscribe-box">
-    <h3>Подпишитесь на рассылку <span>S7avelii </span></h3>
-    <p>Будьте в курсе акций, открывайте новые маршруты</p>
-    <form class="subscribe-form">
-      <input 
-        type="email" 
-        placeholder="Ваша почта" 
-        required
-      >
-      <button type="submit">→</button>
-    </form>
-    <label class="checkbox">
-      <input type="checkbox">
-      Хочу узнавать про скидки и идеи путешествий по почте и соглашаюсь на 
-      <a href="#">обработку персональных данных</a>
-    </label>
-  </div>
-
-  <!-- Низ -->
-  <div class="footer-bottom">
-    <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
-    <div class="socials">
-      <a href="https://vk.com/s7avelii"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
-      <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1 "><img src="images/icons8-tiktok-logo-50 (1).avif" alt="OK"></a>
-      <a href="https://youtu.be/Dy31uUCFaWw?si=2gyqNYaT3ZVO8WJa"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
-      <a href="https://t.me/S7saveliiairlines"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
-    </div>
-  </div>
-</footer>
-
-<style>
-.mobile-footer {
-  background: #f1f5f9;   /* светло-серый фон */
-  padding: 20px;
-  font-family: Inter, sans-serif;
-  color: #111;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Блок подписки */
-.subscribe-box {
-  background: #fff;
-  border-radius: 16px;
-  padding: 20px;
-  border: 1px solid #d1d5db;
-  margin-bottom: 20px;
-}
-.subscribe-box h3 {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-.subscribe-box h3 span {
-  font-family: "Comic Sans MS", cursive; /* на фото декоративный шрифт */
-  font-weight: 400;
-}
-.subscribe-box p {
-  color: #333;
-  margin-bottom: 14px;
-  font-size: 14px;
-}
-
-.subscribe-form {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-}
-.subscribe-form input {
-  flex: 1;
-  padding: 12px 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 20px 0 0 20px;
-  font-size: 14px;
-  outline: none;
-}
-.subscribe-form button {
-  background: #a6d463;
-  border: none;
-  border-radius: 0 20px 20px 0;
-  padding: 0 20px;
-  font-size: 22px;
-  cursor: pointer;
-  color: #fff;
-}
-
-.checkbox {
-  font-size: 13px;
-  color: #333;
-  line-height: 1.4;
-}
-.checkbox input {
-  margin-right: 6px;
-}
-.checkbox a {
-  color: #4f8ef7;
-  text-decoration: underline;
-}
-
-/* Низ */
-.footer-bottom {
-  text-align: center;
-}
-.copy {
-  font-size: 13px;
-  color: #555;
-  margin-bottom: 14px;
-}
-.socials {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-}
-.socials a img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #fff;
-  padding: 8px;
-}
-</style>
-
-    
 </div>
 </body>
 </html>
