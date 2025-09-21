@@ -88,46 +88,96 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(autoSlide, 4000); // каждые 4 секунды 
   </script>
 
-<div class="w-full max-w-[400px] mx-auto mt-4 p-4 bg-white rounded-2xl shadow">
-  <form id="mobileBookingForm" action="search.html" method="get" class="space-y-3">
-    <!-- Откуда -->
-    <div class="relative">
-      <input type="text" id="fromInput" name="from" placeholder="Откуда" class="w-full border rounded-lg p-3" required>
-      <div id="fromSuggestions" class="absolute bg-white w-full rounded-lg shadow mt-1 hidden"></div>
+<div class="max-w-[500px] mx-auto mt-6">
+  <!-- Меню -->
+  <div class="flex space-x-2 mb-4">
+    <button data-tab="purchase" class="tab-btn flex-1 bg-green-100 p-3 rounded-xl font-medium">Покупка</button>
+    <button data-tab="hotel" class="tab-btn flex-1 bg-blue-100 p-3 rounded-xl font-medium">Отели</button>
+    <button data-tab="shop" class="tab-btn flex-1 bg-purple-100 p-3 rounded-xl font-medium">Магазин</button>
+  </div>
+
+  <!-- Контент -->
+  <div id="tabContent" class="bg-white p-4 rounded-2xl shadow">
+    
+    <!-- Покупка (бронирование) -->
+    <div id="purchase" class="tab-pane">
+      <form id="mobileBookingForm" action="search.html" method="get" class="space-y-3">
+        <!-- Откуда -->
+        <div class="relative">
+          <input type="text" id="fromInput" name="from" placeholder="Откуда" class="w-full border rounded-lg p-3" required>
+          <div id="fromSuggestions" class="absolute bg-white w-full rounded-lg shadow mt-1 hidden"></div>
+        </div>
+
+        <!-- Куда -->
+        <div class="relative">
+          <input type="text" id="toInput" name="to" placeholder="Куда" class="w-full border rounded-lg p-3" required>
+          <div id="toSuggestions" class="absolute bg-white w-full rounded-lg shadow mt-1 hidden"></div>
+        </div>
+
+        <!-- Дата туда -->
+        <input id="date1" name="date1" type="date" class="w-full border rounded-lg p-3" required>
+
+        <!-- Дата обратно -->
+        <input id="date2" name="date2" type="date" class="w-full border rounded-lg p-3">
+
+        <!-- Пассажиры -->
+        <select id="passengers" name="passengers" class="w-full border rounded-lg p-3" required>
+          <option value="" disabled selected>Пассажиры</option>
+          <option value="1_econom">1, Эконом</option>
+          <option value="2_econom">2, Эконом</option>
+          <option value="3_econom">3, Эконом</option>
+          <option value="4_econom">4, Эконом</option>
+          <option value="1_business">1, Бизнес</option>
+          <option value="1_first">1, Первый класс</option>
+        </select>
+
+        <!-- Кнопка -->
+        <button type="submit" class="w-full bg-lime-500 text-white font-bold py-3 rounded-xl">
+          Найти билет
+        </button>
+      </form>
     </div>
 
-    <!-- Куда -->
-    <div class="relative">
-      <input type="text" id="toInput" name="to" placeholder="Куда" class="w-full border rounded-lg p-3" required>
-      <div id="toSuggestions" class="absolute bg-white w-full rounded-lg shadow mt-1 hidden"></div>
+    <!-- Отели -->
+    <div id="hotel" class="tab-pane hidden">
+      <p class="font-medium">Здесь будут предложения по отелям.</p>
     </div>
 
-    <!-- Дата туда -->
-    <input id="date1" name="date1" type="date" class="w-full border rounded-lg p-3" required>
-
-    <!-- Дата обратно -->
-    <input id="date2" name="date2" type="date" class="w-full border rounded-lg p-3">
-
-    <!-- Пассажиры -->
-    <select id="passengers" name="passengers" class="w-full border rounded-lg p-3" required>
-      <option value="" disabled selected>Пассажиры</option>
-      <option value="1_econom">1, Эконом</option>
-      <option value="2_econom">2, Эконом</option>
-      <option value="3_econom">3, Эконом</option>
-      <option value="4_econom">4, Эконом</option>
-      <option value="1_business">1, Бизнес</option>
-      <option value="1_first">1, Первый класс</option>
-    </select>
-
-    <!-- Кнопка -->
-    <button type="submit" class="w-full bg-lime-500 text-white font-bold py-3 rounded-xl">
-      Найти билет
-    </button>
-  </form>
+    <!-- Магазин -->
+    <div id="shop" class="tab-pane hidden">
+      <p class="font-medium">Здесь будет онлайн-магазин.</p>
+    </div>
+  </div>
 </div>
 
 <script>
-  // Геолокация для "Откуда"
+  // ====== ВКЛАДКИ ======
+  const buttons = document.querySelectorAll(".tab-btn");
+  const panes = document.querySelectorAll(".tab-pane");
+
+  function showTab(tab) {
+    panes.forEach(p => p.classList.add("hidden"));
+    document.getElementById(tab).classList.remove("hidden");
+    localStorage.setItem("activeTab", tab);
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      showTab(btn.dataset.tab);
+    });
+  });
+
+  // Автооткрытие "Покупка" при первом заходе
+  window.addEventListener("load", () => {
+    const saved = localStorage.getItem("activeTab");
+    if (saved) {
+      showTab(saved);
+    } else {
+      showTab("purchase"); // первый раз всегда бронирование
+    }
+  });
+
+  // ====== ГЕОЛОКАЦИЯ для "Откуда" ======
   function setFromByGeo() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(async (pos) => {
@@ -150,7 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   setFromByGeo();
 
-  // Автокомплит для "Куда"
+  // ====== АВТОКОМПЛИТ для "Куда" ======
   (function autocompleteTo() {
     const toInput = document.getElementById('toInput');
     const toSuggestions = document.getElementById('toSuggestions');
@@ -197,102 +247,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if(last) toInput.value = last;
   })();
 </script>
-  <!-- Кнопки -->
-    <div class="bg-white rounded-xl p-4 flex items-center shadow">
-      <a href="arrivel.html" class="w-10 h-10 flex items-center justify-center bg-green-100 rounded-lg mr-4">
-        <img src="images/photo_5398063018606193773_y.avif" alt="">
-      </a>
-      <p class="font-medium">Направления</p>
-    </a>
-    </div>
-
-    <div class="bg-white rounded-xl p-4 flex items-center shadow">
-      <a href="HOTEL.html" class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-lg mr-4">
-        <img src="images/photo_5398063018606193774_y.avif" alt="">
-      </a>
-      <p class="font-medium">Отели</p>
-    </div>
-
-    <div class="bg-white rounded-xl p-4 flex items-center shadow">
-      <a href="s7hop.html" class="w-10 h-10 flex items-center justify-center bg-purple-100 rounded-lg mr-4">
-        <img src="images/photo_5398063018606193772_y.avif" alt="">
-      </a>
-      <p class="font-medium">Магазин</p>
-    </div>
-  </section>
-
-  <!-- Пробел между слайдером и акциями -->
-  <div class="h-10"></div>
-    
-  <!-- Самые актуальные предложения -->
-  <section class="mt-8 px-4">
-    <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full">Хит</span>
-    <h2 class="text-2xl font-bold mt-2 mb-4">Самые актуальные предложения</h2>
-
-    <!-- Карточки -->
-    <div class="space-y-4">
-      <div class="col-span-2 bg-gradient-to-r from-green-500 to-teal-400 rounded-2xl p-4 text-white flex justify-between items-center">
-        <div>
-          <h3 class="text-lg font-bold">S7avelii business</h3>
-          <p class="text-sm">Создаем сайты на заказ</p>
-        </div>
-        <a href="busines.html">
-          <img src="images/photo_5330078908990750711_x.avif" alt="Семейный счет" class="w-16 h-16 cursor-pointer">
-        </a>
-      </div>
-
-      <div class="bg-gradient-to-r from-pink-400 to-orange-300 rounded-2xl p-4 text-white flex justify-between items-center">
-        <div>
-          <h3 class="text-lg font-bold">Отели для отпуска</h3>
-        </div>
-        <a href="HOTEL.html">
-          <img src="images/photo_5330078908990750712_x.avif" alt="Отели" class="w-16 h-16 cursor-pointer">
-        </a>
-      </div>
-
-      <div class="bg-gradient-to-r from-green-400 to-teal-300 rounded-2xl p-4 text-white flex justify-between items-center">
-        <div>
-          <h3 class="text-lg font-bold">S7avelii Priority</h3>
-          <p class="text-sm">Оформите карту постоянного клиента</p>
-        </div>
-        <a href="priority.html">
-          <img src="images/photo_5330078908990750713_y.avif" alt="Miles & Cash" class="w-16 h-16 cursor-pointer">
-        </a>
-      </div>
-
-      <div class="col-span-2 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-2xl p-4 text-white flex justify-between items-center">
-        <div>
-          <h3 class="text-lg font-bold">S7avelii Shop</h3>
-          <p class="text-sm">Устройте себе шопинг</p>
-        </div>
-        <a href="s7hop.html">
-          <img src="images/photo_5330078908990750714_x (1).avif" alt="S7 Shop" class="w-16 h-16 cursor-pointer">
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Рейсы -->
-  <section class="mt-8 px-4">
-    <h2 class="text-xl font-bold mb-4">Рейсы из г. Савелий</h2>
-    <div class="space-y-3">
-      <div class="bg-white rounded-xl shadow p-4 flex items-center">
-        <img src="images/moskva-650x379.avif" alt="Москва" class="w-16 h-16 rounded-lg mr-4 object-cover">
-        <div>
-          <h3 class="font-bold text-gray-800">Москва</h3>
-          <p class="text-sm text-gray-500">туда и обратно</p>
-          <p class="text-green-600 font-medium">ежедневно</p>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl shadow p-4 flex items-center">
-        <img src="images/2014-08-20-panteon-01.avif" alt="Пула" class="w-16 h-16 rounded-lg mr-4 object-cover">
-        <div>
-          <h3 class="font-bold text-gray-800">Пула</h3>
-          <p class="text-sm text-gray-500">туда и обратно</p>
-          <p class="text-green-600 font-medium">ежедневно</p>
-        </div>
-      </div>
 
       <div class="bg-white rounded-xl shadow p-4 flex items-center">
         <img src="images/images.avif" alt="Рим" class="w-16 h-16 rounded-lg mr-4 object-cover">
