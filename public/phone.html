@@ -86,17 +86,13 @@ document.addEventListener("DOMContentLoaded", () => {
   </main>
 
 </body>
-    <!-- Слайд-шоу -->
+  <!-- Слайдер -->
 <div class="relative w-full max-w-[400px] h-[350px] overflow-hidden rounded-2xl mx-auto">
   <div id="slider" class="absolute w-full h-full">
-    <img src="images/Black Simple Travel Logo_20250914_092424_0002.avif" 
-         class="w-full h-full object-cover absolute" style="opacity:1;transition:opacity 1s;">
-    <img src="images/Black Simple Travel Logo_20250914_092424_0001.avif" 
-         class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
-    <img src="images/Black Simple Travel Logo_20250914_092424_0003.avif" 
-         class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
-    <img src="images/Black Simple Travel Logo_20250914_092424_0000.avif" 
-         class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
+    <img src="images/Black Simple Travel Logo_20250914_092424_0002.avif" class="w-full h-full object-cover absolute" style="opacity:1;transition:opacity 1s;">
+    <img src="images/Black Simple Travel Logo_20250914_092424_0001.avif" class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
+    <img src="images/Black Simple Travel Logo_20250914_092424_0003.avif" class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
+    <img src="images/Black Simple Travel Logo_20250914_092424_0000.avif" class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
   </div>
 </div>
 
@@ -115,13 +111,122 @@ document.addEventListener("DOMContentLoaded", () => {
     showSlide(nextIndex);
   }
 
-  setInterval(autoSlide, 4000); // каждые 4 секунды
+  setInterval(autoSlide, 4000);
+</script>
+
+<!-- Бронирование -->
+<div class="w-full max-w-[400px] mx-auto mt-4 p-4 bg-white rounded-2xl shadow">
+  <form id="mobileBookingForm" action="search.html" method="get" class="space-y-3">
+    <!-- Откуда -->
+    <div class="relative">
+      <input type="text" id="fromInput" name="from" placeholder="Откуда" class="w-full border rounded-lg p-3" required>
+      <div id="fromSuggestions" class="absolute bg-white w-full rounded-lg shadow mt-1 hidden"></div>
+    </div>
+
+    <!-- Куда -->
+    <div class="relative">
+      <input type="text" id="toInput" name="to" placeholder="Куда" class="w-full border rounded-lg p-3" required>
+      <div id="toSuggestions" class="absolute bg-white w-full rounded-lg shadow mt-1 hidden"></div>
+    </div>
+
+    <!-- Дата туда -->
+    <input id="date1" name="date1" type="date" class="w-full border rounded-lg p-3" required>
+
+    <!-- Дата обратно -->
+    <input id="date2" name="date2" type="date" class="w-full border rounded-lg p-3">
+
+    <!-- Пассажиры -->
+    <select id="passengers" name="passengers" class="w-full border rounded-lg p-3" required>
+      <option value="" disabled selected>Пассажиры</option>
+      <option value="1_econom">1, Эконом</option>
+      <option value="2_econom">2, Эконом</option>
+      <option value="3_econom">3, Эконом</option>
+      <option value="4_econom">4, Эконом</option>
+      <option value="1_business">1, Бизнес</option>
+      <option value="1_first">1, Первый класс</option>
+    </select>
+
+    <!-- Кнопка -->
+    <button type="submit" class="w-full bg-lime-500 text-white font-bold py-3 rounded-xl">
+      Найти билет
+    </button>
+  </form>
+</div>
+
+<script>
+  // Геолокация для "Откуда"
+  function setFromByGeo() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        try {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=ru`);
+          const data = await res.json();
+          let city = data.address.city || data.address.town || data.address.village || "Ваш город";
+          if (city.toLowerCase().includes("саратов")) {
+            document.getElementById("fromInput").value = "Савелий, GSV";
+          } else {
+            document.getElementById("fromInput").value = city;
+          }
+        } catch (e) {
+          console.warn("Geo error", e);
+        }
+      });
+    }
+  }
+  setFromByGeo();
+
+  // Автокомплит для "Куда"
+  (function autocompleteTo() {
+    const toInput = document.getElementById('toInput');
+    const toSuggestions = document.getElementById('toSuggestions');
+
+    const airports = [
+      { city:"Москва", code:"DME" },
+      { city:"Москва", code:"SVO" },
+      { city:"Санкт-Петербург", code:"LED" },
+      { city:"Екатеринбург", code:"SVX" },
+      { city:"Омск", code:"OMS" },
+      { city:"Краснодар", code:"KRR" },
+      { city:"Сочи", code:"AER" },
+      { city:"Волгоград", code:"VOG" },
+      { city:"Калининград", code:"KGD" },
+      { city:"Новосибирск", code:"OVB" },
+      { city:"Анталья", code:"AYT" },
+      { city:"Вена", code:"VIE" }
+    ];
+
+    function render(list){
+      toSuggestions.innerHTML = "";
+      list.forEach(it => {
+        const div = document.createElement('div');
+        div.className = 'p-2 cursor-pointer hover:bg-gray-100';
+        div.innerHTML = `<span>${it.city} (${it.code})</span>`;
+        div.addEventListener('click', () => {
+          toInput.value = `${it.city} (${it.code})`;
+          localStorage.setItem("lastTo", toInput.value);
+          toSuggestions.classList.add("hidden");
+        });
+        toSuggestions.appendChild(div);
+      });
+      toSuggestions.classList.toggle("hidden", list.length === 0);
+    }
+
+    toInput.addEventListener('input', e => {
+      const q = e.target.value.toLowerCase();
+      if (!q) { toSuggestions.classList.add("hidden"); return; }
+      const filtered = airports.filter(a => a.city.toLowerCase().includes(q) || a.code.toLowerCase().includes(q));
+      render(filtered);
+    });
+
+    const last = localStorage.getItem("lastTo");
+    if(last) toInput.value = last;
+  })();
 </script>
 
     <!-- Кнопки -->
     <section class="px-4 space-y-3">
-      <a href="bilet.html"class="w-full bg-lime-500 text-white font-bold py-3 rounded-xl">Купить билет</a>
-      <div class="bg-white rounded-xl p-4 flex items-center shadow">
         <a href="arrivel.html" class="w-10 h-10 flex items-center justify-center bg-green-100 rounded-lg mr-4"><img src="images/photo_5398063018606193773_y.avif" alt=""></a>
         <p class="font-medium">Направления</p>
       </div>
