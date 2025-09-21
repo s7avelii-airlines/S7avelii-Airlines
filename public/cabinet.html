@@ -1,836 +1,236 @@
- <!DOCTYPE html>
-
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>S7avelii Airlines</title>
- <!-- Иконка сайта (favicon) -->
-  <link rel="icon" href="images/favicon.png" type="image/favicon.png">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Личный кабинет</title>
   <style>
-  .container {
-    max-width: 1400px;
-    margin: 0 auto; /* центрирует */
-  }
-  body {
-    overflow-x: hidden; /* убирает горизонтальный скролл */
-  }
-</style>
-  <style>
-    body {
-      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-    }
-    .gradient-green {
-      background: linear-gradient(90deg, rgb(163, 213, 13) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-      color: white;
-    }
-   <style>
-    body {
-      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-    }
-    .gradient-green {
-      background: linear-gradient(90deg, rgb(165, 214, 15) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-      color: white;
-    }
-    <style>
-  body {
-    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-  }
-
-  .dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 0.25rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 50;
-    min-width: 160px;
-  }
-
-  .group:hover .dropdown-menu {
-    display: block;
-  }
-</style>
-</head>
-
-<body class="text-gray-900 font-sans">
-   <body class="text-gray-900 font-sans">
-</style>
-  <style>
-    body {
-      margin: 0;
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
       font-family: Arial, sans-serif;
+      background:#f5f6f7;
+      color:#101112;
+      line-height:1.4;
     }
 
-    header {
-      display: flex;
-      align-items: center;
-      padding: 0 60px;
-      height: 80px;
-      border-bottom: 1px solid #ccc;
-      position: relative;
-      z-index: 1000;
-      background: #fff;
+    .container{
+      max-width:1200px;
+      margin:0 auto;
+      padding:16px;
+      display:grid;
+      grid-template-columns: 280px 1fr;
+      gap:20px;
     }
 
-    .logo-img {
-  height: 70px; /* подгоняешь по высоте под шапку */
-  width: auto;
-  cursor: pointer;
-}
+    /* левая панель */
+    .sidebar{
+      background:#fff;
+      padding:16px;
+      border-radius:12px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+    }
+    .avatar{
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      object-fit:cover;
+      margin-bottom:12px;
+      border:3px solid #97ba1e;
+    }
+    .user-name{font-size:20px;font-weight:700;margin-bottom:8px;}
+    .user-email{font-size:14px;color:#6b7280;margin-bottom:16px;}
+    .sidebar button{
+      margin:6px 0;
+      padding:10px 16px;
+      border:none;
+      border-radius:8px;
+      font-weight:600;
+      cursor:pointer;
+      width:100%;
+    }
+    .btn-primary{background:#97ba1e;color:#fff;}
+    .btn-primary:hover{background:#85a71b;}
+    .btn-logout{background:#f3f4f6;color:#101112;}
+    .btn-logout:hover{background:#e5e7eb;}
 
-    .logo-circle {
-      background-color: #93bd0a;
-      color: white;
-      font-weight: 700;
-      font-size: 20px;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-right: 9px;
-      font-family: Arial, sans-serif;
+    /* контент */
+    .content{
+      background:#fff;
+      padding:20px;
+      border-radius:12px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05);
     }
 
-    nav {
-      display: flex;
-      flex-grow: 1;
+    .tabs{
+      display:flex;
+      gap:12px;
+      overflow-x:auto;
+      margin-bottom:20px;
+    }
+    .tabs button{
+      background:none;
+      border:none;
+      padding:8px 14px;
+      border-radius:8px;
+      font-weight:600;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .tabs button.active{
+      background:#97ba1e;
+      color:#fff;
     }
 
-    nav ul {
-      display: flex;
-      gap: 40px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
+    .tab-content{display:none;}
+    .tab-content.active{display:block;}
+
+    .card{
+      background:#fafafa;
+      padding:16px;
+      border-radius:8px;
+      margin-bottom:16px;
+    }
+    .card h3{margin-bottom:12px;font-size:16px;}
+    .card p{margin-bottom:8px;}
+
+    .stats{
+      display:flex;
+      gap:12px;
+      margin-top:12px;
+      flex-wrap:wrap;
+    }
+    .stat{
+      flex:1;
+      background:#fff;
+      padding:12px;
+      border-radius:8px;
+      text-align:center;
+      box-shadow:0 2px 6px rgba(0,0,0,0.05);
+    }
+    .stat .num{font-size:20px;font-weight:700;color:#97ba1e;}
+
+    /* адаптив */
+    @media(max-width:980px){
+      .container{grid-template-columns:1fr;}
+      .sidebar{flex-direction:row;justify-content:flex-start;text-align:left;gap:12px;}
+      .sidebar .avatar{margin:0;}
+      .user-info{flex:1;}
+      .sidebar button{width:auto;flex:1;}
     }
 
-    nav li {
-      position: relative;
-    }
-
-    nav a {
-      position: relative;
-      color: #000;
-      text-decoration: none;
-      font-size: 16px;
-      padding: 28px 0;
-    }
-
-    /* Салатовая полоска */
-    nav a::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 3px;
-      background-color: #b3c900;
-      transition: width 0.3s ease;
-    }
-    nav li:hover > a::after {
-      width: 100%;
-    }
-
-    /* Подменю */
-    .dropdown {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: #fff;
-      padding: 20px;
-      border-top: 2px solid #b3c900;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-      min-width: 240px;
-      z-index: 999;
-
-      opacity: 0;
-      transform: translateY(-10px);
-      pointer-events: none;
-      transition: all 0.3s ease;
-    }
-
-    nav li:hover .dropdown {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
-
-    .dropdown a {
-      display: block;
-      padding: 8px 0;
-      color: #000;
-      text-decoration: none;
-      font-size: 14px;
-    }
-
-    .dropdown a:hover {
-      color: #b3c900;
-    }
-
-    .right-menu {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      font-size: 16px;
-    }
-
-    .right-menu button,
-    .right-menu select {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .right-menu select {
-      border-left: 1px solid #ccc;
-      padding-left: 12px;
-      margin-left: 12px;
-      appearance: none;
-      background: none;
-    }
-
-    .icon-search {
-      width: 20px;
-      height: 20px;
-      stroke: black;
-      stroke-width: 2;
-      cursor: pointer;
-    }
-
-    .flag {
-      width: 20px;
-      height: 14px;
-      border-radius: 2px;
-      overflow: hidden;
-      box-shadow: 0 0 2px rgba(0,0,0,0.15);
-    }
-
-    .flag img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* userArea фикс */
-    #userArea {
-      display: flex;
-      align-items: center;
-    }
-    #userArea a {
-      padding: 8px 14px;
-      border: 1px solid #7ad30d;
-      border-radius: 6px;
-      color: #6dd808;
-      text-decoration: none;
-      font-size: 14px;
-      line-height: 1;
-    }
-
-    /* Пример контента */
-    main {
-      height: 2000px;
-      background: linear-gradient(to bottom, #f9f9f9, #e1e1e1);
-      padding: 40px;
+    @media(max-width:480px){
+      .avatar{width:80px;height:80px;}
+      .user-name{font-size:18px;}
+      .user-email{font-size:12px;}
+      .stat .num{font-size:16px;}
     }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">
-  <a href="index.html">
-    <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
-  </a>
-</div>
+<div class="container">
 
-  <nav>
-    <ul>
-      <li>
-        <a href="index.html">Покупка и управление</a>
-        <div class="dropdown">
-          <a href="bilet.html">Купить билет</a>
-          <a href="auth.html">Управление бронированием</a>
-          <a href="arrivel.html">Направления</a>
-          <a href="HOTEL.html">Отели</a>
-          <a href="class.html">Выбор класса</a>
-        </div>
-      </li>
-      <li>
-        <a href="priority.html">S7avelii Priority</a>
-        <div class="dropdown">
-          <a href="priority.html">О программе</a>
-          <a href="https://t.me/s7aveliihelper">Как копить</a>
-        </div>
-      </li>
-      <li>
-        <a href="#">Информация</a>
-        <div class="dropdown">
-          <a href="body.html">О нас</a>
-          <a href="office.html">Представительство</a>
-          <a href="plane.html">Наш флот</a>
-          <a href="eat.html">Питание</a>
-          <a href="https://t.me/s7aveliihelper">Контакты</a>
-        </div>
-      </li>
-      <li><a href="busines.html">Бизнесу</a></li>
-      <li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
-    </ul>
-  </nav>
-
-  <div class="right-menu">
-    <button aria-label="Search">
-      
-        <circle cx="11" cy="11" r="7"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
-    </button>
-    <button>RUB</button>
-    <div class="flag" title="Russian flag">
-      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" />
+  <!-- Левая панель -->
+  <aside class="sidebar">
+    <img src="images/avatar.jpg" alt="Аватар" class="avatar" id="avatar">
+    <div class="user-info">
+      <div class="user-name" id="userName">Иван Иванов</div>
+      <div class="user-email" id="userEmail">ivan@example.com</div>
     </div>
-    <!-- userArea вместо кнопки Войти -->
-    <div id="userArea"></div>
-  </div>
-</header>
-    <script>
-  window.addEventListener("DOMContentLoaded", () => {
-    const userArea = document.getElementById("userArea");
+    <input type="file" id="avatarUpload" style="display:none">
+    <button class="btn-primary" onclick="document.getElementById('avatarUpload').click()">Изменить фото</button>
+    <button class="btn-logout" onclick="logout()">Выйти</button>
+  </aside>
 
-    const fio = localStorage.getItem("fio");
-    const avatar = localStorage.getItem("avatar");
-    const username = localStorage.getItem("username");
-
-    if (fio && localStorage.getItem("phone")) {
-      // Пользователь вошёл
-      if (avatar) {
-        userArea.innerHTML = `
-          <img src="${avatar}" alt="avatar" 
-            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
-            onclick="window.location.href='cabinet.html'" 
-          />
-        `;
-      } else {
-        userArea.innerHTML = `
-          <span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">
-            ${username || fio.split(" ")[0]}
-          </span>
-        `;
-      }
-    } else {
-      // Не вошёл
-      userArea.innerHTML = `<a href="auth.html">Вход</a>`;
-    }
-  });
-</script>
-<!doctype html>
-<html lang="ru">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Кабинет — S7avelii</title>
-<style>
-  :root{
-    --bg:#f5f7fa;
-    --card:#ffffff;
-    --accent:#9cc42f;
-    --muted:#8b97a6;
-    --radius:14px;
-    --container:1180px;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Inter, "Segoe UI", Roboto, Arial; background:var(--bg); color:#1f2937}
-  .page{max-width:var(--container);margin:28px auto;padding:0 20px}
-  /* header full width */
-  .full-header{
-    width:100%;
-    background:var(--card);
-    display:flex;
-    align-items:center;
-    gap:24px;
-    padding:28px 36px;
-    border-radius:12px;
-    box-shadow:0 6px 20px rgba(16,24,40,0.06);
-  }
-  .avatar-wrap{display:flex;align-items:center;gap:18px}
-  .avatar{
-    width:118px;height:118px;border-radius:999px;object-fit:cover;border:4px solid #fff;box-shadow:0 6px 18px rgba(16,24,40,0.06);cursor:pointer;
-  }
-  .user-info h1{margin:0;font-size:26px;display:flex;align-items:center;gap:12px}
-  .user-info h1 .edit-icon{font-size:14px;background:#eef9d6;border-radius:999px;padding:6px 8px;cursor:pointer;color:#1f3a07}
-  .sub{color:var(--muted);margin-top:6px}
-  /* stats */
-  .stats{
-    margin-left:auto;display:flex;gap:18px;align-items:center;
-  }
-  .stat{background:linear-gradient(180deg,#fff,#fcfff0);padding:14px 18px;border-radius:12px;min-width:110px;text-align:center;border:1px solid rgba(0,0,0,0.04)}
-  .stat .num{font-weight:700;font-size:20px;color:#111827}
-  .stat .label{font-size:12px;color:var(--muted);margin-top:6px}
-  /* tabs */
-  .tabs{display:flex;gap:14px;margin-top:18px;padding:12px 36px;border-bottom:1px solid rgba(0,0,0,0.04)}
-  .tabs a{padding:10px 14px;text-decoration:none;color:#495057;border-radius:8px}
-  .tabs a.active{color:var(--accent);background:rgba(156,196,47,0.06)}
-  /* main layout */
-  .grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:18px}
-  .card{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 4px 12px rgba(16,24,40,0.04);border:1px solid rgba(0,0,0,0.03)}
-  .card h3{margin:0 0 12px 0;font-size:18px}
-  .field{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid rgba(0,0,0,0.03)}
-  .field:first-of-type{border-top:0}
-  .label{color:var(--muted);font-size:14px}
-  .value{font-size:15px;max-width:60%}
-  .edit-btn{background:transparent;border:none;color:var(--accent);cursor:pointer;font-weight:600}
-  .small-muted{color:var(--muted);font-size:13px;margin-top:8px}
-  /* preferences look (below profile) */
-  .pref{margin-top:20px;padding-top:18px;border-top:1px solid rgba(0,0,0,0.03)}
-  /* responsive */
-  @media (max-width:980px){
-    .grid{grid-template-columns:1fr; }
-    .stats{margin-left:0;margin-top:16px;flex-wrap:wrap}
-    .full-header{flex-direction:column;align-items:flex-start;gap:16px}
-  }
-  /* small helpers */
-  .btn{display:inline-block;background:var(--accent);color:white;padding:9px 14px;border-radius:10px;border:none;cursor:pointer}
-  input[type="text"], input[type="email"], input[type="tel"]{width:100%;padding:8px;border-radius:8px;border:1px solid #e6edf3}
-  .row{display:flex;gap:12px}
-  .row .col{flex:1}
-</style>
-</head>
-<body>
-
-<div class="page">
-  <!-- header -->
-  <div class="full-header">
-    <div class="avatar-wrap">
-      <label for="avatarInput" title="Нажмите, чтобы поменять аватар">
-        <img id="avatar" class="avatar" src="https://via.placeholder.com/150" alt="avatar">
-      </label>
-      <input id="avatarInput" type="file" accept="image/*" style="display:none">
-      <div class="user-info">
-        <h1 id="fioHeader">Загрузка... 
-          <span class="edit-icon" id="editNameBtn" title="Изменить">✏</span>
-        </h1>
-        <div class="sub" id="phoneHeader">—</div>
-      </div>
+  <!-- Контент -->
+  <main class="content">
+    <div class="tabs">
+      <button class="active" onclick="showTab('profile')">Профиль</button>
+      <button onclick="showTab('miles')">Мои мили</button>
+      <button onclick="showTab('shop')">Магазин</button>
+      <button onclick="showTab('settings')">Настройки</button>
     </div>
 
-    <div class="stats" aria-hidden="false">
-      <div class="stat">
-        <div class="num" id="bonusMiles">—</div>
-        <div class="label">бонусные мили</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- tabs -->
-  <div class="tabs" role="tablist">
-    <a href="#" class="active" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
-    <a href="#" data-tab="milesTab" onclick="showTab(event)">Мои мили</a>
-    <a href="#" data-tab="shopTab" onclick="showTab(event)">S7avelii Shop</a>
-    <a href="#" data-tab="settingsTab" onclick="showTab(event)">Настройки</a>
-  </div>
-
-  <!-- main grid -->
-  <div class="grid">
-    <!-- left column -->
-    <div>
-      <div id="profileTab" class="card">
-        <h3>Персональные данные</h3>
-
-        <div class="field">
-          <div>
-            <div class="label">ФИО</div>
-            <div class="value" id="fioField">—</div>
-          </div>
-          <button class="edit-btn" onclick="enableEdit('fio')">Изменить</button>
-        </div>
-
-        <div class="field">
-          <div>
-            <div class="label">Дата рождения</div>
-            <div class="value" id="dobField">—</div>
-          </div>
-          <button class="edit-btn" onclick="enableEdit('dob')">Изменить</button>
-        </div>
-
-        <div class="field">
-          <div>
-            <div class="label">Пол</div>
-            <div class="value" id="genderField">—</div>
-          </div>
-          <button class="edit-btn" onclick="enableEdit('gender')">Изменить</button>
-        </div>
-
-        <h3 style="margin-top:18px">Контакты</h3>
-
-        <div class="field">
-          <div>
-            <div class="label">Email</div>
-            <div class="value" id="emailField">—</div>
-          </div>
-          <button class="edit-btn" onclick="enableEdit('email')">Изменить</button>
-        </div>
-
-        <div class="field">
-          <div>
-            <div class="label">Телефон</div>
-            <div class="value" id="phoneField">—</div>
-          </div>
-          <button class="edit-btn" onclick="enableEdit('phone')">Изменить</button>
-        </div>
-
-        <div class="field">
-          <div>
-            <div class="label">Номер карты S7avelii Priority</div>
-            <div class="value" id="cardField">—</div>
-          </div>
-          <button class="edit-btn" onclick="enableEdit('cardNumber')">Изменить</button>
-        </div>
-
-        <div class="pref">
-          <div class="small-muted">Способы связи</div>
-          <div style="margin-top:10px;display:flex;gap:12px;align-items:center">
-            <label><input type="checkbox" id="optSms"> мобильный телефон (SMS)</label>
-            <label><input type="checkbox" id="optEmail"> e-mail</label>
-          </div>
-          <div style="margin-top:14px">
-            <label style="display:flex;gap:10px;align-items:center"><input type="checkbox" id="optAgree"> <span class="small-muted">Согласен с условиями обработки персональных данных</span></label>
-          </div>
-        </div>
-
-        <div style="margin-top:18px;display:flex;gap:12px;align-items:center">
-          <button class="btn" id="saveProfileBtn">Сохранить</button>
-          <div id="saveInfo" class="small-muted"></div>
-        </div>
-      </div>
-
-      <!-- block like on your screenshot (preferences card) -->
-      <div class="card" style="margin-top:16px">
-        <h3>Мои предпочтения</h3>
-        <div style="margin-top:12px" class="small-muted">Город вылета — укажите город, из которого вы летаете чаще всего. Мы сообщим о скидках и новых рейсах.</div>
-
-        <div style="margin-top:16px">
-          <select id="homeCity" style="width:100%;padding:12px;border-radius:10px;border:1px solid #e6edf3">
-            <option value="">Выберите город</option>
-            <option>Савелий,(Саратов)</option>
-            <option>Москва</option>
-            <option>Санкт-Петербург</option>
-            <option>Сочи</option>
-            <option>Казань</option>
-            <option>Минск</option>
-            <option>Пула</option>
-            <option>Владивосток</option>
-            <option>Дубай</option>
-            <option>Анапа</option>
-            <option>Анталья</option>
-          </select>
-        </div>
-
-        <hr style="margin:18px 0;border:none;border-top:1px solid rgba(0,0,0,0.04)">
-
-        <div style="display:flex;gap:18px;align-items:center">
-          <div style="flex:1">
-            <div class="small-muted">Способы связи</div>
-            <label style="display:flex;gap:10px;align-items:center;margin-top:10px"><input type="checkbox" id="notifySms"> Мобильный телефон (SMS)</label>
-            <label style="display:flex;gap:10px;align-items:center;margin-top:6px"><input type="checkbox" id="notifyEmail"> E-mail</label>
-          </div>
-        </div>
-
-    <!-- right column -->
-    <div>
+    <!-- Вкладки -->
+    <div id="profile" class="tab-content active">
       <div class="card">
-        <h3>Краткая информация</h3>
-        <div style="margin-top:12px" class="small-muted">Здесь отображаются основные данные и быстрые действия.</div>
-        <div style="margin-top:18px;display:flex;flex-direction:column;gap:12px">
-          <button onclick="goTo('profileTab')" class="edit-btn">Редактировать профиль</button>
-          <button onclick="goTo('milesTab')" class="edit-btn">Посмотреть мили</button>
-          <button onclick="logout()" class="edit-btn">Выйти</button>
-        </div>
-
-      <div class="card" style="margin-top:16px">
-        <h3>Подсказка</h3>
-        <div class="small-muted" style="margin-top:8px">Изменённые данные сохраняются в личном профиле. Если у вас есть сервер — данные будут отправлены на /api/profile.</div>
+        <h3>Личные данные</h3>
+        <p>ФИО: <span id="userFullName">Иван Иванов</span></p>
+        <p>Телефон: <span id="userPhone">+7 999 123 45 67</span></p>
+        <p>Дата рождения: <span id="userBirth">01.01.1990</span></p>
       </div>
     </div>
-  </div>
+
+    <div id="miles" class="tab-content">
+      <div class="card">
+        <h3>Мои мили</h3>
+        <div class="stats">
+          <div class="stat">
+            <div class="num" id="milesBalance">12000</div>
+            <div>Баланс</div>
+          </div>
+          <div class="stat">
+            <div class="num" id="milesSpent">4500</div>
+            <div>Потрачено</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="shop" class="tab-content">
+      <div class="card">
+        <h3>Магазин</h3>
+        <p>Здесь будут предложения для обмена миль.</p>
+      </div>
+    </div>
+
+    <div id="settings" class="tab-content">
+      <div class="card">
+        <h3>Настройки</h3>
+        <p>Здесь можно изменить пароль и включить двухфакторную аутентификацию.</p>
+      </div>
+    </div>
+
+  </main>
 </div>
 
 <script>
-/* ========== Helpers ========== */
-function el(id){return document.getElementById(id)}
-function showMsg(msg, time=2500){ const s=el('saveInfo'); s.innerText=msg; setTimeout(()=>s.innerText='', time); }
+  // Переключение вкладок
+  function showTab(tabId){
+    document.querySelectorAll('.tabs button').forEach(btn=>btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(tab=>tab.classList.remove('active'));
+    document.querySelector(`.tabs button[onclick="showTab('${tabId}')"]`).classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+  }
 
-/* ========== Tab switching ========== */
-function showTab(evt){
-  evt && evt.preventDefault();
-  const tabId = evt ? evt.currentTarget.getAttribute('data-tab') : 'profileTab';
-  document.querySelectorAll('.tabs a').forEach(a=>a.classList.remove('active'));
-  if(evt) evt.currentTarget.classList.add('active');
-  document.querySelectorAll('.grid .card, .grid > div > .card').forEach(c=>c.style.display='block');
-  // actual show/hide: we have profileTab, milesTab etc — set display
-  ['profileTab','milesTab','travelTab','shopTab','settingsTab'].forEach(id=>{
-    const elc = document.getElementById(id);
-    if(elc) elc.style.display = (id===tabId ? 'block' : 'none');
-  });
-}
-
-/* ========== Data handling: try server, fallback to localStorage ========== */
-async function loadProfile(){
-  // try API first
-  try{
-    const resp = await fetch('/api/profile', { credentials: 'include' });
-    if(resp.ok){
-      const js = await resp.json();
-      if(js.ok && js.profile){
-        applyProfile(js.profile);
-        return;
+  // Загрузка аватара
+  document.getElementById('avatarUpload').addEventListener('change', function(e){
+    const file = e.target.files[0];
+    if(file){
+      const reader = new FileReader();
+      reader.onload = function(ev){
+        document.getElementById('avatar').src = ev.target.result;
+        localStorage.setItem('userAvatar', ev.target.result);
       }
+      reader.readAsDataURL(file);
     }
-  }catch(e){
-    // no server or CORS, fallback
-  }
-  // fallback to localStorage
-  const profile = {
-    fio: localStorage.getItem('fio') || '',
-    phone: localStorage.getItem('phone') || '',
-    email: localStorage.getItem('email') || '',
-    cardNumber: localStorage.getItem('cardNumber') || '',
-    dob: localStorage.getItem('dob') || '',
-    gender: localStorage.getItem('gender') || '',
-    avatar: localStorage.getItem('avatar') || '',
-    bonusMiles: localStorage.getItem('bonusMiles') || '952',
-    statusMiles: localStorage.getItem('statusMiles') || '945',
-    flights: localStorage.getItem('flights') || '0'
-  };
-  applyProfile(profile);
-}
-
-function applyProfile(p){
-  el('fioField').innerText = p.fio || '—';
-  el('dobField').innerText = p.dob || '—';
-  el('genderField').innerText = p.gender || '—';
-  el('emailField').innerText = p.email || '—';
-  el('phoneField').innerText = p.phone || '—';
-  el('cardField').innerText = p.cardNumber || '—';
-  el('fioHeader').innerText = p.fio || 'Пользователь';
-  el('phoneHeader').innerText = p.phone || '';
-  el('bonusMiles').innerText = p.bonusMiles || '—';
-  el('statusMiles').innerText = p.statusMiles || '—';
-  el('flights').innerText = p.flights || '—';
-  if(p.avatar) el('avatar').src = p.avatar;
-}
-
-/* ========== Edit-in-place ========== */
-function enableEdit(field){
-  // field is: fio, dob, gender, email, phone, cardNumber
-  const fieldMap = {
-    fio: ['fioField','fioHeader'],
-    dob: ['dobField'],
-    gender: ['genderField'],
-    email: ['emailField'],
-    phone: ['phoneField','phoneHeader'],
-    cardNumber: ['cardField']
-  };
-  const ids = fieldMap[field];
-  if(!ids) return;
-  // current value
-  const current = el(ids[0]).innerText === '—' ? '' : el(ids[0]).innerText;
-  // create input popup
-  const input = document.createElement('input');
-  input.type = (field==='email') ? 'email' : (field==='phone') ? 'tel' : 'text';
-  input.value = current;
-  input.style.width = '220px';
-  input.onkeydown = (e)=>{ if(e.key==='Enter'){ saveInline(); } };
-  const ok = document.createElement('button');
-  ok.innerText = 'OK';
-  ok.className = 'btn';
-  ok.style.marginLeft='8px';
-  ok.onclick = saveInline;
-  const wrapper = document.createElement('div');
-  wrapper.appendChild(input);
-  wrapper.appendChild(ok);
-
-  const container = ids.map(id=>el(id))[0];
-  // save original node to restore later
-  const old = container.innerHTML;
-  container.innerHTML = '';
-  container.appendChild(wrapper);
-  input.focus();
-
-  function saveInline(){
-    const val = input.value.trim() || '—';
-    // put value into all mapped places
-    ids.forEach(id => {
-      if(el(id)) el(id).innerText = (val==='—' ? '—' : val);
-    });
-    if(field==='fio' && el('fioHeader')) el('fioHeader').innerText = val==='—' ? 'Пользователь' : val;
-    // persist locally
-    const storageKey = field==='cardNumber' ? 'cardNumber' : field;
-    localStorage.setItem(storageKey, val==='—' ? '' : val);
-    // try send to server
-    tryPush({ [storageKey]: val==='—' ? '' : val });
-    showMsg('Изменено');
-  }
-}
-
-/* ========== Avatar upload ========== */
-el('avatarInput').addEventListener('change', function(){
-  const f = this.files[0];
-  if(!f) return;
-  const r = new FileReader();
-  r.onload = async function(e){
-    const dataUrl = e.target.result;
-    el('avatar').src = dataUrl;
-    localStorage.setItem('avatar', dataUrl);
-    // try push to server
-    tryPush({ avatar: dataUrl });
-    showMsg('Аватар обновлён');
-  };
-  r.readAsDataURL(f);
-});
-
-/* ========== Save full profile button ========== */
-el('saveProfileBtn').addEventListener('click', async ()=>{
-  const payload = {
-    fio: (el('fioField').innerText==='—' ? '' : el('fioField').innerText),
-    phone: (el('phoneField').innerText==='—' ? '' : el('phoneField').innerText),
-    email: (el('emailField').innerText==='—' ? '' : el('emailField').innerText),
-    cardNumber: (el('cardField').innerText==='—' ? '' : el('cardField').innerText),
-    dob: (el('dobField').innerText==='—' ? '' : el('dobField').innerText),
-    gender: (el('genderField').innerText==='—' ? '' : el('genderField').innerText),
-    // preferences
-    homeCity: el('homeCity').value || '',
-    notifySms: el('notifySms').checked,
-    notifyEmail: el('notifyEmail').checked,
-    agreeTerms: el('agreeTerms').checked
-  };
-  // save local
-  Object.keys(payload).forEach(k=>{
-    try{ localStorage.setItem(k, (typeof payload[k]==='boolean')? (payload[k]?'1':'0') : (payload[k]||'')); }catch(e){}
   });
-  showMsg('Данные сохранены локально');
-  // try server
-  tryPush(payload, true);
-});
 
-/* ========== Push to server if available ========== */
-async function tryPush(obj, showMessage=false){
-  try{
-    const res = await fetch('/api/profile', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(obj)
-    });
-    if(res.ok){
-      const j = await res.json();
-      if(j.ok){
-        if(showMessage) showMsg('Синхронизировано с сервером');
-        if(j.profile) applyProfile(j.profile);
-        return true;
-      } else {
-        if(showMessage) showMsg(j.error || 'Ошибка сервера');
-      }
-    } else {
-      // HTTP error
-      // do nothing (server may require auth)
-    }
-  }catch(e){
-    // fetch failed (no server / CORS)
+  // Сохранение данных
+  window.onload = function(){
+    const avatar = localStorage.getItem('userAvatar');
+    if(avatar) document.getElementById('avatar').src = avatar;
   }
-  return false;
-}
 
-/* ========== Logout (calls server logout if available, then clear localStorage session markers) ========== */
-async function logout(){
-  try{
-    await fetch('/api/logout', { method:'POST', credentials:'include' });
-  }catch(e){}
-  // remove session markers (do not wipe profile)
-  localStorage.removeItem('session'); // optional
-  // redirect to main page or auth
-  window.location.href = '/';
-}
-
-/* ========== utility goTo tab ========== */
-function goTo(tab){ // e.g. 'profileTab'
-  document.querySelectorAll('.tabs a').forEach(a => a.classList.remove('active'));
-  const a = [...document.querySelectorAll('.tabs a')].find(x=> x.getAttribute('data-tab')===tab);
-  if(a) a.classList.add('active');
-  showTab({ currentTarget: a, preventDefault: ()=>{} });
-}
-
-/* ========== init ========== */
-document.addEventListener('DOMContentLoaded', ()=>{
-  loadProfile();
-  showTab({ currentTarget: document.querySelector('.tabs a.active'), preventDefault: ()=>{} });
-  // edit name button -> inline edit
-  el('editNameBtn').addEventListener('click', ()=> enableEdit('fio'));
-});
+  function logout(){
+    alert("Вы вышли из аккаунта");
+    // Здесь редирект или очистка сессии
+  }
 </script>
-<!-- Footer -->
-<footer class="footer">
-  <div class="footer-container">
-    <div class="footer-left">
-      © 2025. S7avelii Airlines — Все права защищены
-    </div>
-    <div class="footer-right">
-      <a href="https://vk.com/savelii577" target="_blank"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
-      <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1" target="_blank"><img src="images/icons8-tiktok-logo-50 (1).avif" alt="Tik Tok"></a>
-      <a href="www.youtube.com/@S7avelii_Airlines" target="_blank"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
-      <a href="https://t.me/S7saveliiairlines" target="_blank"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
-    </div>
-  </div>
-</footer>
 
-<style>
-  .footer {
-    background-color: #f1f4f9; /* как на скрине */
-    padding: 20px 40px;
-    position: relative;
-    bottom: 0;
-    width: 100%;
-  }
-
-  .footer-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .footer-left {
-    font-size: 14px;
-    color: #667;
-  }
-
-  .footer-right a {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    margin-left: 10px;
-    border-radius: 50%;
-    background: white;
-    transition: transform 0.2s;
-  }
-
-  .footer-right a:hover {
-    transform: scale(1.1);
-  }
-
-  .footer-right img {
-    width: 20px;
-    height: 20px;
-  }
-</style>
 </body>
 </html>
