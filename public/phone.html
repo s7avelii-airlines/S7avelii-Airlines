@@ -32,12 +32,35 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-  <!-- Шапка --> 
-  <header class="flex justify-between items-center p-4 bg-white shadow"> 
+ <body class="bg-gray-50">
+
+  <!-- Шапка -->
+  <header class="fixed top-0 left-0 w-full flex justify-between items-center p-4 bg-white shadow z-50">
+    <!-- Логотип -->
     <img src="images/photo_5276207082657412564_y.avif" alt="S7" class="w-10 h-10">
-    <div class="flex gap-2"> 
-      <a href="auth.html" class="px-4 py-2 rounded-xl border">Войти</a>
-      <a href="inform.html" class="px-4 py-2 rounded-xl border">IT</a> 
+
+    <!-- Кнопки -->
+    <div class="flex gap-2">
+      <!-- Войти -->
+      <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
+        Войти
+        <!-- Иконка пользователя -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
+        </svg>
+      </a>
+
+      <!-- Выбор языка -->
+      <a href="inform.html" class="flex items-center justify-center w-10 h-10 rounded-xl border text-sm font-semibold">
+        RU
+      </a>
+
+      <!-- Чат -->
+      <button class="flex items-center justify-center w-10 h-10 rounded-xl border">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h6m-6 4h4m-5 4h10a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14l3-2z"/>
+        </svg>
+      </button>
     </div>
   </header>
 
@@ -187,32 +210,137 @@ document.addEventListener("DOMContentLoaded", () => {
   <!-- Новости -->
   <!-- ... (оставил твои карточки новостей и статей как есть) ... -->
 
-  <!-- Футер -->
-  <footer class="mobile-footer mt-10">
-    <div class="subscribe-box">
-      <h3>Подпишитесь на рассылку <span>S7avelii </span></h3>
-      <p>Будьте в курсе акций, открывайте новые маршруты</p>
-      <form class="subscribe-form">
-        <input type="email" placeholder="Ваша почта" required>
-        <button type="submit">→</button>
-      </form>
-      <label class="checkbox">
-        <input type="checkbox">
-        Хочу узнавать про скидки и идеи путешествий по почте и соглашаюсь на 
-        <a href="#">обработку персональных данных</a>
-      </label>
-    </div>
+ !-- Кнопка -->
+<div class="mt-6">
+  <a href="https://t.me/S7saveliiairlines" class="block w-full py-3 rounded-xl bg-gray-100 text-gray-900 font-medium text-center">
+    Все статьи
+  </a>
+</div>
+</section>  
 
-    <div class="footer-bottom">
-      <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
-      <div class="socials">
-        <a href="https://vk.com/s7avelii"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
-        <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1 "><img src="images/icons8-tiktok-logo-50 (1).avif" alt="OK"></a>
-        <a href="https://youtu.be/Dy31uUCFaWw?si=2gyqNYaT3ZVO8WJa"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
-        <a href="https://t.me/S7saveliiairlines"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
-      </div>
+<footer class="mobile-footer">
+  <!-- Подписка -->
+  <div class="subscribe-box">
+    <h3>Подпишитесь на рассылку <span>S7avelii </span></h3>
+    <p>Будьте в курсе акций, открывайте новые маршруты</p>
+    <form class="subscribe-form">
+      <input 
+        type="email" 
+        placeholder="Ваша почта" 
+        required
+      >
+      <button type="submit">→</button>
+    </form>
+    <label class="checkbox">
+      <input type="checkbox">
+      Хочу узнавать про скидки и идеи путешествий по почте и соглашаюсь на 
+      <a href="#">обработку персональных данных</a>
+    </label>
+  </div>
+
+  <!-- Низ -->
+  <div class="footer-bottom">
+    <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
+    <div class="socials">
+      <a href="https://vk.com/s7avelii"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
+      <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1 "><img src="images/icons8-tiktok-logo-50 (1).avif" alt="OK"></a>
+      <a href="https://youtu.be/Dy31uUCFaWw?si=2gyqNYaT3ZVO8WJa"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
+      <a href="https://t.me/S7saveliiairlines"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
     </div>
-  </footer>
+  </div>
+</footer>
+
+<style>
+.mobile-footer {
+  background: #f1f5f9;   /* светло-серый фон */
+  padding: 20px;
+  font-family: Inter, sans-serif;
+  color: #111;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Блок подписки */
+.subscribe-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid #d1d5db;
+  margin-bottom: 20px;
+}
+.subscribe-box h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.subscribe-box h3 span {
+  font-family: "Comic Sans MS", cursive; /* на фото декоративный шрифт */
+  font-weight: 400;
+}
+.subscribe-box p {
+  color: #333;
+  margin-bottom: 14px;
+  font-size: 14px;
+}
+
+.subscribe-form {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.subscribe-form input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 20px 0 0 20px;
+  font-size: 14px;
+  outline: none;
+}
+.subscribe-form button {
+  background: #a6d463;
+  border: none;
+  border-radius: 0 20px 20px 0;
+  padding: 0 20px;
+  font-size: 22px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.checkbox {
+  font-size: 13px;
+  color: #333;
+  line-height: 1.4;
+}
+.checkbox input {
+  margin-right: 6px;
+}
+.checkbox a {
+  color: #99d812;
+  text-decoration: underline;
+}
+
+/* Низ */
+.footer-bottom {
+  text-align: center;
+}
+.copy {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 14px;
+}
+.socials {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+.socials a img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff;
+  padding: 8px;
+}
+</style>
 
 </div>
 </body>
