@@ -544,8 +544,8 @@ document.addEventListener("DOMContentLoaded", () => {
   <div id="fromSuggestions" class="suggestions" role="listbox" aria-label="Подсказки отправления"></div>
 </div>
 
-<!-- Стрелка -->
-<div class="cell" style="flex:0 0 44px; justify-content:center; color:#97ba1e;">
+<!-- Стрелка (меняет Откуда и Куда местами) -->
+<div class="cell" id="swapBtn" style="flex:0 0 44px; justify-content:center; color:#97ba1e; cursor:pointer;">
   <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M17 7l4 4-4 4M21 11H7"></path>
     <path d="M7 17l-4-4 4-4M3 13h14"></path>
@@ -618,6 +618,15 @@ document.addEventListener("DOMContentLoaded", () => {
 <div style="height:56px"></div>
 
 <script>
+  // ===== Обмен местами (стрелка) =====
+document.getElementById('swapBtn').addEventListener('click', () => {
+  const fromInput = document.getElementById('fromInput');
+  const toInput = document.getElementById('toInput');
+
+  const tmp = fromInput.value;
+  fromInput.value = toInput.value;
+  toInput.value = tmp;
+});
 // Глобальный массив аэропортов
 const airports = [
   {city:"Москва", code:"SVO"},
@@ -929,7 +938,7 @@ function setDefaultCity(input){
     }, 7000);
   </script>
     <!-- Пробел между слайдером и акциями -->
-  <div class="h-57"></div>
+  <div class="h-60"></div>
   
 <!-- Веселые рейсы из Савелий -->
    <section class="max-w-7xl mx-auto px-4 py-12">
