@@ -72,10 +72,7 @@ setInterval(autoSlide, 4000);
 
   <!-- Вкладки -->
   <div class="flex border-b">
-    <button class="tab-btn flex-1 py-3 text-center font-medium text-gray-600 border-b-2 border-lime-500 text-lime-600" data-tab="avia">Авиабилеты</button>
-    <button class="tab-btn flex-1 py-3 text-center font-medium text-gray-600" data-tab="hotel">Отели</button>
-    <button class="tab-btn flex-1 py-3 text-center font-medium text-gray-600" data-tab="excursions">Экскурсии</button>
-    <button class="tab-btn flex-1 py-3 text-center font-medium text-gray-600" data-tab="transfer">Трансфер</button>
+    <button class="tab-btn flex-1 py-3 text-center font-medium text-gray-600 border-b-2 border-lime-500 text-lime-600" data-tab="avia">Покупка</button>
   </div>
 
   <!-- Вкладка Авиабилеты -->
@@ -117,18 +114,6 @@ setInterval(autoSlide, 4000);
       </button>
     </form>
   </div>
-
-  <!-- Остальные вкладки -->
-  <div id="hotel" class="tab-content p-4 hidden">
-    <p class="text-gray-500">Поиск отелей пока в разработке</p>
-  </div>
-  <div id="excursions" class="tab-content p-4 hidden">
-    <p class="text-gray-500">Экскурсии пока в разработке</p>
-  </div>
-  <div id="transfer" class="tab-content p-4 hidden">
-    <p class="text-gray-500">Трансфер пока в разработке</p>
-  </div>
-</div>
 
 <script>
   // Переключение вкладок
@@ -213,6 +198,21 @@ setInterval(autoSlide, 4000);
     if(last) toInput.value = last;
   })();
 </script>
+
+<!-- Кнопки --> 
+  <section class="px-4 space-y-3">
+  <div class="bg-white rounded-xl p-4 flex items-center shadow"> 
+    <a href="HOTEL.html" class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-lg mr-4">
+      <img src="images/photo_5398063018606193774_y.avif" alt=""></a> 
+    <p class="font-medium">Отели</p> 
+  </div> 
+  <div class="bg-white rounded-xl p-4 flex items-center shadow">
+    <a href="s7hop.html" class="w-10 h-10 flex items-center justify-center bg-purple-100 rounded-lg mr-4">
+      <img src="images/photo_5398063018606193772_y.avif" alt=""></a> 
+    <p class="font-medium">Магазин</p> 
+  </div> 
+</section>
+  
 <!-- Пробел между слайдером и акциями -->
     <div class="h-10"></div>
     
