@@ -211,6 +211,88 @@ document.addEventListener("DOMContentLoaded", () => {
     <label><input type="checkbox" name="miles"> Оплата милями</label>
   </div>
 </div>
+<script>
+// ====== Геолокация для "Откуда" ======
+function setFromByGeo() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      try {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=ru`);
+        const data = await res.json();
+        let city = data.address.city || data.address.town || data.address.village || "Ваш город";
+        if (city.toLowerCase().includes("саратов")) {
+          document.getElementById("fromInput").value = "Савелий, GSV";
+        } else {
+          document.getElementById("fromInput").value = city;
+        }
+      } catch (e) {
+        console.warn("Geo error", e);
+      }
+    });
+  }
+}
+setFromByGeo();
+
+// ====== Автокомплит для "Куда" ======
+(function autocompleteTo() {
+  const toInput = document.getElementById('toInput');
+  const toSuggestions = document.getElementById('toSuggestions');
+
+  const airports = [
+    { city:"Москва", code:"DME" },
+    { city:"Москва", code:"SVO" },
+    { city:"Санкт-Петербург", code:"LED" },
+    { city:"Екатеринбург", code:"SVX" },
+    { city:"Омск", code:"OMS" },
+    { city:"Краснодар", code:"KRR" },
+    { city:"Сочи", code:"AER" },
+    { city:"Волгоград", code:"VOG" },
+    { city:"Калининград", code:"KGD" },
+    { city:"Новосибирск", code:"OVB" },
+    { city:"Анталья", code:"AYT" },
+    { city:"Вена", code:"VIE" }
+  ];
+
+  function render(list){
+    toSuggestions.innerHTML = "";
+    list.forEach(it => {
+      const div = document.createElement('div');
+      div.className = 'suggestion-item';
+      div.innerHTML = `<span class="suggestion-city">${it.city}</span>
+                       <span class="suggestion-code">${it.code}</span>`;
+      div.addEventListener('click', () => {
+        toInput.value = `${it.city} (${it.code})`;
+        localStorage.setItem("lastTo", toInput.value);
+        toSuggestions.style.display = 'none';
+      });
+      toSuggestions.appendChild(div);
+    });
+    toSuggestions.style.display = list.length ? 'block' : 'none';
+  }
+
+  toInput.addEventListener('input', e => {
+    const q = e.target.value.toLowerCase();
+    if (!q) { toSuggestions.style.display = 'none'; return; }
+    const filtered = airports.filter(a => a.city.toLowerCase().includes(q) || a.code.toLowerCase().includes(q));
+    render(filtered);
+  });
+
+  // загрузка последнего поиска
+  const last = localStorage.getItem("lastTo");
+  if(last) toInput.value = last;
+})();
+
+// ====== Меняем местами "Откуда" и "Куда" ======
+document.getElementById('swapBtn').addEventListener('click', () => {
+  const fromInput = document.getElementById('fromInput');
+  const toInput = document.getElementById('toInput');
+  const tmp = fromInput.value;
+  fromInput.value = toInput.value;
+  toInput.value = tmp;
+});
+</script>
 
       <div class="bg-white rounded-xl p-4 flex items-center shadow">
         <a href="arrivel.html" class="w-10 h-10 flex items-center justify-center bg-green-100 rounded-lg mr-4"><img src="images/photo_5398063018606193773_y.avif" alt=""></a>
