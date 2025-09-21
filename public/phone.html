@@ -37,37 +37,26 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   </header>
 
-  <!-- Слайдер -->
-<div class="relative w-full max-w-[400px] h-[350px] overflow-hidden rounded-2xl mx-auto">
-  <div id="slider" class="absolute w-full h-full">
-    <img src="images/3_20250921_080215_0002.avif" class="w-full h-full object-cover absolute" style="opacity:1;transition:opacity 1s;">
+<!-- Слайд-шоу -->
+  <div class="relative w-full max-w-[400px] h-[350px] overflow-hidden rounded-2xl mx-auto"> 
+    <div id="slider" class="absolute w-full h-full"> 
+     <img src="images/3_20250921_080215_0002.avif" class="w-full h-full object-cover absolute" style="opacity:1;transition:opacity 1s;">
     <img src="images/Airbrush-Image-Enhancer-1758427470044.avif" class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
     <img src="images/2_20250921_080215_0001.avif" class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
     <img src="images/4_20250921_080215_0003.avif" class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
-  </div>
-</div>
-
-<script>
-  const slides = document.querySelectorAll("#slider img");
-  let currentIndex = 0;
-
-  function showSlide(nextIndex) {
-    slides[currentIndex].style.opacity = "0";
-    slides[nextIndex].style.opacity = "1";
-    currentIndex = nextIndex;
-  }
-
-  function autoSlide() {
-    let nextIndex = (currentIndex + 1) % slides.length;
-    showSlide(nextIndex);
-  }
-
-  setInterval(autoSlide, 4000);
-</script>
-
-
-    <!-- Кнопки -->
-    <section class="px-4 space-y-3">
+    </div> 
+  </div> 
+  <script> 
+    const slides = document.querySelectorAll("#slider img"); let currentIndex = 0; function showSlide(nextIndex)
+      { slides[currentIndex].style.opacity = "0"; slides[nextIndex].style.opacity = "1"; currentIndex = nextIndex; 
+      }
+    function autoSlide()
+      { let nextIndex = (currentIndex + 1) % slides.length; showSlide(nextIndex); 
+      } setInterval(autoSlide, 4000); // каждые 4 секунды 
+  </script>
+  <!-- Кнопки -->
+  <section class="px-4 space-y-3"> 
+    <a href="bilet.html"class="w-full bg-lime-500 text-white font-bold py-3 rounded-xl">Купить билет</a>
         <a href="arrivel.html" class="w-10 h-10 flex items-center justify-center bg-green-100 rounded-lg mr-4"><img src="images/photo_5398063018606193773_y.avif" alt=""></a>
         <p class="font-medium">Направления</p>
       </div>
