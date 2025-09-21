@@ -618,16 +618,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <div style="height:56px"></div>
 
 <script>
-  // ===== Обмен местами (стрелка) =====
-document.getElementById('swapBtn').addEventListener('click', () => {
-  const fromInput = document.getElementById('fromInput');
-  const toInput = document.getElementById('toInput');
-
-  const tmp = fromInput.value;
-  fromInput.value = toInput.value;
-  toInput.value = tmp;
-});
-// Глобальный массив аэропортов
+// ===== Массив аэропортов =====
 const airports = [
   {city:"Москва", code:"SVO"},
   {city:"Москва", code:"DME"},
@@ -638,11 +629,11 @@ const airports = [
   {city:"Казань", code:"KZN"},
   {city:"Сочи", code:"AER"},
   {city:"Краснодар", code:"KRR"},
-  {city:"Саратов", code:"GSV"} // особый случай
+  {city:"Саратов", code:"GSV"}
 ];
 
-// Автокомплит
-function autocomplete(input, arr) {
+// ===== Автокомплит =====
+function autocomplete(input, arr, saveKey) {
   let currentFocus;
   input.addEventListener("input", function () {
     let val = this.value;
@@ -660,9 +651,10 @@ function autocomplete(input, arr) {
       ) {
         const div = document.createElement("div");
         div.className = "suggestion-item";
-        div.innerHTML = `<span class="suggestion-city">${item.city} (${item.code})</span>`;
+        div.innerHTML = `<span class="suggestion-city">${item.city}</span> <span class="suggestion-code">${item.code}</span>`;
         div.addEventListener("click", () => {
           input.value = `${item.city} (${item.code})`;
+          if(saveKey) localStorage.setItem(saveKey, input.value);
           closeAllLists();
         });
         box.appendChild(div);
@@ -711,12 +703,18 @@ function autocomplete(input, arr) {
   document.addEventListener("click", function (e) {
     closeAllLists(e.target);
   });
+
+  // Подставляем последний выбор из localStorage
+  if(saveKey){
+    const last = localStorage.getItem(saveKey);
+    if(last) input.value = last;
+  }
 }
 
-// Подключаем автокомплит для поля "Куда"
-autocomplete(document.getElementById("toInput"), airports);
+// ===== Подключаем автокомплит для "Куда" =====
+autocomplete(document.getElementById("toInput"), airports, "lastTo");
 
-/* Геолокация + автозаполнение "Откуда" */
+// ===== Геолокация для "Откуда" =====
 (function detectLocation(){
   const fromInput = document.getElementById('fromInput');
   if (!fromInput) return;
@@ -767,14 +765,14 @@ autocomplete(document.getElementById("toInput"), airports);
   });
 })();
 
-/* Выпадающий список выбора аэропорта */
+// ===== Выпадающий список выбора аэропорта =====
 function showAirportSelector(input, list){
   const box = document.createElement('div');
   box.className = 'suggestions';
   list.forEach(it => {
     const div = document.createElement('div');
     div.className = 'suggestion-item';
-    div.innerHTML = `<span class="suggestion-city">${it.city} (${it.code})</span>`;
+    div.innerHTML = `<span class="suggestion-city">${it.city}</span> <span class="suggestion-code">${it.code}</span>`;
     div.addEventListener('click', () => {
       input.value = `${it.city} (${it.code})`;
       box.remove();
@@ -788,143 +786,25 @@ function showAirportSelector(input, list){
   input.parentElement.appendChild(box);
 }
 
-/* Дефолт */
+// ===== Дефолт =====
 function setDefaultCity(input){
   input.value = "Москва (SVO)";
 }
-</script>
 
-<script>
-/* slider auto fade (small helpful enhancement) */
-(function sliderInit(){
-  const imgs = document.querySelectorAll('.slider img');
-  let i=0;
-  setInterval(()=> {
-    imgs[i].classList.remove('active');
-    i = (i+1) % imgs.length;
-    imgs[i].classList.add('active');
-  }, 5000);
-})();
-
-/* AUTOCOMPLETE для "Куда" */
-(function autocompleteInit(){
+// ===== Обмен местами (стрелка) =====
+document.getElementById('swapBtn').addEventListener('click', () => {
+  const fromInput = document.getElementById('fromInput');
   const toInput = document.getElementById('toInput');
-  const suggestions = document.getElementById('suggestions');
 
-  const airports = [
-    {city:"Все направления", code:""},
-    {city:"Москва", code:"ZIA"},
-    {city:"Москва", code:"DME"},
-    {city:"Санкт-Петербург", code:"LED"},
-    {city:"Волгоград", code:""},
-    {city:"Ашхабат", code:""},
-    {city:"Анталья", code:""},
-    {city:"Вена", code:""},
-    {city:"Калининград", code:""},
-    {city:"Новосибирск", code:""},
-    {city:"Екатеринбург", code:"SVX"},
-    {city:"Омск", code:"OMS"},
-    {city:"Краснодар", code:"KRR"},
-    {city:"Сочи", code:"AER"}
-  ];
+  const tmp = fromInput.value;
+  fromInput.value = toInput.value;
+  toInput.value = tmp;
 
-  let currentIndex = -1;
-  let currentItems = [];
-
-  function render(list){
-    suggestions.innerHTML = "";
-    currentItems = list;
-    currentIndex = -1;
-    list.forEach((it, idx) => {
-      const div = document.createElement('div');
-      div.className = 'suggestion-item';
-      div.setAttribute('role','option');
-      div.dataset.index = idx;
-      // left part + code
-      div.innerHTML = `<span class="suggestion-city">${escapeHtml(it.city)}</span>
-                       <span class="suggestion-code">${escapeHtml(it.code)}</span>`;
-      div.addEventListener('click', () => selectItem(idx));
-      div.addEventListener('mouseenter', ()=> highlight(idx));
-      suggestions.appendChild(div);
-    });
-    if(list.length) {
-      suggestions.style.display = 'block';
-      toInput.setAttribute('aria-expanded','true');
-    } else {
-      suggestions.style.display = 'none';
-      toInput.setAttribute('aria-expanded','false');
-    }
-  }
-
-  function escapeHtml(s){ return String(s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;'); }
-
-  function filter(q){
-    if(!q) return [airports[0]]; // all directions
-    const low = q.toLowerCase();
-    const filtered = airports.slice(1).filter(a => a.city.toLowerCase().includes(low) || a.code.toLowerCase().includes(low));
-    return [airports[0], ...filtered];
-  }
-
-  function selectItem(idx){
-    const it = currentItems[idx];
-    if(!it) return;
-    toInput.value = it.code ? `${it.city} (${it.code})` : it.city;
-    suggestions.style.display = 'none';
-    toInput.setAttribute('aria-expanded','false');
-  }
-
-  function highlight(idx){
-    const nodes = suggestions.querySelectorAll('.suggestion-item');
-    nodes.forEach(n => n.classList.remove('highlight'));
-    if(idx >= 0 && nodes[idx]) nodes[idx].classList.add('highlight');
-    currentIndex = idx;
-  }
-
-  function move(dir){
-    const nodes = suggestions.querySelectorAll('.suggestion-item');
-    if(!nodes.length) return;
-    let next = currentIndex + dir;
-    if(next < 0) next = nodes.length - 1;
-    if(next >= nodes.length) next = 0;
-    highlight(next);
-    // ensure visible
-    const el = nodes[next];
-    el.scrollIntoView({block:"nearest"});
-  }
-
-  toInput.addEventListener('input', (e)=>{
-    const q = e.target.value.trim();
-    const list = filter(q);
-    render(list);
-  });
-
-  toInput.addEventListener('keydown', (e)=>{
-    const nodes = suggestions.querySelectorAll('.suggestion-item');
-    if(e.key === 'ArrowDown'){ e.preventDefault(); move(1); }
-    else if(e.key === 'ArrowUp'){ e.preventDefault(); move(-1); }
-    else if(e.key === 'Enter'){
-      if(currentIndex >= 0) { e.preventDefault(); selectItem(currentIndex); }
-    } else if(e.key === 'Escape'){
-      suggestions.style.display = 'none';
-      toInput.setAttribute('a','false');
-    }
-  });
-
-  // close on click outside
-  document.addEventListener('click', (ev)=>{
-    if(ev.target === toInput || suggestions.contains(ev.target)) return;
-    suggestions.style.display = 'none';
-    toInput.setAttribute('aria-expanded','false');
-  });
-
-  // show default (Все направления) on focus
-  toInput.addEventListener('focus', () => {
-    const list = filter(toInput.value.trim());
-    render(list);
-  });
-
-})(); 
+  // сохраняем новый "Куда" в историю
+  localStorage.setItem("lastTo", toInput.value);
+});
 </script>
+
   <!-- Пробел между слайдером и акциями -->
   <div class="h-190"></div>
 
@@ -1277,10 +1157,11 @@ function setDefaultCity(input){
     </div>
   </div>
 </body>
-      
-<meta charset="UTF-8">
+
+<head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Рейсы из Москвы</title>
+  <title>Рейсы</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -1292,8 +1173,8 @@ function setDefaultCity(input){
       max-width: 1200px;
       margin: 50px auto;
       padding: 30px;
-      background-color: #fafafa; /* тёмно-серый фон */
-      border-radius: 12px;       /* скруглим углы для красоты */
+      background-color: #fafafa;
+      border-radius: 12px;
     }
     .header {
       display: flex;
@@ -1303,13 +1184,13 @@ function setDefaultCity(input){
     }
     .header h2 {
       font-size: 28px;
-      color: #0d141a; /* белый текст */
+      color: #0d141a;
       margin: 0;
       font-weight: bold;
     }
     .header a {
       font-size: 14px;
-      color: #6c6e71; /* светло-серый */
+      color: #6c6e71;
       text-decoration: none;
       font-weight: bold;
     }
@@ -1320,21 +1201,21 @@ function setDefaultCity(input){
     }
     .flight {
       padding: 10px 0;
-      border-bottom: 1px solid #cccfd7; /* тёмная линия */
+      border-bottom: 1px solid #cccfd7;
     }
     .flight h3 {
       margin: 0;
       font-size: 18px;
-      color: #1f2235; /* белый текст */
+      color: #1f2235;
       font-weight: bold;
     }
     .flight p {
       margin: 4px 0;
       font-size: 14px;
-      color: #7f8185; /* светло-серый */
+      color: #7f8185;
     }
     .flight .status {
-      color: #a3ce09; /* зелёный как на скрине */
+      color: #a3ce09;
       font-weight: bold;
       font-size: 15px;
       margin-top: 6px;
@@ -1342,6 +1223,10 @@ function setDefaultCity(input){
   </style>
 </head>
 <body>
+  <!-- Блок геолокации -->
+  <div class="container" id="geo-flights"></div>
+
+  <!-- Блок "Рейсы из Савелий" -->
   <div class="container">
     <div class="header">
       <h2>Рейсы из Савелий</h2>
@@ -1395,6 +1280,58 @@ function setDefaultCity(input){
       </div>
     </div>
   </div>
+
+  <script>
+    // Определение города по координатам
+    function getCity(lat, lon) {
+      return fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
+        .then(res => res.json())
+        .then(data => {
+          return data.address.city || data.address.town || data.address.village || "Ваш город";
+        });
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        let lat = pos.coords.latitude;
+        let lon = pos.coords.longitude;
+        let city = await getCity(lat, lon);
+
+        // Логика выбора рейсов
+        let flightsByCity = {
+          "Москва": ["Савелий", "Санкт-Петербург", "Сочи"],
+          "Санкт-Петербург": ["Москва", "Савелий"],
+          "Сочи": ["Москва", "Савелий"]
+        };
+
+        if (city === "Саратов" || city === "Савелий") {
+          // Не показываем блок, т.к. совпадает
+          return;
+        }
+
+        if (flightsByCity[city]) {
+          let flightsHtml = flightsByCity[city].map(dest => `
+            <div class="flight">
+              <h3>${dest}</h3>
+              <p>из ${city} и обратно</p>
+              <div class="status">ежедневно</div>
+            </div>
+          `).join("");
+
+          let geoBlock = `
+            <div class="header">
+              <h2>Рейсы из ${city}</h2>
+              <a href="#">Расписание рейсов</a>
+            </div>
+            <div class="flights-grid">
+              ${flightsHtml}
+            </div>
+          `;
+          document.getElementById("geo-flights").innerHTML = geoBlock;
+        }
+      });
+    }
+  </script>
 </body>
 <!-- Новости S7avelii Airlines -->
 <section class="max-w-7xl mx-auto px-4 py-12">
