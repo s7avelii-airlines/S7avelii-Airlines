@@ -69,14 +69,30 @@
     setInterval(autoSlide, 4000); 
   </script>
 
-  <!-- Меню -->
-  <div class="max-w-[500px] mx-auto mt-6">
-    <div class="flex space-x-2 mb-4">
-      <button data-tab="purchase" class="tab-btn flex-1 bg-green-100 p-3 rounded-xl font-medium">Покупка</button>
-      <button data-tab="hotel" class="tab-btn flex-1 bg-blue-100 p-3 rounded-xl font-medium">Отели</button>
-      <button data-tab="shop" class="tab-btn flex-1 bg-purple-100 p-3 rounded-xl font-medium">Магазин</button>
+ <!-- Меню верхнее: Регистрация / Мои бронирования / Покупка -->
+<div class="max-w-[430px] mx-auto mt-4 bg-white rounded-2xl shadow p-4">
+
+  <!-- Верхние вкладки -->
+  <div class="flex border-b border-gray-200 mb-4 text-sm font-medium text-gray-700">
+    <button data-main-tab="checkin" class="main-tab-btn flex-1 py-2 text-center rounded-t-lg hover:bg-gray-100">Регистрация на рейс</button>
+    <button data-main-tab="mybookings" class="main-tab-btn flex-1 py-2 text-center rounded-t-lg hover:bg-gray-100">Мои бронирования</button>
+    <button data-main-tab="purchase" class="main-tab-btn flex-1 py-2 text-center rounded-t-lg bg-gray-100 text-gray-900">Покупка</button>
+  </div>
+
+  <!-- Контент верхних вкладок -->
+  <div id="mainTabContent">
+
+    <!-- Регистрация -->
+    <div id="checkin" class="main-tab-pane hidden">
+      <p class="text-center text-gray-500">Здесь регистрация на рейс.</p>
     </div>
 
+    <!-- Мои бронирования -->
+    <div id="mybookings" class="main-tab-pane hidden">
+      <p class="text-center text-gray-500">Здесь ваши бронирования.</p>
+    </div>
+
+    <!-- Покупка -->
     <div id="tabContent" class="bg-white p-4 rounded-2xl shadow">
      <!-- Бронирование -->
 <div id="purchase" class="tab-pane">
