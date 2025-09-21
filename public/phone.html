@@ -28,19 +28,64 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 </script>
-  
-<body class="text-gray-900 flex justify-center bg-gray-100">
-  <div class="mobile-wrapper shadow-lg">
-    
-    <!-- Шапка -->
-    <header class="flex justify-between items-center p-4 bg-white shadow">
-      <img src="images/photo_5276207082657412564_y.avif" alt="S7" class="w-10 h-10">
-      <div class="flex gap-2">
-        <a href="auth.html" class="px-4 py-2 rounded-xl border">Войти</a>
-        <a href="inform.html" class="px-4 py-2 rounded-xl border">IT</a>
-      </div>
-    </header>
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S7 — Шапка</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+
+  <!-- Шапка -->
+  <header class="fixed top-0 left-0 w-full flex justify-between items-center p-4 bg-white shadow z-50">
+    <!-- Логотип -->
+    <img src="images/photo_5276207082657412564_y.avif" alt="S7" class="w-10 h-10">
+
+    <!-- Кнопки -->
+    <div class="flex gap-2">
+      <!-- Войти -->
+      <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
+        Войти
+        <!-- Иконка пользователя -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
+        </svg>
+      </a>
+
+      <!-- Выбор языка -->
+      <a href="inform.html" class="flex items-center justify-center w-10 h-10 rounded-xl border text-sm font-semibold">
+        RU
+      </a>
+
+      <!-- Чат -->
+      <button class="flex items-center justify-center w-10 h-10 rounded-xl border">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h6m-6 4h4m-5 4h10a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14l3-2z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Контент для проверки скролла -->
+  <main class="pt-20 p-4">
+    <h1 class="text-2xl font-bold mb-4">Главная страница</h1>
+    <p class="mb-4">Шапка закреплена сверху. Прокрути вниз, чтобы проверить.</p>
+    <div class="space-y-4">
+      <p>Контент...</p>
+      <p>Контент...</p>
+      <p>Контент...</p>
+      <p>Контент...</p>
+      <p>Контент...</p>
+      <p>Контент...</p>
+      <p>Контент...</p>
+      <p>Контент...</p>
+      <p>Контент...</p>
+      <p>Контент...</p>
+    </div>
+  </main>
+
+</body>
     <!-- Слайд-шоу -->
 <div class="relative w-full max-w-[400px] h-[350px] overflow-hidden rounded-2xl mx-auto">
   <div id="slider" class="absolute w-full h-full">
@@ -74,8 +119,98 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
     <!-- Кнопки -->
-    <section class="px-4 space-y-3">
-      <a href="bilet.html"class="w-full bg-lime-500 text-white font-bold py-3 rounded-xl">Купить билет</a>
+    <div class="widget" role="region" aria-label="Окно бронирования">
+
+  <div class="top-overlay">
+    <a href="Index.html" class="active">Покупка</a>
+    <a href="HOTEL.html">Отели</a>
+    <a href="auth.html">Мои бронирования</a>
+    <a href="priority.html">Priority</a>
+  </div>
+
+  <!-- Кнопки внутри блока -->
+  <div class="flex items-center gap-1 px-2 py-1" style="justify-content:flex-start; width:40%;">
+    <button class="px-2 py-0.5 text-xs rounded border bg-gray-100 font-semibold">Авиабилеты</button>
+    <button class="px-2 py-0.5 text-xs rounded border bg-white">Регистрация</button>
+    <button class="px-2 py-0.5 text-xs rounded border bg-white">Бронь</button>
+    <button class="px-2 py-0.5 text-xs rounded border bg-white">Трансфер</button>
+  </div>
+
+  <!-- форма -->
+  <form id="searchForm" action="search.html" method="get" style="margin:0;">
+    <div class="form-row" role="group" aria-label="Поля поиска">
+
+      <!-- Откуда -->
+      <div class="cell" style="flex:1;min-width:160px; position:relative;">
+        <input type="text" id="fromInput" name="from" placeholder="Откуда" autocomplete="off" required>
+        <div id="fromSuggestions" class="suggestions"></div>
+      </div>
+
+      <!-- Стрелка -->
+      <div class="cell" id="swapBtn" style="flex:0 0 44px; justify-content:center; color:#97ba1e; cursor:pointer;">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 7l4 4-4 4M21 11H7"></path>
+          <path d="M7 17l-4-4 4-4M3 13h14"></path>
+        </svg>
+      </div>
+
+      <!-- Куда -->
+      <div class="cell" style="flex:1;min-width:160px; position:relative;">
+        <input type="text" id="toInput" name="to" placeholder="Куда" autocomplete="off" required>
+        <div id="toSuggestions" class="suggestions"></div>
+      </div>
+
+      <!-- Дата туда -->
+      <div class="cell date-cell" style="flex:0 0 140px;">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+          <path d="M16 3v4M8 3v4M3 11h18"></path>
+        </svg>
+        <input id="date1" name="date1" type="date" required>
+      </div>
+
+      <!-- Дата обратно -->
+      <div class="cell date-cell" style="flex:0 0 140px;">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+          <path d="M16 3v4M8 3v4M3 11h18"></path>
+        </svg>
+        <input id="date2" name="date2" type="date" required>
+      </div>
+
+      <!-- Пассажиры -->
+      <div class="cell" style="flex:0 0 120px;">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#97ba1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"></path>
+          <path d="M6 20v-1c0-2.21 2.686-4 6-4s6 1.79 6 4v1"></path>
+        </svg>
+        <select id="passengers" name="passengers" required>
+          <option value="" disabled selected>Выберите</option>
+          <option value="1_econom">1, Эконом</option>
+          <option value="2_econom">2, Эконом</option>
+          <option value="3_econom">3, Эконом</option>
+          <option value="4_econom">4, Эконом</option>
+          <option value="5_econom">5, Эконом</option>
+          <option value="1_business">1, Бизнес</option>
+          <option value="1_first">1, Первый класс</option>
+        </select>
+      </div>
+
+      <!-- Поиск -->
+      <a href ="bilet.html" type="submit" class="search-btn" aria-label="Найти" style="width:120px;">
+        Найти
+      </a>
+
+    </div>
+  </form>
+
+  <div class="bottom">
+    <a href="#">Составить сложный маршрут</a>
+    <a href="#"><span class="new-label">NEW</span> Групповой перелет</a>
+    <label><input type="checkbox" name="pet"> Лечу с питомцем</label>
+    <label><input type="checkbox" name="miles"> Оплата милями</label>
+  </div>
+</div>
 
       <div class="bg-white rounded-xl p-4 flex items-center shadow">
         <a href="arrivel.html" class="w-10 h-10 flex items-center justify-center bg-green-100 rounded-lg mr-4"><img src="images/photo_5398063018606193773_y.avif" alt=""></a>
