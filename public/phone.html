@@ -208,9 +208,54 @@ document.addEventListener("DOMContentLoaded", () => {
   </section>
 
   <!-- Новости -->
-  <!-- ... (оставил твои карточки новостей и статей как есть) ... -->
 
- !-- Кнопка -->
+   <section class="px-4 py-6 bg-gray-50">
+  <!-- Заголовок -->
+  <div class="mb-4">
+    <span class="text-gray-400 text-sm">Что почитать</span>
+    <h2 class="text-2xl font-bold text-gray-900">Делимся опытом путешествий</h2>
+  </div>
+
+  <!-- Сетка карточек -->
+  <div class="grid grid-cols-2 gap-3">
+    <!-- Карточка 1 -->
+    <div class="relative rounded-2xl overflow-hidden h-40">
+      <img src="images/images.avif" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-black/40"></div>
+      <div class="absolute bottom-2 left-2 text-white text-sm font-medium">
+        На выходные в Рим
+      </div>
+    </div>
+
+    <!-- Карточка 2 -->
+    <div class="relative rounded-2xl overflow-hidden h-40">
+      <img src="images/IMG_20250913_121618.avif" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-black/40"></div>
+      <div class="absolute bottom-2 left-2 text-white text-sm font-medium">
+        Споттинг, как искусство
+      </div>
+    </div>
+
+    <!-- Карточка 3 -->
+    <div class="relative rounded-2xl overflow-hidden h-40">
+      <img src="images/IMG_20250913_122149.avif" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-black/40"></div>
+      <div class="absolute bottom-2 left-2 text-white text-sm font-medium">
+        Саратов - столица S7avelii
+      </div>
+    </div>
+
+    <!-- Карточка 4 -->
+    <div class="relative rounded-2xl overflow-hidden h-40">
+      <img src="images/Black Simple Travel Logo_20250914_092424_0000.avif" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-black/40"></div>
+      <div class="absolute bottom-2 left-2 text-white text-sm font-medium">
+        Как копить и тратить мили S7avelii Priority
+      </div>
+    </div>
+  </div>
+
+  <!-- Кнопка -->
 <div class="mt-6">
   <a href="https://t.me/S7saveliiairlines" class="block w-full py-3 rounded-xl bg-gray-100 text-gray-900 font-medium text-center">
     Все статьи
@@ -218,6 +263,154 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 </section>  
 
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Справочный центр</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: #fff;
+      color: #111;
+    }
+
+    .page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  
+  display: flex;
+  justify-content: center;   /* центр по горизонтали */
+  align-items: center;       /* центр по вертикали */
+  min-height: 100vh;         /* занимаем всю высоту экрана */
+}
+    /* Сетка */
+    .columns {
+      display: grid;
+      grid-template-columns: minmax(280px, 1fr) minmax(400px, 2fr);
+      gap: 40px;
+      align-items: start;
+    }
+
+    .left {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .headline {
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #111;
+      white-space: pre-line;
+      text-align: left;
+    }
+
+    .art {
+      max-width: 280px;
+      height: auto;
+    }
+
+    .right {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
+      max-width: 500px;
+    }
+
+    .text-block {
+      line-height: 1.6;
+      text-align: left;
+      white-space: normal !important;
+      word-break: break-word;
+    }
+
+    .faq-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .faq-item {
+      font-size: 18px;
+      font-weight: 500;
+      color: #222;
+      margin-bottom: 8px;
+    }
+
+    .faq-item a {
+      text-decoration: none;
+      color: inherit;
+      transition: color .2s;
+    }
+    .faq-item a:hover {
+      color: #0078d4;
+      text-decoration: underline;
+    }
+
+    .long {
+      margin-top: 16px;
+      font-size: 16px;
+      line-height: 1.4;
+      color: #333;
+    }
+
+    /* адаптивность */
+    @media (max-width: 900px) {
+      .columns {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .left { align-items: center; }
+      .headline { font-size: 32px; text-align: center; }
+      .art { max-width: 200px; }
+      .right { align-items: center; max-width: 100%; }
+      .text-block { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="columns">
+      <!-- левая колонка -->
+      <div class="left">
+        <div class="headline">
+Найти ответ
+в Справочном
+центре
+        </div>
+        <img class="art" src="images/1757601548123.avif" alt="иллюстрация вопроса">
+      </div>
+
+      <!-- правая колонка -->
+      <div class="right">
+        <div class="text-block">
+          <ul class="faq-list" aria-label="Список вопросов">
+            <li class="faq-item"><a href="faq1.html">Можно ли взять чемодан в самолёт?</a></li>
+            <li class="faq-item"><a href="arrivel.html">В какие города вы летаете?</a></li>
+            <li class="faq-item"><a href="https://t.me/s7aveliihelper">Что даёт карта S7avelii Priority?</a></li>
+            <li class="faq-item"><a href="https://t.me/s7aveliihelper">Где узнать статус заказа S7avelii Shop?</a></li>
+            <li class="faq-item"><a href="https://t.me/s7aveliihelper">Как разобраться с личным кабинетом?</a></li>
+            <li class="faq-item"><a href="https://t.me/s7aveliihelper">Как можно накопить мили S7avelii?</a></li>
+            <li class="faq-item"><a href="https://t.me/s7aveliihelper">Как работает оплата «Милями»?</a></li>
+            <li class="faq-item"><a href="https://t.me/s7aveliihelper">Как я могу заказать билет на сайте?</a></li>
+          </ul>
+
+          <div class="long">
+            Я никак не могу понять как работает ваш сайт, запутался не могу. 
+            <a href="https://t.me/s7aveliihelper">Служба поддержки?</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+   
 <footer class="mobile-footer">
   <!-- Подписка -->
   <div class="subscribe-box">
@@ -341,7 +534,8 @@ document.addEventListener("DOMContentLoaded", () => {
   padding: 8px;
 }
 </style>
-
+    
 </div>
 </body>
 </html>
+  
