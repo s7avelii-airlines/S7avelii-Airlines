@@ -1,53 +1,96 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Кабинет — S7avelii</title>
-<style>
-:root{--bg:#f5f7fa;--card:#fff;--accent:#9cc42f;--muted:#8b97a6;}
-*{box-sizing:border-box}
-body{margin:0;font-family:Inter, "Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);color:#1f2937;}
-.page{max-width:1180px;margin:28px auto;padding:0 20px;}
-.full-header{width:100%;background:var(--card);display:flex;align-items:center;gap:24px;padding:28px 36px;border-radius:12px;box-shadow:0 6px 20px rgba(16,24,40,0.06);flex-wrap:wrap;}
-.avatar-wrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
-.avatar{width:118px;height:118px;border-radius:999px;object-fit:cover;border:4px solid #fff;box-shadow:0 6px 18px rgba(16,24,40,0.06);cursor:pointer;}
-.user-info h1{margin:0;font-size:26px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-.user-info h1 .edit-icon{font-size:14px;background:#eef9d6;border-radius:999px;padding:6px 8px;cursor:pointer;color:#1f3a07;}
-.sub{color:var(--muted);margin-top:6px;}
-.card-img{width:80px;height:50px;border-radius:8px;object-fit:cover;cursor:pointer;margin-left:10px;display:none;}
-.card-img-big{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);max-width:80%;max-height:80%;border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,0.5);display:none;z-index:999;}
-.stats{margin-left:auto;display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
-.stat{background:linear-gradient(180deg,#fff,#fcfff0);padding:14px 18px;border-radius:12px;min-width:110px;text-align:center;border:1px solid rgba(0,0,0,0.04);}
-.stat .num{font-weight:700;font-size:20px;color:#111827;}
-.stat .label{font-size:12px;color:var(--muted);margin-top:6px;}
-.tabs{display:flex;gap:14px;margin-top:18px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,0.04);overflow-x:auto;}
-.tabs a{padding:10px 14px;text-decoration:none;color:#495057;border-radius:8px;white-space:nowrap;}
-.tabs a.active{color:var(--accent);background:rgba(156,196,47,0.06);}
-.grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:18px;}
-.card{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 4px 12px rgba(16,24,40,0.04);border:1px solid rgba(0,0,0,0.03);}
-.card h3{margin:0 0 12px 0;font-size:18px;}
-.field{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid rgba(0,0,0,0.03);}
-.field:first-of-type{border-top:0;}
-.label{color:var(--muted);font-size:14px;}
-.value{font-size:15px;max-width:60%;word-wrap:break-word;}
-.edit-btn{background:transparent;border:none;color:var(--accent);cursor:pointer;font-weight:600;}
-.small-muted{color:var(--muted);font-size:13px;margin-top:8px;}
-.pref{margin-top:20px;padding-top:18px;border-top:1px solid rgba(0,0,0,0.03);}
-.btn{display:inline-block;background:var(--accent);color:white;padding:9px 14px;border-radius:10px;border:none;cursor:pointer;}
-input[type="text"],input[type="email"],input[type="tel"],select{width:100%;padding:8px;border-radius:8px;border:1px solid #e6edf3;}
-.row{display:flex;gap:12px;flex-wrap:wrap;}
-.row .col{flex:1;}
-@media(max-width:980px){.grid{grid-template-columns:1fr}.stats{margin-left:0;margin-top:16px;flex-wrap:wrap}.full-header{flex-direction:column;align-items:flex-start;gap:16px}}
-@media(max-width:600px){.tabs{padding:12px;gap:8px}.tabs a{padding:8px 10px;font-size:14px}}
-.footer{background:#f1f4f9;padding:20px 40px;margin-top:28px}
-.footer-container{display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto}
-.footer-left{font-size:14px;color:#667}
-.footer-right a{display:inline-flex;justify-content:center;align-items:center;width:40px;height:40px;margin-left:10px;border-radius:50%;background:white}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Кабинет — S7avelii</title>
+  <link rel="icon" href="images/favicon.png" type="image/png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --accent: #9cc42f;
+      --muted: #8b97a6;
+      --radius: 14px;
+      --container: 1180px;
+    }
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: #1f2937;
+    }
+    .page { max-width: var(--container); margin: 28px auto; padding: 0 20px; }
+
+    /* Header */
+    .full-header {
+      width: 100%;
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 28px 36px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(16,24,40,0.06);
+      flex-wrap: wrap;
+    }
+    .avatar-wrap { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+    .avatar {
+      width: 118px; height: 118px; border-radius: 999px; object-fit: cover;
+      border: 4px solid #fff; box-shadow: 0 6px 18px rgba(16,24,40,0.06); cursor: pointer;
+    }
+    .user-info h1 { margin: 0; font-size: 26px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .user-info h1 .edit-icon { font-size: 14px; background: #eef9d6; border-radius: 999px; padding: 6px 8px; cursor: pointer; color: #1f3a07; }
+    .card-badge {
+      width: 60px;
+      height: auto;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .sub { color: var(--muted); margin-top: 6px; }
+
+    /* Stats */
+    .stats { margin-left: auto; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+    .stat { background: linear-gradient(180deg,#fff,#fcfff0); padding: 14px 18px; border-radius: 12px; min-width: 110px; text-align: center; border: 1px solid rgba(0,0,0,0.04); }
+    .stat .num { font-weight: 700; font-size: 20px; color: #111827; }
+    .stat .label { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 14px; margin-top: 18px; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.04); overflow-x: auto; }
+    .tabs a { padding: 10px 14px; text-decoration: none; color: #495057; border-radius: 8px; white-space: nowrap; }
+    .tabs a.active { color: var(--accent); background: rgba(156,196,47,0.06); }
+
+    /* Main layout */
+    .grid { display: grid; grid-template-columns: 1fr 380px; gap: 22px; margin-top: 18px; }
+    .card { background: var(--card); border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(16,24,40,0.04); border: 1px solid rgba(0,0,0,0.03); }
+    .card h3 { margin: 0 0 12px 0; font-size: 18px; }
+    .field { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-top: 1px solid rgba(0,0,0,0.03); }
+    .field:first-of-type { border-top: 0; }
+    .label { color: var(--muted); font-size: 14px; }
+    .value { font-size: 15px; max-width: 60%; word-wrap: break-word; }
+    .edit-btn { background: transparent; border: none; color: var(--accent); cursor: pointer; font-weight: 600; }
+    .small-muted { color: var(--muted); font-size: 13px; margin-top: 8px; }
+
+    /* Preferences */
+    .pref { margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(0,0,0,0.03); }
+
+    /* Buttons and inputs */
+    .btn { display: inline-block; background: var(--accent); color: white; padding: 9px 14px; border-radius: 10px; border: none; cursor: pointer; }
+    input[type="text"], input[type="email"], input[type="tel"], select { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e6edf3; }
+
+    /* Responsive */
+    @media (max-width: 980px) {
+      .grid { grid-template-columns: 1fr; }
+      .stats { margin-left: 0; margin-top: 16px; flex-wrap: wrap; }
+      .full-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+    }
+  </style>
 </head>
 <body>
+
 <div class="page">
+  <!-- Header -->
   <div class="full-header">
     <div class="avatar-wrap">
       <label for="avatarInput" title="Нажмите, чтобы поменять аватар">
@@ -55,12 +98,12 @@ input[type="text"],input[type="email"],input[type="tel"],select{width:100%;paddi
       </label>
       <input id="avatarInput" type="file" accept="image/*" style="display:none">
       <div class="user-info">
-        <h1 id="fioHeader">Загрузка... 
+        <h1 id="fioHeader">
+          Загрузка...
+          <img id="cardTypeImg" class="card-badge" style="display:none" alt="Card">
           <span class="edit-icon" id="editNameBtn" title="Изменить">✏</span>
         </h1>
         <div class="sub" id="phoneHeader">—</div>
-        <!-- картинка карты -->
-        <img id="cardTypeImg" class="card-img" src="" alt="карта">
       </div>
     </div>
 
@@ -72,6 +115,7 @@ input[type="text"],input[type="email"],input[type="tel"],select{width:100%;paddi
     </div>
   </div>
 
+  <!-- Tabs -->
   <div class="tabs" role="tablist">
     <a href="#" class="active" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
     <a href="#" data-tab="milesTab" onclick="showTab(event)">Мои мили</a>
@@ -79,67 +123,28 @@ input[type="text"],input[type="email"],input[type="tel"],select{width:100%;paddi
     <a href="#" data-tab="settingsTab" onclick="showTab(event)">Настройки</a>
   </div>
 
+  <!-- Main grid -->
   <div class="grid">
-    <!-- Left -->
+    <!-- Left column -->
     <div>
       <div id="profileTab" class="card">
         <h3>Персональные данные</h3>
         <div class="field"><div><div class="label">ФИО</div><div class="value" id="fioField">—</div></div><button class="edit-btn" onclick="enableEdit('fio')">Изменить</button></div>
         <div class="field"><div><div class="label">Дата рождения</div><div class="value" id="dobField">—</div></div><button class="edit-btn" onclick="enableEdit('dob')">Изменить</button></div>
         <div class="field"><div><div class="label">Пол</div><div class="value" id="genderField">—</div></div><button class="edit-btn" onclick="enableEdit('gender')">Изменить</button></div>
-
         <h3 style="margin-top:18px">Контакты</h3>
         <div class="field"><div><div class="label">Email</div><div class="value" id="emailField">—</div></div><button class="edit-btn" onclick="enableEdit('email')">Изменить</button></div>
         <div class="field"><div><div class="label">Телефон</div><div class="value" id="phoneField">—</div></div><button class="edit-btn" onclick="enableEdit('phone')">Изменить</button></div>
-
-        <div class="field"><div><div class="label">Номер карты S7avelii Priority</div><div class="value" id="cardField">—</div></div><button class="edit-btn" onclick="enableEdit('cardNumber')">Изменить</button></div>
-
-        <div class="field"><div><div class="label">Тип карты</div>
-          <div class="value">
-            <span id="cardTypeField">—</span>
-            <select id="cardTypeSelect" style="margin-left:12px;min-width:120px;">
-              <option value="">(выбрать)</option>
-              <option value="Classic">Classic</option>
-              <option value="VIP">VIP</option>
-            </select>
-          </div>
-        </div></div>
-
-        <div class="pref">
-          <div class="small-muted">Способы связи</div>
-          <div style="margin-top:10px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-            <label><input type="checkbox" id="optSms"> мобильный телефон (SMS)</label>
-            <label><input type="checkbox" id="optEmail"> e-mail</label>
-          </div>
-          <div style="margin-top:14px">
-            <label style="display:flex;gap:10px;align-items:center"><input type="checkbox" id="optAgree"> <span class="small-muted">Согласен с условиями обработки персональных данных</span></label>
-          </div>
-        </div>
-
-        <div style="margin-top:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-          <button class="btn" id="saveProfileBtn">Сохранить</button>
-          <div id="saveInfo" class="small-muted"></div>
-        </div>
-      </div>
-
-      <!-- Место для других табов: milesTab/shopTab/settingsTab -->
-      <div id="milesTab" class="card" style="display:none;margin-top:16px;">
-        <h3>Мои мили</h3>
-        <div class="small-muted" style="margin-top:8px">Бонусные мили и история...</div>
-      </div>
-      <div id="shopTab" class="card" style="display:none;margin-top:16px;">
-        <h3>S7avelii Shop</h3>
-      </div>
-      <div id="settingsTab" class="card" style="display:none;margin-top:16px;">
-        <h3>Настройки</h3>
+        <div class="field"><div><div class="label">Номер карты</div><div class="value" id="cardField">—</div></div><button class="edit-btn" onclick="enableEdit('cardNumber')">Изменить</button></div>
+        <div class="field"><div><div class="label">Тип карты</div><div class="value" id="cardTypeField">—</div></div></div>
       </div>
     </div>
 
-    <!-- Right -->
+    <!-- Right column -->
     <div>
       <div class="card">
         <h3>Краткая информация</h3>
-        <div style="margin-top:12px" class="small-muted">Здесь отображаются основные данные и быстрые действия.</div>
+        <div style="margin-top:12px" class="small-muted">Основные действия:</div>
         <div style="margin-top:18px;display:flex;flex-direction:column;gap:12px">
           <button onclick="goTo('profileTab')" class="edit-btn">Редактировать профиль</button>
           <button onclick="goTo('milesTab')" class="edit-btn">Посмотреть мили</button>
@@ -148,26 +153,11 @@ input[type="text"],input[type="email"],input[type="tel"],select{width:100%;paddi
       </div>
     </div>
   </div>
-
-  <footer class="footer" style="margin-top:18px;">
-    <div class="footer-container">
-      <div class="footer-left">© 2025. S7avelii Airlines — Все права защищены</div>
-      <div class="footer-right">
-        <a href="#" target="_blank">VK</a>
-      </div>
-    </div>
-  </footer>
 </div>
 
-<!-- Большая картинка карты -->
-<img id="cardBig" class="card-img-big" alt="карта">
-
 <script>
-/* ---------------- утилиты ---------------- */
-function el(id){ return document.getElementById(id); }
-function showMsg(msg, time=2500){ const s = el('saveInfo'); s.innerText = msg; setTimeout(()=>s.innerText='', time); }
+function el(id){return document.getElementById(id)}
 
-/* ---------------- tabs ---------------- */
 function showTab(evt){
   evt && evt.preventDefault();
   const tabId = evt ? evt.currentTarget.getAttribute('data-tab') : 'profileTab';
@@ -178,218 +168,94 @@ function showTab(evt){
     if(elc) elc.style.display = (id===tabId ? 'block' : 'none');
   });
 }
-function goTo(tab){
-  document.querySelectorAll('.tabs a').forEach(a=>a.classList.remove('active'));
-  const a = [...document.querySelectorAll('.tabs a')].find(x=> x.getAttribute('data-tab')===tab);
-  if(a) a.classList.add('active');
-  showTab({ currentTarget: a, preventDefault: ()=>{} });
-}
 
-/* ---------------- load / apply profile ---------------- */
 function loadProfile(){
-  // Try to load unified currentUser first (some flows use this), else read separate keys
-  let profile = null;
-  try{
-    const cu = localStorage.getItem('currentUser') || localStorage.getItem('sessionUser');
-    if(cu){
-      profile = JSON.parse(cu);
-    }
-  }catch(e){ profile = null; }
-
-  if(!profile){
-    profile = {
-      fio: localStorage.getItem('fio') || '',
-      phone: localStorage.getItem('phone') || '',
-      email: localStorage.getItem('email') || '',
-      cardNumber: localStorage.getItem('cardNumber') || '',
-      cardType: localStorage.getItem('cardType') || '',
-      dob: localStorage.getItem('dob') || '',
-      gender: localStorage.getItem('gender') || '',
-      avatar: localStorage.getItem('avatar') || '',
-      bonusMiles: localStorage.getItem('bonusMiles') || '0',
-      username: localStorage.getItem('username') || (localStorage.getItem('fio') ? localStorage.getItem('fio').split(' ')[0] : '')
-    };
-  }
-
+  const profile = {
+    fio: localStorage.getItem('fio')||'',
+    phone: localStorage.getItem('phone')||'',
+    email: localStorage.getItem('email')||'',
+    cardNumber: localStorage.getItem('cardNumber')||'',
+    dob: localStorage.getItem('dob')||'',
+    gender: localStorage.getItem('gender')||'',
+    avatar: localStorage.getItem('avatar')||'',
+    bonusMiles: localStorage.getItem('bonusMiles')||'952',
+    cardType: localStorage.getItem('cardType')||''
+  };
   applyProfile(profile);
 }
 
 function applyProfile(p){
-  el('fioField').innerText = p.fio || '—';
-  el('dobField').innerText = p.dob || '—';
-  el('genderField').innerText = p.gender || '—';
-  el('emailField').innerText = p.email || '—';
-  el('phoneField').innerText = p.phone || '—';
-  el('cardField').innerText = p.cardNumber || '—';
-  el('fioHeader').innerText = p.fio || 'Пользователь';
-  el('phoneHeader').innerText = p.phone || '';
-  el('bonusMiles').innerText = p.bonusMiles || '—';
-  // select show
-  if(el('cardTypeSelect')) el('cardTypeSelect').value = p.cardType || '';
-  el('cardTypeField').innerText = p.cardType || '—';
-  // avatar
+  el('fioField').innerText = p.fio||'—';
+  el('dobField').innerText = p.dob||'—';
+  el('genderField').innerText = p.gender||'—';
+  el('emailField').innerText = p.email||'—';
+  el('phoneField').innerText = p.phone||'—';
+  el('cardField').innerText = p.cardNumber||'—';
+  el('fioHeader').childNodes[0].textContent = p.fio||'Пользователь';
+  el('phoneHeader').innerText = p.phone||'';
+  el('bonusMiles').innerText = p.bonusMiles||'—';
+
   if(p.avatar) el('avatar').src = p.avatar;
 
-  // карта: подставляем картинку (пути укажи свои, например images/...)
+  el('cardTypeField').innerText = p.cardType||'—';
   const img = el('cardTypeImg');
-  if(p.cardType === 'VIP'){
-    img.src = 'images/vip.png'; // <- положи сюда свою VIP картинку или укажи нужный путь
-    img.style.display = 'inline-block';
-  } else if(p.cardType === 'Classic'){
-    img.src = 'images/classic.png'; // <- путь к Classic
-    img.style.display = 'inline-block';
+  if(p.cardType==='VIP'){
+    img.src='images/vip.png';
+    img.style.display='inline-block';
+  } else if(p.cardType==='Classic'){
+    img.src='images/';
+    img.style.display='inline-block';
   } else {
-    img.style.display = 'none';
+    img.style.display='none';
   }
 }
 
-/* ---------------- inline edit ---------------- */
 function enableEdit(field){
-  const fieldMap = {
-    fio: ['fioField','fioHeader'],
-    dob: ['dobField'],
-    gender: ['genderField'],
-    email: ['emailField'],
-    phone: ['phoneField','phoneHeader'],
-    cardNumber: ['cardField']
-  };
+  const fieldMap = { fio:['fioField','fioHeader'], dob:['dobField'], gender:['genderField'], email:['emailField'], phone:['phoneField','phoneHeader'], cardNumber:['cardField'] };
   const ids = fieldMap[field]; if(!ids) return;
-  const container = el(ids[0]);
-  const current = container.innerText === '—' ? '' : container.innerText;
-  container.innerHTML = '';
+  const current = el(ids[0]).innerText==='—'?'':el(ids[0]).innerText;
   const input = document.createElement('input');
-  input.type = (field==='email') ? 'email' : (field==='phone') ? 'tel' : 'text';
-  input.value = current;
-  input.style.width = '220px';
-  const ok = document.createElement('button'); ok.innerText = 'OK'; ok.className = 'btn'; ok.style.marginLeft='8px';
-  ok.onclick = function(){
-    const val = input.value.trim() || '—';
-    ids.forEach(id => { if(el(id)) el(id).innerText = (val==='—' ? '—' : val); });
-    if(field==='fio' && el('fioHeader')) el('fioHeader').innerText = (val==='—' ? 'Пользователь' : val);
-    const storageKey = (field === 'cardNumber') ? 'cardNumber' : field;
-    localStorage.setItem(storageKey, val==='—' ? '' : val);
-    showMsg('Изменено');
-    // restore container (in case user wants to see non-input)
-  };
-  container.appendChild(input); container.appendChild(ok);
-  input.focus();
-}
-
-/* ---------------- avatar upload ---------------- */
-const avatarInput = el('avatarInput');
-if(avatarInput){
-  avatarInput.addEventListener('change', function(){
-    const f = this.files[0];
-    if(!f) return;
-    const r = new FileReader();
-    r.onload = function(e){
-      el('avatar').src = e.target.result;
-      localStorage.setItem('avatar', e.target.result);
-      showMsg('Аватар обновлён');
-      // try push to server optionally
-    };
-    r.readAsDataURL(f);
-  });
-}
-
-/* ---------------- save profile ---------------- */
-const saveBtn = el('saveProfileBtn');
-if(saveBtn){
-  saveBtn.addEventListener('click', ()=>{
-    const payload = {
-      fio: (el('fioField').innerText==='—' ? '' : el('fioField').innerText),
-      phone: (el('phoneField').innerText==='—' ? '' : el('phoneField').innerText),
-      email: (el('emailField').innerText==='—' ? '' : el('emailField').innerText),
-      cardNumber: (el('cardField').innerText==='—' ? '' : el('cardField').innerText),
-      cardType: el('cardTypeSelect') ? el('cardTypeSelect').value : (el('cardTypeField').innerText==='—' ? '' : el('cardTypeField').innerText),
-      dob: (el('dobField').innerText==='—' ? '' : el('dobField').innerText),
-      gender: (el('genderField').innerText==='—' ? '' : el('genderField').innerText),
-      homeCity: el('homeCity') ? el('homeCity').value : ''
-    };
-
-    // save locally
-    Object.keys(payload).forEach(k=>{
-      try{ localStorage.setItem(k, payload[k]||''); }catch(e){}
-    });
-    // also update unified currentUser for compatibility
-    const cur = {
-      fio: payload.fio, phone: payload.phone, email: payload.email, cardNumber: payload.cardNumber, cardType: payload.cardType, dob: payload.dob, gender: payload.gender, avatar: localStorage.getItem('avatar') || ''
-    };
-    try{ localStorage.setItem('currentUser', JSON.stringify(cur)); }catch(e){}
-
-    applyProfile(cur);
-    showMsg('Данные сохранены локально');
-
-    // try push to server if available
-    tryPush(payload, true);
-  });
-}
-
-/* ---------------- tryPush to server (optional) ---------------- */
-async function tryPush(obj, showMessage=false){
-  try{
-    const res = await fetch('/api/profile', {
-      method:'POST', credentials:'include', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(obj)
-    });
-    if(res.ok){
-      const j = await res.json();
-      if(j.ok){
-        if(showMessage) showMsg('Синхронизировано с сервером');
-        if(j.profile) applyProfile(j.profile);
-        return true;
-      } else {
-        if(showMessage) showMsg(j.error || 'Ошибка сервера');
-      }
-    }
-  }catch(e){
-    // сервер недоступен — нормально для offline
+  input.type = (field==='email')?'email':(field==='phone')?'tel':'text';
+  input.value = current; input.style.width='220px';
+  const ok = document.createElement('button'); ok.innerText='OK'; ok.className='btn'; ok.style.marginLeft='8px'; ok.onclick=saveInline;
+  const wrapper = document.createElement('div'); wrapper.appendChild(input); wrapper.appendChild(ok);
+  const container = el(ids[0]); container.innerHTML=''; container.appendChild(wrapper); input.focus();
+  function saveInline(){
+    const val = input.value.trim()||'—';
+    ids.forEach(id=>{ if(el(id)) el(id).innerText=(val==='—'?'—':val); });
+    if(field==='fio' && el('fioHeader')) el('fioHeader').childNodes[0].textContent=val==='—'?'Пользователь':val;
+    localStorage.setItem(field,val==='—'?'':val);
   }
-  return false;
 }
 
-/* ---------------- card image click (modal) ---------------- */
-const cardImg = el('cardTypeImg');
-const cardBig = el('cardBig');
-if(cardImg && cardBig){
-  cardImg.addEventListener('click', ()=>{
-    if(cardImg.style.display==='none' || !cardImg.src) return;
-    cardBig.src = cardImg.src;
-    cardBig.style.display = 'block';
-  });
-  cardBig.addEventListener('click', ()=>{ cardBig.style.display = 'none'; });
-}
+/* Avatar upload */
+el('avatarInput').addEventListener('change', function(){
+  const f = this.files[0];
+  if(!f) return;
+  const r = new FileReader();
+  r.onload = function(e){
+    const dataUrl = e.target.result;
+    el('avatar').src = dataUrl;
+    localStorage.setItem('avatar', dataUrl);
+  };
+  r.readAsDataURL(f);
+});
 
-/* ---------------- cardTypeSelect change -> update image & save ---------------- */
-const cardTypeSelect = el('cardTypeSelect');
-if(cardTypeSelect){
-  cardTypeSelect.addEventListener('change', ()=>{
-    const v = cardTypeSelect.value;
-    localStorage.setItem('cardType', v || '');
-    el('cardTypeField').innerText = v || '—';
-    if(v==='VIP') el('cardTypeImg').src = 'images/vip.png';
-    else if(v==='Classic') el('cardTypeImg').src = 'images/classic.png';
-    el('cardTypeImg').style.display = v ? 'inline-block' : 'none';
-    showMsg('Тип карты обновлён');
-  });
-}
-
-/* ---------------- logout ---------------- */
+/* Logout */
 function logout(){
-  // don't wipe profile fields, just remove session-ish markers if present
-  localStorage.removeItem('sessionUser');
-  localStorage.removeItem('currentUser');
-  // redirect to main page or login
-  window.location.href = '/';
+  // очистка всех данных профиля
+  ['fio','phone','email','cardNumber','dob','gender','avatar','bonusMiles','cardType','username','currentUser'].forEach(k=>localStorage.removeItem(k));
+  // редирект на регистрацию/вход
+  window.location.href = 'register.html';
 }
 
-/* ---------------- init ---------------- */
+/* init */
 document.addEventListener('DOMContentLoaded', ()=>{
   loadProfile();
   showTab({ currentTarget: document.querySelector('.tabs a.active'), preventDefault: ()=>{} });
-  const editNameBtn = el('editNameBtn');
-  if(editNameBtn) editNameBtn.addEventListener('click', ()=> enableEdit('fio'));
+  el('editNameBtn').addEventListener('click', ()=> enableEdit('fio'));
 });
 </script>
+
 </body>
 </html>
