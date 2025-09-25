@@ -246,7 +246,7 @@ function logout(){
   // очистка всех данных профиля
   ['fio','phone','email','cardNumber','dob','gender','avatar','bonusMiles','cardType','username','currentUser'].forEach(k=>localStorage.removeItem(k));
   // редирект на регистрацию/вход
-  window.location.href = 'register.html';
+  window.location.href = 'auth.html';
 }
 
 /* init */
