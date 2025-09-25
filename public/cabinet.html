@@ -99,7 +99,7 @@
       <input id="avatarInput" type="file" accept="image/*" style="display:none">
       <div class="user-info">
         <h1 id="fioHeader">
-          Загрузка...
+          ФИО
           <img id="cardTypeImg" class="card-badge" style="display:none" alt="Card">
           <span class="edit-icon" id="editNameBtn" title="Изменить">✏</span>
         </h1>
@@ -200,16 +200,16 @@ function applyProfile(p){
   el('cardTypeField').innerText = p.cardType||'—';
   const img = el('cardTypeImg');
   if(p.cardType==='VIP'){
-    img.src='images/vip.png';
+    img.src='images/Черный_Тренировка_Фитнес_Членская_Карта_Идентификационная_Карта .avif';
     img.style.display='inline-block';
   } else if(p.cardType==='Classic'){
-    img.src='images/';
+    img.src='images/Черный_Тренировка_Фитнес_Членская_Карта_Идентификационная_Карта (1).avif';
     img.style.display='inline-block';
   } else {
     img.style.display='none';
   }
 }
-
+  
 function enableEdit(field){
   const fieldMap = { fio:['fioField','fioHeader'], dob:['dobField'], gender:['genderField'], email:['emailField'], phone:['phoneField','phoneHeader'], cardNumber:['cardField'] };
   const ids = fieldMap[field]; if(!ids) return;
