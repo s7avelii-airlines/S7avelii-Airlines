@@ -1,28 +1,73 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Вход / Регистрация — S7avelii</title>
 <style>
-:root{--green:#9cc42f;--green-dark:#8ab12a;--bg:#f5f7fa;--card:#fff;--muted:#666;}
-*{box-sizing:border-box}
-body{margin:0;font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
-.card{width:360px;background:var(--card);border-radius:12px;box-shadow:0 6px 24px rgba(16,24,40,0.08);padding:22px;}
-h2{margin:0 0 14px 0;font-size:20px}
-input, select{width:100%;padding:10px 12px;margin-top:10px;border-radius:8px;border:1px solid #d6d8db;font-size:14px;}
-.btn{width:100%;padding:12px;border-radius:8px;border:0;background:var(--green);color:#fff;font-weight:600;cursor:pointer;margin-top:14px;}
-.btn:hover{background:var(--green-dark)}
-.link-btn{display:inline-block;margin-top:12px;text-decoration:none;color:var(--green);cursor:pointer;font-size:14px;}
-.muted{color:var(--muted);font-size:13px;margin-top:8px}
-.error{color:#d23f44;margin-top:10px;font-size:13px}
-.success{color:green;margin-top:10px;font-size:13px}
-.switch{margin-top:14px;text-align:center;font-size:14px;color:#3b3b3b;cursor:pointer}
-.hidden{display:none}
-.small{font-size:13px;color:#555;margin-top:8px}
-.card img{border-radius:6px;cursor:pointer;margin-top:10px;width:100px;height:60px;}
-#cardModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;}
-#cardModal img{max-width:90%;max-height:90%;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,0.3);}
+  :root{
+    --green:#9cc42f;
+    --green-dark:#8ab12a;
+    --bg:#f5f7fa;
+    --card:#fff;
+    --muted:#666;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter, "Segoe UI", Roboto, Arial, sans-serif;
+    background:var(--bg);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+  .card{
+    width:360px;
+    background:var(--card);
+    border-radius:12px;
+    box-shadow:0 6px 24px rgba(16,24,40,0.08);
+    padding:22px;
+  }
+  h2{margin:0 0 14px 0;font-size:20px}
+  input, select{
+    width:100%;
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid #d6d8db;
+    margin-top:10px;
+    font-size:14px;
+  }
+  .row{display:flex;gap:10px}
+  .btn{
+    width:100%;
+    padding:12px;
+    border-radius:8px;
+    border:0;
+    background:var(--green);
+    color:#fff;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:14px;
+  }
+  .btn:hover{background:var(--green-dark)}
+  .link-btn{
+    display:inline-block;
+    margin-top:12px;
+    text-decoration:none;
+    color:var(--green);
+    cursor:pointer;
+    font-size:14px;
+  }
+  .muted{color:var(--muted);font-size:13px;margin-top:8px}
+  .error{color:#d23f44;margin-top:10px;font-size:13px}
+  .success{color:green;margin-top:10px;font-size:13px}
+  .switch{margin-top:14px;text-align:center;font-size:14px;color:#3b3b3b;cursor:pointer}
+  .hidden{display:none}
+  .small{font-size:13px;color:#555;margin-top:8px}
+  .card-type-label{display:flex;align-items:center;gap:8px;margin-top:8px;}
+  .card-type-img{width:50px;height:auto;cursor:pointer;display:inline-block;}
 </style>
 </head>
 <body>
@@ -34,7 +79,6 @@ input, select{width:100%;padding:10px 12px;margin-top:10px;border-radius:8px;bor
   <form id="loginForm">
     <input id="loginFio" type="text" placeholder="ФИО" required autocomplete="name">
     <input id="loginPhone" type="tel" placeholder="Телефон" required autocomplete="tel">
-    <input id="loginEmail" type="email" placeholder="Email" required autocomplete="email">
     <button class="btn" type="submit">Войти</button>
     <div id="loginError" class="error"></div>
     <div class="small">Если аккаунт не найден — нажмите «Регистрация» и создайте его.</div>
@@ -48,11 +92,17 @@ input, select{width:100%;padding:10px 12px;margin-top:10px;border-radius:8px;bor
     <input id="regEmail" type="email" placeholder="Email" autocomplete="email">
     <input id="regPhone" type="tel" placeholder="Телефон" required autocomplete="tel">
     <input id="regCard" type="text" placeholder="Номер карты S7avelii Priority">
-    <select id="regCardType" required style="margin-top:10px;">
-      <option value="">Выберите карту</option>
-      <option value="VIP">VIP</option>
-      <option value="Classic">Classic</option>
-    </select>
+
+    <div class="small-muted">Выберите тип карты:</div>
+    <label class="card-type-label">
+      <input type="radio" name="regCardType" value="VIP"> VIP
+      <img src="vip_card.png" class="card-type-img" alt="VIP">
+    </label>
+    <label class="card-type-label">
+      <input type="radio" name="regCardType" value="Classic"> Classic
+      <img src="classic_card.png" class="card-type-img" alt="Classic">
+    </label>
+
     <button class="btn" type="submit">Зарегистрироваться</button>
     <div id="regError" class="error"></div>
     <div id="regSuccess" class="success"></div>
@@ -63,95 +113,95 @@ input, select{width:100%;padding:10px 12px;margin-top:10px;border-radius:8px;bor
   </div>
 </div>
 
-<!-- Модальное окно для карты -->
-<div id="cardModal"><img id="cardModalImg"></div>
-
 <script>
-const loginForm = document.getElementById('loginForm');
-const registerForm = document.getElementById('registerForm');
-const switchLink = document.getElementById('switchLink');
-const title = document.getElementById('title');
-const loginError = document.getElementById('loginError');
-const regError = document.getElementById('regError');
-const regSuccess = document.getElementById('regSuccess');
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
+  const switchLink = document.getElementById('switchLink');
+  const title = document.getElementById('title');
+  const loginError = document.getElementById('loginError');
+  const regError = document.getElementById('regError');
+  const regSuccess = document.getElementById('regSuccess');
 
-// Авто-редирект, если пользователь уже зарегистрирован
-window.addEventListener('DOMContentLoaded', () => {
-  const users = JSON.parse(localStorage.getItem('users')||'[]');
-  if(users.length>0) window.location.href='cabinet.html';
-});
+  // Авто-редирект, если пользователь уже есть
+  window.addEventListener('DOMContentLoaded', () => {
+    if(localStorage.getItem('fio') && localStorage.getItem('phone')){
+      window.location.href = 'cabinet.html';
+    }
+  });
 
-// Переключатель форм
-switchLink.addEventListener('click', () => {
-  const showingLogin = !loginForm.classList.contains('hidden');
-  if(showingLogin){
-    loginForm.classList.add('hidden');
-    registerForm.classList.remove('hidden');
-    title.innerText='Регистрация';
-    switchLink.innerText='Войти';
-    loginError.innerText=''; regError.innerText=''; regSuccess.innerText='';
-  } else {
-    registerForm.classList.add('hidden');
-    loginForm.classList.remove('hidden');
-    title.innerText='Вход';
-    switchLink.innerText='Зарегистрироваться';
-    loginError.innerText=''; regError.innerText=''; regSuccess.innerText='';
-  }
-});
+  // Переключение формы
+  switchLink.addEventListener('click', () => {
+    const showingLogin = !loginForm.classList.contains('hidden');
+    if(showingLogin){
+      loginForm.classList.add('hidden');
+      registerForm.classList.remove('hidden');
+      title.innerText = 'Регистрация';
+      switchLink.innerText = 'Войти';
+      loginError.innerText = '';
+      regError.innerText = '';
+      regSuccess.innerText = '';
+    } else {
+      registerForm.classList.add('hidden');
+      loginForm.classList.remove('hidden');
+      title.innerText = 'Вход';
+      switchLink.innerText = 'Зарегистрироваться';
+      loginError.innerText = '';
+      regError.innerText = '';
+      regSuccess.innerText = '';
+    }
+  });
 
-// Регистрация
-registerForm.addEventListener('submit', e=>{
-  e.preventDefault();
-  regError.innerText=''; regSuccess.innerText='';
-  const fio=document.getElementById('regFio').value.trim();
-  const dob=document.getElementById('regDob').value.trim();
-  const gender=document.getElementById('regGender').value.trim();
-  const email=document.getElementById('regEmail').value.trim();
-  const phone=document.getElementById('regPhone').value.trim();
-  const card=document.getElementById('regCard').value.trim();
-  const cardType=document.getElementById('regCardType').value;
+  // Логин
+  loginForm.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    loginError.innerText = '';
+    const fio = document.getElementById('loginFio').value.trim();
+    const phone = document.getElementById('loginPhone').value.trim();
 
-  if(!fio||!phone||!email||!cardType){ regError.innerText='Заполните ФИО, телефон, email и выберите карту'; return; }
+    if(!fio || !phone){ loginError.innerText='Заполните все поля.'; return; }
 
-  // Получаем всех пользователей
-  let users=JSON.parse(localStorage.getItem('users')||'[]');
+    const storedFio = localStorage.getItem('fio');
+    const storedPhone = localStorage.getItem('phone');
 
-  // Проверка уникальности
-  if(users.some(u=>u.fio===fio && u.phone===phone && u.email===email)){
-    regError.innerText='Пользователь уже существует'; return;
-  }
+    if(storedFio===fio && storedPhone===phone){
+      window.location.href='cabinet.html';
+    } else {
+      loginError.innerText='Неверные данные или аккаунт не найден.';
+    }
+  });
 
-  const username=fio.split(' ')[0]||fio;
-  const newUser={fio, dob, gender, email, phone, cardNumber:card, cardType, username, bonusMiles:'0'};
+  // Регистрация
+  registerForm.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    regError.innerText='';
+    regSuccess.innerText='';
 
-  users.push(newUser);
-  localStorage.setItem('users', JSON.stringify(users));
-  localStorage.setItem('currentUser', JSON.stringify(newUser));
+    const fio = document.getElementById('regFio').value.trim();
+    const dob = document.getElementById('regDob').value.trim();
+    const gender = document.getElementById('regGender').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const phone = document.getElementById('regPhone').value.trim();
+    const card = document.getElementById('regCard').value.trim();
+    const cardType = document.querySelector('input[name="regCardType"]:checked')?.value || '';
 
-  regSuccess.innerText='Регистрация успешна — переход в кабинет...';
-  setTimeout(()=>window.location.href='cabinet.html',700);
-});
+    if(!fio || !phone){ regError.innerText='Поля ФИО и телефон обязательны.'; return; }
 
-// Вход
-loginForm.addEventListener('submit', e=>{
-  e.preventDefault();
-  loginError.innerText='';
-  const fio=document.getElementById('loginFio').value.trim();
-  const phone=document.getElementById('loginPhone').value.trim();
-  const email=document.getElementById('loginEmail').value.trim();
-  let users=JSON.parse(localStorage.getItem('users')||'[]');
-  const user=users.find(u=>u.fio===fio && u.phone===phone && u.email===email);
-  if(user){
-    localStorage.setItem('currentUser', JSON.stringify(user));
-    window.location.href='cabinet.html';
-  } else loginError.innerText='Неверные данные или аккаунт не найден.';
-});
+    // Сохраняем данные
+    localStorage.setItem('fio',fio);
+    if(dob) localStorage.setItem('dob',dob);
+    if(gender) localStorage.setItem('gender',gender);
+    if(email) localStorage.setItem('email',email);
+    localStorage.setItem('phone',phone);
+    if(card) localStorage.setItem('cardNumber',card);
+    if(cardType) localStorage.setItem('cardType',cardType);
 
-// Модальное окно для карты
-const cardModal=document.getElementById('cardModal');
-const cardModalImg=document.getElementById('cardModalImg');
-cardModal.addEventListener('click', ()=>cardModal.style.display='none');
+    // username
+    const username = fio.split(' ')[0] || fio;
+    localStorage.setItem('username',username);
+
+    regSuccess.innerText='Регистрация прошла успешно — выполняется переход в личный кабинет...';
+    setTimeout(()=>{ window.location.href='cabinet.html'; },700);
+  });
 </script>
 </body>
 </html>
-
