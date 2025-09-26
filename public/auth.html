@@ -1,165 +1,171 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Вход / Регистрация — S7avelii Airlines</title>
-<style>
-  :root{
-    --green:#9cc42f;
-    --green-dark:#8ab12a;
-    --bg:#f5f7fa;
-    --card:#fff;
-    --muted:#666;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:url("images/Blue Modern Business Proposal Presentation.avif") no-repeat center center/cover;
-    min-height:100vh;
-  }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Вход / Регистрация — S7avelii</title>
+  <style>
+    :root {
+      --green:#9cc42f;
+      --green-dark:#8ab12a;
+      --bg:#f5f7fa;
+      --card:#fff;
+      --muted:#666;
+    }
 
-  /* ---------- HEADER ---------- */
-  header {
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 20px;
-    height:70px;
-    border-bottom:1px solid #ccc;
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    z-index:1000;
-    background:#fff;
-  }
-  .logo-img{height:50px;width:auto;cursor:pointer}
-  nav{display:flex}
-  nav ul{
-    display:flex;gap:30px;margin:0;padding:0;list-style:none
-  }
-  nav li{position:relative}
-  nav a{
-    position:relative;color:#000;text-decoration:none;font-size:15px;padding:25px 0;display:block
-  }
-  nav a::after{
-    content:"";position:absolute;bottom:0;left:0;width:0;height:2px;background-color:var(--green);transition:width 0.3s ease
-  }
-  nav li:hover>a::after{width:100%}
-  .dropdown{
-    position:absolute;top:100%;left:0;background:#fff;padding:16px;border-top:2px solid var(--green);
-    box-shadow:0 6px 16px rgba(0,0,0,0.15);min-width:200px;z-index:999;
-    opacity:0;transform:translateY(-10px);pointer-events:none;transition:all 0.3s ease;
-  }
-  nav li:hover .dropdown{opacity:1;transform:translateY(0);pointer-events:auto}
-  .dropdown a{display:block;padding:8px 0;color:#000;font-size:14px;text-decoration:none}
-  .dropdown a:hover{color:var(--green)}
-  .right-menu{display:flex;align-items:center;gap:16px;font-size:15px}
-  .icon-search{width:20px;height:20px;stroke:black;stroke-width:2;cursor:pointer}
-  .flag{width:20px;height:14px;border-radius:2px;overflow:hidden;box-shadow:0 0 2px rgba(0,0,0,0.15)}
-  .flag img{width:100%;height:100%;object-fit:cover}
-  #userArea a{padding:8px 14px;border:1px solid #7ad30d;border-radius:6px;color:#6dd808;text-decoration:none;font-size:14px}
-  .burger{display:none;flex-direction:column;justify-content:center;width:26px;height:20px;cursor:pointer}
-  .burger span{height:3px;background:#000;margin:3px 0;border-radius:2px;transition:0.3s}
+    * { box-sizing:border-box; }
 
-  /* ---------- AUTH CARD ---------- */
-  main{display:flex;align-items:center;justify-content:center;min-height:100vh;padding-top:90px}
-  .card{
-    width:360px;background:var(--card);border-radius:12px;
-    box-shadow:0 6px 24px rgba(16,24,40,0.15);padding:22px
-  }
-  h2{margin:0 0 14px 0;font-size:20px}
-  input, select{
-    width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d6d8db;margin-top:10px;font-size:14px
-  }
-  .btn{width:100%;padding:12px;border-radius:8px;border:0;background:var(--green);color:#fff;font-weight:600;cursor:pointer;margin-top:14px}
-  .btn:hover{background:var(--green-dark)}
-  .error{color:#d23f44;margin-top:10px;font-size:13px}
-  .success{color:green;margin-top:10px;font-size:13px}
-  .switch{margin-top:14px;text-align:center;font-size:14px;color:#3b3b3b;cursor:pointer}
-  .hidden{display:none}
-  .small{font-size:13px;color:#555;margin-top:8px}
-  .card-type-label{display:flex;align-items:center;gap:8px;margin-top:8px;}
-  .card-type-img{width:50px;height:auto;cursor:pointer}
+    body {
+      margin:0;
+      font-family: Inter, Arial, sans-serif;
+      min-height:100vh;
+      background: url("images/Blue Modern Business Proposal Presentation.avif") no-repeat center center fixed;
+      background-size: cover;
+    }
 
-  /* ---------- MOBILE ADAPTIVE ---------- */
-  @media(max-width:900px){
-    nav{display:none;position:absolute;top:70px;left:0;width:100%;background:#fff;flex-direction:column;border-top:1px solid #ccc;max-height:0;overflow:hidden;transition:max-height 0.4s ease}
-    nav.active{display:flex;max-height:500px}
-    nav ul{flex-direction:column;gap:0}
-    nav li{border-bottom:1px solid #eee}
-    nav a{padding:14px 20px}
-    .dropdown{position:static;opacity:1;transform:none;box-shadow:none;border:none;padding:0 20px 10px;display:none}
-    nav li.open .dropdown{display:block}
-    .right-menu{display:none}
-    .burger{display:flex}
-    main{padding:100px 20px}
-  }
-</style>
+    /* ===== HEADER ===== */
+    header {
+      display:flex;
+      align-items:center;
+      padding:0 20px;
+      height:70px;
+      border-bottom:1px solid #ccc;
+      position:fixed;
+      top:0; left:0;
+      width:100%;
+      z-index:1000;
+      background:#fff;
+    }
+
+    .logo-img {
+      height:50px;
+      width:auto;
+    }
+
+    nav { flex-grow:1; }
+    nav ul {
+      display:flex;
+      gap:20px;
+      list-style:none;
+      margin:0; padding:0;
+    }
+    nav li { position:relative; }
+    nav a {
+      text-decoration:none;
+      color:#000;
+      font-size:15px;
+      padding:25px 0;
+    }
+    nav a::after {
+      content:"";
+      position:absolute;
+      bottom:0; left:0;
+      width:0; height:2px;
+      background:var(--green);
+      transition:.3s;
+    }
+    nav li:hover > a::after { width:100%; }
+
+    .dropdown {
+      position:absolute;
+      top:100%; left:0;
+      background:#fff;
+      padding:12px;
+      border-top:2px solid var(--green);
+      box-shadow:0 6px 16px rgba(0,0,0,.15);
+      min-width:180px;
+      opacity:0; transform:translateY(-10px);
+      pointer-events:none;
+      transition:.3s;
+    }
+    nav li:hover .dropdown {
+      opacity:1; transform:translateY(0);
+      pointer-events:auto;
+    }
+    .dropdown a { display:block; padding:6px 0; font-size:14px; }
+
+    .right-menu {
+      display:flex; align-items:center; gap:12px;
+    }
+    .right-menu a {
+      padding:6px 10px;
+      border:1px solid var(--green);
+      border-radius:6px;
+      color:var(--green);
+      text-decoration:none;
+      font-size:14px;
+    }
+
+    /* ===== MAIN ===== */
+    main {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:90px 20px 40px; /* отступ под шапку */
+      min-height:100vh;
+    }
+
+    .card {
+      width:360px;
+      background:rgba(255,255,255,0.92);
+      border-radius:12px;
+      box-shadow:0 6px 24px rgba(16,24,40,0.25);
+      padding:22px;
+    }
+
+    h2 {margin:0 0 14px;font-size:20px;}
+    input {
+      width:100%; padding:10px 12px;
+      border-radius:8px; border:1px solid #d6d8db;
+      margin-top:10px; font-size:14px;
+    }
+    .btn {
+      width:100%; padding:12px;
+      border-radius:8px; border:0;
+      background:var(--green); color:#fff;
+      font-weight:600; cursor:pointer;
+      margin-top:14px;
+    }
+    .btn:hover { background:var(--green-dark); }
+
+    .error { color:#d23f44; margin-top:10px; font-size:13px; }
+    .success { color:green; margin-top:10px; font-size:13px; }
+    .switch { margin-top:14px; text-align:center; font-size:14px; cursor:pointer; }
+    .hidden { display:none; }
+
+    /* ===== MOBILE ===== */
+    @media(max-width:768px){
+      nav ul { flex-direction:column; gap:10px; }
+      header { flex-wrap:wrap; height:auto; padding:10px; }
+      .card { width:100%; }
+    }
+  </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">
-    <a href="index.html">
-      <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
-    </a>
-  </div>
-
+  <a href="index.html"><img src="images/1757683264306.avif" class="logo-img" alt="S7avelii" /></a>
   <nav>
     <ul>
       <li>
-        <a href="index.html">Покупка и управление</a>
+        <a href="index.html">Покупка</a>
         <div class="dropdown">
           <a href="bilet.html">Купить билет</a>
           <a href="auth.html">Управление бронированием</a>
-          <a href="arrivel.html">Направления</a>
-          <a href="HOTEL.html">Отели</a>
-          <a href="class.html">Выбор класса</a>
         </div>
       </li>
       <li>
-        <a href="priority.html">S7avelii Priority</a>
+        <a href="priority.html">Priority</a>
         <div class="dropdown">
           <a href="priority.html">О программе</a>
           <a href="https://t.me/s7aveliihelper">Как копить</a>
         </div>
       </li>
-      <li>
-        <a href="#">Информация</a>
-        <div class="dropdown">
-          <a href="body.html">О нас</a>
-          <a href="office.html">Представительство</a>
-          <a href="plane.html">Наш флот</a>
-          <a href="eat.html">Питание</a>
-          <a href="https://t.me/s7aveliihelper">Контакты</a>
-        </div>
-      </li>
-      <li><a href="busines.html">Бизнесу</a></li>
-      <li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
+      <li><a href="body.html">О нас</a></li>
     </ul>
   </nav>
-
   <div class="right-menu">
-    <button aria-label="Search">
-      <svg class="icon-search" fill="none" viewBox="0 0 24 24">
-        <circle cx="11" cy="11" r="7"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
-    </button>
-    <button>RUB</button>
-    <div class="flag" title="Russian flag">
-      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" />
-    </div>
-    <div id="userArea">
-      <a href="auth.html">Войти</a>
-    </div>
-  </div>
-
-  <div class="burger" id="burger">
-    <span></span><span></span><span></span>
+    <a href="auth.html">Войти</a>
   </div>
 </header>
 
@@ -173,145 +179,84 @@
       <input id="loginPhone" type="tel" placeholder="Телефон" required autocomplete="tel">
       <button class="btn" type="submit">Войти</button>
       <div id="loginError" class="error"></div>
-      <div class="small">Если аккаунт не найден — нажмите «Регистрация» и создайте его.</div>
     </form>
 
     <!-- Форма регистрации -->
-    <form id="registerForm" class="hidden" autocomplete="on">
-      <input id="regFio" type="text" placeholder="ФИО" required autocomplete="name">
-      <input id="regDob" type="text" placeholder="Дата рождения (ДД.MM.ГГГГ)" autocomplete="bday">
-      <input id="regGender" type="text" placeholder="Пол">
-      <input id="regEmail" type="email" placeholder="Email" autocomplete="email">
-      <input id="regPhone" type="tel" placeholder="Телефон" required autocomplete="tel">
-      <input id="regCard" type="text" placeholder="Номер карты S7avelii Priority">
-
-      <div class="small">Выберите тип карты:</div>
-      <label class="card-type-label">
-        <input type="radio" name="regCardType" value="VIP"> VIP
-        <img src="images/vip_card.png" class="card-type-img" alt="VIP">
-      </label>
-      <label class="card-type-label">
-        <input type="radio" name="regCardType" value="Classic"> Classic
-        <img src="images/classic_card.png" class="card-type-img" alt="Classic">
-      </label>
-
+    <form id="registerForm" class="hidden">
+      <input id="regFio" type="text" placeholder="ФИО" required>
+      <input id="regEmail" type="email" placeholder="Email">
+      <input id="regPhone" type="tel" placeholder="Телефон" required>
       <button class="btn" type="submit">Зарегистрироваться</button>
       <div id="regError" class="error"></div>
       <div id="regSuccess" class="success"></div>
     </form>
 
-    <div class="switch" id="switch">
-      Нет аккаунта? <span id="switchLink" style="color:var(--green);text-decoration:underline;cursor:pointer">Зарегистрироваться</span>
+    <div class="switch">
+      Нет аккаунта? <span id="switchLink" style="color:var(--green);text-decoration:underline;">Зарегистрироваться</span>
     </div>
   </div>
 </main>
 
 <script>
-  // ---- burger menu ----
-  const burger = document.getElementById('burger');
-  const nav = document.querySelector('nav');
-  burger.addEventListener('click', () => {
-    nav.classList.toggle('active');
-  });
-  const navItems = nav.querySelectorAll('li > a');
-  navItems.forEach(link => {
-    link.addEventListener('click', e => {
-      const parentLi = link.parentElement;
-      if(parentLi.querySelector('.dropdown') && window.innerWidth <= 900){
-        e.preventDefault();
-        parentLi.classList.toggle('open');
-      }
-    });
-  });
+  const loginForm=document.getElementById('loginForm');
+  const registerForm=document.getElementById('registerForm');
+  const switchLink=document.getElementById('switchLink');
+  const title=document.getElementById('title');
+  const loginError=document.getElementById('loginError');
+  const regError=document.getElementById('regError');
+  const regSuccess=document.getElementById('regSuccess');
 
-  // ---- auth logic ----
-  const loginForm = document.getElementById('loginForm');
-  const registerForm = document.getElementById('registerForm');
-  const switchLink = document.getElementById('switchLink');
-  const title = document.getElementById('title');
-  const loginError = document.getElementById('loginError');
-  const regError = document.getElementById('regError');
-  const regSuccess = document.getElementById('regSuccess');
-
-  // редирект если уже авторизован
-  window.addEventListener('DOMContentLoaded', () => {
-    if(localStorage.getItem('fio') && localStorage.getItem('phone')){
-      window.location.href = 'cabinet.html';
+  // Авто-редирект
+  window.addEventListener('DOMContentLoaded',()=>{
+    if(localStorage.getItem('fio')&&localStorage.getItem('phone')){
+      window.location.href='cabinet.html';
     }
   });
 
-  // переключение форм
-  switchLink.addEventListener('click', () => {
-    const showingLogin = !loginForm.classList.contains('hidden');
+  // Переключение
+  switchLink.addEventListener('click',()=>{
+    const showingLogin=!loginForm.classList.contains('hidden');
     if(showingLogin){
       loginForm.classList.add('hidden');
       registerForm.classList.remove('hidden');
-      title.innerText = 'Регистрация';
-      switchLink.innerText = 'Войти';
-      loginError.innerText = '';
-      regError.innerText = '';
-      regSuccess.innerText = '';
+      title.innerText='Регистрация';
+      switchLink.innerText='Войти';
+      loginError.innerText=''; regError.innerText=''; regSuccess.innerText='';
     } else {
       registerForm.classList.add('hidden');
       loginForm.classList.remove('hidden');
-      title.innerText = 'Вход';
-      switchLink.innerText = 'Зарегистрироваться';
-      loginError.innerText = '';
-      regError.innerText = '';
-      regSuccess.innerText = '';
+      title.innerText='Вход';
+      switchLink.innerText='Зарегистрироваться';
+      loginError.innerText=''; regError.innerText=''; regSuccess.innerText='';
     }
   });
 
-  // логин
-  loginForm.addEventListener('submit', (e)=>{
+  // Логин
+  loginForm.addEventListener('submit',(e)=>{
     e.preventDefault();
-    loginError.innerText = '';
-    const fio = document.getElementById('loginFio').value.trim();
-    const phone = document.getElementById('loginPhone').value.trim();
-
-    if(!fio || !phone){ loginError.innerText='Заполните все поля.'; return; }
-
-    const storedFio = localStorage.getItem('fio');
-    const storedPhone = localStorage.getItem('phone');
-
-    if(storedFio===fio && storedPhone===phone){
+    loginError.innerText='';
+    const fio=document.getElementById('loginFio').value.trim();
+    const phone=document.getElementById('loginPhone').value.trim();
+    if(!fio||!phone){ loginError.innerText='Заполните все поля.'; return; }
+    if(localStorage.getItem('fio')===fio && localStorage.getItem('phone')===phone){
       window.location.href='cabinet.html';
     } else {
       loginError.innerText='Неверные данные или аккаунт не найден.';
     }
   });
 
-  // регистрация
+  // Регистрация
   registerForm.addEventListener('submit',(e)=>{
     e.preventDefault();
-    regError.innerText='';
-    regSuccess.innerText='';
-
-    const fio = document.getElementById('regFio').value.trim();
-    const dob = document.getElementById('regDob').value.trim();
-    const gender = document.getElementById('regGender').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const phone = document.getElementById('regPhone').value.trim();
-    const card = document.getElementById('regCard').value.trim();
-    const cardType = document.querySelector('input[name="regCardType"]:checked')?.value || '';
-
-    if(!fio || !phone){ regError.innerText='Поля ФИО и телефон обязательны.'; return; }
-
+    regError.innerText=''; regSuccess.innerText='';
+    const fio=document.getElementById('regFio').value.trim();
+    const phone=document.getElementById('regPhone').value.trim();
+    if(!fio||!phone){ regError.innerText='Поля ФИО и телефон обязательны.'; return; }
     localStorage.setItem('fio',fio);
-    if(dob) localStorage.setItem('dob',dob);
-    if(gender) localStorage.setItem('gender',gender);
-    if(email) localStorage.setItem('email',email);
     localStorage.setItem('phone',phone);
-    if(card) localStorage.setItem('cardNumber',card);
-    if(cardType) localStorage.setItem('cardType',cardType);
-
-    const username = fio.split(' ')[0] || fio;
-    localStorage.setItem('username',username);
-
-    regSuccess.innerText='Регистрация прошла успешно — выполняется переход в личный кабинет...';
+    regSuccess.innerText='Регистрация успешна! Перенаправляем...';
     setTimeout(()=>{ window.location.href='cabinet.html'; },700);
   });
 </script>
 </body>
 </html>
-
