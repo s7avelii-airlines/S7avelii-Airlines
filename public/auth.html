@@ -106,12 +106,31 @@
     }
 
     .card {
-      width:360px;
-      background:rgba(255,255,255,0.92);
-      border-radius:12px;
-      box-shadow:0 6px 24px rgba(16,24,40,0.25);
-      padding:22px;
-    }
+  width: 100%;
+  max-width: 360px;
+  background: rgba(255,255,255,0.92);
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(16,24,40,0.25);
+  padding: 22px;
+}
+
+/* Чтобы форма помещалась на очень маленьких экранах */
+@media(max-width: 480px) {
+  main {
+    padding: 80px 10px 20px; /* меньше отступы сверху и по бокам */
+  }
+  .card {
+    padding: 16px;
+  }
+  input {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+  .btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
 
     h2 {margin:0 0 14px;font-size:20px;}
     input {
@@ -154,19 +173,7 @@
           <a href="auth.html">Управление бронированием</a>
         </div>
       </li>
-      <li>
-        <a href="priority.html">Priority</a>
-        <div class="dropdown">
-          <a href="priority.html">О программе</a>
-          <a href="https://t.me/s7aveliihelper">Как копить</a>
-        </div>
-      </li>
-      <li><a href="body.html">О нас</a></li>
-    </ul>
   </nav>
-  <div class="right-menu">
-    <a href="auth.html">Войти</a>
-  </div>
 </header>
 
 <main>
