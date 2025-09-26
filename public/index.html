@@ -368,7 +368,7 @@ document.addEventListener("DOMContentLoaded", () => {
   position: absolute;
   left: 50%;
   transform: translateX(-50%) scale(1.1); /* сразу и центр, и масштаб */
-  bottom: -160px;          /* прижимаем к низу слайдера, чуть нависает */
+  bottom: 113px;          /* прижимаем к низу слайдера, чуть нависает */
   max-width: 950px;
   width: 90%;
   background: #fff;
@@ -494,17 +494,61 @@ document.addEventListener("DOMContentLoaded", () => {
 <body>
 
 <div class="hero">
- <!-- Слайдер -->
- <div class="relative w-full h-[372px] overflow-hidden">
-  <div id="slider" class="absolute w-full h-full">
-    <img src="images/Beige Black Minimalist Event Music Festival Concert Ticket (4).avif" class="w-full h-full object-cover absolute" style="opacity: 1; transition: opacity 1s;">
-    <img src="images/Beige Black Minimalist Event Music Festival Concert Ticket (4) (1).avif" class="w-full h-full object-cover absolute" style="opacity: 0; transition: opacity 1s;">
-    <img src="images/Beige Black Minimalist Event Music Festival Concert Ticket (2).avif" class="w-full h-full object-cover absolute" style="opacity: 0; transition: opacity 1s;">
-    <img src="images/Beige Black Minimalist Event Music Festival Concert Ticket (1).avif" class="w-full h-full object-cover absolute" style="opacity: 0; transition: opacity 1s;">
+  <!-- Слайдер -->
+  <div class="relative w-full h-[372px] overflow-hidden">
+    <div id="slider" class="absolute w-full h-full">
+      <img src="images/Beige Black Minimalist Event Music Festival Concert Ticket (4).avif" class="w-full h-full object-cover absolute" style="opacity: 1; transition: opacity 1s;">
+      <img src="images/Beige Black Minimalist Event Music Festival Concert Ticket (4) (1).avif" class="w-full h-full object-cover absolute" style="opacity: 0; transition: opacity 1s;">
+      <img src="images/Beige Black Minimalist Event Music Festival Concert Ticket (2).avif" class="w-full h-full object-cover absolute" style="opacity: 0; transition: opacity 1s;">
+      <img src="images/Beige Black Minimalist Event Music Festival Concert Ticket (1).avif" class="w-full h-full object-cover absolute" style="opacity: 0; transition: opacity 1s;">
+    </div>
+
+    <!-- Стрелки -->
+    <button id="prev" class="absolute top-1/2 left-4 -translate-y-1/2 bg-black/50 text-white px-3 py-2 rounded-full hover:bg-black transition">‹</button>
+    <button id="next" class="absolute top-1/2 right-4 -translate-y-1/2 bg-black/50 text-white px-3 py-2 rounded-full hover:bg-black transition">›</button>
+
+    <!-- Точки -->
+    <div id="dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2"></div>
   </div>
+</div>
+
+<script>
+  const slides = document.querySelectorAll("#slider img");
+  const dotsContainer = document.getElementById("dots");
+  let current = 0;
+
+  // Создаем точки
+  slides.forEach((_, i) => {
+    const dot = document.createElement("button");
+    dot.className = "w-3 h-3 rounded-full bg-white/50 hover:bg-white transition";
+    if (i === 0) dot.classList.add("bg-white");
+    dot.addEventListener("click", () => showSlide(i));
+    dotsContainer.appendChild(dot);
+  });
+
+  const dots = dotsContainer.querySelectorAll("button");
+
+  function showSlide(index) {
+    slides[current].style.opacity = 0;
+    dots[current].classList.remove("bg-white");
+    dots[current].classList.add("bg-white/50");
+
+    current = (index + slides.length) % slides.length;
+
+    slides[current].style.opacity = 1;
+    dots[current].classList.add("bg-white");
+    dots[current].classList.remove("bg-white/50");
+  }
+
+  document.getElementById("prev").addEventListener("click", () => showSlide(current - 1));
+  document.getElementById("next").addEventListener("click", () => showSlide(current + 1));
+
+   // Автопрокрутка (можно убрать если не нужно)
+  setInterval(() => showSlide(current + 1), 5000);
+  </script>
 
 <!-- Окно бронирования --> 
-   <div class="absolute top-[110%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-xl rounded-xl p-6 w-11/12 md:w-3/4 lg:w-1/2"> 
+   <div class="absolute top-[70%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-xl rounded-xl p-6 w-11/12 md:w-3/4 lg:w-1/2"> 
      <h2 class="text-xl font-semibold mb-4"></h2> 
      <form class="grid grid-cols-1 md:grid-cols-2 gap-4"> 
        <select class="border p-2 rounded"> 
@@ -512,7 +556,6 @@ document.addEventListener("DOMContentLoaded", () => {
    </div> 
  </div> 
 <section class="max-w-6xl mx-auto mt-10">
-
   <!-- ВСТАВЛЕННОЕ ОКНО БРОНИРОВАНИЯ -->
 
   <div class="widget" role="region" aria-label="Окно бронирования">
