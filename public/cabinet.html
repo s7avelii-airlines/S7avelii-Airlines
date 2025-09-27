@@ -12,120 +12,64 @@
       --card: #ffffff;
       --accent: #9cc42f;
       --muted: #8b97a6;
-      --radius: 14px;
       --container: 1180px;
     }
-    body {
-      margin: 0;
-      font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
-      background: var(--bg);
-      color: #1f2937;
-    }
-    .page { max-width: var(--container); margin: 28px auto; padding: 0 20px; }
-
-    /* Header */
-    .full-header {
-      width: 100%;
-      background: var(--card);
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      padding: 28px 36px;
-      border-radius: 12px;
-      box-shadow: 0 6px 20px rgba(16,24,40,0.06);
-      flex-wrap: wrap;
-    }
-    .avatar-wrap { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
-    .avatar {
-      width: 118px; height: 118px; border-radius: 999px; object-fit: cover;
-      border: 4px solid #fff; box-shadow: 0 6px 18px rgba(16,24,40,0.06); cursor: pointer;
-    }
-    .user-info h1 { margin: 0; font-size: 26px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .user-info h1 .edit-icon { font-size: 14px; background: #eef9d6; border-radius: 999px; padding: 6px 8px; cursor: pointer; color: #1f3a07; }
-    .card-badge {
-      width: 60px;
-      height: auto;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .sub { color: var(--muted); margin-top: 6px; }
-
-    /* Stats */
-    .stats { margin-left: auto; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
-    .stat { background: linear-gradient(180deg,#fff,#fcfff0); padding: 14px 18px; border-radius: 12px; min-width: 110px; text-align: center; border: 1px solid rgba(0,0,0,0.04); }
-    .stat .num { font-weight: 700; font-size: 20px; color: #111827; }
-    .stat .label { font-size: 12px; color: var(--muted); margin-top: 6px; }
-
-    /* Tabs */
-    .tabs { display: flex; gap: 14px; margin-top: 18px; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.04); overflow-x: auto; }
-    .tabs a { padding: 10px 14px; text-decoration: none; color: #495057; border-radius: 8px; white-space: nowrap; }
-    .tabs a.active { color: var(--accent); background: rgba(156,196,47,0.06); }
-
-    /* Main layout */
-    .grid { display: grid; grid-template-columns: 1fr 380px; gap: 22px; margin-top: 18px; }
-    .card { background: var(--card); border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(16,24,40,0.04); border: 1px solid rgba(0,0,0,0.03); }
-    .card h3 { margin: 0 0 12px 0; font-size: 18px; }
-    .field { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-top: 1px solid rgba(0,0,0,0.03); }
-    .field:first-of-type { border-top: 0; }
-    .label { color: var(--muted); font-size: 14px; }
-    .value { font-size: 15px; max-width: 60%; word-wrap: break-word; }
-    .edit-btn { background: transparent; border: none; color: var(--accent); cursor: pointer; font-weight: 600; }
-    .small-muted { color: var(--muted); font-size: 13px; margin-top: 8px; }
-
-    /* Preferences */
-    .pref { margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(0,0,0,0.03); }
-
-    /* Buttons and inputs */
-    .btn { display: inline-block; background: var(--accent); color: white; padding: 9px 14px; border-radius: 10px; border: none; cursor: pointer; }
-    input[type="text"], input[type="email"], input[type="tel"], select { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e6edf3; }
-
-    /* Responsive */
-    @media (max-width: 980px) {
-      .grid { grid-template-columns: 1fr; }
-      .stats { margin-left: 0; margin-top: 16px; flex-wrap: wrap; }
-      .full-header { flex-direction: column; align-items: flex-start; gap: 16px; }
-    }
+    body { margin:0; font-family:Inter,Arial,sans-serif; background:var(--bg); color:#1f2937; }
+    .page { max-width:var(--container); margin:28px auto; padding:0 20px; }
+    .full-header { width:100%; background:var(--card); display:flex; align-items:center; gap:24px; padding:28px 36px; border-radius:12px; box-shadow:0 6px 20px rgba(16,24,40,0.06); flex-wrap:wrap; }
+    .avatar-wrap { display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+    .avatar { width:118px; height:118px; border-radius:999px; object-fit:cover; border:4px solid #fff; box-shadow:0 6px 18px rgba(16,24,40,0.06); cursor:pointer; }
+    .user-info h1 { margin:0; font-size:26px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+    .edit-icon { font-size:14px; background:#eef9d6; border-radius:999px; padding:6px 8px; cursor:pointer; color:#1f3a07; }
+    .card-badge { width:60px; border-radius:8px; display:none; }
+    .sub { color:var(--muted); margin-top:6px; }
+    .stats { margin-left:auto; display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+    .stat { background:linear-gradient(180deg,#fff,#fcfff0); padding:14px 18px; border-radius:12px; min-width:110px; text-align:center; border:1px solid rgba(0,0,0,0.04); }
+    .num { font-weight:700; font-size:20px; color:#111827; }
+    .label { font-size:12px; color:var(--muted); margin-top:6px; }
+    .tabs { display:flex; gap:14px; margin-top:18px; padding:12px 0; border-bottom:1px solid rgba(0,0,0,0.04); overflow-x:auto; }
+    .tabs a { padding:10px 14px; text-decoration:none; color:#495057; border-radius:8px; white-space:nowrap; }
+    .tabs a.active { color:var(--accent); background:rgba(156,196,47,0.06); }
+    .grid { display:grid; grid-template-columns:1fr 380px; gap:22px; margin-top:18px; }
+    .card { background:var(--card); border-radius:12px; padding:20px; box-shadow:0 4px 12px rgba(16,24,40,0.04); border:1px solid rgba(0,0,0,0.03); }
+    .card h3 { margin:0 0 12px; font-size:18px; }
+    .field { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-top:1px solid rgba(0,0,0,0.03); }
+    .field:first-of-type { border-top:0; }
+    .label { color:var(--muted); font-size:14px; }
+    .value { font-size:15px; max-width:60%; word-wrap:break-word; }
+    .edit-btn { background:transparent; border:none; color:var(--accent); cursor:pointer; font-weight:600; }
+    .small-muted { color:var(--muted); font-size:13px; margin-top:8px; }
+    .btn { display:inline-block; background:var(--accent); color:#fff; padding:9px 14px; border-radius:10px; border:none; cursor:pointer; }
+    @media (max-width:980px){ .grid{grid-template-columns:1fr;} .stats{margin-left:0;margin-top:16px;} .full-header{flex-direction:column;align-items:flex-start;gap:16px;} }
   </style>
 </head>
 <body>
-
 <div class="page">
-  <!-- Header -->
   <div class="full-header">
     <div class="avatar-wrap">
-      <label for="avatarInput" title="Нажмите, чтобы поменять аватар">
-        <img id="avatar" class="avatar" src="https://via.placeholder.com/150" alt="avatar">
-      </label>
+      <label for="avatarInput"><img id="avatar" class="avatar" src="https://via.placeholder.com/150" alt="avatar"></label>
       <input id="avatarInput" type="file" accept="image/*" style="display:none">
       <div class="user-info">
-        <h1 id="fioHeader">
-          ФИО
-          <img id="cardTypeImg" class="card-badge" style="display:none" alt="Card">
-          <span class="edit-icon" id="editNameBtn" title="Изменить">✏</span>
+        <h1 id="fioHeader">Пользователь
+          <img id="cardTypeImg" class="card-badge" alt="Card">
+          <span class="edit-icon" id="editNameBtn">✏</span>
         </h1>
         <div class="sub" id="phoneHeader">—</div>
       </div>
     </div>
-
-    <div class="stats" aria-hidden="false">
-      <div class="stat">
-        <div class="num" id="bonusMiles">—</div>
-        <div class="label">бонусные мили</div>
-      </div>
+    <div class="stats">
+      <div class="stat"><div class="num" id="bonusMiles">—</div><div class="label">бонусные мили</div></div>
     </div>
   </div>
 
-  <!-- Tabs -->
-  <div class="tabs" role="tablist">
+  <div class="tabs">
     <a href="#" class="active" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
     <a href="#" data-tab="milesTab" onclick="showTab(event)">Мои мили</a>
     <a href="#" data-tab="shopTab" onclick="showTab(event)">S7avelii Shop</a>
     <a href="#" data-tab="settingsTab" onclick="showTab(event)">Настройки</a>
   </div>
 
-  <!-- Main grid -->
   <div class="grid">
-    <!-- Left column -->
     <div>
       <div id="profileTab" class="card">
         <h3>Персональные данные</h3>
@@ -135,16 +79,14 @@
         <h3 style="margin-top:18px">Контакты</h3>
         <div class="field"><div><div class="label">Email</div><div class="value" id="emailField">—</div></div><button class="edit-btn" onclick="enableEdit('email')">Изменить</button></div>
         <div class="field"><div><div class="label">Телефон</div><div class="value" id="phoneField">—</div></div><button class="edit-btn" onclick="enableEdit('phone')">Изменить</button></div>
-        <div class="field"><div><div class="label">Номер карты</div><div class="value" id="cardField">—</div></div><button class="edit-btn" onclick="enableEdit('cardNumber')">Изменить</button></div>
+        <div class="field"><div><div class="label">Номер карты</div><div class="value" id="cardField">—</div></div><button class="edit-btn" onclick="enableEdit('card')">Изменить</button></div>
         <div class="field"><div><div class="label">Тип карты</div><div class="value" id="cardTypeField">—</div></div></div>
       </div>
     </div>
-
-    <!-- Right column -->
     <div>
       <div class="card">
         <h3>Краткая информация</h3>
-        <div style="margin-top:12px" class="small-muted">Основные действия:</div>
+        <div class="small-muted" style="margin-top:12px">Основные действия:</div>
         <div style="margin-top:18px;display:flex;flex-direction:column;gap:12px">
           <button onclick="goTo('profileTab')" class="edit-btn">Редактировать профиль</button>
           <button onclick="goTo('milesTab')" class="edit-btn">Посмотреть мили</button>
@@ -164,98 +106,71 @@ function showTab(evt){
   document.querySelectorAll('.tabs a').forEach(a=>a.classList.remove('active'));
   if(evt) evt.currentTarget.classList.add('active');
   ['profileTab','milesTab','shopTab','settingsTab'].forEach(id=>{
-    const elc = el(id);
-    if(elc) elc.style.display = (id===tabId ? 'block' : 'none');
+    const elc = el(id); if(elc) elc.style.display=(id===tabId?'block':'none');
   });
 }
 
-function loadProfile(){
-  const profile = {
-    fio: localStorage.getItem('fio')||'',
-    phone: localStorage.getItem('phone')||'',
-    email: localStorage.getItem('email')||'',
-    cardNumber: localStorage.getItem('cardNumber')||'',
-    dob: localStorage.getItem('dob')||'',
-    gender: localStorage.getItem('gender')||'',
-    avatar: localStorage.getItem('avatar')||'',
-    bonusMiles: localStorage.getItem('bonusMiles')||'952',
-    cardType: localStorage.getItem('cardType')||''
-  };
-  applyProfile(profile);
+async function loadProfile(){
+  try {
+    const res = await fetch("/api/profile",{credentials:"include"});
+    if(!res.ok){ window.location.href="auth.html"; return; }
+    const data = await res.json();
+    applyProfile(data.user);
+  } catch(e){ console.error("Ошибка загрузки профиля",e); window.location.href="auth.html"; }
 }
 
 function applyProfile(p){
-  el('fioField').innerText = p.fio||'—';
-  el('dobField').innerText = p.dob||'—';
-  el('genderField').innerText = p.gender||'—';
-  el('emailField').innerText = p.email||'—';
-  el('phoneField').innerText = p.phone||'—';
-  el('cardField').innerText = p.cardNumber||'—';
-  el('fioHeader').childNodes[0].textContent = p.fio||'Пользователь';
-  el('phoneHeader').innerText = p.phone||'';
-  el('bonusMiles').innerText = p.bonusMiles||'—';
-
-  if(p.avatar) el('avatar').src = p.avatar;
-
-  el('cardTypeField').innerText = p.cardType||'—';
-  const img = el('cardTypeImg');
-  if(p.cardType==='VIP'){
-    img.src='images/Черный_Тренировка_Фитнес_Членская_Карта_Идентификационная_Карта .avif';
-    img.style.display='inline-block';
-  } else if(p.cardType==='Classic'){
-    img.src='images/Черный_Тренировка_Фитнес_Членская_Карта_Идентификационная_Карта (1).avif';
-    img.style.display='inline-block';
-  } else {
-    img.style.display='none';
-  }
+  el('fioField').innerText=p.fio||'—';
+  el('dobField').innerText=p.dob||'—';
+  el('genderField').innerText=p.gender||'—';
+  el('emailField').innerText=p.email||'—';
+  el('phoneField').innerText=p.phone||'—';
+  el('cardField').innerText=p.card||'—';
+  el('fioHeader').childNodes[0].textContent=p.fio||'Пользователь';
+  el('phoneHeader').innerText=p.phone||'';
+  el('bonusMiles').innerText=p.bonusMiles||'952';
+  if(p.avatar) el('avatar').src=p.avatar;
+  el('cardTypeField').innerText=p.cardType||'—';
+  const img=el('cardTypeImg');
+  if(p.cardType==='VIP'){img.src='images/vip.png';img.style.display='inline-block';}
+  else if(p.cardType==='Classic'){img.src='images/classic.png';img.style.display='inline-block';}
+  else{img.style.display='none';}
 }
-  
+
 function enableEdit(field){
-  const fieldMap = { fio:['fioField','fioHeader'], dob:['dobField'], gender:['genderField'], email:['emailField'], phone:['phoneField','phoneHeader'], cardNumber:['cardField'] };
-  const ids = fieldMap[field]; if(!ids) return;
-  const current = el(ids[0]).innerText==='—'?'':el(ids[0]).innerText;
-  const input = document.createElement('input');
-  input.type = (field==='email')?'email':(field==='phone')?'tel':'text';
-  input.value = current; input.style.width='220px';
-  const ok = document.createElement('button'); ok.innerText='OK'; ok.className='btn'; ok.style.marginLeft='8px'; ok.onclick=saveInline;
-  const wrapper = document.createElement('div'); wrapper.appendChild(input); wrapper.appendChild(ok);
-  const container = el(ids[0]); container.innerHTML=''; container.appendChild(wrapper); input.focus();
-  function saveInline(){
-    const val = input.value.trim()||'—';
-    ids.forEach(id=>{ if(el(id)) el(id).innerText=(val==='—'?'—':val); });
+  const map={fio:['fioField','fioHeader'],dob:['dobField'],gender:['genderField'],email:['emailField'],phone:['phoneField','phoneHeader'],card:['cardField']};
+  const ids=map[field]; if(!ids) return;
+  const current=el(ids[0]).innerText==='—'?'':el(ids[0]).innerText;
+  const input=document.createElement('input');
+  input.type=(field==='email')?'email':(field==='phone')?'tel':'text';
+  input.value=current; input.style.width='220px';
+  const ok=document.createElement('button'); ok.innerText='OK'; ok.className='btn'; ok.style.marginLeft='8px'; ok.onclick=saveInline;
+  const wrapper=document.createElement('div'); wrapper.appendChild(input); wrapper.appendChild(ok);
+  const container=el(ids[0]); container.innerHTML=''; container.appendChild(wrapper); input.focus();
+  async function saveInline(){
+    const val=input.value.trim()||'—';
+    ids.forEach(id=>{if(el(id))el(id).innerText=(val==='—'?'—':val);});
     if(field==='fio' && el('fioHeader')) el('fioHeader').childNodes[0].textContent=val==='—'?'Пользователь':val;
     localStorage.setItem(field,val==='—'?'':val);
+    // отправка обновлений на сервер
+    try{ await fetch("/api/update-profile",{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify({[field]:val==='—'?'':val})}); }catch(e){console.error("Ошибка обновления",e);}
   }
 }
 
-/* Avatar upload */
-el('avatarInput').addEventListener('change', function(){
-  const f = this.files[0];
-  if(!f) return;
-  const r = new FileReader();
-  r.onload = function(e){
-    const dataUrl = e.target.result;
-    el('avatar').src = dataUrl;
-    localStorage.setItem('avatar', dataUrl);
+el('avatarInput').addEventListener('change',function(){
+  const f=this.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=function(e){
+    const dataUrl=e.target.result; el('avatar').src=dataUrl; localStorage.setItem('avatar',dataUrl);
+    fetch("/api/update-profile",{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify({avatar:dataUrl})});
   };
   r.readAsDataURL(f);
 });
 
-/* Logout */
-function logout(){
-  // очистка всех данных профиля
-  ['fio','phone','email','cardNumber','dob','gender','avatar','bonusMiles','cardType','username','currentUser'].forEach(k=>localStorage.removeItem(k));
-  // редирект на регистрацию/вход
-  window.location.href = 'auth.html';
-}
+async function logout(){ await fetch("/api/logout",{method:"POST",credentials:"include"}); window.location.href="auth.html"; }
 
-/* init */
-document.addEventListener('DOMContentLoaded', ()=>{
-  loadProfile();
-  showTab({ currentTarget: document.querySelector('.tabs a.active'), preventDefault: ()=>{} });
-  el('editNameBtn').addEventListener('click', ()=> enableEdit('fio'));
-});
+document.addEventListener('DOMContentLoaded',()=>{ loadProfile(); showTab({currentTarget:document.querySelector('.tabs a.active'),preventDefault:()=>{}}); el('editNameBtn').addEventListener('click',()=>enableEdit('fio')); });
 </script>
-
 </body>
 </html>
+
