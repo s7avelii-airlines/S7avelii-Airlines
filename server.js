@@ -1,23 +1,23 @@
-// server.js
-import express from "express";
-import fs from "fs";
-import path from "path";
-import session from "express-session";
-import bodyParser from "body-parser";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const express = require("express");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const bcrypt = require("bcrypt");
+const fs = require("fs");
+const path = require("path");
+const cors = require("cors");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const USERS_FILE = path.join(__dirname, "users.json");
 
-// middleware
-app.use(bodyParser.json());
-app.use(express.static("public")); // папка с auth.html, cabinet.html, картинками
+// ===== Middleware =====
+app.use(express.json({ limit: "5mb" }));
+app.use(cookieParser());
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
 
-// настройка сессий (для Render + домен обязательно secure + sameSite:'none')
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "supersecret",
@@ -25,102 +25,108 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true,      // обязательно для https
-      sameSite: "none",  // чтобы работало через твой домен
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 дней
-    },
+      secure: true, // Render использует HTTPS, поэтому включено
+      sameSite: "lax",
+      maxAge: 1000 * 60 * 60 * 24 * 7 // 7 дней
+    }
   })
 );
 
-// функция чтения пользователей
-function readUsers() {
+// ===== Хранилище =====
+function loadUsers() {
   if (!fs.existsSync(USERS_FILE)) return [];
   return JSON.parse(fs.readFileSync(USERS_FILE, "utf8"));
 }
 
-// функция записи пользователей
-function writeUsers(users) {
+function saveUsers(users) {
   fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), "utf8");
 }
 
-// регистрация
-app.post("/api/register", (req, res) => {
-  const { fio, dob, gender, email, phone, card, cardType } = req.body;
+// ===== Маршруты =====
 
-  if (!fio || !email || !phone) {
-    return res.status(400).json({ message: "ФИО, Email и Телефон обязательны" });
+// Регистрация
+app.post("/api/register", async (req, res) => {
+  const { email, password, fio, phone } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email и пароль обязательны" });
   }
-
-  let users = readUsers();
-
-  // проверка на дубликат
-  const exists = users.find((u) => u.email === email || u.phone === phone);
-  if (exists) {
-    return res.status(400).json({ message: "Такой Email или Телефон уже зарегистрирован" });
+  let users = loadUsers();
+  if (users.find((u) => u.email === email)) {
+    return res.status(400).json({ message: "Пользователь уже существует" });
   }
-
+  const hashed = await bcrypt.hash(password, 10);
   const newUser = {
-    id: Date.now(),
-    fio,
-    dob,
-    gender,
+    id: Date.now().toString(),
     email,
-    phone,
-    card,
-    cardType,
+    password: hashed,
+    fio: fio || "",
+    phone: phone || "",
+    dob: "",
+    gender: "",
+    card: "",
+    cardType: "Classic",
+    avatar: "",
+    bonusMiles: 952
   };
-
   users.push(newUser);
-  writeUsers(users);
-
-  // создаём сессию
+  saveUsers(users);
   req.session.userId = newUser.id;
-
   res.json({ message: "Регистрация успешна", user: newUser });
 });
 
-// вход
-app.post("/api/login", (req, res) => {
-  const { fio, phone } = req.body;
-
-  if (!fio || !phone) {
-    return res.status(400).json({ message: "Введите ФИО и телефон" });
-  }
-
-  const users = readUsers();
-  const user = users.find((u) => u.fio === fio && u.phone === phone);
-
-  if (!user) {
-    return res.status(401).json({ message: "Неверные данные или пользователь не найден" });
-  }
-
+// Логин
+app.post("/api/login", async (req, res) => {
+  const { email, password } = req.body;
+  let users = loadUsers();
+  const user = users.find((u) => u.email === email);
+  if (!user) return res.status(400).json({ message: "Неверный логин или пароль" });
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) return res.status(400).json({ message: "Неверный логин или пароль" });
   req.session.userId = user.id;
   res.json({ message: "Вход успешен", user });
 });
 
-// получить профиль
+// Профиль
 app.get("/api/profile", (req, res) => {
   if (!req.session.userId) {
     return res.status(401).json({ message: "Не авторизован" });
   }
-  const users = readUsers();
+  let users = loadUsers();
   const user = users.find((u) => u.id === req.session.userId);
-  if (!user) {
-    return res.status(404).json({ message: "Пользователь не найден" });
-  }
+  if (!user) return res.status(401).json({ message: "Пользователь не найден" });
   res.json({ user });
 });
 
-// выход
+// Обновление профиля
+app.post("/api/update-profile", (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: "Не авторизован" });
+  }
+  let users = loadUsers();
+  let user = users.find((u) => u.id === req.session.userId);
+  if (!user) return res.status(404).json({ message: "Пользователь не найден" });
+
+  const allowedFields = ["fio", "dob", "gender", "email", "phone", "card", "cardType", "avatar"];
+  for (let f of allowedFields) {
+    if (req.body[f] !== undefined) user[f] = req.body[f];
+  }
+
+  saveUsers(users);
+  res.json({ message: "Профиль обновлен", user });
+});
+
+// Выход
 app.post("/api/logout", (req, res) => {
   req.session.destroy(() => {
     res.clearCookie("connect.sid");
-    res.json({ message: "Выход выполнен" });
+    res.json({ message: "Вы вышли" });
   });
 });
 
-// запуск
+// ===== Статика =====
+app.use(express.static(path.join(__dirname, "public")));
+
 app.listen(PORT, () => {
-  console.log(`✅ Сервер запущен на http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
-```
+
