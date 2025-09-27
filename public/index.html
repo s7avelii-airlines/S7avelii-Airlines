@@ -5,27 +5,73 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>S7avelii Airlines</title>
   <script src="https://cdn.tailwindcss.com"></script>
-<link rel="icon" href="images/favicon.png" type="image/png">
-  <script src="https://cdn.tailwindcss.com"></script>
-   <!-- Подключаем Google Fonts -->
+  <link rel="icon" href="images/favicon.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    /* применяем Roboto ко всем элементам */
     * {
       font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
     }
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-    }
     body {
-      overflow-x: hidden;
+      overflow-x: auto; /* чтобы не обрезать фиксированные блоки */
+      margin: 0;
+      padding: 0;
       background: linear-gradient(90deg, rgba(255, 255, 255, 1) 100%);
     }
-    .gradient-green {
-      background: linear-gradient(90deg, #7cb305);
-      color: white;
+
+    /* контейнер фиксированной ширины */
+    .fixed-container {
+      width: 1400px;
+      height: 900px;
+      position: relative; /* для абсолютного позиционирования внутренних блоков */
+      margin: 0 auto;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
     }
+
+    /* фиксированные блоки */
+    .block1 {
+      position: absolute;
+      top: 50px;
+      left: 50px;
+      width: 300px;
+      height: 100px;
+      background-color: #7cb305;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .block2 {
+      position: absolute;
+      top: 200px;
+      left: 50px;
+      width: 500px;
+      height: 200px;
+      background-color: #1890ff;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .block3 {
+      position: absolute;
+      top: 450px;
+      left: 600px;
+      width: 400px;
+      height: 300px;
+      background-color: #ff4d4f;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    /* Dropdown меню из твоего кода */
     .dropdown-menu {
       display: none;
       position: absolute;
@@ -43,14 +89,14 @@
     }
   </style>
 
- <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const isMobile = /Android|iPhone|iPad|iPod|Windows Phone|Mobi/i.test(navigator.userAgent);
-  if (isMobile) {
-    window.location.href = "phone.html";
-  }
-});
-</script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const isMobile = /Android|iPhone|iPad|iPod|Windows Phone|Mobi/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.location.href = "phone.html";
+      }
+    });
+  </script>
 </head>
 
 <body class="text-gray-900 font-sans">
