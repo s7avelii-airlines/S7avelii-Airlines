@@ -25,9 +25,9 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true, // Render использует HTTPS, поэтому включено
+      secure: true,
       sameSite: "lax",
-      maxAge: 1000 * 60 * 60 * 24 * 7 // 7 дней
+      maxAge: 1000 * 60 * 60 * 24 * 7
     }
   })
 );
@@ -66,7 +66,8 @@ app.post("/api/register", async (req, res) => {
     card: "",
     cardType: "Classic",
     avatar: "",
-    bonusMiles: 952
+    bonusMiles: 952,
+    role: "user" // по умолчанию обычный пользователь
   };
   users.push(newUser);
   saveUsers(users);
@@ -106,7 +107,7 @@ app.post("/api/update-profile", (req, res) => {
   let user = users.find((u) => u.id === req.session.userId);
   if (!user) return res.status(404).json({ message: "Пользователь не найден" });
 
-  const allowedFields = ["fio", "dob", "gender", "email", "phone", "card", "cardType", "avatar"];
+  const allowedFields = ["fio", "dob", "gender", "email", "phone", "card", "cardType", "avatar", "bonusMiles"];
   for (let f of allowedFields) {
     if (req.body[f] !== undefined) user[f] = req.body[f];
   }
@@ -123,10 +124,50 @@ app.post("/api/logout", (req, res) => {
   });
 });
 
+// ===== Админ-маршруты =====
+
+// Проверка прав администратора
+function isAdmin(req, res, next) {
+  let users = loadUsers();
+  const user = users.find((u) => u.id === req.session.userId);
+  if (!user || user.role !== "admin") {
+    return res.status(403).json({ message: "Нет доступа" });
+  }
+  next();
+}
+
+// Получить всех пользователей
+app.get("/api/admin/users", isAdmin, (req, res) => {
+  const users = loadUsers();
+  res.json(users.map(u => ({ ...u, password: undefined })));
+});
+
+// Удалить пользователя
+app.delete("/api/admin/users/:id", isAdmin, (req, res) => {
+  let users = loadUsers();
+  users = users.filter(u => u.id !== req.params.id);
+  saveUsers(users);
+  res.json({ message: "Пользователь удален" });
+});
+
+// Обновить пользователя
+app.patch("/api/admin/users/:id", isAdmin, (req, res) => {
+  let users = loadUsers();
+  const user = users.find(u => u.id === req.params.id);
+  if (!user) return res.status(404).json({ message: "Пользователь не найден" });
+
+  const allowed = ["fio", "dob", "gender", "email", "phone", "card", "cardType", "bonusMiles", "role"];
+  for (let f of allowed) {
+    if (req.body[f] !== undefined) user[f] = req.body[f];
+  }
+  saveUsers(users);
+  res.json({ message: "Пользователь обновлен", user });
+});
+
 // ===== Статика =====
 app.use(express.static(path.join(__dirname, "public")));
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-});
+
 
