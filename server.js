@@ -25,9 +25,9 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true,
+      secure: false, // для Render можно поставить true если HTTPS
       sameSite: "lax",
-      maxAge: 1000 * 60 * 60 * 24 * 7
+      maxAge: 1000 * 60 * 60 * 24 * 7 // 7 дней
     }
   })
 );
@@ -40,6 +40,14 @@ function loadUsers() {
 
 function saveUsers(users) {
   fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), "utf8");
+}
+
+// ===== Проверка аутентификации =====
+function authRequired(req, res, next) {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: "Не авторизован" });
+  }
+  next();
 }
 
 // ===== Маршруты =====
@@ -78,85 +86,53 @@ app.post("/api/register", async (req, res) => {
 // Логин
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email и пароль обязательны" });
+  }
   let users = loadUsers();
   const user = users.find((u) => u.email === email);
-  if (!user) return res.status(400).json({ message: "Неверный логин или пароль" });
+  if (!user) return res.status(400).json({ message: "Пользователь не найден" });
   const match = await bcrypt.compare(password, user.password);
-  if (!match) return res.status(400).json({ message: "Неверный логин или пароль" });
+  if (!match) return res.status(400).json({ message: "Неверный пароль" });
   req.session.userId = user.id;
   res.json({ message: "Вход успешен", user });
 });
 
-// Профиль
-app.get("/api/profile", (req, res) => {
-  if (!req.session.userId) {
-    return res.status(401).json({ message: "Не авторизован" });
-  }
-  let users = loadUsers();
+// Получить текущего пользователя
+app.get("/api/me", authRequired, (req, res) => {
+  const users = loadUsers();
   const user = users.find((u) => u.id === req.session.userId);
-  if (!user) return res.status(401).json({ message: "Пользователь не найден" });
-  res.json({ user });
+  res.json(user || null);
 });
 
 // Обновление профиля
-app.post("/api/update-profile", (req, res) => {
-  if (!req.session.userId) {
-    return res.status(401).json({ message: "Не авторизован" });
-  }
-  let users = loadUsers();
-  let user = users.find((u) => u.id === req.session.userId);
+app.post("/api/profile", authRequired, (req, res) => {
+  const users = loadUsers();
+  const user = users.find((u) => u.id === req.session.userId);
   if (!user) return res.status(404).json({ message: "Пользователь не найден" });
-
-  const allowedFields = ["fio", "dob", "gender", "email", "phone", "card", "cardType", "avatar", "bonusMiles"];
-  for (let f of allowedFields) {
-    if (req.body[f] !== undefined) user[f] = req.body[f];
-  }
-
+  const fields = ["fio", "phone", "email", "dob", "gender", "card", "cardType", "avatar"];
+  fields.forEach(f => { if(req.body[f] !== undefined) user[f] = req.body[f]; });
   saveUsers(users);
   res.json({ message: "Профиль обновлен", user });
 });
 
-// Выход
-app.post("/api/logout", (req, res) => {
-  req.session.destroy(() => {
-    res.clearCookie("connect.sid");
-    res.json({ message: "Вы вышли" });
-  });
-});
-
-// ===== Админ =====
-function isAdmin(req, res, next) {
-  let users = loadUsers();
-  const user = users.find((u) => u.id === req.session.userId);
-  if (!user || user.role !== "admin") {
+// Получить всех пользователей (для админа)
+app.get("/api/users", authRequired, (req, res) => {
+  const users = loadUsers();
+  const currentUser = users.find(u => u.id === req.session.userId);
+  if (!currentUser || currentUser.role !== "admin") {
     return res.status(403).json({ message: "Нет доступа" });
   }
-  next();
-}
-
-app.get("/api/admin/users", isAdmin, (req, res) => {
-  const users = loadUsers();
-  res.json(users.map(u => ({ ...u, password: undefined })));
+  res.json(users);
 });
 
-app.delete("/api/admin/users/:id", isAdmin, (req, res) => {
-  let users = loadUsers();
-  users = users.filter(u => u.id !== req.params.id);
-  saveUsers(users);
-  res.json({ message: "Пользователь удален" });
-});
-
-app.patch("/api/admin/users/:id", isAdmin, (req, res) => {
-  let users = loadUsers();
-  const user = users.find(u => u.id === req.params.id);
-  if (!user) return res.status(404).json({ message: "Пользователь не найден" });
-
-  const allowed = ["fio", "dob", "gender", "email", "phone", "card", "cardType", "bonusMiles", "role"];
-  for (let f of allowed) {
-    if (req.body[f] !== undefined) user[f] = req.body[f];
-  }
-  saveUsers(users);
-  res.json({ message: "Пользователь обновлен", user });
+// Выйти
+app.post("/api/logout", authRequired, (req, res) => {
+  req.session.destroy(err => {
+    if (err) return res.status(500).json({ message: "Ошибка выхода" });
+    res.clearCookie("connect.sid");
+    res.json({ message: "Выход выполнен" });
+  });
 });
 
 // ===== Статика =====
@@ -165,4 +141,3 @@ app.use(express.static(path.join(__dirname, "public")));
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
