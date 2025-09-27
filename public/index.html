@@ -4,51 +4,55 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>S7avelii Airlines</title>
-  <link rel="icon" href="images/favicon.png" type="image/png">
   <script src="https://cdn.tailwindcss.com"></script>
+<link rel="icon" href="images/favicon.png" type="image/png">
+  <script src="https://cdn.tailwindcss.com"></script>
+   <!-- Подключаем Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
   <style>
-    * { font-family: 'Roboto', 'Segoe UI', Arial, sans-serif; }
-    body {
-      margin: 0;
-      overflow: hidden;
-      background: #f8f8f8;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+    /* применяем Roboto ко всем элементам */
+    * {
+      font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
     }
-    #app {
-      width: 1920px;
-      height: 1080px;
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    body {
+      overflow-x: hidden;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 1) 100%);
+    }
+    .gradient-green {
+      background: linear-gradient(90deg, #7cb305);
+      color: white;
+    }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
       background: white;
-      transform-origin: top left;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      border: 1px solid #ccc;
+      border-radius: 0.25rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 50;
+      min-width: 160px;
+    }
+    .group:hover .dropdown-menu {
+      display: block;
     }
   </style>
 
-  <script>
-    // Перенаправление на мобильную версию
-    document.addEventListener("DOMContentLoaded", () => {
-      const isMobile = /Android|iPhone|iPad|iPod|Windows Phone|Mobi/i.test(navigator.userAgent);
-      if (isMobile) {
-        window.location.href = "phone.html";
-      }
-    });
-
-    // Масштабирование под экран
-    function scaleApp() {
-      const app = document.getElementById("app");
-      if (!app) return;
-      const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
-      app.style.transform = `scale(${scale})`;
-    }
-    window.addEventListener("resize", scaleApp);
-    window.addEventListener("load", scaleApp);
-  </script>
+ <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const isMobile = /Android|iPhone|iPad|iPod|Windows Phone|Mobi/i.test(navigator.userAgent);
+  if (isMobile) {
+    window.location.href = "phone.html";
+  }
+});
+</script>
 </head>
-
+  
 <body class="text-gray-900 font-sans">
 </style>
   <style>
