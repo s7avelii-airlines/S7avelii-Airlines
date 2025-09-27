@@ -1,94 +1,126 @@
+// server.js
 import express from "express";
 import fs from "fs";
 import path from "path";
+import session from "express-session";
 import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
-import cors from "cors";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const USERS_FILE = path.join(__dirname, "users.json");
 
-// ====== ФАЙЛ ПОЛЬЗОВАТЕЛЕЙ ======
-const DB_FILE = path.join(process.cwd(), "users.json");
-let users = fs.existsSync(DB_FILE) ? JSON.parse(fs.readFileSync(DB_FILE)) : [];
+// middleware
+app.use(bodyParser.json());
+app.use(express.static("public")); // папка с auth.html, cabinet.html, картинками
 
-function saveUsers() {
-  fs.writeFileSync(DB_FILE, JSON.stringify(users, null, 2));
+// настройка сессий (для Render + домен обязательно secure + sameSite:'none')
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "supersecret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: true,      // обязательно для https
+      sameSite: "none",  // чтобы работало через твой домен
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 дней
+    },
+  })
+);
+
+// функция чтения пользователей
+function readUsers() {
+  if (!fs.existsSync(USERS_FILE)) return [];
+  return JSON.parse(fs.readFileSync(USERS_FILE, "utf8"));
 }
 
-// ====== MIDDLEWARE ======
-app.use(bodyParser.json());
-app.use(cookieParser());
+// функция записи пользователей
+function writeUsers(users) {
+  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), "utf8");
+}
 
-// ⚠️ замени на адрес твоего фронта
-const FRONTEND_URL = "https://мойдомен.ru";
-
-app.use(cors({
-  origin: FRONTEND_URL,
-  credentials: true
-}));
-
-// ====== API ======
-
-// Регистрация
+// регистрация
 app.post("/api/register", (req, res) => {
-  const { fio, phone, email, password, cardType } = req.body;
-  if (!fio || !phone || !email || !password) {
-    return res.json({ ok: false, error: "Заполните все поля" });
+  const { fio, dob, gender, email, phone, card, cardType } = req.body;
+
+  if (!fio || !email || !phone) {
+    return res.status(400).json({ message: "ФИО, Email и Телефон обязательны" });
   }
-  if (users.find(u => u.phone === phone || u.email === email)) {
-    return res.json({ ok: false, error: "Такой пользователь уже есть" });
+
+  let users = readUsers();
+
+  // проверка на дубликат
+  const exists = users.find((u) => u.email === email || u.phone === phone);
+  if (exists) {
+    return res.status(400).json({ message: "Такой Email или Телефон уже зарегистрирован" });
   }
 
   const newUser = {
+    id: Date.now(),
     fio,
-    phone,
+    dob,
+    gender,
     email,
-    password, // ⚠️ лучше хэшировать
-    cardType: cardType || "Classic",
-    miles: 0,
-    createdAt: new Date().toISOString()
+    phone,
+    card,
+    cardType,
   };
 
   users.push(newUser);
-  saveUsers();
-  res.json({ ok: true });
+  writeUsers(users);
+
+  // создаём сессию
+  req.session.userId = newUser.id;
+
+  res.json({ message: "Регистрация успешна", user: newUser });
 });
 
-// Логин
+// вход
 app.post("/api/login", (req, res) => {
-  const { phone, password } = req.body;
-  const user = users.find(u => u.phone === phone && u.password === password);
-  if (!user) return res.json({ ok: false, error: "Неверный телефон или пароль" });
+  const { fio, phone } = req.body;
 
-  res.cookie("sessionUser", user.phone, {
-    httpOnly: true,
-    secure: true,       // обязательно для HTTPS
-    sameSite: "none"    // чтобы работало между доменами
-  });
-  res.json({ ok: true });
+  if (!fio || !phone) {
+    return res.status(400).json({ message: "Введите ФИО и телефон" });
+  }
+
+  const users = readUsers();
+  const user = users.find((u) => u.fio === fio && u.phone === phone);
+
+  if (!user) {
+    return res.status(401).json({ message: "Неверные данные или пользователь не найден" });
+  }
+
+  req.session.userId = user.id;
+  res.json({ message: "Вход успешен", user });
 });
 
-// Профиль
+// получить профиль
 app.get("/api/profile", (req, res) => {
-  const phone = req.cookies.sessionUser;
-  if (!phone) return res.json({ ok: false, error: "Не авторизован" });
-  const user = users.find(u => u.phone === phone);
-  if (!user) return res.json({ ok: false, error: "Не найден" });
-  res.json({ ok: true, profile: user });
+  if (!req.session.userId) {
+    return res.status(401).json({ message: "Не авторизован" });
+  }
+  const users = readUsers();
+  const user = users.find((u) => u.id === req.session.userId);
+  if (!user) {
+    return res.status(404).json({ message: "Пользователь не найден" });
+  }
+  res.json({ user });
 });
 
-// Выход
+// выход
 app.post("/api/logout", (req, res) => {
-  res.clearCookie("sessionUser", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none"
+  req.session.destroy(() => {
+    res.clearCookie("connect.sid");
+    res.json({ message: "Выход выполнен" });
   });
-  res.json({ ok: true });
 });
 
-// ====== ЗАПУСК ======
+// запуск
 app.listen(PORT, () => {
-  console.log(`✅ Сервер запущен на порту ${PORT}`);
+  console.log(`✅ Сервер запущен на http://localhost:${PORT}`);
 });
+```
