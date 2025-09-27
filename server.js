@@ -67,7 +67,7 @@ app.post("/api/register", async (req, res) => {
     cardType: "Classic",
     avatar: "",
     bonusMiles: 952,
-    role: "user" // по умолчанию обычный пользователь
+    role: "user"
   };
   users.push(newUser);
   saveUsers(users);
@@ -124,9 +124,7 @@ app.post("/api/logout", (req, res) => {
   });
 });
 
-// ===== Админ-маршруты =====
-
-// Проверка прав администратора
+// ===== Админ =====
 function isAdmin(req, res, next) {
   let users = loadUsers();
   const user = users.find((u) => u.id === req.session.userId);
@@ -136,13 +134,11 @@ function isAdmin(req, res, next) {
   next();
 }
 
-// Получить всех пользователей
 app.get("/api/admin/users", isAdmin, (req, res) => {
   const users = loadUsers();
   res.json(users.map(u => ({ ...u, password: undefined })));
 });
 
-// Удалить пользователя
 app.delete("/api/admin/users/:id", isAdmin, (req, res) => {
   let users = loadUsers();
   users = users.filter(u => u.id !== req.params.id);
@@ -150,7 +146,6 @@ app.delete("/api/admin/users/:id", isAdmin, (req, res) => {
   res.json({ message: "Пользователь удален" });
 });
 
-// Обновить пользователя
 app.patch("/api/admin/users/:id", isAdmin, (req, res) => {
   let users = loadUsers();
   const user = users.find(u => u.id === req.params.id);
@@ -169,5 +164,5 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-
+});
 
