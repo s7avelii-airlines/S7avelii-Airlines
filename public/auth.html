@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -23,116 +24,56 @@
       background-size: cover;
     }
 
-    /* ===== HEADER ===== */
     header {
-      display:flex;
-      align-items:center;
-      padding:0 20px;
-      height:70px;
+      display:flex; align-items:center;
+      padding:0 20px; height:70px;
       border-bottom:1px solid #ccc;
-      position:fixed;
-      top:0; left:0;
-      width:100%;
-      z-index:1000;
+      position:fixed; top:0; left:0;
+      width:100%; z-index:1000;
       background:#fff;
     }
-
-    .logo-img {
-      height:50px;
-      width:auto;
-    }
+    .logo-img { height:50px; width:auto; }
 
     nav { flex-grow:1; }
     nav ul {
-      display:flex;
-      gap:20px;
-      list-style:none;
-      margin:0; padding:0;
+      display:flex; gap:20px;
+      list-style:none; margin:0; padding:0;
     }
-    nav li { position:relative; }
     nav a {
-      text-decoration:none;
-      color:#000;
-      font-size:15px;
-      padding:25px 0;
+      text-decoration:none; color:#000; font-size:15px;
+      padding:25px 0; position:relative;
     }
     nav a::after {
-      content:"";
-      position:absolute;
-      bottom:0; left:0;
-      width:0; height:2px;
-      background:var(--green);
-      transition:.3s;
+      content:""; position:absolute; bottom:0; left:0;
+      width:0; height:2px; background:var(--green); transition:.3s;
     }
     nav li:hover > a::after { width:100%; }
 
     .dropdown {
-      position:absolute;
-      top:100%; left:0;
-      background:#fff;
-      padding:12px;
+      position:absolute; top:100%; left:0;
+      background:#fff; padding:12px;
       border-top:2px solid var(--green);
       box-shadow:0 6px 16px rgba(0,0,0,.15);
-      min-width:180px;
-      opacity:0; transform:translateY(-10px);
-      pointer-events:none;
-      transition:.3s;
+      min-width:180px; opacity:0;
+      transform:translateY(-10px);
+      pointer-events:none; transition:.3s;
     }
-    nav li:hover .dropdown {
-      opacity:1; transform:translateY(0);
-      pointer-events:auto;
-    }
+    nav li:hover .dropdown { opacity:1; transform:translateY(0); pointer-events:auto; }
     .dropdown a { display:block; padding:6px 0; font-size:14px; }
 
-    .right-menu {
-      display:flex; align-items:center; gap:12px;
-    }
-    .right-menu a {
-      padding:6px 10px;
-      border:1px solid var(--green);
-      border-radius:6px;
-      color:var(--green);
-      text-decoration:none;
-      font-size:14px;
-    }
-
-    /* ===== MAIN ===== */
     main {
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:90px 20px 40px; /* отступ под шапку */
-      min-height:100vh;
+      display:flex; align-items:center; justify-content:center;
+      padding:90px 20px 40px; min-height:100vh;
     }
-
     .card {
-  width: 100%;
-  max-width: 360px;
-  background: rgba(255,255,255,0.92);
-  border-radius: 12px;
-  box-shadow: 0 6px 24px rgba(16,24,40,0.25);
-  padding: 22px;
-}
+      width:100%; max-width:360px;
+      background:rgba(255,255,255,0.92);
+      border-radius:12px;
+      box-shadow:0 6px 24px rgba(16,24,40,0.25);
+      padding:22px;
+    }
+    h2 { margin:0 0 14px; font-size:20px; }
 
-/* Чтобы форма помещалась на очень маленьких экранах */
-@media(max-width: 480px) {
-  main {
-    padding: 80px 10px 20px; /* меньше отступы сверху и по бокам */
-  }
-  .card {
-    padding: 16px;
-  }
-  input {
-    font-size: 13px;
-    padding: 8px 10px;
-  }
-  .btn {
-    padding: 10px;
-    font-size: 14px;
-  }
-}
-
-    h2 {margin:0 0 14px;font-size:20px;}
     input {
       width:100%; padding:10px 12px;
       border-radius:8px; border:1px solid #d6d8db;
@@ -152,11 +93,11 @@
     .switch { margin-top:14px; text-align:center; font-size:14px; cursor:pointer; }
     .hidden { display:none; }
 
-    /* ===== MOBILE ===== */
-    @media(max-width:768px){
-      nav ul { flex-direction:column; gap:10px; }
-      header { flex-wrap:wrap; height:auto; padding:10px; }
-      .card { width:100%; }
+    @media(max-width:480px){
+      main { padding:80px 10px 20px; }
+      .card { padding:16px; }
+      input { font-size:13px; padding:8px 10px; }
+      .btn { padding:10px; font-size:14px; }
     }
   </style>
 </head>
@@ -173,11 +114,12 @@
           <a href="auth.html">Управление бронированием</a>
         </div>
       </li>
+    </ul>
   </nav>
 </header>
 
 <main>
-  <div class="card" id="card">
+  <div class="card">
     <h2 id="title">Вход</h2>
 
     <!-- Форма входа -->
@@ -188,36 +130,39 @@
       <div id="loginError" class="error"></div>
     </form>
 
-   <!-- Форма регистрации -->
-  <form id="registerForm" class="hidden" autocomplete="on">
-    <input id="regFio" type="text" placeholder="ФИО" required autocomplete="name">
-    <input id="regDob" type="text" placeholder="Дата рождения (ДД.MM.ГГГГ)" autocomplete="bday">
-    <input id="regGender" type="text" placeholder="Пол">
-    <input id="regEmail" type="email" placeholder="Email" autocomplete="email">
-    <input id="regPhone" type="tel" placeholder="Телефон" required autocomplete="tel">
-    <input id="regCard" type="text" placeholder="Номер карты S7avelii Priority">
+    <!-- Форма регистрации -->
+    <form id="registerForm" class="hidden" autocomplete="on">
+      <input id="regFio" type="text" placeholder="ФИО" required autocomplete="name">
+      <input id="regDob" type="text" placeholder="Дата рождения (ДД.MM.ГГГГ)" autocomplete="bday">
+      <input id="regGender" type="text" placeholder="Пол">
+      <input id="regEmail" type="email" placeholder="Email" required autocomplete="email">
+      <input id="regPhone" type="tel" placeholder="Телефон" required autocomplete="tel">
+      <input id="regCard" type="text" placeholder="Номер карты S7avelii Priority">
 
-    <div class="small-muted">Выберите тип карты:</div>
-    <label class="card-type-label">
-      <input type="radio" name="regCardType" value="VIP"> VIP
-      <img src="vip_card.png" class="card-type-img" alt="VIP">
-    </label>
-    <label class="card-type-label">
-      <input type="radio" name="regCardType" value="Classic"> Classic
-      <img src="classic_card.png" class="card-type-img" alt="Classic">
-    </label>
+      <div class="small-muted">Выберите тип карты:</div>
+      <label>
+        <input type="radio" name="regCardType" value="VIP"> VIP
+        <img src="images/vip_card.png" alt="VIP" width="60">
+      </label>
+      <label>
+        <input type="radio" name="regCardType" value="Classic"> Classic
+        <img src="images/classic_card.png" alt="Classic" width="60">
+      </label>
 
-    <button class="btn" type="submit">Зарегистрироваться</button>
-    <div id="regError" class="error"></div>
-    <div id="regSuccess" class="success"></div>
-  </form>
+      <button class="btn" type="submit">Зарегистрироваться</button>
+      <div id="regError" class="error"></div>
+      <div id="regSuccess" class="success"></div>
+    </form>
 
-  <div class="switch" id="switch">
-    Нет аккаунта? <span id="switchLink" style="color:var(--green);text-decoration:underline;cursor:pointer">Зарегистрироваться</span>
+    <div class="switch" id="switch">
+      Нет аккаунта? <span id="switchLink" style="color:var(--green);text-decoration:underline;">Зарегистрироваться</span>
+    </div>
   </div>
-</div>
+</main>
 
 <script>
+  const API_URL = "https://s7avelii.onrender.com"; // сервер Render
+
   const loginForm = document.getElementById('loginForm');
   const registerForm = document.getElementById('registerForm');
   const switchLink = document.getElementById('switchLink');
@@ -226,59 +171,58 @@
   const regError = document.getElementById('regError');
   const regSuccess = document.getElementById('regSuccess');
 
-  // Авто-редирект, если пользователь уже есть
+  // Проверка активной сессии
   window.addEventListener('DOMContentLoaded', () => {
-    if(localStorage.getItem('fio') && localStorage.getItem('phone')){
-      window.location.href = 'cabinet.html';
-    }
+    fetch(API_URL + "/api/profile", { credentials:'include' })
+      .then(r => { if (r.ok) window.location.href="cabinet.html"; });
   });
 
-  // Переключение формы
+  // Переключение форм
   switchLink.addEventListener('click', () => {
-    const showingLogin = !loginForm.classList.contains('hidden');
-    if(showingLogin){
+    const loginShown = !loginForm.classList.contains('hidden');
+    if(loginShown){
       loginForm.classList.add('hidden');
       registerForm.classList.remove('hidden');
       title.innerText = 'Регистрация';
       switchLink.innerText = 'Войти';
-      loginError.innerText = '';
-      regError.innerText = '';
-      regSuccess.innerText = '';
+      loginError.innerText = ''; regError.innerText = ''; regSuccess.innerText = '';
     } else {
       registerForm.classList.add('hidden');
       loginForm.classList.remove('hidden');
       title.innerText = 'Вход';
       switchLink.innerText = 'Зарегистрироваться';
-      loginError.innerText = '';
-      regError.innerText = '';
-      regSuccess.innerText = '';
+      loginError.innerText = ''; regError.innerText = ''; regSuccess.innerText = '';
     }
   });
 
   // Логин
-  loginForm.addEventListener('submit', (e)=>{
+  loginForm.addEventListener('submit', e => {
     e.preventDefault();
     loginError.innerText = '';
     const fio = document.getElementById('loginFio').value.trim();
     const phone = document.getElementById('loginPhone').value.trim();
 
-    if(!fio || !phone){ loginError.innerText='Заполните все поля.'; return; }
-
-    const storedFio = localStorage.getItem('fio');
-    const storedPhone = localStorage.getItem('phone');
-
-    if(storedFio===fio && storedPhone===phone){
-      window.location.href='cabinet.html';
-    } else {
-      loginError.innerText='Неверные данные или аккаунт не найден.';
-    }
+    fetch(API_URL + "/api/login", {
+      method:"POST",
+      credentials:"include",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ fio, phone })
+    })
+    .then(async resp => {
+      if(!resp.ok){ 
+        const data = await resp.json();
+        loginError.innerText = data.error || "Ошибка входа";
+        return;
+      }
+      window.location.href="cabinet.html";
+    })
+    .catch(()=> loginError.innerText="Ошибка сети");
   });
 
   // Регистрация
-  registerForm.addEventListener('submit',(e)=>{
+  registerForm.addEventListener('submit', e => {
     e.preventDefault();
-    regError.innerText='';
-    regSuccess.innerText='';
+    regError.innerText = ''; regSuccess.innerText = '';
 
     const fio = document.getElementById('regFio').value.trim();
     const dob = document.getElementById('regDob').value.trim();
@@ -288,25 +232,24 @@
     const card = document.getElementById('regCard').value.trim();
     const cardType = document.querySelector('input[name="regCardType"]:checked')?.value || '';
 
-    if(!fio || !phone){ regError.innerText='Поля ФИО и телефон обязательны.'; return; }
-
-    // Сохраняем данные
-    localStorage.setItem('fio',fio);
-    if(dob) localStorage.setItem('dob',dob);
-    if(gender) localStorage.setItem('gender',gender);
-    if(email) localStorage.setItem('email',email);
-    localStorage.setItem('phone',phone);
-    if(card) localStorage.setItem('cardNumber',card);
-    if(cardType) localStorage.setItem('cardType',cardType);
-
-    // username
-    const username = fio.split(' ')[0] || fio;
-    localStorage.setItem('username',username);
-
-    regSuccess.innerText='Регистрация прошла успешно — выполняется переход в личный кабинет...';
-    setTimeout(()=>{ window.location.href='cabinet.html'; },700);
+    fetch(API_URL + "/api/register", {
+      method:"POST",
+      credentials:"include",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ fio, dob, gender, email, phone, card, cardType })
+    })
+    .then(async resp => {
+      const data = await resp.json();
+      if(!resp.ok){
+        regError.innerText = data.error || "Ошибка регистрации";
+        return;
+      }
+      regSuccess.innerText = "Регистрация успешна! Переход...";
+      setTimeout(()=> window.location.href="cabinet.html", 1000);
+    })
+    .catch(()=> regError.innerText="Ошибка сети");
   });
 </script>
-    
 </body>
 </html>
+```
