@@ -5,142 +5,138 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Вход / Регистрация — S7avelii</title>
 <style>
-  :root{--green:#9cc42f;--green-dark:#8ab12a;--bg:#f5f7fa;--card:#fff;--muted:#666}
+  :root{
+    --green:#9cc42f;
+    --green-dark:#8ab12a;
+    --muted:#666;
+  }
   *{box-sizing:border-box}
-  body{margin:0;font-family:Inter,Arial,sans-serif;min-height:100vh;background:url("images/Blue Modern Business Proposal Presentation.avif") no-repeat center/cover}
-  .card{width:100%;max-width:360px;background:rgba(255,255,255,0.95);border-radius:12px;padding:22px;margin:90px auto;box-shadow:0 6px 24px rgba(0,0,0,0.12)}
+  body{
+    margin:0;
+    font-family:Inter,Arial,sans-serif;
+    min-height:100vh;
+    background:url("images/Blue Modern Business Proposal Presentation.avif") no-repeat center/cover;
+    background-size:cover;
+  }
+
+  header{
+    position:fixed;top:0;left:0;width:100%;height:70px;
+    display:flex;align-items:center;gap:20px;
+    padding:0 20px;background:#fff;z-index:1000;
+    border-bottom:1px solid #e5e5e5;
+  }
+  .logo-img{height:50px}
+  nav ul{margin:0;padding:0;list-style:none;display:flex;gap:20px}
+  nav a{text-decoration:none;color:#111;position:relative;padding:25px 0}
+  nav a::after{content:"";position:absolute;bottom:0;left:0;height:2px;width:0;background:var(--green);transition:.25s}
+  nav li:hover>a::after{width:100%}
+
+  main{display:flex;justify-content:center;align-items:flex-start;padding:110px 20px 40px}
+  .card{
+    width:100%;max-width:420px;
+    background:rgba(255,255,255,0.96);
+    border-radius:12px;padding:22px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.15);
+  }
   h2{margin:0 0 14px;font-size:20px}
   input{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d6d8db;margin-top:10px;font-size:14px}
   .btn{width:100%;padding:12px;border-radius:8px;border:0;background:var(--green);color:#fff;font-weight:600;margin-top:14px;cursor:pointer}
   .btn:hover{background:var(--green-dark)}
+
+  .switch{text-align:center;margin-top:14px;font-size:14px}
+  .switch button{background:none;border:0;color:var(--green);text-decoration:underline;cursor:pointer;font:inherit}
+
   .error{color:#d23f44;margin-top:10px;font-size:13px}
   .success{color:green;margin-top:10px;font-size:13px}
-  .switch{text-align:center;margin-top:14px}
-  label.card-type{display:inline-flex;align-items:center;gap:8px;margin-right:8px}
-  .small-muted{font-size:13px;color:#666;margin-top:8px}
+
+  /* fade animation */
+  form{transition:opacity .35s ease, transform .35s ease;will-change:opacity,transform}
+  .hidden{display:none}
+  .fade{opacity:0;transform:translateY(12px);pointer-events:none}
+  .fade.show{display:block;opacity:1;transform:translateY(0);pointer-events:auto}
 </style>
 </head>
 <body>
 
-<div class="card">
-  <h2 id="title">Вход</h2>
+<header>
+  <a href="index.html"><img src="images/1757683264306.avif" alt="S7avelii" class="logo-img"/></a>
+  <nav>
+    <ul>
+      <li><a href="index.html">Покупка</a></li>
+      <li><a href="bilet.html">Купить билет</a></li>
+      <li><a href="auth.html">Управление бронированием</a></li>
+    </ul>
+  </nav>
+</header>
 
-  <form id="loginForm">
-    <input id="loginFio" type="text" placeholder="ФИО" required autocomplete="name">
-    <input id="loginPhone" type="tel" placeholder="Телефон" required autocomplete="tel">
-    <input id="loginPassword" type="password" placeholder="Пароль" required>
-    <button class="btn" type="submit">Войти</button>
-    <div id="loginError" class="error"></div>
-  </form>
+<main>
+  <div class="card">
+    <h2 id="title">Вход</h2>
 
-  <form id="registerForm" class="hidden" autocomplete="on">
-    <input id="regFio" type="text" placeholder="ФИО" required autocomplete="name">
-    <input id="regDob" type="text" placeholder="Дата рождения (ДД.MM.ГГГГ)" autocomplete="bday">
-    <input id="regGender" type="text" placeholder="Пол">
-    <input id="regEmail" type="email" placeholder="Email" required autocomplete="email">
-    <input id="regPhone" type="tel" placeholder="Телефон" required autocomplete="tel">
-    <input id="regPassword" type="password" placeholder="Пароль" required>
-    <input id="regCard" type="text" placeholder="Номер карты S7avelii Priority">
+    <form id="loginForm" class="fade show">
+      <input id="loginPhone" type="tel" placeholder="Телефон" required autocomplete="tel">
+      <input id="loginPassword" type="password" placeholder="Пароль" required>
+      <button class="btn" type="submit">Войти</button>
+      <div id="loginError" class="error"></div>
+    </form>
 
-    <div class="small-muted">Выберите тип карты:</div>
-    <label class="card-type"><input type="radio" name="regCardType" value="VIP"> VIP <img src="images/vip_card.png" alt="VIP" width="60"></label>
-    <label class="card-type"><input type="radio" name="regCardType" value="Classic"> Classic <img src="images/classic_card.png" alt="Classic" width="60"></label>
+    <form id="registerForm" class="fade hidden">
+      <input id="regFio" type="text" placeholder="ФИО" required autocomplete="name">
+      <input id="regEmail" type="email" placeholder="Email" required autocomplete="email">
+      <input id="regPhone" type="tel" placeholder="Телефон" required autocomplete="tel">
+      <input id="regPassword" type="password" placeholder="Пароль" required>
+      <button class="btn" type="submit">Зарегистрироваться</button>
+      <div id="regError" class="error"></div>
+      <div id="regSuccess" class="success"></div>
+    </form>
 
-    <button class="btn" type="submit">Зарегистрироваться</button>
-    <div id="regError" class="error"></div>
-    <div id="regSuccess" class="success"></div>
-  </form>
-
-  <div class="switch">Нет аккаунта? <span id="switchLink" style="color:var(--green);text-decoration:underline;cursor:pointer">Зарегистрироваться</span></div>
-</div>
+    <div class="switch"><span id="switchText">Нет аккаунта?</span> <button id="switchBtn">Зарегистрироваться</button></div>
+  </div>
+</main>
 
 <script>
-  // use relative API path — this avoids CORS if server serves public/ from same origin
-  const API = '';
+const API = '';
+const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
+const title = document.getElementById('title');
+const switchBtn = document.getElementById('switchBtn');
+const switchText = document.getElementById('switchText');
 
-  const loginForm = document.getElementById('loginForm');
-  const registerForm = document.getElementById('registerForm');
-  const switchLink = document.getElementById('switchLink');
-  const title = document.getElementById('title');
-  const loginError = document.getElementById('loginError');
-  const regError = document.getElementById('regError');
-  const regSuccess = document.getElementById('regSuccess');
+function showForm(showLogin){
+  const toShow = showLogin?loginForm:registerForm;
+  const toHide = showLogin?registerForm:loginForm;
+  // hide
+  toHide.classList.remove('show');
+  setTimeout(()=>toHide.classList.add('hidden'),350);
+  // show
+  toShow.classList.remove('hidden');
+  setTimeout(()=>toShow.classList.add('show'),10);
 
-  // redirect if already logged in
-  window.addEventListener('DOMContentLoaded', () => {
-    fetch(API + '/api/profile', { credentials: 'include' })
-      .then(r => { if (r.ok) window.location.href = '/cabinet.html'; })
-      .catch(() => {});
-  });
+  if(showLogin){
+    title.textContent = 'Вход';
+    switchText.textContent = 'Нет аккаунта?';
+    switchBtn.textContent = 'Зарегистрироваться';
+  }else{
+    title.textContent = 'Регистрация';
+    switchText.textContent = 'Уже есть аккаунт?';
+    switchBtn.textContent = 'Войти';
+  }
+}
 
-  switchLink.addEventListener('click', () => {
-    const loginShown = !loginForm.classList.contains('hidden');
-    if(loginShown){
-      loginForm.classList.add('hidden');
-      registerForm.classList.remove('hidden');
-      title.innerText = 'Регистрация';
-      switchLink.innerText = 'Войти';
-    } else {
-      registerForm.classList.add('hidden');
-      loginForm.classList.remove('hidden');
-      title.innerText = 'Вход';
-      switchLink.innerText = 'Зарегистрироваться';
-    }
-    loginError.innerText=''; regError.innerText=''; regSuccess.innerText='';
-  });
+switchBtn.addEventListener('click',e=>{
+  e.preventDefault();
+  const showingLogin = loginForm.classList.contains('show');
+  showForm(!showingLogin);
+});
 
-  // login — now sends password (server requires password)
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    loginError.innerText = '';
-    const fio = document.getElementById('loginFio').value.trim();
-    const phone = document.getElementById('loginPhone').value.trim();
-    const password = document.getElementById('loginPassword').value;
-
-    try{
-      const resp = await fetch(API + '/api/login', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone, password })
-      });
-      const data = await resp.json();
-      if(!resp.ok) { loginError.innerText = data.error || 'Ошибка входа'; return; }
-      window.location.href = '/cabinet.html';
-    }catch(err){
-      loginError.innerText = 'Ошибка сети';
-    }
-  });
-
-  // registration
-  registerForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    regError.innerText=''; regSuccess.innerText='';
-
-    const fio = document.getElementById('regFio').value.trim();
-    const dob = document.getElementById('regDob').value.trim();
-    const gender = document.getElementById('regGender').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const phone = document.getElementById('regPhone').value.trim();
-    const password = document.getElementById('regPassword').value;
-    const card = document.getElementById('regCard').value.trim();
-    const cardType = document.querySelector('input[name="regCardType"]:checked')?.value || '';
-
-    try{
-      const resp = await fetch(API + '/api/register', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fio, dob, gender, email, phone, card, cardType, password })
-      });
-      const data = await resp.json();
-      if(!resp.ok){ regError.innerText = data.error || 'Ошибка регистрации'; return; }
-      regSuccess.innerText = 'Регистрация успешна — выполняется переход...';
-      setTimeout(()=> window.location.href = '/cabinet.html', 900);
-    }catch(err){
-      regError.innerText = 'Ошибка сети';
-    }
-  });
+// auto-check session
+window.addEventListener('DOMContentLoaded', async ()=>{
+  try{
+    const r = await fetch(API+'/api/profile',{credentials:'include'});
+    if(r.ok) location.href='cabinet.html';
+  }catch{}
+});
 </script>
+
 </body>
 </html>
