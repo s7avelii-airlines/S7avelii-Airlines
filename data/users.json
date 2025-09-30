@@ -1,0 +1,18 @@
+[
+  {
+    "id": "admin-k0p3abc",
+    "fio": "Администратор",
+    "phone": "+70000000001",
+    "email": "admin@s7avelii.example",
+    "password": "$2b$10$...bcrypt hash...",
+    "cardNumber": "00000001",
+    "cardType": "VIP",
+    "dob": "01.01.1990",
+    "gender": "М",
+    "avatar": "",
+    "bonusMiles": 10000,
+    "role": "admin",
+    "createdAt": "2025-09-30T12:34:56.789Z"
+  },
+  ...
+]
