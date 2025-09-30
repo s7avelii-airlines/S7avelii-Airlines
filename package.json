@@ -1,22 +1,18 @@
 {
-  "name": "s7avelii-airlines",
+  "name": "s7avelii-server",
   "version": "1.0.0",
-  "description": "Личный кабинет и регистрация для S7avelii Airlines",
+  "description": "Static site + users API for S7avelii",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=18"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "cookie-parser": "^1.4.6",
-    "body-parser": "^1.20.2",
-    "cors": "^2.8.5",
-    "pg": "^8.11.0",
     "bcrypt": "^5.1.0",
-    "dotenv": "^17.2.2"
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3"
   }
 }
