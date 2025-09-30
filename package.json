@@ -1,17 +1,14 @@
 {
   "name": "s7avelii-server",
   "version": "1.0.0",
-  "description": "Static site + users API for S7avelii",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
-  "engines": {
-    "node": ">=18"
-  },
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-session": "^1.17.3"
   }
