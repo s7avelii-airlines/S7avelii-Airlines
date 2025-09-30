@@ -1,6 +1,7 @@
 {
   "name": "s7avelii-airlines",
   "version": "1.0.0",
+  "description": "Личный кабинет и регистрация для S7avelii Airlines",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -18,6 +19,4 @@
     "bcrypt": "^5.1.0",
     "dotenv": "^17.2.2"
   }
-}
-
 }
