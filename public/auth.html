@@ -12,11 +12,9 @@
   }
   *{box-sizing:border-box}
   body{
-    margin:0;
-    font-family:Inter,Arial,sans-serif;
+    margin:0;font-family:Inter,Arial,sans-serif;
     min-height:100vh;
     background:url("images/Blue Modern Business Proposal Presentation.avif") no-repeat center/cover;
-    background-size:cover;
   }
 
   header{
@@ -49,6 +47,8 @@
   .error{color:#d23f44;margin-top:10px;font-size:13px}
   .success{color:green;margin-top:10px;font-size:13px}
 
+  .small-muted{font-size:13px;color:var(--muted);margin-top:8px}
+
   /* fade animation */
   form{transition:opacity .35s ease, transform .35s ease;will-change:opacity,transform}
   .hidden{display:none}
@@ -73,18 +73,29 @@
   <div class="card">
     <h2 id="title">Вход</h2>
 
+    <!-- форма входа -->
     <form id="loginForm" class="fade show">
+      <input id="loginFio" type="text" placeholder="ФИО" required autocomplete="name">
       <input id="loginPhone" type="tel" placeholder="Телефон" required autocomplete="tel">
       <input id="loginPassword" type="password" placeholder="Пароль" required>
       <button class="btn" type="submit">Войти</button>
       <div id="loginError" class="error"></div>
     </form>
 
+    <!-- форма регистрации -->
     <form id="registerForm" class="fade hidden">
       <input id="regFio" type="text" placeholder="ФИО" required autocomplete="name">
+      <input id="regDob" type="text" placeholder="Дата рождения (ДД.MM.ГГГГ)" autocomplete="bday">
+      <input id="regGender" type="text" placeholder="Пол">
       <input id="regEmail" type="email" placeholder="Email" required autocomplete="email">
       <input id="regPhone" type="tel" placeholder="Телефон" required autocomplete="tel">
       <input id="regPassword" type="password" placeholder="Пароль" required>
+      <input id="regCard" type="text" placeholder="Номер карты S7avelii Priority">
+
+      <div class="small-muted">Выберите тип карты:</div>
+      <label class="card-type"><input type="radio" name="regCardType" value="VIP"> VIP <img src="images/vip_card.png" alt="VIP" width="60"></label>
+      <label class="card-type"><input type="radio" name="regCardType" value="Classic"> Classic <img src="images/classic_card.png" alt="Classic" width="60"></label>
+
       <button class="btn" type="submit">Зарегистрироваться</button>
       <div id="regError" class="error"></div>
       <div id="regSuccess" class="success"></div>
@@ -105,10 +116,8 @@ const switchText = document.getElementById('switchText');
 function showForm(showLogin){
   const toShow = showLogin?loginForm:registerForm;
   const toHide = showLogin?registerForm:loginForm;
-  // hide
   toHide.classList.remove('show');
   setTimeout(()=>toHide.classList.add('hidden'),350);
-  // show
   toShow.classList.remove('hidden');
   setTimeout(()=>toShow.classList.add('show'),10);
 
@@ -129,7 +138,7 @@ switchBtn.addEventListener('click',e=>{
   showForm(!showingLogin);
 });
 
-// auto-check session
+// авто-проверка сессии
 window.addEventListener('DOMContentLoaded', async ()=>{
   try{
     const r = await fetch(API+'/api/profile',{credentials:'include'});
@@ -140,3 +149,4 @@ window.addEventListener('DOMContentLoaded', async ()=>{
 
 </body>
 </html>
+
