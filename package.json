@@ -1,11 +1,10 @@
 {
   "name": "s7avelii-server",
   "version": "1.0.0",
-  "description": "S7avelii file-backed server for auth + cart",
+  "description": "S7avelii simple server: users + cart + profile",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "NODE_ENV=development node server.js"
+    "start": "node server.js"
   },
   "engines": {
     "node": ">=18"
