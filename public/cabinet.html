@@ -7,40 +7,34 @@
   <link rel="icon" href="images/favicon.png" type="image/png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root {
-      --bg: #f5f7fa;
-      --card: #ffffff;
-      --accent: #9cc42f;
-      --muted: #8b97a6;
-      --container: 1180px;
-    }
-    body { margin:0; font-family:Inter,Arial,sans-serif; background:var(--bg); color:#1f2937; }
-    .page { max-width:var(--container); margin:28px auto; padding:0 20px; }
-    .full-header { width:100%; background:var(--card); display:flex; align-items:center; gap:24px; padding:28px 36px; border-radius:12px; box-shadow:0 6px 20px rgba(16,24,40,0.06); flex-wrap:wrap; }
-    .avatar-wrap { display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
-    .avatar { width:118px; height:118px; border-radius:999px; object-fit:cover; border:4px solid #fff; box-shadow:0 6px 18px rgba(16,24,40,0.06); cursor:pointer; }
-    .user-info h1 { margin:0; font-size:26px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-    .edit-icon { font-size:14px; background:#eef9d6; border-radius:999px; padding:6px 8px; cursor:pointer; color:#1f3a07; }
-    .card-badge { width:60px; border-radius:8px; display:none; }
-    .sub { color:var(--muted); margin-top:6px; }
-    .stats { margin-left:auto; display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
-    .stat { background:linear-gradient(180deg,#fff,#fcfff0); padding:14px 18px; border-radius:12px; min-width:110px; text-align:center; border:1px solid rgba(0,0,0,0.04); }
-    .num { font-weight:700; font-size:20px; color:#111827; }
-    .label { font-size:12px; color:var(--muted); margin-top:6px; }
-    .tabs { display:flex; gap:14px; margin-top:18px; padding:12px 0; border-bottom:1px solid rgba(0,0,0,0.04); overflow-x:auto; }
-    .tabs a { padding:10px 14px; text-decoration:none; color:#495057; border-radius:8px; white-space:nowrap; }
-    .tabs a.active { color:var(--accent); background:rgba(156,196,47,0.06); }
-    .grid { display:grid; grid-template-columns:1fr 380px; gap:22px; margin-top:18px; }
-    .card { background:var(--card); border-radius:12px; padding:20px; box-shadow:0 4px 12px rgba(16,24,40,0.04); border:1px solid rgba(0,0,0,0.03); }
-    .card h3 { margin:0 0 12px; font-size:18px; }
-    .field { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-top:1px solid rgba(0,0,0,0.03); }
-    .field:first-of-type { border-top:0; }
-    .label { color:var(--muted); font-size:14px; }
-    .value { font-size:15px; max-width:60%; word-wrap:break-word; }
-    .edit-btn { background:transparent; border:none; color:var(--accent); cursor:pointer; font-weight:600; }
-    .small-muted { color:var(--muted); font-size:13px; margin-top:8px; }
-    .btn { display:inline-block; background:var(--accent); color:#fff; padding:9px 14px; border-radius:10px; border:none; cursor:pointer; }
-    .save-notice { color:var(--muted); font-size:13px; margin-left:8px; }
+    :root { --bg:#f5f7fa; --card:#ffffff; --accent:#9cc42f; --muted:#8b97a6; --container:1180px; }
+    body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:#1f2937}
+    .page{max-width:var(--container);margin:28px auto;padding:0 20px}
+    .full-header{width:100%;background:var(--card);display:flex;align-items:center;gap:24px;padding:28px 36px;border-radius:12px;box-shadow:0 6px 20px rgba(16,24,40,0.06);flex-wrap:wrap}
+    .avatar-wrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+    .avatar{width:118px;height:118px;border-radius:999px;object-fit:cover;border:4px solid #fff;box-shadow:0 6px 18px rgba(16,24,40,0.06);cursor:pointer}
+    .user-info h1{margin:0;font-size:26px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    .edit-icon{font-size:14px;background:#eef9d6;border-radius:999px;padding:6px 8px;cursor:pointer;color:#1f3a07}
+    .card-badge{width:60px;border-radius:8px;display:none}
+    .sub{color:var(--muted);margin-top:6px}
+    .stats{margin-left:auto;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+    .stat{background:linear-gradient(180deg,#fff,#fcfff0);padding:14px 18px;border-radius:12px;min-width:110px;text-align:center;border:1px solid rgba(0,0,0,0.04)}
+    .tabs{display:flex;gap:14px;margin-top:18px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,0.04);overflow-x:auto}
+    .tabs a{padding:10px 14px;text-decoration:none;color:#495057;border-radius:8px;white-space:nowrap}
+    .tabs a.active{color:var(--accent);background:rgba(156,196,47,0.06)}
+    .grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:18px}
+    .card{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 4px 12px rgba(16,24,40,0.04);border:1px solid rgba(0,0,0,0.03)}
+    .card h3{margin:0 0 12px;font-size:18px}
+    .field{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid rgba(0,0,0,0.03)}
+    .label{color:var(--muted);font-size:14px}
+    .value{font-size:15px;max-width:60%;word-wrap:break-word}
+    .edit-btn{background:transparent;border:none;color:var(--accent);cursor:pointer;font-weight:600}
+    .small-muted{color:var(--muted);font-size:13px;margin-top:8px}
+    .btn{display:inline-block;background:var(--accent);color:#fff;padding:9px 14px;border-radius:10px;border:none;cursor:pointer}
+    .shop-grid{display:flex;flex-direction:column;gap:12px}
+    .shop-item{display:flex;gap:12px;align-items:center;border:1px solid #eee;padding:10px;border-radius:10px}
+    .shop-item img{width:68px;height:68px;object-fit:contain;border-radius:8px;background:#fafafa}
+    .shop-actions{display:flex;gap:8px;align-items:center;margin-left:auto}
     @media (max-width:980px){ .grid{grid-template-columns:1fr;} .stats{margin-left:0;margin-top:16px;} .full-header{flex-direction:column;align-items:flex-start;gap:16px;} }
   </style>
 </head>
@@ -53,7 +47,7 @@
       <div class="user-info">
         <h1 id="fioHeader">Пользователь
           <img id="cardTypeImg" class="card-badge" alt="Card">
-          <span class="edit-icon" id="editNameBtn" title="Изменить">✏</span>
+          <span class="edit-icon" id="editNameBtn">✏</span>
         </h1>
         <div class="sub" id="phoneHeader">—</div>
       </div>
@@ -82,11 +76,45 @@
         <div class="field"><div><div class="label">ФИО</div><div class="value" id="fioField">—</div></div><button class="edit-btn" onclick="enableEdit('fio')">Изменить</button></div>
         <div class="field"><div><div class="label">Дата рождения</div><div class="value" id="dobField">—</div></div><button class="edit-btn" onclick="enableEdit('dob')">Изменить</button></div>
         <div class="field"><div><div class="label">Пол</div><div class="value" id="genderField">—</div></div><button class="edit-btn" onclick="enableEdit('gender')">Изменить</button></div>
+
         <h3 style="margin-top:18px">Контакты</h3>
         <div class="field"><div><div class="label">Email</div><div class="value" id="emailField">—</div></div><button class="edit-btn" onclick="enableEdit('email')">Изменить</button></div>
         <div class="field"><div><div class="label">Телефон</div><div class="value" id="phoneField">—</div></div><button class="edit-btn" onclick="enableEdit('phone')">Изменить</button></div>
         <div class="field"><div><div class="label">Номер карты</div><div class="value" id="cardField">—</div></div><button class="edit-btn" onclick="enableEdit('cardNumber')">Изменить</button></div>
         <div class="field"><div><div class="label">Тип карты</div><div class="value" id="cardTypeField">—</div></div></div>
+
+        <div style="margin-top:18px">
+          <button id="saveProfileBtn" class="btn">Сохранить профиль</button>
+          <div id="saveInfo" class="small-muted"></div>
+        </div>
+      </div>
+
+      <!-- Shop tab content (hidden by default) -->
+      <div id="shopTab" class="card" style="display:none">
+        <h3>S7avelii Shop — корзина</h3>
+        <div class="small-muted" style="margin-top:6px">Товары, которые вы добавили в корзину.</div>
+
+        <div id="cartItems" class="shop-grid" style="margin-top:12px">
+          <!-- items rendered here -->
+        </div>
+
+        <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
+          <div><strong>Итого: <span id="cartTotal">0</span> ₽</strong></div>
+          <div style="display:flex;gap:8px">
+            <button id="clearCartBtn" class="edit-btn">Очистить</button>
+            <button id="checkoutBtn" class="btn">Оформить заказ</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="milesTab" class="card" style="display:none">
+        <h3>Мои мили</h3>
+        <div class="small-muted">Здесь вы можете увидеть историю и баланс мили.</div>
+      </div>
+
+      <div id="settingsTab" class="card" style="display:none">
+        <h3>Настройки</h3>
+        <div class="small-muted">Настройки аккаунта и уведомлений.</div>
       </div>
     </div>
 
@@ -94,266 +122,297 @@
     <div>
       <div class="card">
         <h3>Краткая информация</h3>
-        <div style="margin-top:12px" class="small-muted">Здесь отображаются основные данные и быстрые действия.</div>
+        <div style="margin-top:12px" class="small-muted">Основные действия:</div>
         <div style="margin-top:18px;display:flex;flex-direction:column;gap:12px">
           <button onclick="goTo('profileTab')" class="edit-btn">Редактировать профиль</button>
           <button onclick="goTo('milesTab')" class="edit-btn">Посмотреть мили</button>
-          <div style="display:flex;align-items:center;gap:12px">
-            <button onclick="logout()" class="edit-btn">Выйти</button>
-            <div id="saveInfo" class="save-notice"></div>
-          </div>
+          <button onclick="logout()" class="edit-btn">Выйти</button>
         </div>
-      </div>
-
-      <div class="card" style="margin-top:16px">
-        <h3>Подсказка</h3>
-        <div class="small-muted" style="margin-top:8px">Изменённые данные сохраняются в личном профиле и отправляются на сервер (если он есть).</div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-/* Utility */
+/* ---------- utils ---------- */
 function el(id){ return document.getElementById(id); }
-function showMsg(msg, time=2500){ const s = el('saveInfo'); s.innerText = msg; setTimeout(()=>{ if(s.innerText===msg) s.innerText=''; }, time); }
+function showMsg(text, time=2500){ const s=el('saveInfo'); s.innerText=text; setTimeout(()=>s.innerText='', time); }
 
-/* Tabs */
+/* ---------- tabs ---------- */
 function showTab(evt){
   evt && evt.preventDefault();
-  const tabId = evt ? evt.currentTarget.getAttribute('data-tab') : 'profileTab';
+  const tabId = evt ? evt.currentTarget.getAttribute('data-tab') : (location.hash ? location.hash.replace('#','') : 'profileTab');
   document.querySelectorAll('.tabs a').forEach(a=>a.classList.remove('active'));
-  if(evt) evt.currentTarget.classList.add('active');
+  const activeLink = [...document.querySelectorAll('.tabs a')].find(x=>x.getAttribute('data-tab')===tabId);
+  if(activeLink) activeLink.classList.add('active');
   ['profileTab','milesTab','shopTab','settingsTab'].forEach(id=>{
     const elc = document.getElementById(id);
     if(elc) elc.style.display = (id===tabId ? 'block' : 'none');
   });
+  // update hash for deep-link
+  if(tabId) location.hash = tabId==='profileTab' ? '' : ('#'+tabId);
 }
 
-/* Robust profile loading:
-   Accepts server returning either:
-     1) { ok: true, user: {...} }
-     2) {...profile...}
-*/
+/* ---------- profile load / apply ---------- */
 async function loadProfile(){
   try{
-    const res = await fetch('/api/profile', { credentials:'include' });
-    if(!res.ok){
-      // not logged in -> redirect to auth
-      window.location.href = 'auth.html';
-      return;
+    const resp = await fetch('/api/profile', { credentials: 'include' });
+    if(resp.ok){
+      const j = await resp.json();
+      if(j.user){ applyProfile(j.user); return; }
     }
-    const payload = await res.json().catch(()=>null);
-    if(!payload){ throw new Error('invalid json'); }
-
-    // normalize
-    let profile = null;
-    if(payload.user) profile = payload.user;
-    else if(payload.ok && payload.user) profile = payload.user;
-    else profile = payload;
-
-    applyProfile(profile);
-  }catch(err){
-    console.error('Ошибка загрузки профиля', err);
-    // best effort: if we have localStorage fallback, use it; otherwise force login
-    const fallback = {
-      fio: localStorage.getItem('fio') || '',
-      phone: localStorage.getItem('phone') || '',
-      email: localStorage.getItem('email') || '',
-      cardNumber: localStorage.getItem('cardNumber') || '',
-      dob: localStorage.getItem('dob') || '',
-      gender: localStorage.getItem('gender') || '',
-      avatar: localStorage.getItem('avatar') || '',
-      bonusMiles: localStorage.getItem('bonusMiles') || ''
-    };
-    // if there's anything — apply, otherwise redirect
-    if(fallback.fio || fallback.phone || fallback.email || fallback.cardNumber){
-      applyProfile(fallback);
-      showMsg('Отображаются локальные данные');
-    } else {
-      window.location.href = 'auth.html';
-    }
-  }
-}
-
-/* Apply profile to UI (supports both cardNumber/card) */
-function applyProfile(p){
-  p = p || {};
-  const cardNumber = p.cardNumber || p.card || '';
-  el('fioField').innerText = p.fio || '—';
-  el('dobField').innerText = p.dob || '—';
-  el('genderField').innerText = p.gender || '—';
-  el('emailField').innerText = p.email || '—';
-  el('phoneField').innerText = p.phone || '—';
-  el('cardField').innerText = cardNumber || '—';
-  // header name (keep any existing edit icon)
-  const fioHeader = el('fioHeader');
-  // set only text node, preserve edit icon element
-  if(fioHeader){
-    // remove existing text nodes then insert new text node at start
-    // safer way: set firstChild textContent if exists and is text node
-    const first = fioHeader.childNodes[0];
-    if(first && first.nodeType === Node.TEXT_NODE){
-      first.textContent = p.fio || 'Пользователь';
-    } else {
-      fioHeader.insertBefore(document.createTextNode(p.fio || 'Пользователь'), fioHeader.firstChild);
-    }
-  }
-  el('phoneHeader').innerText = p.phone || '';
-  el('bonusMiles').innerText = (p.bonusMiles !== undefined && p.bonusMiles !== null) ? p.bonusMiles : '—';
-  if(p.avatar) el('avatar').src = p.avatar;
-
-  el('cardTypeField').innerText = p.cardType || '—';
-  const img = el('cardTypeImg');
-  if(p.cardType === 'VIP'){ img.src = 'images/vip.png'; img.style.display = 'inline-block'; }
-  else if(p.cardType === 'Classic'){ img.src = 'images/classic.png'; img.style.display = 'inline-block'; }
-  else { img.style.display = 'none'; }
-
-  // persist locally as backup
-  try{
-    localStorage.setItem('fio', p.fio || '');
-    localStorage.setItem('phone', p.phone || '');
-    localStorage.setItem('email', p.email || '');
-    localStorage.setItem('cardNumber', cardNumber || '');
-    if(p.avatar) localStorage.setItem('avatar', p.avatar);
-    if(p.dob) localStorage.setItem('dob', p.dob);
-    if(p.gender) localStorage.setItem('gender', p.gender);
-    if(p.bonusMiles !== undefined) localStorage.setItem('bonusMiles', String(p.bonusMiles));
   }catch(e){}
+  // fallback to localStorage if no server/profile
+  const profile = {
+    fio: localStorage.getItem('fio')||'',
+    phone: localStorage.getItem('phone')||'',
+    email: localStorage.getItem('email')||'',
+    cardNumber: localStorage.getItem('cardNumber')||'',
+    dob: localStorage.getItem('dob')||'',
+    gender: localStorage.getItem('gender')||'',
+    avatar: localStorage.getItem('avatar')||'',
+    bonusMiles: localStorage.getItem('bonusMiles')||'0',
+    cardType: localStorage.getItem('cardType')||''
+  };
+  applyProfile(profile);
 }
 
-/* Inline edit for fields */
+function applyProfile(p){
+  el('fioField').innerText = p.fio||'—';
+  el('dobField').innerText = p.dob||'—';
+  el('genderField').innerText = p.gender||'—';
+  el('emailField').innerText = p.email||'—';
+  el('phoneField').innerText = p.phone||'—';
+  el('cardField').innerText = p.cardNumber||'—';
+  el('fioHeader').childNodes[0].textContent = p.fio||'Пользователь';
+  el('phoneHeader').innerText = p.phone||'';
+  el('bonusMiles').innerText = p.bonusMiles||'—';
+  if(p.avatar) el('avatar').src = p.avatar;
+  el('cardTypeField').innerText = p.cardType||'—';
+  const img = el('cardTypeImg');
+  if(p.cardType==='VIP'){ img.src='images/vip.png'; img.style.display='inline-block'; }
+  else if(p.cardType==='Classic'){ img.src='images/classic.png'; img.style.display='inline-block'; }
+  else img.style.display='none';
+}
+
+/* ---------- inline edit ---------- */
 function enableEdit(field){
-  const fieldMap = {
-    fio: ['fioField','fioHeader'],
-    dob: ['dobField'],
-    gender: ['genderField'],
-    email: ['emailField'],
-    phone: ['phoneField','phoneHeader'],
-    cardNumber: ['cardField']
-  };
-  const ids = fieldMap[field];
-  if(!ids) return;
-  const containerId = ids[0];
-  const container = el(containerId);
+  const fieldMap = { fio:['fioField','fioHeader'], dob:['dobField'], gender:['genderField'], email:['emailField'], phone:['phoneField','phoneHeader'], cardNumber:['cardField'] };
+  const ids = fieldMap[field]; if(!ids) return;
+  const container = el(ids[0]);
   const current = container.innerText === '—' ? '' : container.innerText;
   const input = document.createElement('input');
-  input.type = (field === 'email') ? 'email' : (field === 'phone') ? 'tel' : 'text';
-  input.value = current;
-  input.style.width = '220px';
-  const ok = document.createElement('button'); ok.innerText = 'OK'; ok.className = 'btn'; ok.style.marginLeft = '8px';
-  const cancel = document.createElement('button'); cancel.innerText = 'Отмена'; cancel.className = 'edit-btn'; cancel.style.marginLeft='8px';
-  const wrapper = document.createElement('div');
-  wrapper.appendChild(input); wrapper.appendChild(ok); wrapper.appendChild(cancel);
-  container.innerHTML = '';
-  container.appendChild(wrapper);
-  input.focus();
-
-  cancel.onclick = function(e){ e.preventDefault(); // restore original display
-    ids.forEach(id => { if(el(id)) el(id).innerText = current || '—'; });
-  };
-
-  ok.onclick = async function(e){
-    e.preventDefault();
-    const val = input.value.trim();
-    const saveVal = val || '';
-    // update UI immediately
-    ids.forEach(id => { if(el(id)) el(id).innerText = saveVal || '—'; });
-    if(field === 'fio' && el('fioHeader')){
-      const fh = el('fioHeader');
-      const first = fh.childNodes[0];
-      if(first && first.nodeType === Node.TEXT_NODE) first.textContent = saveVal || 'Пользователь';
-      else fh.insertBefore(document.createTextNode(saveVal || 'Пользователь'), fh.firstChild);
-    }
-    // local fallback
-    try{ localStorage.setItem(field === 'cardNumber' ? 'cardNumber' : field, saveVal); }catch(e){}
-    showMsg('Сохраняю...');
-    // prepare payload: server uses cardNumber key
-    const payloadKey = field === 'cardNumber' ? 'cardNumber' : field;
-    const payload = {};
-    payload[payloadKey] = saveVal;
-    // try primary endpoint, fallback if necessary
-    try{
-      const ok1 = await postProfileUpdate(payload);
-      if(ok1){
-        showMsg('Сохранено');
-      } else {
-        showMsg('Локально сохранено (сервер недоступен)');
-      }
-    }catch(e){
-      console.error('Ошибка при обновлении', e);
-      showMsg('Ошибка обновления');
-    }
+  input.type = (field==='email')?'email':(field==='phone')?'tel':'text';
+  input.value = current; input.style.width = '220px';
+  const ok = document.createElement('button'); ok.innerText='OK'; ok.className='btn'; ok.style.marginLeft='8px';
+  const wrapper = document.createElement('div'); wrapper.appendChild(input); wrapper.appendChild(ok);
+  container.innerHTML = ''; container.appendChild(wrapper); input.focus();
+  ok.onclick = async () => {
+    const val = input.value.trim() || '—';
+    ids.forEach(id=>{ if(el(id)) el(id).innerText = (val==='—'?'—':val); });
+    if(field==='fio' && el('fioHeader')) el('fioHeader').childNodes[0].textContent = (val==='—'?'Пользователь':val);
+    localStorage.setItem(field, val==='—'?'':val);
+    // try push to server (update-profile endpoint)
+    try{ await fetch('/api/profile/update',{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ [field]: val==='—'?'':val }) }); }catch(e){}
+    showMsg('Изменено');
   };
 }
 
-/* Avatar upload: read as dataURL, update local UI and sync */
+/* ---------- avatar upload ---------- */
 el('avatarInput').addEventListener('change', function(){
   const f = this.files[0]; if(!f) return;
   const r = new FileReader();
-  r.onload = async function(e){
-    const dataUrl = e.target.result;
-    el('avatar').src = dataUrl;
-    try{ localStorage.setItem('avatar', dataUrl); }catch(e){}
-    showMsg('Загружаю аватар...');
-    try{
-      const ok = await postProfileUpdate({ avatar: dataUrl });
-      if(ok) showMsg('Аватар сохранён');
-      else showMsg('Аватар сохранён локально');
-    }catch(e){ console.error('avatar upload err', e); showMsg('Ошибка сохранения аватара'); }
+  r.onload = function(e){
+    const dataUrl = e.target.result; el('avatar').src = dataUrl; localStorage.setItem('avatar', dataUrl);
+    // send to server if available
+    fetch('/api/profile/update',{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ avatar: dataUrl }) }).catch(()=>{});
+    showMsg('Аватар обновлён');
   };
   r.readAsDataURL(f);
 });
 
-/* postProfileUpdate: tries /api/profile/update, falls back to /api/update-profile */
-async function postProfileUpdate(obj){
+/* ---------- save profile (full) ---------- */
+el('saveProfileBtn').addEventListener('click', async ()=>{
+  const payload = {
+    fio: (el('fioField').innerText==='—' ? '' : el('fioField').innerText),
+    phone: (el('phoneField').innerText==='—' ? '' : el('phoneField').innerText),
+    email: (el('emailField').innerText==='—' ? '' : el('emailField').innerText),
+    cardNumber: (el('cardField').innerText==='—' ? '' : el('cardField').innerText),
+    dob: (el('dobField').innerText==='—' ? '' : el('dobField').innerText),
+    gender: (el('genderField').innerText==='—' ? '' : el('genderField').innerText),
+    cardType: (el('cardTypeField').innerText==='—' ? '' : el('cardTypeField').innerText)
+  };
+  // save locally
+  Object.keys(payload).forEach(k=>{
+    try{ localStorage.setItem(k, (payload[k]||'')); }catch(e){}
+  });
+  showMsg('Данные сохранены локально');
+  // push to server
   try{
-    // first try expected endpoint
-    let res = await fetch('/api/profile/update', {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(obj)
-    });
-    if(res.ok) return true;
-    // try fallback
-    res = await fetch('/api/update-profile', {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(obj)
-    });
-    return res.ok;
-  }catch(e){
-    return false;
-  }
-}
+    const res = await fetch('/api/profile/update', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+    if(res.ok) showMsg('Синхронизировано с сервером');
+  }catch(e){}
+});
 
-/* Logout */
+/* ---------- logout ---------- */
 async function logout(){
-  try{
-    await fetch('/api/logout', { method:'POST', credentials:'include' });
-  }catch(e){}
-  // clear session markers (do not wipe profile completely)
-  try{
-    localStorage.removeItem('session');
-  }catch(e){}
-  window.location.href = 'auth.html';
+  try{ await fetch('/api/logout', { method:'POST', credentials:'include' }); }catch(e){}
+  // clear only session markers; keep profile for convenience if you want
+  localStorage.removeItem('session');
+  // clear cart local copy? keep - better keep
+  location.href = 'auth.html';
 }
 
-/* goTo helper */
-function goTo(tab){
-  document.querySelectorAll('.tabs a').forEach(a => a.classList.remove('active'));
-  const a = [...document.querySelectorAll('.tabs a')].find(x=> x.getAttribute('data-tab')===tab);
-  if(a) a.classList.add('active');
-  showTab({ currentTarget: a, preventDefault: ()=>{} });
+/* ---------- SHOP / CART logic ---------- */
+
+/*
+Cart storage strategy:
+- If server provides /api/cart (GET) and /api/cart/add and /api/cart/checkout endpoints, use server-side cart (requires session).
+- Otherwise fallback to localStorage under key "s7_cart".
+*/
+
+function parsePrice(v){
+  // accepts number or strings like "2 350 ₽" or "2350"
+  if (typeof v === 'number') return v;
+  const num = String(v).replace(/[^\d]/g,'');
+  return num ? Number(num) : 0;
 }
 
-/* init */
+function getLocalCart(){ try{ return JSON.parse(localStorage.getItem('s7_cart')||'[]'); }catch(e){return [];} }
+function saveLocalCart(arr){ localStorage.setItem('s7_cart', JSON.stringify(arr)); }
+
+async function loadCart(){
+  // Try server first
+  try{
+    const r = await fetch('/api/cart', { credentials: 'include' });
+    if (r.ok){
+      const j = await r.json();
+      if (Array.isArray(j.items)) { renderCart(j.items); return; }
+    }
+  }catch(e){}
+  // fallback local
+  const cart = getLocalCart();
+  renderCart(cart);
+}
+
+function renderCart(items){
+  const container = el('cartItems');
+  container.innerHTML = '';
+  let total = 0;
+  if(!items || items.length===0){
+    container.innerHTML = '<div class="small-muted">Корзина пуста</div>';
+    el('cartTotal').innerText = '0';
+    return;
+  }
+  items.forEach((it, idx) => {
+    total += parsePrice(it.priceVal || it.price || it.priceVal || it.priceVal === 0 ? it.priceVal : parsePrice(it.price || 0));
+    const div = document.createElement('div');
+    div.className = 'shop-item';
+    div.innerHTML = `
+      <img src="${it.image || 'images/photo_5330078908990750485_y.avif'}" alt="${it.title||''}">
+      <div style="min-width:160px">
+        <div style="font-weight:700">${it.title||''}</div>
+        <div class="small-muted">${it.price|| (it.priceVal ? it.priceVal + ' ₽' : '')}</div>
+      </div>
+      <div class="shop-actions">
+        <button class="edit-btn" data-idx="${idx}" onclick="removeFromCart(${idx})">Удалить</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+  el('cartTotal').innerText = total;
+}
+
+/* Remove item from cart (local or server) */
+async function removeFromCart(idx){
+  // try server removal
+  try{
+    const r = await fetch('/api/cart/remove', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ index: idx }) });
+    if (r.ok){ await loadCart(); return; }
+  }catch(e){}
+  // fallback local
+  const cart = getLocalCart();
+  if(idx>=0 && idx<cart.length){ cart.splice(idx,1); saveLocalCart(cart); renderCart(cart); }
+}
+
+/* Clear cart */
+el('clearCartBtn').addEventListener('click', async ()=>{
+  if(!confirm('Очистить корзину?')) return;
+  try{
+    const r = await fetch('/api/cart/clear', { method:'POST', credentials:'include' });
+    if (r.ok) { await loadCart(); return; }
+  }catch(e){}
+  saveLocalCart([]); renderCart([]);
+});
+
+/* Checkout */
+el('checkoutBtn').addEventListener('click', async ()=>{
+  const cart = getLocalCart();
+  // Try server checkout
+  try{
+    const r = await fetch('/api/cart/checkout', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ items: cart }) });
+    if (r.ok){
+      alert('Заказ принят на сервере. Спасибо!');
+      // clear local copy too
+      saveLocalCart([]);
+      await loadCart();
+      return;
+    } else {
+      const txt = await r.text().catch(()=>null);
+      console.warn('server checkout failed', txt);
+    }
+  }catch(e){ console.warn('server checkout error', e); }
+
+  // fallback: simulate checkout locally
+  if (cart.length === 0){ alert('Корзина пуста'); return; }
+  // You may implement a real payment flow. For now — simple confirmation and clear
+  if (confirm('Оформить заказ локально (без сервера)?')) {
+    // here you can open mailto or store orders in localStorage
+    const orders = JSON.parse(localStorage.getItem('s7_orders')||'[]');
+    orders.push({ id: Date.now(), date: new Date().toISOString(), items: cart });
+    localStorage.setItem('s7_orders', JSON.stringify(orders));
+    saveLocalCart([]);
+    await loadCart();
+    alert('Заказ сохранён локально в истории (s7_orders).');
+  }
+});
+
+/* ---------- add to cart API helper (called from shop page) ----------
+   The shop page uses fetch('/api/cart/add') if available.
+   But also stores in localStorage so cabinet can show it.
+---------------------------------------------------------------------*/
+window.__S7 = window.__S7 || {}; // expose small API for shop page
+window.__S7.addToCartFromShop = async function(item){
+  // item: { id, title, priceVal, price, image, qty }
+  try{
+    // try remote add
+    const r = await fetch('/api/cart/add', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(item)
+    });
+    if(r.ok){ showMsg('Добавлено в корзину (сервер)'); return { ok:true, server:true }; }
+  }catch(e){}
+  // fallback local
+  const cart = getLocalCart();
+  cart.push(item);
+  saveLocalCart(cart);
+  showMsg('Добавлено в корзину (локально)');
+  return { ok:true, server:false };
+};
+
+/* ---------- init ---------- */
 document.addEventListener('DOMContentLoaded', ()=>{
   loadProfile();
   showTab({ currentTarget: document.querySelector('.tabs a.active'), preventDefault: ()=>{} });
-  el('editNameBtn').addEventListener('click', ()=> enableEdit('fio'));
+  // if user opened cabinet with hash #shop — show shop tab
+  if(location.hash && location.hash.includes('shop')) {
+    const link = [...document.querySelectorAll('.tabs a')].find(x=>x.getAttribute('data-tab')==='shopTab');
+    if(link) { link.classList.add('active'); showTab({ currentTarget: link, preventDefault: ()=>{} }); }
+  }
+  document.getElementById('editNameBtn').addEventListener('click', ()=> enableEdit('fio'));
+  loadCart();
 });
 </script>
 </body>
