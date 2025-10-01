@@ -40,6 +40,7 @@
     .edit-btn { background:transparent; border:none; color:var(--accent); cursor:pointer; font-weight:600; }
     .small-muted { color:var(--muted); font-size:13px; margin-top:8px; }
     .btn { display:inline-block; background:var(--accent); color:#fff; padding:9px 14px; border-radius:10px; border:none; cursor:pointer; }
+    .save-notice { color:var(--muted); font-size:13px; margin-left:8px; }
     @media (max-width:980px){ .grid{grid-template-columns:1fr;} .stats{margin-left:0;margin-top:16px;} .full-header{flex-direction:column;align-items:flex-start;gap:16px;} }
   </style>
 </head>
@@ -52,17 +53,21 @@
       <div class="user-info">
         <h1 id="fioHeader">Пользователь
           <img id="cardTypeImg" class="card-badge" alt="Card">
-          <span class="edit-icon" id="editNameBtn">✏</span>
+          <span class="edit-icon" id="editNameBtn" title="Изменить">✏</span>
         </h1>
         <div class="sub" id="phoneHeader">—</div>
       </div>
     </div>
-    <div class="stats">
-      <div class="stat"><div class="num" id="bonusMiles">—</div><div class="label">бонусные мили</div></div>
+
+    <div class="stats" aria-hidden="false">
+      <div class="stat">
+        <div class="num" id="bonusMiles">—</div>
+        <div class="label">бонусные мили</div>
+      </div>
     </div>
   </div>
 
-  <div class="tabs">
+  <div class="tabs" role="tablist">
     <a href="#" class="active" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
     <a href="#" data-tab="milesTab" onclick="showTab(event)">Мои мили</a>
     <a href="#" data-tab="shopTab" onclick="showTab(event)">S7avelii Shop</a>
@@ -70,6 +75,7 @@
   </div>
 
   <div class="grid">
+    <!-- Left column -->
     <div>
       <div id="profileTab" class="card">
         <h3>Персональные данные</h3>
@@ -79,98 +85,276 @@
         <h3 style="margin-top:18px">Контакты</h3>
         <div class="field"><div><div class="label">Email</div><div class="value" id="emailField">—</div></div><button class="edit-btn" onclick="enableEdit('email')">Изменить</button></div>
         <div class="field"><div><div class="label">Телефон</div><div class="value" id="phoneField">—</div></div><button class="edit-btn" onclick="enableEdit('phone')">Изменить</button></div>
-        <div class="field"><div><div class="label">Номер карты</div><div class="value" id="cardField">—</div></div><button class="edit-btn" onclick="enableEdit('card')">Изменить</button></div>
+        <div class="field"><div><div class="label">Номер карты</div><div class="value" id="cardField">—</div></div><button class="edit-btn" onclick="enableEdit('cardNumber')">Изменить</button></div>
         <div class="field"><div><div class="label">Тип карты</div><div class="value" id="cardTypeField">—</div></div></div>
       </div>
     </div>
+
+    <!-- Right column -->
     <div>
       <div class="card">
         <h3>Краткая информация</h3>
-        <div class="small-muted" style="margin-top:12px">Основные действия:</div>
+        <div style="margin-top:12px" class="small-muted">Здесь отображаются основные данные и быстрые действия.</div>
         <div style="margin-top:18px;display:flex;flex-direction:column;gap:12px">
           <button onclick="goTo('profileTab')" class="edit-btn">Редактировать профиль</button>
           <button onclick="goTo('milesTab')" class="edit-btn">Посмотреть мили</button>
-          <button onclick="logout()" class="edit-btn">Выйти</button>
+          <div style="display:flex;align-items:center;gap:12px">
+            <button onclick="logout()" class="edit-btn">Выйти</button>
+            <div id="saveInfo" class="save-notice"></div>
+          </div>
         </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h3>Подсказка</h3>
+        <div class="small-muted" style="margin-top:8px">Изменённые данные сохраняются в личном профиле и отправляются на сервер (если он есть).</div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-function el(id){return document.getElementById(id)}
+/* Utility */
+function el(id){ return document.getElementById(id); }
+function showMsg(msg, time=2500){ const s = el('saveInfo'); s.innerText = msg; setTimeout(()=>{ if(s.innerText===msg) s.innerText=''; }, time); }
 
+/* Tabs */
 function showTab(evt){
   evt && evt.preventDefault();
   const tabId = evt ? evt.currentTarget.getAttribute('data-tab') : 'profileTab';
   document.querySelectorAll('.tabs a').forEach(a=>a.classList.remove('active'));
   if(evt) evt.currentTarget.classList.add('active');
   ['profileTab','milesTab','shopTab','settingsTab'].forEach(id=>{
-    const elc = el(id); if(elc) elc.style.display=(id===tabId?'block':'none');
+    const elc = document.getElementById(id);
+    if(elc) elc.style.display = (id===tabId ? 'block' : 'none');
   });
 }
 
+/* Robust profile loading:
+   Accepts server returning either:
+     1) { ok: true, user: {...} }
+     2) {...profile...}
+*/
 async function loadProfile(){
-  try {
-    const res = await fetch("/api/profile",{credentials:"include"});
-    if(!res.ok){ window.location.href="auth.html"; return; }
-    const data = await res.json();
-    applyProfile(data.user);
-  } catch(e){ console.error("Ошибка загрузки профиля",e); window.location.href="auth.html"; }
-}
+  try{
+    const res = await fetch('/api/profile', { credentials:'include' });
+    if(!res.ok){
+      // not logged in -> redirect to auth
+      window.location.href = 'auth.html';
+      return;
+    }
+    const payload = await res.json().catch(()=>null);
+    if(!payload){ throw new Error('invalid json'); }
 
-function applyProfile(p){
-  el('fioField').innerText=p.fio||'—';
-  el('dobField').innerText=p.dob||'—';
-  el('genderField').innerText=p.gender||'—';
-  el('emailField').innerText=p.email||'—';
-  el('phoneField').innerText=p.phone||'—';
-  el('cardField').innerText=p.card||'—';
-  el('fioHeader').childNodes[0].textContent=p.fio||'Пользователь';
-  el('phoneHeader').innerText=p.phone||'';
-  el('bonusMiles').innerText=p.bonusMiles||'952';
-  if(p.avatar) el('avatar').src=p.avatar;
-  el('cardTypeField').innerText=p.cardType||'—';
-  const img=el('cardTypeImg');
-  if(p.cardType==='VIP'){img.src='images/vip.png';img.style.display='inline-block';}
-  else if(p.cardType==='Classic'){img.src='images/classic.png';img.style.display='inline-block';}
-  else{img.style.display='none';}
-}
+    // normalize
+    let profile = null;
+    if(payload.user) profile = payload.user;
+    else if(payload.ok && payload.user) profile = payload.user;
+    else profile = payload;
 
-function enableEdit(field){
-  const map={fio:['fioField','fioHeader'],dob:['dobField'],gender:['genderField'],email:['emailField'],phone:['phoneField','phoneHeader'],card:['cardField']};
-  const ids=map[field]; if(!ids) return;
-  const current=el(ids[0]).innerText==='—'?'':el(ids[0]).innerText;
-  const input=document.createElement('input');
-  input.type=(field==='email')?'email':(field==='phone')?'tel':'text';
-  input.value=current; input.style.width='220px';
-  const ok=document.createElement('button'); ok.innerText='OK'; ok.className='btn'; ok.style.marginLeft='8px'; ok.onclick=saveInline;
-  const wrapper=document.createElement('div'); wrapper.appendChild(input); wrapper.appendChild(ok);
-  const container=el(ids[0]); container.innerHTML=''; container.appendChild(wrapper); input.focus();
-  async function saveInline(){
-    const val=input.value.trim()||'—';
-    ids.forEach(id=>{if(el(id))el(id).innerText=(val==='—'?'—':val);});
-    if(field==='fio' && el('fioHeader')) el('fioHeader').childNodes[0].textContent=val==='—'?'Пользователь':val;
-    localStorage.setItem(field,val==='—'?'':val);
-    // отправка обновлений на сервер
-    try{ await fetch("/api/update-profile",{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify({[field]:val==='—'?'':val})}); }catch(e){console.error("Ошибка обновления",e);}
+    applyProfile(profile);
+  }catch(err){
+    console.error('Ошибка загрузки профиля', err);
+    // best effort: if we have localStorage fallback, use it; otherwise force login
+    const fallback = {
+      fio: localStorage.getItem('fio') || '',
+      phone: localStorage.getItem('phone') || '',
+      email: localStorage.getItem('email') || '',
+      cardNumber: localStorage.getItem('cardNumber') || '',
+      dob: localStorage.getItem('dob') || '',
+      gender: localStorage.getItem('gender') || '',
+      avatar: localStorage.getItem('avatar') || '',
+      bonusMiles: localStorage.getItem('bonusMiles') || ''
+    };
+    // if there's anything — apply, otherwise redirect
+    if(fallback.fio || fallback.phone || fallback.email || fallback.cardNumber){
+      applyProfile(fallback);
+      showMsg('Отображаются локальные данные');
+    } else {
+      window.location.href = 'auth.html';
+    }
   }
 }
 
-el('avatarInput').addEventListener('change',function(){
-  const f=this.files[0]; if(!f) return;
-  const r=new FileReader();
-  r.onload=function(e){
-    const dataUrl=e.target.result; el('avatar').src=dataUrl; localStorage.setItem('avatar',dataUrl);
-    fetch("/api/update-profile",{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify({avatar:dataUrl})});
+/* Apply profile to UI (supports both cardNumber/card) */
+function applyProfile(p){
+  p = p || {};
+  const cardNumber = p.cardNumber || p.card || '';
+  el('fioField').innerText = p.fio || '—';
+  el('dobField').innerText = p.dob || '—';
+  el('genderField').innerText = p.gender || '—';
+  el('emailField').innerText = p.email || '—';
+  el('phoneField').innerText = p.phone || '—';
+  el('cardField').innerText = cardNumber || '—';
+  // header name (keep any existing edit icon)
+  const fioHeader = el('fioHeader');
+  // set only text node, preserve edit icon element
+  if(fioHeader){
+    // remove existing text nodes then insert new text node at start
+    // safer way: set firstChild textContent if exists and is text node
+    const first = fioHeader.childNodes[0];
+    if(first && first.nodeType === Node.TEXT_NODE){
+      first.textContent = p.fio || 'Пользователь';
+    } else {
+      fioHeader.insertBefore(document.createTextNode(p.fio || 'Пользователь'), fioHeader.firstChild);
+    }
+  }
+  el('phoneHeader').innerText = p.phone || '';
+  el('bonusMiles').innerText = (p.bonusMiles !== undefined && p.bonusMiles !== null) ? p.bonusMiles : '—';
+  if(p.avatar) el('avatar').src = p.avatar;
+
+  el('cardTypeField').innerText = p.cardType || '—';
+  const img = el('cardTypeImg');
+  if(p.cardType === 'VIP'){ img.src = 'images/vip.png'; img.style.display = 'inline-block'; }
+  else if(p.cardType === 'Classic'){ img.src = 'images/classic.png'; img.style.display = 'inline-block'; }
+  else { img.style.display = 'none'; }
+
+  // persist locally as backup
+  try{
+    localStorage.setItem('fio', p.fio || '');
+    localStorage.setItem('phone', p.phone || '');
+    localStorage.setItem('email', p.email || '');
+    localStorage.setItem('cardNumber', cardNumber || '');
+    if(p.avatar) localStorage.setItem('avatar', p.avatar);
+    if(p.dob) localStorage.setItem('dob', p.dob);
+    if(p.gender) localStorage.setItem('gender', p.gender);
+    if(p.bonusMiles !== undefined) localStorage.setItem('bonusMiles', String(p.bonusMiles));
+  }catch(e){}
+}
+
+/* Inline edit for fields */
+function enableEdit(field){
+  const fieldMap = {
+    fio: ['fioField','fioHeader'],
+    dob: ['dobField'],
+    gender: ['genderField'],
+    email: ['emailField'],
+    phone: ['phoneField','phoneHeader'],
+    cardNumber: ['cardField']
+  };
+  const ids = fieldMap[field];
+  if(!ids) return;
+  const containerId = ids[0];
+  const container = el(containerId);
+  const current = container.innerText === '—' ? '' : container.innerText;
+  const input = document.createElement('input');
+  input.type = (field === 'email') ? 'email' : (field === 'phone') ? 'tel' : 'text';
+  input.value = current;
+  input.style.width = '220px';
+  const ok = document.createElement('button'); ok.innerText = 'OK'; ok.className = 'btn'; ok.style.marginLeft = '8px';
+  const cancel = document.createElement('button'); cancel.innerText = 'Отмена'; cancel.className = 'edit-btn'; cancel.style.marginLeft='8px';
+  const wrapper = document.createElement('div');
+  wrapper.appendChild(input); wrapper.appendChild(ok); wrapper.appendChild(cancel);
+  container.innerHTML = '';
+  container.appendChild(wrapper);
+  input.focus();
+
+  cancel.onclick = function(e){ e.preventDefault(); // restore original display
+    ids.forEach(id => { if(el(id)) el(id).innerText = current || '—'; });
+  };
+
+  ok.onclick = async function(e){
+    e.preventDefault();
+    const val = input.value.trim();
+    const saveVal = val || '';
+    // update UI immediately
+    ids.forEach(id => { if(el(id)) el(id).innerText = saveVal || '—'; });
+    if(field === 'fio' && el('fioHeader')){
+      const fh = el('fioHeader');
+      const first = fh.childNodes[0];
+      if(first && first.nodeType === Node.TEXT_NODE) first.textContent = saveVal || 'Пользователь';
+      else fh.insertBefore(document.createTextNode(saveVal || 'Пользователь'), fh.firstChild);
+    }
+    // local fallback
+    try{ localStorage.setItem(field === 'cardNumber' ? 'cardNumber' : field, saveVal); }catch(e){}
+    showMsg('Сохраняю...');
+    // prepare payload: server uses cardNumber key
+    const payloadKey = field === 'cardNumber' ? 'cardNumber' : field;
+    const payload = {};
+    payload[payloadKey] = saveVal;
+    // try primary endpoint, fallback if necessary
+    try{
+      const ok1 = await postProfileUpdate(payload);
+      if(ok1){
+        showMsg('Сохранено');
+      } else {
+        showMsg('Локально сохранено (сервер недоступен)');
+      }
+    }catch(e){
+      console.error('Ошибка при обновлении', e);
+      showMsg('Ошибка обновления');
+    }
+  };
+}
+
+/* Avatar upload: read as dataURL, update local UI and sync */
+el('avatarInput').addEventListener('change', function(){
+  const f = this.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = async function(e){
+    const dataUrl = e.target.result;
+    el('avatar').src = dataUrl;
+    try{ localStorage.setItem('avatar', dataUrl); }catch(e){}
+    showMsg('Загружаю аватар...');
+    try{
+      const ok = await postProfileUpdate({ avatar: dataUrl });
+      if(ok) showMsg('Аватар сохранён');
+      else showMsg('Аватар сохранён локально');
+    }catch(e){ console.error('avatar upload err', e); showMsg('Ошибка сохранения аватара'); }
   };
   r.readAsDataURL(f);
 });
 
-async function logout(){ await fetch("/api/logout",{method:"POST",credentials:"include"}); window.location.href="auth.html"; }
+/* postProfileUpdate: tries /api/profile/update, falls back to /api/update-profile */
+async function postProfileUpdate(obj){
+  try{
+    // first try expected endpoint
+    let res = await fetch('/api/profile/update', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(obj)
+    });
+    if(res.ok) return true;
+    // try fallback
+    res = await fetch('/api/update-profile', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(obj)
+    });
+    return res.ok;
+  }catch(e){
+    return false;
+  }
+}
 
-document.addEventListener('DOMContentLoaded',()=>{ loadProfile(); showTab({currentTarget:document.querySelector('.tabs a.active'),preventDefault:()=>{}}); el('editNameBtn').addEventListener('click',()=>enableEdit('fio')); });
+/* Logout */
+async function logout(){
+  try{
+    await fetch('/api/logout', { method:'POST', credentials:'include' });
+  }catch(e){}
+  // clear session markers (do not wipe profile completely)
+  try{
+    localStorage.removeItem('session');
+  }catch(e){}
+  window.location.href = 'auth.html';
+}
+
+/* goTo helper */
+function goTo(tab){
+  document.querySelectorAll('.tabs a').forEach(a => a.classList.remove('active'));
+  const a = [...document.querySelectorAll('.tabs a')].find(x=> x.getAttribute('data-tab')===tab);
+  if(a) a.classList.add('active');
+  showTab({ currentTarget: a, preventDefault: ()=>{} });
+}
+
+/* init */
+document.addEventListener('DOMContentLoaded', ()=>{
+  loadProfile();
+  showTab({ currentTarget: document.querySelector('.tabs a.active'), preventDefault: ()=>{} });
+  el('editNameBtn').addEventListener('click', ()=> enableEdit('fio'));
+});
 </script>
 </body>
 </html>
-
