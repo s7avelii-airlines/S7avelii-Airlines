@@ -1,102 +1,102 @@
 // server.js
-// Lightweight file-backed server for S7avelii — users + cart + orders
-// Uses pure-JS bcrypt (bcryptjs) to avoid native build issues on deploy platforms.
-
 const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
+const cors = require('cors');
 const fs = require('fs');
 const fsp = fs.promises;
 const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const IS_PROD = process.env.NODE_ENV === 'production';
 
-const PUBLIC_DIR = path.join(__dirname, 'public');
 const DATA_DIR = path.join(__dirname, 'data');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
-const CARTS_FILE = path.join(DATA_DIR, 'carts.json');
-const ORDERS_FILE = path.join(DATA_DIR, 'orders.json');
+const PUBLIC_DIR = path.join(__dirname, 'public');
 
-// middlewares
-app.use(express.json({ limit: '5mb' }));
-app.use(express.urlencoded({ extended: true }));
+const IS_PROD = process.env.NODE_ENV === 'production';
+const SESSION_SECRET = process.env.SESSION_SECRET || 'change-me-in-prod';
+
+// middleware
+app.use(express.json({ limit: '8mb' }));
 app.use(cookieParser());
+// CORS only if frontend may call from other origin — we allow credentials
+app.use(cors({ origin: true, credentials: true }));
+// serve static files
 app.use(express.static(PUBLIC_DIR));
 
-// session
+// sessions
 app.use(session({
   name: 's7avelii.sid',
-  secret: process.env.SESSION_SECRET || 'please-change-this-secret',
+  secret: SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: IS_PROD, // ensure https in prod
+    secure: IS_PROD,
     sameSite: 'lax',
     maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
   }
 }));
 
-// Safe write helper (atomic-ish)
-async function safeWriteFile(filePath, content) {
-  const tmp = filePath + '.tmp-' + Date.now();
-  await fsp.writeFile(tmp, content, { encoding: 'utf8' });
-  await fsp.rename(tmp, filePath);
-}
-
-// Ensure data files exist
-async function ensureDataFiles() {
+// helpers: ensure data dir and users file
+async function ensureUsersFile() {
   await fsp.mkdir(DATA_DIR, { recursive: true });
-  async function ensure(fp, initial) {
-    try {
-      await fsp.access(fp, fs.constants.F_OK);
-    } catch (e) {
-      await safeWriteFile(fp, JSON.stringify(initial, null, 2));
-    }
-  }
-  await ensure(USERS_FILE, []);
-  await ensure(CARTS_FILE, {});
-  await ensure(ORDERS_FILE, []);
-}
-
-async function loadJson(fp, fallback) {
   try {
-    const raw = await fsp.readFile(fp, 'utf8');
-    return JSON.parse(raw || JSON.stringify(fallback));
+    await fsp.access(USERS_FILE, fs.constants.F_OK);
   } catch (e) {
-    console.error('Failed to load JSON', fp, e);
-    return fallback;
+    await safeWriteFile(USERS_FILE, JSON.stringify([], null, 2));
   }
 }
-async function saveJson(fp, data) {
-  await safeWriteFile(fp, JSON.stringify(data, null, 2));
+
+async function safeWriteFile(target, content) {
+  const tmp = target + '.tmp-' + Date.now();
+  await fsp.writeFile(tmp, content, 'utf8');
+  await fsp.rename(tmp, target);
 }
 
-// Users helpers
-async function loadUsers() { return loadJson(USERS_FILE, []); }
-async function saveUsers(u){ return saveJson(USERS_FILE, u); }
+async function loadUsers() {
+  await ensureUsersFile();
+  const raw = await fsp.readFile(USERS_FILE, 'utf8');
+  try {
+    return JSON.parse(raw || '[]');
+  } catch (e) {
+    console.error('Invalid users.json, resetting', e);
+    await safeWriteFile(USERS_FILE, JSON.stringify([], null, 2));
+    return [];
+  }
+}
 
-// Carts helpers (object: { userId: [items...] })
-async function loadCarts(){ return loadJson(CARTS_FILE, {}); }
-async function saveCarts(c){ return saveJson(CARTS_FILE, c); }
+async function saveUsers(users) {
+  await ensureUsersFile();
+  await safeWriteFile(USERS_FILE, JSON.stringify(users, null, 2));
+}
 
-// Orders helpers
-async function loadOrders(){ return loadJson(ORDERS_FILE, []); }
-async function saveOrders(o){ return saveJson(ORDERS_FILE, o); }
+// utilities
+function makeSafeUser(u) {
+  const copy = { ...u };
+  delete copy.password;
+  return copy;
+}
 
-/* ----------------- Authentication API ----------------- */
+function newId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+}
+
+/* ---------------------------
+   AUTH API
+   --------------------------- */
 
 // register
 app.post('/api/register', async (req, res) => {
   try {
     const { fio, phone, email, password, cardNumber, cardType, dob, gender } = req.body;
-    if (!fio || !phone || !password) return res.status(400).json({ error: 'Поля fio, phone и password обязательны' });
-
+    if (!fio || !phone || !password) {
+      return res.status(400).json({ error: 'Поля fio, phone и password обязательны' });
+    }
     const users = await loadUsers();
-    if (email && users.find(u => u.email && u.email.toLowerCase() === String(email).toLowerCase())) {
+    if (email && users.find(u => u.email && u.email.toLowerCase() === email.toLowerCase())) {
       return res.status(400).json({ error: 'Пользователь с таким email уже зарегистрирован' });
     }
     if (users.find(u => u.phone === phone)) {
@@ -104,24 +104,31 @@ app.post('/api/register', async (req, res) => {
     }
 
     const hashed = await bcrypt.hash(password, 10);
-    const id = Date.now().toString(36) + Math.random().toString(36).slice(2,8);
-    const newUser = {
-      id, fio, phone, email: email||'', password: hashed,
-      cardNumber: cardNumber||'', cardType: cardType||'', dob: dob||'', gender: gender||'',
-      avatar: '', bonusMiles: 0, role: 'user', createdAt: new Date().toISOString()
+    const id = newId();
+    const user = {
+      id,
+      fio,
+      phone,
+      email: email || '',
+      password: hashed,
+      cardNumber: cardNumber || '',
+      cardType: cardType || '',
+      dob: dob || '',
+      gender: gender || '',
+      avatar: '',
+      bonusMiles: 0,
+      role: 'user',
+      cart: [],      // cart stored per-user
+      orders: [],    // user's orders
+      createdAt: new Date().toISOString()
     };
-    users.push(newUser);
+    users.push(user);
     await saveUsers(users);
 
-    // initialize empty cart for user
-    const carts = await loadCarts();
-    carts[id] = carts[id] || [];
-    await saveCarts(carts);
-
     // create session
-    req.session.userId = id;
+    req.session.userId = user.id;
 
-    const safe = {...newUser}; delete safe.password;
+    const safe = makeSafeUser(user);
     res.json({ ok: true, user: safe });
   } catch (err) {
     console.error('register error', err);
@@ -129,7 +136,7 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// login
+// login (accept phone or email)
 app.post('/api/login', async (req, res) => {
   try {
     const { phone, email, password } = req.body;
@@ -143,8 +150,7 @@ app.post('/api/login', async (req, res) => {
     if (!ok) return res.status(400).json({ error: 'Неверный пароль' });
 
     req.session.userId = user.id;
-    const safe = {...user}; delete safe.password;
-    res.json({ ok: true, user: safe });
+    res.json({ ok: true, user: makeSafeUser(user) });
   } catch (err) {
     console.error('login error', err);
     res.status(500).json({ error: 'Internal server error' });
@@ -160,108 +166,130 @@ app.post('/api/logout', (req, res) => {
   });
 });
 
-// profile
+/* ---------------------------
+   PROFILE API
+   --------------------------- */
+
 app.get('/api/profile', async (req, res) => {
   try {
     if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
     const users = await loadUsers();
     const user = users.find(u => u.id === req.session.userId);
     if (!user) return res.status(404).json({ error: 'Пользователь не найден' });
-    const safe = {...user}; delete safe.password;
-    res.json({ ok: true, user: safe });
+    res.json({ ok: true, user: makeSafeUser(user) });
   } catch (err) {
     console.error('profile error', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// update profile
 app.post('/api/profile/update', async (req, res) => {
   try {
     if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
-    const allowed = ['fio','phone','email','cardNumber','cardType','dob','gender','avatar','bonusMiles'];
     const users = await loadUsers();
     const user = users.find(u => u.id === req.session.userId);
     if (!user) return res.status(404).json({ error: 'Пользователь не найден' });
+
+    const allowed = ['fio','phone','email','cardNumber','cardType','dob','gender','avatar','bonusMiles'];
     for (const k of allowed) {
       if (req.body[k] !== undefined) user[k] = req.body[k];
     }
     await saveUsers(users);
-    const safe = {...user}; delete safe.password;
-    res.json({ ok: true, user: safe });
+    res.json({ ok: true, user: makeSafeUser(user) });
   } catch (err) {
     console.error('profile update error', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-/* ----------------- Cart API ----------------- */
+// alias for legacy frontend
+app.post('/api/update-profile', (req, res) => {
+  // reuse previous route
+  return app._router.handle(req, res, () => {}, '/api/profile/update', 'POST');
+});
 
-// require auth middleware for cart endpoints
-function requireAuth(req, res, next){
-  if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
-  next();
-}
+/* ---------------------------
+   CART API (per-user)
+   --------------------------- */
 
-// get cart
-app.get('/api/cart', requireAuth, async (req, res) => {
+app.get('/api/cart', async (req, res) => {
   try {
-    const carts = await loadCarts();
-    const items = carts[req.session.userId] || [];
-    res.json({ ok: true, items });
+    if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
+    const users = await loadUsers();
+    const user = users.find(u => u.id === req.session.userId);
+    res.json({ ok: true, cart: (user && user.cart) ? user.cart : [] });
   } catch (err) {
     console.error('cart get error', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// add to cart
-app.post('/api/cart/add', requireAuth, async (req, res) => {
+app.post('/api/cart/add', async (req, res) => {
   try {
+    if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
     const item = req.body;
-    if (!item || !item.id) return res.status(400).json({ error: 'Неправильный item' });
-    const carts = await loadCarts();
-    carts[req.session.userId] = carts[req.session.userId] || [];
-    carts[req.session.userId].push(item);
-    await saveCarts(carts);
-    res.json({ ok: true, items: carts[req.session.userId] });
+    if (!item || !item.id) return res.status(400).json({ error: 'Неверный товар' });
+
+    const users = await loadUsers();
+    const user = users.find(u => u.id === req.session.userId);
+    if (!user) return res.status(404).json({ error: 'Пользователь не найден' });
+
+    user.cart = user.cart || [];
+    const existing = user.cart.find(x => x.id == item.id);
+    if (existing) {
+      existing.qty = (existing.qty || 1) + (item.qty || 1);
+    } else {
+      user.cart.push({
+        id: item.id,
+        title: item.title || '',
+        price: item.price || '',
+        image: item.image || '',
+        qty: item.qty || 1
+      });
+    }
+    await saveUsers(users);
+    res.json({ ok: true, cart: user.cart });
   } catch (err) {
     console.error('cart add error', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// remove from cart: accepts { index } OR { id } (removes first match)
-app.post('/api/cart/remove', requireAuth, async (req, res) => {
+app.post('/api/cart/remove', async (req, res) => {
   try {
-    const { index, id } = req.body || {};
-    const carts = await loadCarts();
-    const arr = carts[req.session.userId] || [];
-    if (typeof index === 'number') {
-      if (index < 0 || index >= arr.length) return res.status(400).json({ error: 'Неправильный индекс' });
-      arr.splice(index, 1);
-    } else if (id) {
-      const i = arr.findIndex(it => it.id === id);
-      if (i >= 0) arr.splice(i,1);
-      else return res.status(404).json({ error: 'Товар не найден' });
+    if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
+    const { id, all } = req.body;
+    if (!id) return res.status(400).json({ error: 'id required' });
+
+    const users = await loadUsers();
+    const user = users.find(u => u.id === req.session.userId);
+    if (!user) return res.status(404).json({ error: 'Пользователь не найден' });
+
+    user.cart = user.cart || [];
+    const idx = user.cart.findIndex(x => x.id == id);
+    if (idx === -1) return res.status(404).json({ error: 'Товар не найден в корзине' });
+
+    if (all || (user.cart[idx].qty <= 1)) {
+      user.cart.splice(idx, 1);
     } else {
-      return res.status(400).json({ error: 'Нужен index или id' });
+      user.cart[idx].qty -= 1;
     }
-    carts[req.session.userId] = arr;
-    await saveCarts(carts);
-    res.json({ ok: true, items: arr });
+    await saveUsers(users);
+    res.json({ ok: true, cart: user.cart });
   } catch (err) {
     console.error('cart remove error', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// clear cart
-app.post('/api/cart/clear', requireAuth, async (req, res) => {
+app.post('/api/cart/clear', async (req, res) => {
   try {
-    const carts = await loadCarts();
-    carts[req.session.userId] = [];
-    await saveCarts(carts);
+    if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
+    const users = await loadUsers();
+    const user = users.find(u => u.id === req.session.userId);
+    if (!user) return res.status(404).json({ error: 'Пользователь не найден' });
+    user.cart = [];
+    await saveUsers(users);
     res.json({ ok: true });
   } catch (err) {
     console.error('cart clear error', err);
@@ -269,72 +297,84 @@ app.post('/api/cart/clear', requireAuth, async (req, res) => {
   }
 });
 
-// checkout: accepts { items } optionally; will create an order and clear cart
-app.post('/api/cart/checkout', requireAuth, async (req, res) => {
+app.post('/api/cart/checkout', async (req, res) => {
   try {
-    const provided = req.body && Array.isArray(req.body.items) ? req.body.items : null;
-    const carts = await loadCarts();
-    const items = provided || (carts[req.session.userId] || []);
-    if (!items || items.length === 0) return res.status(400).json({ error: 'Корзина пуста' });
-
+    if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
     const users = await loadUsers();
-    const user = users.find(u => u.id === req.session.userId) || null;
+    const user = users.find(u => u.id === req.session.userId);
+    if (!user) return res.status(404).json({ error: 'Пользователь не найден' });
 
-    const orders = await loadOrders();
+    const cart = user.cart || [];
+    if (!cart.length) return res.status(400).json({ error: 'Корзина пуста' });
+
+    const total = cart.reduce((s, it) => {
+      // try to parse numbers from price strings (best effort)
+      const digits = (it.price || '').replace(/[^\d,.-]/g, '').replace(',', '.');
+      const n = parseFloat(digits) || 0;
+      return s + n * (it.qty || 1);
+    }, 0);
+
     const order = {
-      id: Date.now().toString(36) + Math.random().toString(36).slice(2,8),
-      userId: req.session.userId,
-      items,
+      id: newId(),
+      items: cart,
+      total,
       createdAt: new Date().toISOString(),
-      userSnapshot: { fio: user?.fio||'', phone: user?.phone||'', email: user?.email||'' }
+      status: 'pending'
     };
-    orders.push(order);
-    await saveOrders(orders);
-
-    // clear server cart
-    carts[req.session.userId] = [];
-    await saveCarts(carts);
-
-    res.json({ ok: true, orderId: order.id });
+    user.orders = user.orders || [];
+    user.orders.push(order);
+    user.cart = [];
+    await saveUsers(users);
+    res.json({ ok: true, order });
   } catch (err) {
     console.error('checkout error', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-/* ----------------- Admin (optional) ----------------- */
-// simple admin listing users (role==='admin')
-app.get('/api/admin/users', requireAuth, async (req, res) => {
+/* ---------------------------
+   Admin: list users (no passwords) - optional
+   --------------------------- */
+app.get('/api/admin/users', async (req, res) => {
+  // Basic admin by role in session
   try {
+    if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
     const users = await loadUsers();
     const me = users.find(u => u.id === req.session.userId);
     if (!me || me.role !== 'admin') return res.status(403).json({ error: 'Нет доступа' });
-    const safe = users.map(u => { const copy = {...u}; delete copy.password; return copy; });
+    const safe = users.map(u => {
+      const c = { ...u }; delete c.password; return c;
+    });
     res.json({ ok: true, users: safe });
   } catch (err) {
-    console.error('admin users error', err); res.status(500).json({ error: 'Internal server error' });
+    console.error('admin users error', err);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-/* ----------------- SPA fallback ----------------- */
-// serve index.html for non-API routes (if you use a SPA)
+/* ---------------------------
+   SPA fallback: serve index.html for non-API paths
+   --------------------------- */
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'API endpoint not found' });
-  const idx = path.join(PUBLIC_DIR, 'index.html');
-  res.sendFile(idx);
+  const index = path.join(PUBLIC_DIR, 'index.html');
+  if (fs.existsSync(index)) return res.sendFile(index);
+  return res.send('S7avelii server');
 });
 
-/* ----------------- start ----------------- */
+/* ---------------------------
+   start
+   --------------------------- */
 (async () => {
   try {
-    await ensureDataFiles();
+    await ensureUsersFile();
     app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-      console.log(`Public: ${PUBLIC_DIR}`);
-      console.log(`Data dir: ${DATA_DIR}`);
+      console.log(`Server listening on port ${PORT}`);
+      console.log(`Public folder: ${PUBLIC_DIR}`);
+      console.log(`Users file: ${USERS_FILE}`);
     });
   } catch (err) {
-    console.error('Failed to start server', err);
+    console.error('Failed to start', err);
     process.exit(1);
   }
 })();
