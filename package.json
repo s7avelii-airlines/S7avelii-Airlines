@@ -1,7 +1,7 @@
 {
   "name": "s7avelii-server",
   "version": "1.0.0",
-  "description": "S7avelii simple server: users + cart + profile",
+  "description": "S7avelii server for users + cart + profile",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
