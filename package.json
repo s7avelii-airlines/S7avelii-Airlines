@@ -1,18 +1,19 @@
 {
   "name": "s7avelii-server",
   "version": "1.0.0",
+  "description": "S7avelii file-backed server for auth + cart",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "bcrypt": "^5.1.0",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "express-session": "^1.17.3"
+    "start": "node server.js",
+    "dev": "NODE_ENV=development node server.js"
   },
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3"
   }
 }
