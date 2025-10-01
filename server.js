@@ -1,153 +1,141 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const cookieParser = require("cookie-parser");
-const { v4: uuidv4 } = require("uuid");
+const session = require("express-session");
+const bodyParser = require("body-parser");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 const USERS_FILE = path.join(__dirname, "users.json");
 
-// Middleware
-app.use(express.json({ limit: "5mb" }));
-app.use(cookieParser());
+// ====== Middleware ======
+app.use(bodyParser.json({ limit: "2mb" }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// Загружаем пользователей
-function loadUsers() {
-  if (!fs.existsSync(USERS_FILE)) {
-    fs.writeFileSync(USERS_FILE, JSON.stringify([]));
+app.use(
+  session({
+    secret: "s7avelii-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, maxAge: 7 * 24 * 60 * 60 * 1000 }, // 7 дней
+  })
+);
+
+// ====== Helpers ======
+function readUsers() {
+  try {
+    return JSON.parse(fs.readFileSync(USERS_FILE, "utf8"));
+  } catch {
+    return [];
   }
-  return JSON.parse(fs.readFileSync(USERS_FILE));
 }
 
-// Сохраняем пользователей
 function saveUsers(users) {
-  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), "utf8");
 }
 
-// Получить текущего юзера по сессии
-function getUser(req) {
-  const sid = req.cookies.session;
-  if (!sid) return null;
-  const users = loadUsers();
-  return users.find((u) => u.session === sid);
-}
-
-// 📌 Регистрация
+// ====== Auth ======
 app.post("/api/register", (req, res) => {
-  const { username, password, email } = req.body;
-  if (!username || !password) {
-    return res.status(400).json({ error: "Заполните все поля" });
+  const { fio, dob, gender, email, phone, password, card, cardType } = req.body;
+  let users = readUsers();
+
+  if (users.find((u) => u.phone === phone)) {
+    return res.status(400).json({ error: "Пользователь с таким телефоном уже существует" });
   }
-  let users = loadUsers();
-  if (users.find((u) => u.username === username)) {
-    return res.status(400).json({ error: "Такой пользователь уже есть" });
-  }
-  const session = uuidv4();
+
   const newUser = {
-    id: uuidv4(),
-    username,
+    fio,
+    dob,
+    gender,
+    email,
+    phone,
     password,
-    email: email || "",
-    session,
-    cart: []
+    card,
+    cardType,
+    avatar: "",
+    bonusMiles: 1000,
+    cart: [], // корзина по умолчанию
   };
+
   users.push(newUser);
   saveUsers(users);
-  res.cookie("session", session, { httpOnly: true, sameSite: "lax" });
+
+  req.session.user = { phone };
   res.json({ success: true, user: newUser });
 });
 
-// 📌 Логин
 app.post("/api/login", (req, res) => {
-  const { username, password } = req.body;
-  const users = loadUsers();
-  const user = users.find(
-    (u) => u.username === username && u.password === password
-  );
-  if (!user) return res.status(401).json({ error: "Неверные данные" });
-  user.session = uuidv4();
-  saveUsers(users);
-  res.cookie("session", user.session, { httpOnly: true, sameSite: "lax" });
+  const { fio, phone, password } = req.body;
+  let users = readUsers();
+
+  const user = users.find((u) => u.phone === phone && u.password === password);
+  if (!user) {
+    return res.status(400).json({ error: "Неверные данные" });
+  }
+
+  req.session.user = { phone };
   res.json({ success: true, user });
 });
 
-// 📌 Выход
 app.post("/api/logout", (req, res) => {
-  const user = getUser(req);
-  if (user) {
-    user.session = null;
-    let users = loadUsers();
-    users = users.map((u) => (u.id === user.id ? user : u));
-    saveUsers(users);
-  }
-  res.clearCookie("session");
-  res.json({ success: true });
+  req.session.destroy(() => {
+    res.json({ success: true });
+  });
 });
 
-// 📌 Профиль
+// ====== Profile ======
 app.get("/api/profile", (req, res) => {
-  const user = getUser(req);
-  if (!user) return res.status(401).json({ error: "Не авторизован" });
+  if (!req.session.user) return res.status(401).json({ error: "Не авторизован" });
+  let users = readUsers();
+  const user = users.find((u) => u.phone === req.session.user.phone);
+  if (!user) return res.status(404).json({ error: "Пользователь не найден" });
   res.json({ user });
 });
 
-// 📌 Обновить профиль
 app.post("/api/update-profile", (req, res) => {
-  const user = getUser(req);
-  if (!user) return res.status(401).json({ error: "Не авторизован" });
+  if (!req.session.user) return res.status(401).json({ error: "Не авторизован" });
 
-  Object.assign(user, req.body);
-  let users = loadUsers();
-  users = users.map((u) => (u.id === user.id ? user : u));
+  let users = readUsers();
+  const idx = users.findIndex((u) => u.phone === req.session.user.phone);
+  if (idx === -1) return res.status(404).json({ error: "Пользователь не найден" });
+
+  users[idx] = { ...users[idx], ...req.body };
   saveUsers(users);
-  res.json({ success: true, user });
+
+  res.json({ success: true, user: users[idx] });
 });
 
-// 📌 Добавить товар в корзину
+// ====== Cart ======
 app.post("/api/cart/add", (req, res) => {
-  const user = getUser(req);
-  if (!user) return res.status(401).json({ error: "Не авторизован" });
+  if (!req.session.user) return res.status(401).json({ error: "Не авторизован" });
 
-  const { id, title, price, image, qty } = req.body;
-  const existing = user.cart.find((item) => item.id === id);
-  if (existing) {
-    existing.qty += qty || 1;
-  } else {
-    user.cart.push({ id, title, price, image, qty: qty || 1 });
-  }
+  const { product } = req.body;
+  if (!product) return res.status(400).json({ error: "Нет товара" });
 
-  let users = loadUsers();
-  users = users.map((u) => (u.id === user.id ? user : u));
+  let users = readUsers();
+  const idx = users.findIndex((u) => u.phone === req.session.user.phone);
+  if (idx === -1) return res.status(404).json({ error: "Пользователь не найден" });
+
+  users[idx].cart.push(product);
   saveUsers(users);
-  res.json({ success: true, cart: user.cart });
+
+  res.json({ success: true, cart: users[idx].cart });
 });
 
-// 📌 Получить корзину
 app.get("/api/cart", (req, res) => {
-  const user = getUser(req);
-  if (!user) return res.status(401).json({ error: "Не авторизован" });
+  if (!req.session.user) return res.status(401).json({ error: "Не авторизован" });
+
+  let users = readUsers();
+  const user = users.find((u) => u.phone === req.session.user.phone);
+  if (!user) return res.status(404).json({ error: "Пользователь не найден" });
+
   res.json({ cart: user.cart });
 });
 
-// 📌 Удалить из корзины
-app.post("/api/cart/remove", (req, res) => {
-  const user = getUser(req);
-  if (!user) return res.status(401).json({ error: "Не авторизован" });
-
-  const { id } = req.body;
-  user.cart = user.cart.filter((item) => item.id !== id);
-
-  let users = loadUsers();
-  users = users.map((u) => (u.id === user.id ? user : u));
-  saveUsers(users);
-  res.json({ success: true, cart: user.cart });
+// ====== Start ======
+app.listen(PORT, () => {
+  console.log(`✅ Server started on port ${PORT}`);
 });
 
-// 📌 Деплой Render требует index.html по умолчанию
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
 
-app.listen(PORT, () => console.log(`✅ Сервер запущен на порту ${PORT}`));
