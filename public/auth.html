@@ -40,6 +40,7 @@
   input{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d6d8db;margin-top:10px;font-size:14px}
   .btn{width:100%;padding:12px;border-radius:8px;border:0;background:var(--green);color:#fff;font-weight:600;margin-top:14px;cursor:pointer}
   .btn:hover{background:var(--green-dark)}
+  .btn[disabled]{opacity:.6;cursor:not-allowed}
 
   .switch{text-align:center;margin-top:14px;font-size:14px}
   .switch button{background:none;border:0;color:var(--green);text-decoration:underline;cursor:pointer;font:inherit}
@@ -54,6 +55,10 @@
   .hidden{display:none}
   .fade{opacity:0;transform:translateY(12px);pointer-events:none}
   .fade.show{display:block;opacity:1;transform:translateY(0);pointer-events:auto}
+
+  .row { display:flex; gap:10px; }
+  .card-type { display:inline-flex; align-items:center; gap:8px; margin-right:8px; margin-top:8px; }
+  .card-type img { display:inline-block; vertical-align:middle; border-radius:6px; }
 </style>
 </head>
 <body>
@@ -70,35 +75,37 @@
 </header>
 
 <main>
-  <div class="card">
+  <div class="card" aria-live="polite">
     <h2 id="title">Вход</h2>
 
     <!-- форма входа -->
-    <form id="loginForm" class="fade show">
-      <input id="loginFio" type="text" placeholder="ФИО" required autocomplete="name">
-      <input id="loginPhone" type="tel" placeholder="Телефон" required autocomplete="tel">
+    <form id="loginForm" class="fade show" autocomplete="on" novalidate>
+      <input id="loginFio" type="text" placeholder="ФИО (необязательно)" autocomplete="name">
+      <input id="loginPhone" type="tel" placeholder="Телефон" required autocomplete="tel" inputmode="tel">
       <input id="loginPassword" type="password" placeholder="Пароль" required>
-      <button class="btn" type="submit">Войти</button>
-      <div id="loginError" class="error"></div>
+      <button class="btn" id="loginBtn" type="submit">Войти</button>
+      <div id="loginError" class="error" role="status" aria-live="assertive"></div>
     </form>
 
     <!-- форма регистрации -->
-    <form id="registerForm" class="fade hidden">
+    <form id="registerForm" class="fade hidden" autocomplete="on" novalidate>
       <input id="regFio" type="text" placeholder="ФИО" required autocomplete="name">
       <input id="regDob" type="text" placeholder="Дата рождения (ДД.MM.ГГГГ)" autocomplete="bday">
       <input id="regGender" type="text" placeholder="Пол">
       <input id="regEmail" type="email" placeholder="Email" required autocomplete="email">
-      <input id="regPhone" type="tel" placeholder="Телефон" required autocomplete="tel">
-      <input id="regPassword" type="password" placeholder="Пароль" required>
+      <input id="regPhone" type="tel" placeholder="Телефон" required autocomplete="tel" inputmode="tel">
+      <input id="regPassword" type="password" placeholder="Пароль (мин. 6 символов)" required>
       <input id="regCard" type="text" placeholder="Номер карты S7avelii Priority">
 
       <div class="small-muted">Выберите тип карты:</div>
-      <label class="card-type"><input type="radio" name="regCardType" value="VIP"> VIP <img src="images/vip_card.png" alt="VIP" width="60"></label>
-      <label class="card-type"><input type="radio" name="regCardType" value="Classic"> Classic <img src="images/classic_card.png" alt="Classic" width="60"></label>
+      <div class="row" style="margin-top:6px">
+        <label class="card-type"><input type="radio" name="regCardType" value="VIP"> VIP <img src="images/vip_card.png" alt="VIP" width="60"></label>
+        <label class="card-type"><input type="radio" name="regCardType" value="Classic"> Classic <img src="images/classic_card.png" alt="Classic" width="60"></label>
+      </div>
 
-      <button class="btn" type="submit">Зарегистрироваться</button>
-      <div id="regError" class="error"></div>
-      <div id="regSuccess" class="success"></div>
+      <button class="btn" id="regBtn" type="submit">Зарегистрироваться</button>
+      <div id="regError" class="error" role="status" aria-live="assertive"></div>
+      <div id="regSuccess" class="success" role="status" aria-live="polite"></div>
     </form>
 
     <div class="switch"><span id="switchText">Нет аккаунта?</span> <button id="switchBtn">Зарегистрироваться</button></div>
@@ -106,47 +113,180 @@
 </main>
 
 <script>
-const API = '';
+/*
+  auth.html client script
+  - Submits to /api/login and /api/register (same origin)
+  - Sends credentials: 'include' so cookie-based session is created
+  - Shows errors and success messages
+  - Smooth fade in/out already supported via CSS classes
+*/
+
+const API = ''; // same origin
+
+// elements
 const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
 const title = document.getElementById('title');
 const switchBtn = document.getElementById('switchBtn');
 const switchText = document.getElementById('switchText');
 
-function showForm(showLogin){
-  const toShow = showLogin?loginForm:registerForm;
-  const toHide = showLogin?registerForm:loginForm;
-  toHide.classList.remove('show');
-  setTimeout(()=>toHide.classList.add('hidden'),350);
-  toShow.classList.remove('hidden');
-  setTimeout(()=>toShow.classList.add('show'),10);
+const loginError = document.getElementById('loginError');
+const regError = document.getElementById('regError');
+const regSuccess = document.getElementById('regSuccess');
 
+const loginBtn = document.getElementById('loginBtn');
+const regBtn = document.getElementById('regBtn');
+
+// helper to toggle forms with fade
+function showForm(showLogin){
+  const toShow = showLogin ? loginForm : registerForm;
+  const toHide = showLogin ? registerForm : loginForm;
+
+  // hide the other
+  toHide.classList.remove('show');
+  // after animation hide fully
+  setTimeout(() => {
+    toHide.classList.add('hidden');
+  }, 360);
+
+  // show target
+  toShow.classList.remove('hidden');
+  // allow reflow
+  setTimeout(() => toShow.classList.add('show'), 10);
+
+  // update header and labels
   if(showLogin){
     title.textContent = 'Вход';
     switchText.textContent = 'Нет аккаунта?';
     switchBtn.textContent = 'Зарегистрироваться';
-  }else{
+  } else {
     title.textContent = 'Регистрация';
     switchText.textContent = 'Уже есть аккаунт?';
     switchBtn.textContent = 'Войти';
   }
+
+  // clear messages
+  loginError.textContent = '';
+  regError.textContent = '';
+  regSuccess.textContent = '';
 }
 
-switchBtn.addEventListener('click',e=>{
+// toggle button
+switchBtn.addEventListener('click', (e) => {
   e.preventDefault();
   const showingLogin = loginForm.classList.contains('show');
   showForm(!showingLogin);
 });
 
-// авто-проверка сессии
-window.addEventListener('DOMContentLoaded', async ()=>{
-  try{
-    const r = await fetch(API+'/api/profile',{credentials:'include'});
-    if(r.ok) location.href='cabinet.html';
-  }catch{}
+// auto-check session - if logged in -> go to cabinet
+window.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const r = await fetch(API + '/api/profile', { credentials: 'include' });
+    if (r.ok) {
+      // already authenticated
+      window.location.href = 'cabinet.html';
+    }
+  } catch (err) {
+    // network fail or no server — stay on page
+    // console.log('profile check failed', err);
+  }
+});
+
+/* ---------- Login ---------- */
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  loginError.textContent = '';
+
+  const phone = document.getElementById('loginPhone').value.trim();
+  const password = document.getElementById('loginPassword').value;
+
+  if (!phone) { loginError.textContent = 'Введите телефон.'; return; }
+  if (!password) { loginError.textContent = 'Введите пароль.'; return; }
+
+  loginBtn.disabled = true;
+  loginBtn.textContent = 'Проверка...';
+
+  try {
+    const resp = await fetch(API + '/api/login', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, password })
+    });
+
+    const data = await resp.json().catch(()=>({}));
+
+    if (!resp.ok) {
+      loginError.textContent = (data && data.error) ? data.error : 'Ошибка входа';
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Войти';
+      return;
+    }
+
+    // success -> redirect
+    window.location.href = 'cabinet.html';
+  } catch (err) {
+    loginError.textContent = 'Ошибка сети. Попробуйте позже.';
+    loginBtn.disabled = false;
+    loginBtn.textContent = 'Войти';
+  }
+});
+
+/* ---------- Register ---------- */
+registerForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  regError.textContent = '';
+  regSuccess.textContent = '';
+
+  const fio = document.getElementById('regFio').value.trim();
+  const dob = document.getElementById('regDob').value.trim();
+  const gender = document.getElementById('regGender').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const phone = document.getElementById('regPhone').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const card = document.getElementById('regCard').value.trim();
+  const cardType = document.querySelector('input[name="regCardType"]:checked')?.value || '';
+
+  // basic client validation
+  if (!fio) { regError.textContent = 'Введите ФИО.'; return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { regError.textContent = 'Введите корректный email.'; return; }
+  if (!phone) { regError.textContent = 'Введите телефон.'; return; }
+  if (!password || password.length < 6) { regError.textContent = 'Пароль должен быть не менее 6 символов.'; return; }
+
+  regBtn.disabled = true;
+  regBtn.textContent = 'Регистрация...';
+
+  try {
+    const resp = await fetch(API + '/api/register', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fio, dob, gender, email, phone, password,
+        cardNumber: card, cardType
+      })
+    });
+
+    const data = await resp.json().catch(()=>({}));
+
+    if (!resp.ok) {
+      regError.textContent = (data && data.error) ? data.error : 'Ошибка регистрации';
+      regBtn.disabled = false;
+      regBtn.textContent = 'Зарегистрироваться';
+      return;
+    }
+
+    // success
+    regSuccess.textContent = 'Регистрация успешна — перенаправляем в личный кабинет...';
+    setTimeout(()=> window.location.href = 'cabinet.html', 900);
+
+  } catch (err) {
+    regError.textContent = 'Ошибка сети. Попробуйте позже.';
+    regBtn.disabled = false;
+    regBtn.textContent = 'Зарегистрироваться';
+  }
 });
 </script>
 
 </body>
 </html>
-
