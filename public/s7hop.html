@@ -9,43 +9,26 @@
     body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;color:#1c1c1c;background:#fff}
     a{text-decoration:none;color:inherit}
     button{font:inherit}
-
     :root{
-      --s7:#b4e600;
-      --s7-dark:#95c900;
-      --line:#e5e7eb;
-      --bg:#f6f7f9;
-      --shadow:0 1px 2px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.06);
-      --radius:14px;
-      --radius-lg:18px;
+      --s7:#b4e600;--s7-dark:#95c900;--line:#e5e7eb;--bg:#f6f7f9;--shadow:0 1px 2px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.06);
+      --radius:14px;--radius-lg:18px;
     }
-
     .topbar{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--line)}
     .topbar-inner{max-width:1220px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:14px 20px;flex-wrap:wrap}
-
     .logo{display:flex;align-items:center;gap:10px;font-weight:700}
     .logo-img{width:36px;height:36px;border-radius:50%;object-fit:cover}
-
     .catalog-btn{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--line);padding:10px 14px;border-radius:12px;white-space:nowrap}
     .search{flex:1;display:flex;align-items:center;background:var(--bg);border:1px solid var(--line);padding:10px 12px;border-radius:12px;gap:10px;min-width:160px}
     .search input{border:0;outline:0;background:transparent;width:100%}
-
     .top-actions{display:flex;align-items:center;gap:18px;margin-left:auto;flex-wrap:wrap}
-
     .crumbs{max-width:1220px;margin:14px auto 0;padding:0 20px;color:#6b7280;font-size:14px}
-
     .page{max-width:1220px;margin:0 auto;padding:8px 20px 60px}
     .page h1{font-size:42px;margin:16px 0 18px}
-
     .content{display:grid;grid-template-columns:260px 1fr;gap:26px}
-
     .filter{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px}
     .filter h3{margin:0 0 10px;font-size:16px}
-
     .sort{display:flex;justify-content:flex-end;margin-bottom:8px}
-
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
-
     .card{border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;background:#fff;box-shadow:var(--shadow);display:flex;flex-direction:column}
     .thumb{background:#f9fafb;position:relative;display:grid;place-items:center;height:210px}
     .heart{position:absolute;right:12px;top:12px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line)}
@@ -53,35 +36,27 @@
     .price{font-weight:700}
     .title{color:#1a1a1a;min-height:44px}
     .btn{display:inline-flex;align-items:center;justify-content:center;background:var(--s7);border:0;border-radius:12px;padding:10px 14px;font-weight:700;margin-top:auto}
+    .btn.secondary{background:#fff;border:1px solid var(--line);color:#111}
     .btn:hover{background:var(--s7-dark);cursor:pointer}
-
-    /* Адаптив */
-    @media (max-width: 900px){
-      .content{grid-template-columns:1fr}
-      .page h1{font-size:34px}
-      .filter{margin-bottom:20px}
-    }
-
-    @media (max-width: 600px){
-      .topbar-inner{gap:10px;padding:10px;flex-direction:column;align-items:flex-start}
-      .top-actions{margin-left:0;gap:12px}
-      .search{width:100%}
-      .page h1{font-size:28px}
-      .crumbs{font-size:12px}
-    }
+    @media (max-width: 900px){ .content{grid-template-columns:1fr} .page h1{font-size:34px} .filter{margin-bottom:20px} }
+    @media (max-width: 600px){ .topbar-inner{gap:10px;padding:10px;flex-direction:column;align-items:flex-start} .top-actions{margin-left:0;gap:12px} .search{width:100%} .page h1{font-size:28px} .crumbs{font-size:12px} }
+    /* cart toast */
+    .toast{position:fixed;right:20px;bottom:20px;background:#111;color:#fff;padding:10px 14px;border-radius:10px;opacity:0;transform:translateY(8px);transition:all .28s}
+    .toast.show{opacity:1;transform:translateY(0)}
   </style>
 </head>
 <body>
   <header class="topbar">
     <div class="topbar-inner">
-      <a class="logo" href="#">
+      <a class="logo" href="index.html">
         <img src="images/photo_5276207082657412564_y.avif" alt="Логотип" class="logo-img">
+        S7avelii
       </a>
       <a class="catalog-btn" href="index.html">Главная</a>
       <label class="search"><input placeholder="Поиск" /></label>
       <nav class="top-actions">
         <a href="auth.html">Войти</a>
-        <a href="#">Избранное</a>
+        <a href="cabinet.html#shop">Корзина</a>
       </nav>
     </div>
   </header>
@@ -95,18 +70,19 @@
       <aside>
         <div class="filter">
           <h3>Цена товара</h3>
-          <label>от <input type="number" value="500"></label>
-          <label>до <input type="number" value="5 000"></label>
-          <h3>Изготовлен в</h3>
-          <label><input type="checkbox"> Россия</label>
+          <label>от <input id="fmin" type="number" value="500"></label><br>
+          <label>до <input id="fmax" type="number" value="5000"></label>
+          <h3 style="margin-top:12px">Фильтры</h3>
+          <label><input id="fmade" type="checkbox"> Россия</label>
         </div>
       </aside>
 
       <section>
         <div class="sort">
-          <select>
-            <option>Популярные</option>
-            <option>По рейтингу</option>
+          <select id="sortSelect">
+            <option value="popular">Популярные</option>
+            <option value="price-asc">По цене ↑</option>
+            <option value="price-desc">По цене ↓</option>
           </select>
         </div>
 
@@ -115,47 +91,141 @@
     </div>
   </main>
 
+  <div id="toast" class="toast"></div>
+
   <script>
+  // Products: priceVal — числовая цена (₽), buyUrl — ссылка на оплату/покупку
   const products = [
-    {
-      price: "550 ₽",
-      title: "Блокнот S7avelii Airlnes",
-      image: "images/photo_5330078908990750485_y.avif"
-    },
-    {
-      price: "2 350 ₽",
-      title: "Комбо Блокнот + Футболка",
-      image: "images/photo_5330078908990750484_y.avif"
-    },
-    {
-      price: "1 900 ₽",
-      title: "Фирменная футболка S7avelii Airlines",
-      image: "images/photo_5332515869139530693_y.avif"
-    },
-    {
-      price: "4 500 ₽",
-      title: "Комбо Путешественник ",
-      image: "images/photo_5330078908990750483_y.avif"
-    }
+    { id: "p1", price: "550 ₽", priceVal: 550, title: "Блокнот S7avelii Airlines", image: "images/photo_5330078908990750485_y.avif", buyUrl: "https://t.me/s7aveliishop" },
+    { id: "p2", price: "2 350 ₽", priceVal: 2350, title: "Комбо Блокнот + Футболка", image: "images/photo_5330078908990750484_y.avif", buyUrl: "https://t.me/s7aveliishop" },
+    { id: "p3", price: "1 900 ₽", priceVal: 1900, title: "Фирменная футболка S7avelii Airlines", image: "images/photo_5332515869139530693_y.avif", buyUrl: "https://t.me/s7aveliishop" },
+    { id: "p4", price: "4 500 ₽", priceVal: 4500, title: "Комбо Путешественник", image: "images/photo_5330078908990750483_y.avif", buyUrl: "https://t.me/s7aveliishop" }
   ];
 
   const grid = document.getElementById("product-grid");
+  const toast = document.getElementById('toast');
 
-  products.forEach(p => {
-    const card = document.createElement("article");
-    card.className = "card";
-    card.innerHTML = `
-      <div class="thumb">
-        <img src="${p.image}" alt="${p.title}" style="max-height:100%; max-width:100%; object-fit:contain;">
-        <div class="heart">♡</div>
-      </div>
-      <div class="card-body">
-        <div class="price">${p.price}</div>
-        <div class="title">${p.title}</div>
-        <a href="https://t.me/s7aveliishop" class="btn">В корзину</a>
-      </div>`;
-    grid.appendChild(card);
+  function showToast(text, t=1800){
+    toast.textContent = text;
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'), t);
+  }
+
+  // Try to check session by calling /api/profile — returns true if logged in
+  async function isLoggedIn(){
+    try {
+      const r = await fetch('/api/profile', { credentials: 'include' });
+      return r.ok;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Add to cart: try server first, otherwise localStorage
+  async function addToCartRemote(item){
+    // server endpoint expected: POST /api/cart/add  with credentials
+    try {
+      const res = await fetch('/api/cart/add', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(item)
+      });
+      if (res.ok) return { ok: true, server: true };
+      return { ok: false };
+    } catch (e) {
+      return { ok: false };
+    }
+  }
+
+  function getLocalCart(){
+    try { return JSON.parse(localStorage.getItem('s7_cart')||'[]'); }
+    catch(e){ return []; }
+  }
+  function saveLocalCart(arr){ localStorage.setItem('s7_cart', JSON.stringify(arr)); }
+
+  async function addToCart(product){
+    // product = {id, title, priceVal, price, image}
+    // If server and logged in — try server add. Otherwise use localStorage
+    const logged = await isLoggedIn();
+    const item = { id: product.id, title: product.title, priceVal: product.priceVal, price: product.price, image: product.image, qty: 1 };
+    if (logged) {
+      const r = await addToCartRemote(item);
+      if (r.ok && r.server) {
+        showToast('Добавлено в корзину (синхронизировано с сервером)');
+        // navigate to cabinet shop
+        setTimeout(()=> location.href = 'cabinet.html#shop', 600);
+        return;
+      }
+    }
+    // fallback to localStorage
+    const cart = getLocalCart();
+    cart.push(item);
+    saveLocalCart(cart);
+    showToast('Добавлено в корзину');
+    setTimeout(()=> location.href = 'cabinet.html#shop', 600);
+  }
+
+  // render grid
+  function renderProducts(list){
+    grid.innerHTML = '';
+    list.forEach(p => {
+      const card = document.createElement("article");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="thumb">
+          <img src="${p.image}" alt="${p.title}" style="max-height:100%; max-width:100%; object-fit:contain;">
+          <div class="heart">♡</div>
+        </div>
+        <div class="card-body">
+          <div class="price">${p.price}</div>
+          <div class="title">${p.title}</div>
+          <div style="display:flex;gap:8px;margin-top:auto">
+            <button class="btn buy">Купить</button>
+            <button class="btn secondary cart">В корзину</button>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+
+      card.querySelector('.buy').addEventListener('click', ()=> {
+        window.open(p.buyUrl, '_blank');
+      });
+
+      card.querySelector('.cart').addEventListener('click', async () => {
+        const logged = await isLoggedIn();
+        if (!logged) {
+          if (confirm('Чтобы добавить товар в корзину, необходимо войти или зарегистрироваться. Перейти на страницу входа?')) {
+            location.href = 'auth.html';
+          }
+          return;
+        }
+        addToCart(p);
+      });
+    });
+  }
+
+  // Filters and sort
+  document.getElementById('sortSelect').addEventListener('change', ()=>{
+    applyFiltersAndSort();
   });
-</script>
+  document.getElementById('fmin').addEventListener('input', applyFiltersAndSort);
+  document.getElementById('fmax').addEventListener('input', applyFiltersAndSort);
+  document.getElementById('fmade').addEventListener('change', applyFiltersAndSort);
+
+  function applyFiltersAndSort(){
+    let list = products.slice();
+    const min = Number((document.getElementById('fmin').value||0));
+    const max = Number((document.getElementById('fmax').value||9999999));
+    list = list.filter(p => p.priceVal >= min && p.priceVal <= max);
+    const sort = document.getElementById('sortSelect').value;
+    if (sort === 'price-asc') list.sort((a,b)=>a.priceVal-b.priceVal);
+    if (sort === 'price-desc') list.sort((a,b)=>b.priceVal-a.priceVal);
+    renderProducts(list);
+  }
+
+  // init
+  applyFiltersAndSort();
+
+  </script>
 </body>
 </html>
