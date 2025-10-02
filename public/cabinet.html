@@ -4,6 +4,149 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Кабинет — S7avelii</title>
+   <link rel="icon" href="images/favicon.png" type="image/favicon.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    height: 60px;
+    border-bottom: 1px solid #ccc;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: #fff;
+  }
+
+  .logo-img {
+    height: 45px;
+    width: auto;
+    cursor: pointer;
+  }
+
+  nav {
+    display: flex;
+  }
+
+  nav ul {
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  nav a {
+    color: #000;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .right-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+
+  /* гамбургер */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+  }
+  .hamburger span {
+    width: 22px;
+    height: 2px;
+    background: #000;
+  }
+
+  /* нижнее меню */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255,255,255,0.95);
+    border-top: 1px solid #ddd;
+    display: none; /* показываем только на мобилке */
+    justify-content: space-around;
+    padding: 6px 0;
+    z-index: 1000;
+  }
+
+  .bottom-nav a {
+    text-decoration: none;
+    color: #666;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .bottom-nav a.active {
+    color: #6cd100;
+    font-weight: bold;
+  }
+  .bottom-nav svg {
+    width: 22px;
+    height: 22px;
+    margin-bottom: 3px;
+  }
+
+  /* адаптив */
+  @media (max-width: 768px) {
+    nav { display: none; }
+    .hamburger { display: flex; }
+    .bottom-nav { display: flex; }
+    header { height: 60px; padding: 0 12px; }
+    .logo-img { height: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <a href="index.html">
+      <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
+    </a>
+  </div>
+
+  <!-- десктоп меню -->
+  <nav>
+    <ul>
+      <li><a href="bilet.html">Купить билет</a></li>
+      <li><a href="priority.html">S7avelii Priority</a></li>
+      <li><a href="body.html">Информация</a></li>
+      <li><a href="busines.html">Бизнесу</a></li>
+    </ul>
+  </nav>
+
+  <!-- гамбургер на мобилке -->
+  <div class="hamburger" onclick="alert('Здесь будет мобильное меню')">
+    <span></span><span></span><span></span>
+  </div>
+
+  <div class="right-menu">
+    <button>RUB</button>
+    <div class="flag">
+      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" width="20" />
+    </div>
+  </div>
+</header>
+
   <style>
     :root { --bg:#f5f7fa;--card:#fff;--accent:#9cc42f;--muted:#8b97a6;--container:1180px }
     *{box-sizing:border-box}
