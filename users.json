@@ -1,10 +1,1 @@
-{
-  "fio":"Имя Фамилия",
-  "dob":"ДД.ММ.ГГГГ",
-  "gender":"М",
-  "email":"email@example.com",
-  "phone":"79991112233",
-  "password":"123456",
-  "cardNumber":"123456789",
-  "cardType":"VIP"
-}
+{}
