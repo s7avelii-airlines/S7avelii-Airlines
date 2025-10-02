@@ -4,8 +4,8 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Вход / Регистрация — S7avelii</title>
-   <link rel="icon" href="images/favicon.png" type="image/favicon.png">
-  <script src="https://cdn.tailwindcss.com"></script>
+<link rel="icon" href="images/favicon.png" type="image/png">
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
   :root{
     --green:#9cc42f;
@@ -18,7 +18,6 @@
     min-height:100vh;
     background:url("images/Blue Modern Business Proposal Presentation.avif") no-repeat center/cover;
   }
-
   header{
     position:fixed;top:0;left:0;width:100%;height:70px;
     display:flex;align-items:center;gap:20px;
@@ -30,7 +29,6 @@
   nav a{text-decoration:none;color:#111;position:relative;padding:25px 0}
   nav a::after{content:"";position:absolute;bottom:0;left:0;height:2px;width:0;background:var(--green);transition:.25s}
   nav li:hover>a::after{width:100%}
-
   main{display:flex;justify-content:center;align-items:flex-start;padding:110px 20px 40px}
   .card{
     width:100%;max-width:420px;
@@ -43,21 +41,15 @@
   .btn{width:100%;padding:12px;border-radius:8px;border:0;background:var(--green);color:#fff;font-weight:600;margin-top:14px;cursor:pointer}
   .btn:hover{background:var(--green-dark)}
   .btn[disabled]{opacity:.6;cursor:not-allowed}
-
   .switch{text-align:center;margin-top:14px;font-size:14px}
   .switch button{background:none;border:0;color:var(--green);text-decoration:underline;cursor:pointer;font:inherit}
-
   .error{color:#d23f44;margin-top:10px;font-size:13px}
   .success{color:green;margin-top:10px;font-size:13px}
-
   .small-muted{font-size:13px;color:var(--muted);margin-top:8px}
-
-  /* fade animation */
   form{transition:opacity .35s ease, transform .35s ease;will-change:opacity,transform}
   .hidden{display:none}
   .fade{opacity:0;transform:translateY(12px);pointer-events:none}
   .fade.show{display:block;opacity:1;transform:translateY(0);pointer-events:auto}
-
   .row { display:flex; gap:10px; }
   .card-type { display:inline-flex; align-items:center; gap:8px; margin-right:8px; margin-top:8px; }
   .card-type img { display:inline-block; vertical-align:middle; border-radius:6px; }
@@ -115,48 +107,27 @@
 </main>
 
 <script>
-/*
-  auth.html client script
-  - Submits to /api/login and /api/register (same origin)
-  - Sends credentials: 'include' so cookie-based session is created
-  - Shows errors and success messages
-  - Smooth fade in/out already supported via CSS classes
-*/
+const API = '';
 
-const API = ''; // same origin
-
-// elements
 const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
 const title = document.getElementById('title');
 const switchBtn = document.getElementById('switchBtn');
 const switchText = document.getElementById('switchText');
-
 const loginError = document.getElementById('loginError');
 const regError = document.getElementById('regError');
 const regSuccess = document.getElementById('regSuccess');
-
 const loginBtn = document.getElementById('loginBtn');
 const regBtn = document.getElementById('regBtn');
 
-// helper to toggle forms with fade
 function showForm(showLogin){
   const toShow = showLogin ? loginForm : registerForm;
   const toHide = showLogin ? registerForm : loginForm;
-
-  // hide the other
   toHide.classList.remove('show');
-  // after animation hide fully
-  setTimeout(() => {
-    toHide.classList.add('hidden');
-  }, 360);
-
-  // show target
+  setTimeout(() => { toHide.classList.add('hidden'); }, 360);
   toShow.classList.remove('hidden');
-  // allow reflow
   setTimeout(() => toShow.classList.add('show'), 10);
 
-  // update header and labels
   if(showLogin){
     title.textContent = 'Вход';
     switchText.textContent = 'Нет аккаунта?';
@@ -167,47 +138,34 @@ function showForm(showLogin){
     switchBtn.textContent = 'Войти';
   }
 
-  // clear messages
   loginError.textContent = '';
   regError.textContent = '';
   regSuccess.textContent = '';
 }
 
-// toggle button
 switchBtn.addEventListener('click', (e) => {
   e.preventDefault();
   const showingLogin = loginForm.classList.contains('show');
   showForm(!showingLogin);
 });
 
-// auto-check session - if logged in -> go to cabinet
 window.addEventListener('DOMContentLoaded', async () => {
   try {
     const r = await fetch(API + '/api/profile', { credentials: 'include' });
-    if (r.ok) {
-      // already authenticated
-      window.location.href = 'cabinet.html';
-    }
-  } catch (err) {
-    // network fail or no server — stay on page
-    // console.log('profile check failed', err);
-  }
+    if (r.ok) window.location.href = 'cabinet.html';
+  } catch {}
 });
 
-/* ---------- Login ---------- */
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   loginError.textContent = '';
-
   const phone = document.getElementById('loginPhone').value.trim();
   const password = document.getElementById('loginPassword').value;
-
   if (!phone) { loginError.textContent = 'Введите телефон.'; return; }
   if (!password) { loginError.textContent = 'Введите пароль.'; return; }
 
   loginBtn.disabled = true;
   loginBtn.textContent = 'Проверка...';
-
   try {
     const resp = await fetch(API + '/api/login', {
       method: 'POST',
@@ -215,26 +173,21 @@ loginForm.addEventListener('submit', async (e) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ phone, password })
     });
-
     const data = await resp.json().catch(()=>({}));
-
     if (!resp.ok) {
-      loginError.textContent = (data && data.error) ? data.error : 'Ошибка входа';
+      loginError.textContent = data.error||'Ошибка входа';
       loginBtn.disabled = false;
       loginBtn.textContent = 'Войти';
       return;
     }
-
-    // success -> redirect
     window.location.href = 'cabinet.html';
-  } catch (err) {
+  } catch {
     loginError.textContent = 'Ошибка сети. Попробуйте позже.';
     loginBtn.disabled = false;
     loginBtn.textContent = 'Войти';
   }
 });
 
-/* ---------- Register ---------- */
 registerForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   regError.textContent = '';
@@ -249,40 +202,30 @@ registerForm.addEventListener('submit', async (e) => {
   const card = document.getElementById('regCard').value.trim();
   const cardType = document.querySelector('input[name="regCardType"]:checked')?.value || '';
 
-  // basic client validation
   if (!fio) { regError.textContent = 'Введите ФИО.'; return; }
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { regError.textContent = 'Введите корректный email.'; return; }
   if (!phone) { regError.textContent = 'Введите телефон.'; return; }
-  if (!password || password.length < 6) { regError.textContent = 'Пароль должен быть не менее 6 символов.'; return; }
+  if (!password || password.length<6) { regError.textContent = 'Пароль должен быть не менее 6 символов.'; return; }
 
   regBtn.disabled = true;
   regBtn.textContent = 'Регистрация...';
-
   try {
     const resp = await fetch(API + '/api/register', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        fio, dob, gender, email, phone, password,
-        cardNumber: card, cardType
-      })
+      body: JSON.stringify({ fio,dob,gender,email,phone,password,cardNumber:card,cardType })
     });
-
     const data = await resp.json().catch(()=>({}));
-
     if (!resp.ok) {
-      regError.textContent = (data && data.error) ? data.error : 'Ошибка регистрации';
+      regError.textContent = data.error||'Ошибка регистрации';
       regBtn.disabled = false;
       regBtn.textContent = 'Зарегистрироваться';
       return;
     }
-
-    // success
-    regSuccess.textContent = 'Регистрация успешна — перенаправляем в личный кабинет...';
-    setTimeout(()=> window.location.href = 'cabinet.html', 900);
-
-  } catch (err) {
+    regSuccess.textContent = 'Регистрация успешна — перенаправляем в кабинет...';
+    setTimeout(()=> window.location.href='cabinet.html', 900);
+  } catch {
     regError.textContent = 'Ошибка сети. Попробуйте позже.';
     regBtn.disabled = false;
     regBtn.textContent = 'Зарегистрироваться';
