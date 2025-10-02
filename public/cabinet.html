@@ -211,35 +211,131 @@
         </div>
       </div>
 
-      <!-- Miles -->
-      <div id="milesTab" class="card" style="margin-top:16px;display:none">
-        <h3>Мои мили</h3>
-        <div class="muted">История начислений и статус</div>
+    <div style="max-width:600px; margin:20px auto; font-family:Arial, sans-serif; color:#333;">
+  <div style="background:#fff; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.1); padding:20px;">
+    
+    <h2 style="font-size:18px; font-weight:600; margin-bottom:10px;">
+      Статус в программе <a href="#" style="color:#1a73e8; text-decoration:none;">S7 Priority</a>
+    </h2>
 
-        <div style="margin-top:12px">
-          <div style="display:flex;align-items:center;gap:14px">
-            <div style="flex:1">
-              <div style="display:flex;justify-content:space-between;align-items:center">
-                <div><strong id="milesValue">0</strong> миль</div>
-                <div class="small-muted" id="currentLevel">—</div>
-              </div>
-              <div class="miles-bar" style="margin-top:10px">
-                <div id="milesFill" class="miles-fill"></div>
-              </div>
-              <div class="miles-info">
-                <div id="levelFrom">0</div>
-                <div id="levelTo">—</div>
-              </div>
-            </div>
-            <div style="width:150px;text-align:center">
-              <div class="small-muted">Статусные мили</div>
-              <div style="font-weight:700;font-size:20px" id="statusMilesStat">—</div>
-            </div>
-          </div>
-        </div>
+    <div style="margin-bottom:20px;">
+      <div style="font-size:14px; color:#666;">Ваш статус:</div>
+      <div id="statusName" style="font-size:20px; font-weight:bold;">Classic</div>
+    </div>
 
-        <div style="margin-top:12px" class="small-muted">Прогресс обновляется автоматически при изменении миль.</div>
+    <div style="background:#f9fafb; border-radius:10px; padding:15px; margin-bottom:20px;">
+      <div style="font-size:24px; font-weight:bold; margin-bottom:5px;">
+        <span id="milesValue">0</span> бонусные мили
       </div>
+    </div>
+
+    <!-- Прогресс -->
+    <div style="margin-bottom:10px; font-size:14px;">
+      <span id="currentMiles" style="background:#8bc34a; color:#fff; border-radius:8px; padding:2px 8px; font-weight:bold;">0 миль</span>
+      <span style="margin-left:10px; color:#666;">0 полётов</span>
+    </div>
+
+    <div style="background:#e9ecef; border-radius:6px; height:12px; width:100%; overflow:hidden;">
+      <div id="milesProgress" style="background:#8bc34a; height:100%; width:0%;"></div>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; margin-top:5px; font-size:12px; color:#999;">
+      <span id="nextLevelName">Classic Master</span>
+      <span id="nextLevelMiles">5000</span>
+    </div>
+
+    <div style="margin-top:15px; font-size:14px; color:#666;">
+      Статусных миль: <b id="statusMiles">0</b><br>
+      Полётов: <b id="flights">0</b>
+    </div>
+
+    <!-- Привилегии -->
+    <div style="margin-top:20px;">
+      <h3 style="font-size:15px; margin-bottom:10px; color:#444;">Привилегии статуса:</h3>
+      <ul id="privileges" style="list-style:none; padding-left:15px; color:#333;">
+        <!-- сюда вставим пункты -->
+      </ul>
+    </div>
+
+    <hr style="margin:15px 0; border:0; border-top:1px solid #eee;">
+
+    <div style="font-size:14px; color:#444; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        Дата регистрации: <b id="registrationDate"></b>
+      </div>
+      <div>
+        Состояние счёта: <b style="color:#2e7d32;" id="accountStatus">Активный</b>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Настройки статусов
+  const statuses = {
+    Classic: {
+      name: "Classic",
+      nextLevel: "Classic Master",
+      maxMiles: 5000,
+      color: "#8bc34a",
+      privileges: [
+        "Бонусные мили копятся за покупки на сайте и в приложении. Можно тратить на авиабилеты и допуслуги.",
+        "Статусные мили копятся за полеты и покупки по карте S7 — T-Bank."
+      ]
+    },
+    VIP: {
+      name: "VIP",
+      nextLevel: "VIP Gold",
+      maxMiles: 25000,
+      color: "#fbc02d",
+      privileges: [
+        "Приоритетная регистрация и посадка.",
+        "Доступ в бизнес-залы аэропортов.",
+        "Бонусные и статусные мили за полёты и покупки."
+      ]
+    }
+  };
+
+  function updateStatus(type, miles, flights=0, registration="06 июл 2021", account="Активный") {
+    const s = statuses[type];
+    const percent = Math.min(100, (miles / s.maxMiles) * 100);
+
+    document.getElementById("statusName").textContent = s.name;
+    document.getElementById("milesValue").textContent = miles;
+    document.getElementById("statusMiles").textContent = miles;
+    document.getElementById("flights").textContent = flights;
+    document.getElementById("currentMiles").textContent = miles + " миль";
+    document.getElementById("nextLevelName").textContent = s.nextLevel;
+    document.getElementById("nextLevelMiles").textContent = s.maxMiles;
+
+    const progress = document.getElementById("milesProgress");
+    progress.style.width = percent + "%";
+    progress.style.background = s.color;
+    document.getElementById("currentMiles").style.background = s.color;
+
+    // Привилегии
+    const list = document.getElementById("privileges");
+    list.innerHTML = "";
+    s.privileges.forEach(p => {
+      const li = document.createElement("li");
+      li.innerHTML = "• " + p;
+      li.style.marginBottom = "5px";
+      list.appendChild(li);
+    });
+
+    // Дата и статус
+    document.getElementById("registrationDate").textContent = registration;
+    document.getElementById("accountStatus").textContent = account;
+  }
+
+  // 🔹 Тест: Classic
+  updateStatus("Classic", 1057, 0, "06 июл 2021", "Активный");
+
+  // 🔹 Пример VIP:
+  // updateStatus("VIP", 12340, 5, "15 мар 2022", "Активный");
+</script>
+
 
       <!-- Shop -->
       <div id="shopTab" class="card" style="margin-top:16px;display:none">
