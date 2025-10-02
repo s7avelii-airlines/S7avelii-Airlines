@@ -344,14 +344,18 @@
 </header>
 
 <script>
+/* ==========================
+   Функция обновления User Area
+   ========================== */
 function updateUserArea() {
   const userArea = document.getElementById("userArea");
   const fio = localStorage.getItem("fio");
   const avatar = localStorage.getItem("avatar");
+  const phone = localStorage.getItem("phone");
 
-  if (fio && localStorage.getItem("phone")) {
+  if (fio && phone) {
     if (avatar) {
-      userArea.innerHTML = `<img src="${avatar}" alt="avatar" 
+      userArea.innerHTML = `<img src="${avatar}" alt="avatar"
         style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
         onclick="window.location.href='cabinet.html'" 
       />`;
@@ -365,8 +369,20 @@ function updateUserArea() {
   }
 }
 
+/* ==========================
+   Обновление при загрузке страницы
+   ========================== */
 window.addEventListener("DOMContentLoaded", updateUserArea);
 
+/* ==========================
+   Слушатель изменений профиля
+   ========================== */
+// Если кабинет меняет данные, скрипт отправит событие
+window.addEventListener("storage", (e) => {
+  if (["fio", "avatar", "phone"].includes(e.key)) {
+    updateUserArea();
+  }
+});
 </script>
 
 <head>
