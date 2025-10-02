@@ -1,335 +1,864 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Кабинет — S7avelii</title>
-  <style>
-    :root { --bg:#f5f7fa;--card:#fff;--accent:#9cc42f;--muted:#8b97a6;--container:1180px }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:#1f2937}
-    .page{max-width:var(--container);margin:28px auto;padding:0 20px}
-    .full-header{width:100%;background:var(--card);display:flex;align-items:center;gap:24px;padding:28px 36px;border-radius:12px;box-shadow:0 6px 20px rgba(16,24,40,0.06);flex-wrap:wrap}
-    .avatar{width:118px;height:118px;border-radius:999px;object-fit:cover;border:4px solid #fff}
-    .card-badge{width:60px;display:none}
-    .tabs{display:flex;gap:14px;margin-top:18px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,0.04);overflow-x:auto}
-    .tabs a{padding:10px 14px;text-decoration:none;color:#495057;border-radius:8px}
-    .tabs a.active{color:var(--accent);background:rgba(156,196,47,0.06)}
-    .grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:18px}
-    .card{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 4px 12px rgba(16,24,40,0.04)}
-    .field{display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid rgba(0,0,0,0.03)}
-    .small-muted{color:var(--muted);font-size:13px}
-    .btn{background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
-    /* cart table */
-    .cart-table{width:100%;border-collapse:collapse}
-    .cart-table th,.cart-table td{padding:8px;border-bottom:1px solid #eee;text-align:left}
-    .cart-empty{color:#777;padding:12px}
-    @media(max-width:980px){.grid{grid-template-columns:1fr}}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Личный кабинет — S7avelii</title>
+<link rel="icon" href="images/favicon.png" />
+<style>
+  /* ========== Palette & layout ========== */
+  :root{
+    --bg:#f3f6f9;
+    --card:#ffffff;
+    --accent:#9cc42f;
+    --accent-2:#8ab12a;
+    --muted:#6b7280;
+    --radius:12px;
+    --shadow: 0 6px 20px rgba(16,24,40,0.06);
+    --container:1100px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+    background:var(--bg);
+    color:#111827;
+  }
+  .wrap{max-width:var(--container);margin:18px auto;padding:18px}
+
+  /* ========== Header ========== */
+  .top {
+    background: #fff;
+    border-radius:12px;
+    box-shadow: var(--shadow);
+    padding:18px 22px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    position:sticky;
+    top:12px;
+    z-index:30;
+  }
+  .logo { display:flex; align-items:center; gap:12px; font-weight:700; font-size:18px; color:#111 }
+  .logo img{width:46px;height:46px;border-radius:999px;object-fit:cover}
+  .top-right{margin-left:auto;display:flex;gap:12px;align-items:center}
+  .lang-flag{width:28px;height:18px;border-radius:3px;object-fit:cover}
+  .small-avatar{width:36px;height:36px;border-radius:999px;object-fit:cover;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.08)}
+
+  /* ========== Profile header big ========== */
+  .profile-card{
+    margin-top:18px;
+    background:var(--card);
+    padding:22px;
+    border-radius:16px;
+    box-shadow:var(--shadow);
+    display:flex;
+    gap:22px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  .avatar-wrap{display:flex;gap:18px;align-items:center}
+  .avatar{
+    width:118px;height:118px;border-radius:999px;object-fit:cover;border:4px solid #fff;box-shadow:0 6px 18px rgba(0,0,0,0.06);cursor:pointer;
+  }
+  .user-info{min-width:260px}
+  .user-info h1{margin:0;font-size:20px;display:flex;align-items:center;gap:12px}
+  .user-info .sub{color:var(--muted);margin-top:6px}
+  .card-badge{width:72px;height:auto;border-radius:8px;display:inline-block;vertical-align:middle}
+
+  .stats{margin-left:auto;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  .stat{background:linear-gradient(180deg,#fff,#fcfff0);padding:12px 18px;border-radius:12px;text-align:center;border:1px solid rgba(0,0,0,0.04)}
+  .stat .num{font-weight:700;font-size:20px}
+  .stat .label{font-size:12px;color:var(--muted);margin-top:6px}
+
+  /* ========== Tabs ========== */
+  .tabs{display:flex;gap:12px;margin-top:16px;padding:10px 6px}
+  .tabs a{padding:10px 14px;border-radius:10px;text-decoration:none;color:#475569;background:transparent}
+  .tabs a.active{background:rgba(156,196,47,0.06);color:var(--accent);font-weight:600}
+
+  /* ========== Main grid ========== */
+  .grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:18px}
+  .card{background:var(--card);padding:18px;border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.03)}
+  .card h3{margin:0 0 12px;font-size:18px}
+  .field{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid rgba(0,0,0,0.04)}
+  .field:first-of-type{border-top:0}
+  .label{color:var(--muted);font-size:13px}
+  .value{font-size:15px;max-width:70%;word-wrap:break-word}
+  .edit-btn{background:transparent;border:0;color:var(--accent);cursor:pointer;font-weight:600;padding:8px 10px;border-radius:8px}
+  .small-muted{color:var(--muted);font-size:13px;margin-top:8px}
+
+  /* notification boxes */
+  .notice{background:linear-gradient(180deg,#fff,#f6f8fb);border-radius:12px;padding:12px 16px;border:1px solid rgba(0,0,0,0.03);display:flex;align-items:center;gap:12px}
+  .notice .dot{width:36px;height:36px;display:grid;place-items:center;border-radius:999px;background:rgba(156,196,47,0.12);color:var(--accent);font-weight:700}
+  .notice-row{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+
+  /* shop */
+  .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+  .product{border-radius:12px;border:1px solid rgba(0,0,0,0.03);background:#fff;padding:12px;display:flex;flex-direction:column;gap:8px}
+  .product img{width:100%;height:140px;object-fit:cover;border-radius:8px}
+  .product .title{font-weight:600}
+  .product .price{font-weight:700}
+
+  /* cart list */
+  .cart-item{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px dashed rgba(0,0,0,0.04)}
+  .cart-item img{width:64px;height:64px;object-fit:cover;border-radius:8px}
+
+  /* forms and inputs */
+  input[type="text"],input[type="email"],input[type="tel"],input[type="password"],select,textarea{padding:10px;border-radius:8px;border:1px solid #e6edf3;width:100%;font-size:14px}
+  .btn{display:inline-block;background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:0;cursor:pointer}
+  .btn.secondary{background:#eef2f7;color:#111;border:0}
+  .muted{color:var(--muted)}
+
+  /* responsive */
+  @media (max-width:980px){
+    .grid{grid-template-columns:1fr}
+    .stats{margin-left:0;margin-top:12px}
+    .top{padding:12px}
+  }
+  @media (max-width:520px){
+    .avatar{width:88px;height:88px}
+    .card-badge{width:52px}
+  }
+</style>
 </head>
 <body>
-<div class="page">
-  <div class="full-header">
-    <div style="display:flex;align-items:center;gap:16px">
-      <label for="avatarInput"><img id="avatar" class="avatar" src="https://via.placeholder.com/150" alt="avatar"></label>
-      <input id="avatarInput" type="file" accept="image/*" style="display:none">
-      <div>
-        <h1 id="fioHeader">Загрузка...</h1>
-        <div class="small-muted" id="phoneHeader">—</div>
-      </div>
+
+<div class="wrap">
+
+  <!-- TOP -->
+  <div class="top" role="banner">
+    <div class="logo">
+      <img src="images/photo_5276207082657412564_y.avif" alt="logo">
+      <div>S7avelii Airlines</div>
     </div>
-    <div style="margin-left:auto" class="small-muted">Бонусные мили: <strong id="bonusMiles">—</strong></div>
+
+    <div class="top-right">
+      <img src="images/flag_ru.png" alt="ru" class="lang-flag" onerror="this.style.display='none'">
+      <img id="topSmallAvatar" src="https://via.placeholder.com/36" alt="avatar" class="small-avatar" title="Открыть профиль">
+    </div>
   </div>
 
-  <div class="tabs" role="tablist">
+  <!-- PROFILE header -->
+  <section class="profile-card" aria-label="profile header">
+    <div class="avatar-wrap">
+      <label for="avatarInput" title="Нажмите чтобы загрузить фото">
+        <img id="avatar" class="avatar" src="https://via.placeholder.com/150" alt="avatar">
+      </label>
+      <input id="avatarInput" type="file" accept="image/*" style="display:none">
+      <div class="user-info">
+        <h1 id="fioHeader">Загрузка...</h1>
+        <div class="sub" id="phoneHeader">—</div>
+        <div style="margin-top:10px">
+          <img id="cardTypeImg" class="card-badge" src="" style="display:none" alt="card">
+          <span id="cardTypeText" class="muted" style="margin-left:8px"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats" aria-hidden="false">
+      <div class="stat"><div class="num" id="bonusMiles">—</div><div class="label">бонусные мили</div></div>
+      <div class="stat"><div class="num" id="statusMiles">—</div><div class="label">статусные мили</div></div>
+    </div>
+  </section>
+
+  <!-- Tabs -->
+  <nav class="tabs" role="tablist" aria-label="tabs">
     <a href="#" class="active" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
     <a href="#" data-tab="milesTab" onclick="showTab(event)">Мои мили</a>
     <a href="#" data-tab="shopTab" onclick="showTab(event)">S7avelii Shop</a>
     <a href="#" data-tab="settingsTab" onclick="showTab(event)">Настройки</a>
+  </nav>
+
+  <!-- Notifications -->
+  <div class="notice-row">
+    <div class="notice">
+      <div class="dot">✈</div>
+      <div>
+        <div style="font-weight:700">Уведомления в Телеграме</div>
+        <div class="muted">Получайте важную информацию о полёте прямо в мессенджере.</div>
+      </div>
+      <div style="margin-left:auto"><button class="btn secondary" id="subscribeTelegramBtn">Подписаться</button></div>
+    </div>
+
+    <div class="notice" style="background:#fff7f4;border-color:rgba(234,88,12,0.08)">
+      <div class="dot" style="background:rgba(234,88,12,0.1;color:#ea580c">!</div>
+      <div class="muted">Срок действия вашего заграничного паспорта истёк. Не забудьте обновить документ для планирования путешествий.</div>
+      <div style="margin-left:auto"><button class="btn secondary" id="dismissPassportNotice">✕</button></div>
+    </div>
   </div>
 
+  <!-- Grid -->
   <div class="grid">
+
+    <!-- LEFT: Profile details -->
     <div>
-      <div id="profileTab" class="card">
+      <div id="profileTab" class="card" role="region" aria-label="profile">
         <h3>Персональные данные</h3>
-        <div class="field"><div><div class="small-muted">ФИО</div><div id="fioField">—</div></div><button class="btn" onclick="enableEdit('fio')">Изменить</button></div>
-        <div class="field"><div><div class="small-muted">Дата рождения</div><div id="dobField">—</div></div><button class="btn" onclick="enableEdit('dob')">Изменить</button></div>
-        <div class="field"><div><div class="small-muted">Пол</div><div id="genderField">—</div></div><button class="btn" onclick="enableEdit('gender')">Изменить</button></div>
+        <div style="padding:8px 0 0 0" class="muted">ФИО / отображаемое имя</div>
+        <div class="field">
+          <div>
+            <div class="label">ФИО</div>
+            <div id="fioField" class="value">—</div>
+          </div>
+          <button class="edit-btn" onclick="enableEdit('fio')">Изменить</button>
+        </div>
+
+        <div class="field">
+          <div>
+            <div class="label">Дата рождения</div>
+            <div id="dobField" class="value">—</div>
+          </div>
+          <button class="edit-btn" onclick="enableEdit('dob')">Изменить</button>
+        </div>
+
+        <div class="field">
+          <div>
+            <div class="label">Пол</div>
+            <div id="genderField" class="value">—</div>
+          </div>
+          <button class="edit-btn" onclick="enableEdit('gender')">Изменить</button>
+        </div>
 
         <h3 style="margin-top:16px">Контакты</h3>
-        <div class="field"><div><div class="small-muted">Email</div><div id="emailField">—</div></div><button class="btn" onclick="enableEdit('email')">Изменить</button></div>
-        <div class="field"><div><div class="small-muted">Телефон</div><div id="phoneField">—</div></div><button class="btn" onclick="enableEdit('phone')">Изменить</button></div>
 
-        <h3 style="margin-top:16px">Карта</h3>
-        <div class="field"><div><div class="small-muted">Номер карты</div><div id="cardField">—</div></div><button class="btn" onclick="enableEdit('cardNumber')">Изменить</button></div>
-        <div class="field"><div><div class="small-muted">Тип карты</div><div id="cardTypeField">—</div></div></div>
+        <div class="field">
+          <div>
+            <div class="label">E-mail</div>
+            <div id="emailField" class="value">—</div>
+          </div>
+          <button class="edit-btn" onclick="enableEdit('email')">Изменить</button>
+        </div>
+
+        <div class="field">
+          <div>
+            <div class="label">Телефон</div>
+            <div id="phoneField" class="value">—</div>
+          </div>
+          <button class="edit-btn" onclick="enableEdit('phone')">Изменить</button>
+        </div>
+
+        <div class="field">
+          <div>
+            <div class="label">Номер карты</div>
+            <div id="cardField" class="value">—</div>
+          </div>
+          <button class="edit-btn" onclick="enableEdit('cardNumber')">Изменить</button>
+        </div>
+
       </div>
 
-      <!-- Shop tab content -->
-      <div id="shopTab" class="card" style="display:none">
-        <h3>Корзина</h3>
-        <div id="cartContainer">
-          <div class="cart-empty">Загрузка корзины...</div>
+      <!-- Мои мили -->
+      <div id="milesTab" class="card" style="margin-top:16px;display:none">
+        <h3>Мои мили</h3>
+        <div class="muted">История начислений и статус</div>
+        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:160px" class="card">
+            <div class="label">бонусные мили</div>
+            <div class="num" id="milesBonusStat">—</div>
+          </div>
+          <div style="flex:1;min-width:160px" class="card">
+            <div class="label">статусные мили</div>
+            <div class="num" id="milesStatusStat">—</div>
+          </div>
         </div>
-        <div style="margin-top:12px;display:flex;gap:8px">
-          <button class="btn" id="checkoutBtn" onclick="checkout()" disabled>Оформить заказ</button>
-          <button class="btn" id="clearCartBtn" onclick="clearCart()" style="background:#999">Очистить корзину</button>
+      </div>
+
+      <!-- Shop tab -->
+      <div id="shopTab" class="card" style="margin-top:16px;display:none">
+        <h3>S7avelii Shop</h3>
+        <div class="muted">Товары, которые можно купить прямо сейчас</div>
+        <div id="productGrid" style="margin-top:12px" class="product-grid"></div>
+
+        <h3 style="margin-top:16px">В корзине</h3>
+        <div id="cartList" style="min-height:40px"></div>
+        <div style="display:flex;gap:10px;margin-top:10px;align-items:center">
+          <div id="cartTotal" class="muted">Итого: 0 ₽</div>
+          <div style="margin-left:auto">
+            <button id="checkoutBtn" class="btn">Оформить</button>
+          </div>
         </div>
-        <div id="cartMsg" class="small-muted" style="margin-top:8px"></div>
+      </div>
+
+ <!-- Настройки -->
+  <section id="settings" class="tab-panel">
+    <h2>Настройки</h2>
+
+    <div class="card">
+      <h3>Смена пароля</h3>
+      <form id="changePasswordForm">
+        <input type="password" id="oldPassword" placeholder="Старый пароль" required>
+        <input type="password" id="newPassword" placeholder="Новый пароль" required>
+        <button type="submit" class="btn">Сменить пароль</button>
+      </form>
+      <div id="passMsg"></div>
+    </div>
+
+    <div class="card">
+      <h3>Интеграции</h3>
+      <button id="linkTelegram" class="btn">Связать Telegram</button>
+      <p id="tgStatus">Не привязан</p>
+    </div>
+
+        <div>
+          <div style="font-weight:600">Привязать Telegram</div>
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+            <input id="tgHandle" placeholder="@username" style="width:240px">
+            <button id="saveTgBtn" class="btn">Сохранить</button>
+          </div>
+          <div id="tgMsg" class="muted" style="margin-top:8px"></div>
+        </div>
+
+        <hr style="margin:14px 0;border:none;border-top:1px solid rgba(0,0,0,0.04)">
+
+        <div style="margin-top:6px">
+          <button id="logoutBtn" class="btn secondary" style="background:#fff;border:1px solid rgba(0,0,0,0.06)">Выйти</button>
+        </div>
+
+        <!-- admin panel placeholder -->
+        <div id="adminPanel" style="margin-top:14px;display:none">
+          <h4>Админ: пользователи</h4>
+          <div id="adminUsersList" class="muted"></div>
+        </div>
+
       </div>
 
     </div>
 
-    <div>
+    <!-- RIGHT: Summary / quick-actions -->
+    <aside>
       <div class="card">
-        <h3>Быстрые действия</h3>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <button class="btn" onclick="goTo('profileTab')">Редактировать профиль</button>
-          <button class="btn" onclick="goTo('shopTab')">Открыть корзину</button>
-          <button class="btn" onclick="logout()" style="background:#e66">Выйти</button>
+        <h3>Краткая информация</h3>
+        <div class="muted" style="margin-top:8px">Быстрые действия</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+          <button class="edit-btn" onclick="goTo('profileTab')">Редактировать профиль</button>
+          <button class="edit-btn" onclick="goTo('milesTab')">Посмотреть мили</button>
+          <button class="edit-btn" onclick="goTo('shopTab')">Открыть Shop</button>
         </div>
       </div>
 
       <div class="card" style="margin-top:16px">
-        <h3>Заказы</h3>
-        <div id="ordersContainer" class="small-muted" style="margin-top:8px">Загрузка...</div>
+        <h3>Подсказка</h3>
+        <div class="muted" style="margin-top:8px">Изменённые данные отправляются на сервер (если доступен /api/profile/update).</div>
       </div>
-    </div>
+    </aside>
+
   </div>
 </div>
 
 <script>
-function el(id){return document.getElementById(id)}
+/* =============================
+   Config & helpers
+   ============================= */
+const API = ''; // пустой => тот же origin. Можно заменить на https://your-render-domain
+const el = id => document.getElementById(id);
+let currentUser = null; // will hold user object from server
 
-function showTab(evt){
+// safe fetch helper
+async function safeFetch(url, opts = {}) {
+  opts.credentials = opts.credentials || 'include';
+  try {
+    const res = await fetch(API + url, opts);
+    return res;
+  } catch (e) {
+    console.warn('network error', e);
+    throw e;
+  }
+}
+
+/* =============================
+   Init: load profile
+   ============================= */
+async function loadProfile() {
+  try {
+    const res = await safeFetch('/api/profile');
+    if (!res.ok) {
+      // not logged in -> redirect to auth
+      console.warn('not authorized', res.status);
+      // don't immediately redirect — keep page usable
+      showGuestState();
+      return;
+    }
+    const json = await res.json();
+    currentUser = json.user || null;
+    applyProfile(currentUser);
+  } catch (e) {
+    console.error('failed load profile', e);
+    showGuestState();
+  }
+}
+
+/* =============================
+   UI: apply profile
+   ============================= */
+function applyProfile(u) {
+  if (!u) { showGuestState(); return; }
+  // header small avatar
+  el('topSmallAvatar').src = u.avatar || 'https://via.placeholder.com/36';
+  el('avatar').src = u.avatar || 'https://via.placeholder.com/150';
+  el('fioHeader').textContent = u.fio || 'Пользователь';
+  el('phoneHeader').textContent = u.phone || '';
+  el('fioField').textContent = u.fio || '—';
+  el('dobField').textContent = u.dob || '—';
+  el('genderField').textContent = u.gender || '—';
+  el('emailField').textContent = u.email || '—';
+  el('phoneField').textContent = u.phone || '—';
+  el('cardField').textContent = u.cardNumber || '—';
+  el('bonusMiles').textContent = u.bonusMiles || '—';
+  el('milesBonusStat').textContent = u.bonusMiles || '—';
+  el('milesStatusStat').textContent = u.statusMiles || '—';
+  // card type
+  el('cardTypeField')?.remove?.();
+  const cardTypeText = el('cardTypeText');
+  if (u.cardType) {
+    cardTypeText.textContent = u.cardType;
+  } else {
+    cardTypeText.textContent = '';
+  }
+  const badge = el('cardTypeImg');
+  if (u.cardType === 'VIP') {
+    badge.src = 'images/vip_card.png';
+    badge.style.display = 'inline-block';
+  } else if (u.cardType === 'Classic') {
+    badge.src = 'images/classic_card.png';
+    badge.style.display = 'inline-block';
+  } else {
+    badge.style.display = 'none';
+  }
+
+  // enable admin panel if role admin
+  if (u.role === 'admin') {
+    el('adminPanel').style.display = 'block';
+    loadAdminUsers();
+  }
+
+  // load user's cart from localStorage
+  loadCartForUser();
+}
+
+/* =============================
+   Guest behaviour
+   ============================= */
+function showGuestState(){
+  // show placeholder values and keep Shop actions requiring auth
+  el('fioHeader').textContent = 'Гость';
+  el('avatar').src = 'https://via.placeholder.com/150';
+  el('topSmallAvatar').src = 'https://via.placeholder.com/36';
+  el('phoneHeader').textContent = '';
+  // ensure shop list rendered
+  renderProducts();
+}
+
+/* =============================
+   Inline edit
+   ============================= */
+function enableEdit(field) {
+  // mapping server fields
+  const map = {
+    fio: {id:'fioField', key:'fio'},
+    dob: {id:'dobField', key:'dob'},
+    gender: {id:'genderField', key:'gender'},
+    email: {id:'emailField', key:'email'},
+    phone: {id:'phoneField', key:'phone'},
+    cardNumber: {id:'cardField', key:'cardNumber'}
+  };
+  const m = map[field];
+  if (!m) return;
+  const container = el(m.id);
+  const current = container.textContent === '—' ? '' : container.textContent;
+  container.innerHTML = '';
+  const input = document.createElement('input');
+  input.value = current;
+  input.style.width = '220px';
+  input.type = (field === 'email') ? 'email' : (field === 'phone') ? 'tel' : 'text';
+  const ok = document.createElement('button');
+  ok.className = 'btn';
+  ok.textContent = 'OK';
+  ok.style.marginLeft = '8px';
+  ok.onclick = async () => {
+    const value = input.value.trim();
+    container.textContent = value || '—';
+    if (field === 'fio') {
+      el('fioHeader').textContent = value || 'Пользователь';
+    }
+    // persist local
+    localStorage.setItem(m.key, value || '');
+    // try push to server
+    try {
+      await safeFetch('/api/profile/update', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({[m.key]: value || ''})
+      });
+    } catch (e) {
+      console.warn('profile update failed', e);
+    }
+  };
+  container.appendChild(input);
+  container.appendChild(ok);
+  input.focus();
+}
+
+/* =============================
+   Avatar upload
+   ============================= */
+el('avatarInput').addEventListener('change', function(){
+  const f = this.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = async (ev) => {
+    const dataUrl = ev.target.result;
+    el('avatar').src = dataUrl;
+    el('topSmallAvatar').src = dataUrl;
+    localStorage.setItem('avatar', dataUrl);
+    // try push to server
+    try {
+      await safeFetch('/api/profile/update', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ avatar: dataUrl })
+      });
+    } catch (e) { console.warn('avatar push failed', e); }
+  };
+  reader.readAsDataURL(f);
+});
+
+/* =============================
+   Tabs handling
+   ============================= */
+function showTab(evt) {
   evt && evt.preventDefault();
   const tabId = evt ? evt.currentTarget.getAttribute('data-tab') : 'profileTab';
   document.querySelectorAll('.tabs a').forEach(a=>a.classList.remove('active'));
-  if(evt) evt.currentTarget.classList.add('active');
+  if (evt) evt.currentTarget.classList.add('active');
   ['profileTab','milesTab','shopTab','settingsTab'].forEach(id=>{
-    const elc = el(id);
-    if(elc) elc.style.display = (id===tabId ? 'block' : 'none');
-  });
-  // if opened shop tab - refresh cart
-  if(tabId === 'shopTab') loadCart();
-}
-
-async function loadProfile(){
-  try {
-    const res = await fetch('/api/profile', { credentials: 'include' });
-    if(!res.ok){
-      // not logged in -> go to auth
-      window.location.href = '/auth.html';
-      return;
-    }
-    const j = await res.json();
-    applyProfile(j.user || j);
-  } catch (err) {
-    console.error('loadProfile err', err);
-    window.location.href = '/auth.html';
-  }
-}
-
-function applyProfile(p){
-  el('fioField').innerText = p.fio || '—';
-  el('dobField').innerText = p.dob || '—';
-  el('genderField').innerText = p.gender || '—';
-  el('emailField').innerText = p.email || '—';
-  el('phoneField').innerText = p.phone || '—';
-  el('cardField').innerText = p.cardNumber || '—';
-  el('cardTypeField').innerText = p.cardType || '—';
-  el('fioHeader').innerText = p.fio || 'Пользователь';
-  el('bonusMiles').innerText = p.bonusMiles || '—';
-  if(p.avatar) el('avatar').src = p.avatar;
-  // orders
-  renderOrders(p.orders || []);
-}
-
-function renderOrders(orders){
-  const o = el('ordersContainer');
-  if(!orders || !orders.length) { o.innerText = 'Заказы отсутствуют'; return; }
-  o.innerHTML = '';
-  orders.slice().reverse().forEach(ord=>{
-    const div = document.createElement('div');
-    div.style.marginBottom='10px';
-    div.innerHTML = `<strong>Заказ ${ord.id}</strong> — ${new Date(ord.createdAt).toLocaleString()} — ${ord.status}<br>
-      Товаров: ${ord.items.length} — Сумма: ${formatTotal(ord.total)}`;
-    o.appendChild(div);
+    const node = document.getElementById(id);
+    if (node) node.style.display = (id === tabId ? 'block' : 'none');
   });
 }
 
-function formatTotal(t){ return (isNaN(t) ? t : t + ' ₽'); }
+/* =============================
+   Shop: products + cart
+   ============================= */
+const PRODUCTS = [
+  { id:'p1', title:'Блокнот S7avelii', price:550, image:'images/photo_5330078908990750485_y.avif', buyLink:'https://t.me/s7aveliishop' },
+  { id:'p2', title:'Комбо Блокнот + Футболка', price:2350, image:'images/photo_5330078908990750484_y.avif', buyLink:'https://t.me/s7aveliishop' },
+  { id:'p3', title:'Фирменная футболка', price:1900, image:'images/photo_5332515869139530693_y.avif', buyLink:'https://t.me/s7aveliishop' },
+  { id:'p4', title:'Комбо Путешественник', price:4500, image:'images/photo_5330078908990750483_y.avif', buyLink:'https://t.me/s7aveliishop' }
+];
 
-/* inline edit (same as before) */
-function enableEdit(field){
-  const map = { fio:['fioField','fioHeader'], dob:['dobField'], gender:['genderField'], email:['emailField'], phone:['phoneField','phoneHeader'], cardNumber:['cardField'] };
-  const ids = map[field]; if(!ids) return;
-  const cur = el(ids[0]).innerText==='—'?'':el(ids[0]).innerText;
-  const input = document.createElement('input'); input.value = cur; input.style.width='220px';
-  const ok = document.createElement('button'); ok.innerText='OK'; ok.className='btn'; ok.style.marginLeft='8px';
-  const wrapper = document.createElement('div'); wrapper.appendChild(input); wrapper.appendChild(ok);
-  const container = el(ids[0]); container.innerHTML=''; container.appendChild(wrapper); input.focus();
-  ok.onclick = async () => {
-    const val = input.value.trim() || '';
-    // update UI
-    ids.forEach(id=>{ if(el(id)) el(id).innerText = val || '—'; });
-    if(field === 'fio' && el('fioHeader')) el('fioHeader').innerText = val || 'Пользователь';
-    // send to server
-    try {
-      const body = {};
-      body[field] = val;
-      const r = await fetch('/api/profile/update', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify(body) });
-      if(!r.ok) console.warn('update failed');
-      else {
-        const j = await r.json();
-        if(j.user) applyProfile(j.user);
-      }
-    } catch(e){ console.error(e); }
-  };
+function renderProducts(){
+  const grid = el('productGrid');
+  grid.innerHTML = '';
+  PRODUCTS.forEach(p=>{
+    const card = document.createElement('div');
+    card.className = 'product';
+    card.innerHTML = `
+      <img src="${p.image}" alt="${escapeHtml(p.title)}">
+      <div class="title">${escapeHtml(p.title)}</div>
+      <div class="price">${formatPrice(p.price)}</div>
+      <div style="display:flex;gap:8px;margin-top:auto">
+        <a class="btn" href="${p.buyLink}" target="_blank">Купить</a>
+        <button class="btn secondary" data-add="${p.id}">В корзину</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+  // attach handlers
+  grid.querySelectorAll('button[data-add]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      const id = btn.getAttribute('data-add');
+      addToCart(id);
+    });
+  });
 }
 
-/* avatar upload */
-el('avatarInput').addEventListener('change', function(){
-  const f = this.files[0]; if(!f) return;
-  const r = new FileReader();
-  r.onload = async (e) => {
-    const dataUrl = e.target.result;
-    el('avatar').src = dataUrl;
-    try {
-      await fetch('/api/profile/update', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ avatar: dataUrl })});
-    } catch(e){ console.error('avatar upload', e); }
-  };
-  r.readAsDataURL(f);
-});
-
-/* CART functions */
-async function loadCart(){
-  const container = el('cartContainer');
-  container.innerHTML = '<div class="cart-empty">Загрузка корзины...</div>';
+/* Cart storage per-user */
+function getCartKey(){
+  if (currentUser && currentUser.id) return 'cart_' + currentUser.id;
+  // fallback: anonymous cart
+  return 'cart_anonymous';
+}
+function loadCartForUser(){
+  const key = getCartKey();
   try {
-    const res = await fetch('/api/cart', { credentials: 'include' });
-    if (!res.ok) {
-      container.innerHTML = `<div class="cart-empty">Для работы корзины нужно войти — <a href="/auth.html">войти / зарегистрироваться</a></div>`;
-      el('checkoutBtn').disabled = true;
-      return;
-    }
-    const j = await res.json();
-    const cart = j.cart || [];
-    renderCart(cart);
+    const raw = localStorage.getItem(key);
+    const items = raw ? JSON.parse(raw) : [];
+    renderCart(items);
   } catch (e) {
-    container.innerHTML = `<div class="cart-empty">Ошибка сети</div>`;
-    el('checkoutBtn').disabled = true;
+    renderCart([]);
   }
 }
-
-function renderCart(cart){
-  const container = el('cartContainer');
-  if(!cart || !cart.length){
-    container.innerHTML = '<div class="cart-empty">Корзина пуста</div>';
-    el('checkoutBtn').disabled = true;
+function saveCart(items){
+  const key = getCartKey();
+  localStorage.setItem(key, JSON.stringify(items));
+  renderCart(items);
+}
+function addToCart(productId){
+  if (!currentUser) {
+    // ask to login
+    alert('Чтобы добавить товар в корзину, пожалуйста, войдите или зарегистрируйтесь.');
+    window.location.href = '/auth.html';
     return;
   }
-  const table = document.createElement('table');
-  table.className = 'cart-table';
-  table.innerHTML = `<thead><tr><th>Товар</th><th>Цена</th><th>Кол-во</th><th>Действие</th></tr></thead>`;
-  const tbody = document.createElement('tbody');
+  const p = PRODUCTS.find(x=>x.id===productId);
+  if (!p) return;
+  const key = getCartKey();
+  const raw = localStorage.getItem(key);
+  const items = raw ? JSON.parse(raw) : [];
+  const exists = items.find(it=>it.id===productId);
+  if (exists) exists.qty = (exists.qty||1) + 1;
+  else items.push({ id: p.id, title: p.title, price: p.price, image:p.image, qty:1 });
+  saveCart(items);
+  alert('Добавлено в корзину');
+}
+function removeFromCart(productId){
+  const key = getCartKey();
+  const raw = localStorage.getItem(key);
+  const items = raw ? JSON.parse(raw) : [];
+  const remaining = items.filter(it=>it.id !== productId);
+  saveCart(remaining);
+}
+function changeQty(productId, qty){
+  const key = getCartKey();
+  const raw = localStorage.getItem(key);
+  const items = raw ? JSON.parse(raw) : [];
+  const it = items.find(x=>x.id===productId);
+  if (it) {
+    it.qty = Math.max(1, qty);
+    saveCart(items);
+  }
+}
+function renderCart(items){
+  const list = el('cartList');
+  list.innerHTML = '';
+  if (!items || items.length === 0) {
+    list.innerHTML = '<div class="muted">Корзина пуста</div>';
+    el('cartTotal').textContent = 'Итого: 0 ₽';
+    return;
+  }
   let total = 0;
-  cart.forEach(item=>{
-    const tr = document.createElement('tr');
-    const priceNum = parseFloat((item.price||'').replace(/[^\d,.-]/g,'').replace(',','.')) || 0;
-    total += priceNum * (item.qty || 1);
-    tr.innerHTML = `<td><img src="${item.image||''}" style="width:48px;height:48px;object-fit:cover;margin-right:8px;vertical-align:middle"> ${item.title}</td>
-      <td>${item.price}</td>
-      <td>${item.qty || 1}</td>
-      <td><button class="btn" data-id="${item.id}" onclick="removeFromCart('${item.id}')">Удалить</button></td>`;
-    tbody.appendChild(tr);
+  items.forEach(it=>{
+    const row = document.createElement('div');
+    row.className = 'cart-item';
+    row.innerHTML = `
+      <img src="${it.image}" alt="${escapeHtml(it.title)}">
+      <div style="flex:1">
+        <div style="font-weight:600">${escapeHtml(it.title)}</div>
+        <div class="muted">${formatPrice(it.price)} × <input type="number" value="${it.qty}" min="1" style="width:64px" data-qty="${it.id}"></div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-weight:700">${formatPrice(it.price * it.qty)}</div>
+        <div style="margin-top:8px"><button class="edit-btn" data-remove="${it.id}">Удалить</button></div>
+      </div>
+    `;
+    list.appendChild(row);
+    total += it.price * it.qty;
   });
-  table.appendChild(tbody);
-  const footer = document.createElement('div'); footer.style.marginTop='12px';
-  footer.innerHTML = `<strong>Итого: ${formatTotal(total)}</strong>`;
-  container.innerHTML = '';
-  container.appendChild(table);
-  container.appendChild(footer);
-  el('checkoutBtn').disabled = false;
+  el('cartTotal').textContent = 'Итого: ' + formatPrice(total);
+  // events
+  list.querySelectorAll('[data-remove]').forEach(btn=>{
+    btn.addEventListener('click', ()=> removeFromCart(btn.getAttribute('data-remove')));
+  });
+  list.querySelectorAll('[data-qty]').forEach(inp=>{
+    inp.addEventListener('change', ()=> {
+      const id = inp.getAttribute('data-qty');
+      const q = parseInt(inp.value,10) || 1;
+      changeQty(id, q);
+    });
+  });
 }
 
-async function addToCartBackend(product){
-  try {
-    const res = await fetch('/api/cart/add', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify(product) });
-    if (!res.ok) {
-      const d = await res.json();
-      alert(d.error || 'Ошибка добавления в корзину');
-      if (res.status === 401) window.location.href = '/auth.html';
-      return;
-    }
-    const j = await res.json();
-    // optional: show message
-    alert('Товар добавлен в корзину');
-    // if current tab is shopTab, refresh
-    if (document.querySelector('.tabs a.active').getAttribute('data-tab') === 'shopTab') loadCart();
-  } catch (e) {
-    alert('Ошибка сети');
+/* Checkout handler */
+el('checkoutBtn').addEventListener('click', async ()=>{
+  if (!currentUser) {
+    alert('Для оформления заказа войдите в аккаунт.');
+    window.location.href = '/auth.html';
+    return;
   }
-}
-
-async function removeFromCart(id){
+  // since we don't have payment, just simulate order creation: send cart to server if supported, otherwise clear cart
+  const key = getCartKey();
+  const items = JSON.parse(localStorage.getItem(key) || '[]');
+  if (!items || items.length === 0) { alert('Корзина пуста'); return; }
   try {
-    const res = await fetch('/api/cart/remove', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ id })});
-    if (!res.ok) {
-      const d = await res.json();
-      alert(d.error || 'Ошибка удаления');
-      return;
-    }
-    loadCart();
+    // attempt to send to /api/orders (optional)
+    await safeFetch('/api/orders', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ items })
+    });
+    alert('Заказ отправлен (симуляция). Корзина очищена.');
   } catch (e) {
-    alert('Ошибка сети');
+    // if server doesn't support, still clear cart locally
+    console.warn('orders endpoint failed (ok):', e);
+    alert('Заказ оформлен локально (сервер недоступен) — корзина очищена.');
   }
-}
+  localStorage.removeItem(key);
+  renderCart([]);
+});
 
-async function clearCart(){
-  if(!confirm('Очистить всю корзину?')) return;
+/* =============================
+   Settings: change password & telegram
+   ============================= */
+el('changePasswordBtn').addEventListener('click', async ()=>{
+  const oldPwd = el('oldPassword').value;
+  const newPwd = el('newPassword').value;
+  el('changePwdMsg').textContent = '';
+  if (!oldPwd || !newPwd) { el('changePwdMsg').textContent = 'Заполните оба поля'; return; }
   try {
-    const res = await fetch('/api/cart/clear', { method:'POST', credentials:'include' });
+    // first try dedicated endpoint
+    let res = await safeFetch('/api/change-password', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ oldPassword: oldPwd, newPassword: newPwd })
+    });
     if (res.ok) {
-      loadCart();
-      el('cartMsg').innerText = 'Корзина очищена';
-      setTimeout(()=> el('cartMsg').innerText = '', 2000);
-    } else alert('Ошибка очистки');
-  } catch(e){ alert('Ошибка сети'); }
-}
-
-async function checkout(){
-  if(!confirm('Перейти к оформлению заказа?')) return;
-  try {
-    const res = await fetch('/api/cart/checkout', { method:'POST', credentials:'include' });
-    const j = await res.json();
-    if (!res.ok) {
-      alert(j.error || 'Ошибка оформления');
+      el('changePwdMsg').textContent = 'Пароль успешно изменён';
+      el('oldPassword').value = el('newPassword').value = '';
       return;
     }
-    loadCart();
-    el('cartMsg').innerText = 'Заказ принят, спасибо!';
-    // reload profile/orders
-    setTimeout(()=> loadProfile(), 500);
-  } catch(e){ alert('Ошибка сети'); }
-}
+    // fallback: try update via profile update (server must handle this)
+    res = await safeFetch('/api/profile/update', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ password: newPwd })
+    });
+    if (res.ok) {
+      el('changePwdMsg').textContent = 'Пароль обновлён (через profile/update)';
+      el('oldPassword').value = el('newPassword').value = '';
+      return;
+    } else {
+      const j = await res.json().catch(()=>({}));
+      el('changePwdMsg').textContent = j.error || 'Не удалось сменить пароль';
+    }
+  } catch (e) {
+    console.warn('change pwd error', e);
+    el('changePwdMsg').textContent = 'Ошибка сети';
+  }
+});
 
-/* redirect helpers */
-function goTo(tab){ document.querySelectorAll('.tabs a').forEach(a=>a.classList.remove('active')); const a = [...document.querySelectorAll('.tabs a')].find(x=>x.getAttribute('data-tab')===tab); if(a) a.classList.add('active'); showTab({ currentTarget: a, preventDefault: ()=>{} }); }
+el('saveTgBtn').addEventListener('click', async ()=>{
+  const handle = el('tgHandle').value.trim();
+  el('tgMsg').textContent = '';
+  if (!currentUser) { el('tgMsg').textContent = 'Требуется вход'; return; }
+  try {
+    const res = await safeFetch('/api/profile/update', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ telegram: handle })
+    });
+    if (res.ok) {
+      el('tgMsg').textContent = 'Сохранено';
+      // update local copy
+      currentUser.telegram = handle;
+    } else {
+      const j = await res.json().catch(()=>({}));
+      el('tgMsg').textContent = j.error || 'Ошибка';
+    }
+  } catch (e) {
+    el('tgMsg').textContent = 'Ошибка сети';
+  }
+});
 
-/* logout */
-async function logout(){
-  try { await fetch('/api/logout', { method:'POST', credentials:'include' }); } catch(e){}
+/* =============================
+   Logout
+   ============================= */
+el('logoutBtn').addEventListener('click', async ()=>{
+  try {
+    await safeFetch('/api/logout', { method:'POST' });
+  } catch (e) { console.warn('logout network', e); }
+  // clear local cart key for this user
+  if (currentUser && currentUser.id) {
+    try { localStorage.removeItem('cart_' + currentUser.id); } catch (e) {}
+  }
+  // clear currentUser and redirect to auth
+  currentUser = null;
   window.location.href = '/auth.html';
+});
+
+/* =============================
+   Admin: list users
+   ============================= */
+async function loadAdminUsers(){
+  try {
+    const res = await safeFetch('/api/admin/users');
+    if (!res.ok) {
+      console.warn('admin users denied or no endpoint');
+      el('adminUsersList').textContent = 'Нет доступа или эндпоинт отсутствует';
+      return;
+    }
+    const j = await res.json();
+    if (j.ok && Array.isArray(j.users)) {
+      const listEl = el('adminUsersList');
+      listEl.innerHTML = '';
+      j.users.forEach(u=>{
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.justifyContent = 'space-between';
+        row.style.alignItems = 'center';
+        row.style.padding = '6px 0';
+        row.innerHTML = `<div><strong>${escapeHtml(u.fio||u.email||u.phone||u.id)}</strong> <span class="muted">(${escapeHtml(u.email||'')})</span></div>
+                         <div><button class="edit-btn" data-del="${u.id}">Удалить</button></div>`;
+        listEl.appendChild(row);
+      });
+      listEl.querySelectorAll('[data-del]').forEach(btn=>{
+        btn.addEventListener('click', async ()=>{
+          if (!confirm('Удалить пользователя?')) return;
+          const id = btn.getAttribute('data-del');
+          const r = await safeFetch('/api/admin/users/' + encodeURIComponent(id), { method:'DELETE' });
+          if (r.ok) {
+            btn.closest('div').remove();
+          } else {
+            alert('Ошибка удаления');
+          }
+        });
+      });
+    }
+  } catch (e) {
+    console.warn('loadAdminUsers fail', e);
+  }
 }
 
-/* INIT */
+/* =============================
+   Utilities
+   ============================= */
+function formatPrice(n){ return (typeof n === 'number' ? n.toLocaleString('ru-RU') : n) + ' ₽'; }
+function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+
+/* =============================
+   Dismiss passport notice
+   ============================= */
+el('dismissPassportNotice').addEventListener('click', ()=> {
+  // simply hide that notice
+  el('dismissPassportNotice').closest('.notice').style.display = 'none';
+});
+
+/* =============================
+   Subscribe Telegram btn (example behaviour)
+   ============================= */
+el('subscribeTelegramBtn').addEventListener('click', ()=> {
+  if (!currentUser) { alert('Чтобы подписаться — войдите'); window.location.href='/auth.html'; return; }
+  alert('Отправлено приглашение в Telegram (симуляция).');
+});
+
+/* =============================
+   goTo helper
+   ============================= */
+function goTo(tab){
+  const a = [...document.querySelectorAll('.tabs a')].find(x=>x.getAttribute('data-tab')===tab);
+  if (a) { a.click(); a.classList.add('active'); showTab({ currentTarget: a, preventDefault: ()=>{} }); }
+}
+
+/* =============================
+   On load: render products & load profile
+   ============================= */
 document.addEventListener('DOMContentLoaded', async ()=>{
+  renderProducts();
   await loadProfile();
-  showTab({ currentTarget: document.querySelector('.tabs a.active'), preventDefault: ()=>{} });
-  // expose addToCart for other pages (shop)
-  window.addToCartBackend = addToCartBackend;
+  // ensure cart loaded after profile
+  loadCartForUser();
 });
 </script>
+<script src="cabinet.js"></script>
 </body>
 </html>
+ 
