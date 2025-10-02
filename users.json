@@ -1,1 +1,18 @@
-{}
+[
+  {
+    "id": "user123",
+    "fio": "Иван Иванов",
+    "phone": "+79998887766",
+    "email": "ivan@example.com",
+    "password": "$2a$10$u1kFjmrDqBiF2PRiPvRhXe6RkZ8A0G5G/ilcJ8sYka5l9MN1Xv5n2",
+    "cardNumber": "1234567890123456",
+    "cardType": "Visa",
+    "dob": "1990-05-12",
+    "gender": "male",
+    "avatar": "",
+    "bonusMiles": 1500,
+    "role": "user",
+    "cart": [],
+    "createdAt": "2025-10-02T12:30:00.000Z"
+  }
+]
