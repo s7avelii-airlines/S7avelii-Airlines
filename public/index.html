@@ -344,32 +344,29 @@
 </header>
 
 <script>
-  window.addEventListener("DOMContentLoaded", () => {
-    const userArea = document.getElementById("userArea");
+function updateUserArea() {
+  const userArea = document.getElementById("userArea");
+  const fio = localStorage.getItem("fio");
+  const avatar = localStorage.getItem("avatar");
 
-    const fio = localStorage.getItem("fio");
-    const avatar = localStorage.getItem("avatar");
-    const username = localStorage.getItem("username");
-
-    if (fio && localStorage.getItem("phone")) {
-      if (avatar) {
-        userArea.innerHTML = `
-          <img src="${avatar}" alt="avatar" 
-            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
-            onclick="window.location.href='cabinet.html'" 
-          />
-        `;
-      } else {
-        userArea.innerHTML = `
-          <span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">
-            ${username || fio.split(" ")[0]}
-          </span>
-        `;
-      }
+  if (fio && localStorage.getItem("phone")) {
+    if (avatar) {
+      userArea.innerHTML = `<img src="${avatar}" alt="avatar" 
+        style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
+        onclick="window.location.href='cabinet.html'" 
+      />`;
     } else {
-      userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+      userArea.innerHTML = `<span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">
+        ${fio.split(" ")[0]}
+      </span>`;
     }
-  });
+  } else {
+    userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+  }
+}
+
+window.addEventListener("DOMContentLoaded", updateUserArea);
+
 </script>
 
 <head>
