@@ -1,20 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Кабинет — S7avelii</title>
-  <link rel="icon" href="images/favicon.png" type="image/png">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Личный кабинет — S7avelii</title>
+  <link rel="icon" href="images/favicon.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* ======= preserve original look ======= */
     :root{
       --bg:#f3f6f9;
       --card:#ffffff;
       --accent:#9cc42f;
       --muted:#6b7280;
-      --container:1100px;
+      --radius:12px;
       --shadow: 0 6px 20px rgba(16,24,40,0.06);
+      --container:1100px;
     }
     *{box-sizing:border-box}
     body{
@@ -41,20 +41,8 @@
     .top-right{margin-left:auto;display:flex;gap:12px;align-items:center}
     .lang-flag{width:28px;height:18px;border-radius:3px;object-fit:cover}
     .small-avatar{width:36px;height:36px;border-radius:999px;object-fit:cover;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.08)}
-    .profile-card{
-      margin-top:18px;
-      background:var(--card);
-      padding:22px;
-      border-radius:16px;
-      box-shadow:var(--shadow);
-      display:flex;
-      gap:22px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-    .avatar{
-      width:118px;height:118px;border-radius:999px;object-fit:cover;border:4px solid #fff;box-shadow:0 6px 18px rgba(0,0,0,0.06);cursor:pointer;
-    }
+    .profile-card{margin-top:18px;background:var(--card);padding:22px;border-radius:16px;box-shadow:var(--shadow);display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
+    .avatar{width:118px;height:118px;border-radius:999px;object-fit:cover;border:4px solid #fff;box-shadow:0 6px 18px rgba(0,0,0,0.06);cursor:pointer;}
     .user-info{min-width:260px}
     .user-info h1{margin:0;font-size:20px;display:flex;align-items:center;gap:12px}
     .user-info .sub{color:var(--muted);margin-top:6px}
@@ -87,7 +75,15 @@
     .btn{display:inline-block;background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:0;cursor:pointer}
     .btn.secondary{background:#eef2f7;color:#111;border:0}
     .muted{color:var(--muted)}
-    @media (max-width:980px){ .grid{grid-template-columns:1fr} .stats{margin-left:0;margin-top:12px} }
+    /* miles progress */
+    .miles-bar { background:#eef2f4; border-radius:12px; height:18px; overflow:hidden; width:100%; }
+    .miles-fill { height:100%; width:0%; transition: width .6s ease; background: linear-gradient(90deg,#9cc42f,#6cc100); }
+    .miles-info { display:flex; justify-content:space-between; margin-top:8px; font-size:13px; color:var(--muted); }
+    @media (max-width:980px){
+      .grid{grid-template-columns:1fr}
+      .stats{margin-left:0;margin-top:12px}
+      .top{padding:12px}
+    }
   </style>
 </head>
 <body>
@@ -102,7 +98,7 @@
 
     <div class="top-right">
       <img src="images/flag_ru.png" alt="ru" class="lang-flag" onerror="this.style.display='none'">
-      <img id="topSmallAvatar" src="https://via.placeholder.com/36" alt="avatar" class="small-avatar" title="Открыть профиль">
+      <img id="topSmallAvatar" src="https://via.placeholder.com/36" alt="avatar" class="small-avatar" title="Открыть профиль" onclick="location.href='/cabinet.html'">
     </div>
   </div>
 
@@ -137,7 +133,7 @@
     <a href="#" data-tab="settingsTab" onclick="showTab(event)">Настройки</a>
   </nav>
 
-  <!-- Notifications -->
+  <!-- Notices -->
   <div class="notice-row" style="margin-top:12px">
     <div class="notice">
       <div class="dot">✈</div>
@@ -147,19 +143,14 @@
       </div>
       <div style="margin-left:auto"><button class="btn secondary" id="subscribeTelegramBtn">Подписаться</button></div>
     </div>
-
-    <div class="notice" style="background:#fff7f4;border-color:rgba(234,88,12,0.08);margin-top:10px">
-      <div class="dot" style="background:rgba(234,88,12,0.1;color:#ea580c">!</div>
-      <div class="muted">Срок действия вашего заграничного паспорта истёк. Не забудьте обновить документ для планирования путешествий.</div>
-      <div style="margin-left:auto"><button class="btn secondary" id="dismissPassportNotice">✕</button></div>
-    </div>
   </div>
 
   <!-- Grid -->
   <div class="grid">
 
-    <!-- LEFT: Profile details -->
+    <!-- LEFT -->
     <div>
+      <!-- Profile -->
       <div id="profileTab" class="card" role="region" aria-label="profile">
         <h3>Персональные данные</h3>
         <div style="padding:8px 0 0 0" class="muted">ФИО / отображаемое имя</div>
@@ -188,7 +179,6 @@
         </div>
 
         <h3 style="margin-top:16px">Контакты</h3>
-
         <div class="field">
           <div>
             <div class="label">E-mail</div>
@@ -221,133 +211,37 @@
         </div>
       </div>
 
-      <div style="max-width:600px; margin:20px auto; font-family:Arial, sans-serif; color:#333;">
-  <div style="background:#fff; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.1); padding:20px;">
-    
-    <h2 style="font-size:18px; font-weight:600; margin-bottom:10px;">
-      Статус в программе <a href="#" style="color:#1a73e8; text-decoration:none;">S7 Priority</a>
-    </h2>
+      <!-- Miles -->
+      <div id="milesTab" class="card" style="margin-top:16px;display:none">
+        <h3>Мои мили</h3>
+        <div class="muted">История начислений и статус</div>
 
-    <div style="margin-bottom:20px;">
-      <div style="font-size:14px; color:#666;">Ваш статус:</div>
-      <div id="statusName" style="font-size:20px; font-weight:bold;">Classic</div>
-    </div>
+        <div style="margin-top:12px">
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="flex:1">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div><strong id="milesValue">0</strong> миль</div>
+                <div class="small-muted" id="currentLevel">—</div>
+              </div>
+              <div class="miles-bar" style="margin-top:10px">
+                <div id="milesFill" class="miles-fill"></div>
+              </div>
+              <div class="miles-info">
+                <div id="levelFrom">0</div>
+                <div id="levelTo">—</div>
+              </div>
+            </div>
+            <div style="width:150px;text-align:center">
+              <div class="small-muted">Статусные мили</div>
+              <div style="font-weight:700;font-size:20px" id="statusMilesStat">—</div>
+            </div>
+          </div>
+        </div>
 
-    <div style="background:#f9fafb; border-radius:10px; padding:15px; margin-bottom:20px;">
-      <div style="font-size:24px; font-weight:bold; margin-bottom:5px;">
-        <span id="milesValue">0</span> бонусные мили
+        <div style="margin-top:12px" class="small-muted">Прогресс обновляется автоматически при изменении миль.</div>
       </div>
-    </div>
 
-    <!-- Прогресс -->
-    <div style="margin-bottom:10px; font-size:14px;">
-      <span id="currentMiles" style="background:#8bc34a; color:#fff; border-radius:8px; padding:2px 8px; font-weight:bold;">0 миль</span>
-      <span style="margin-left:10px; color:#666;">0 полётов</span>
-    </div>
-
-    <div style="background:#e9ecef; border-radius:6px; height:12px; width:100%; overflow:hidden;">
-      <div id="milesProgress" style="background:#8bc34a; height:100%; width:0%;"></div>
-    </div>
-
-    <div style="display:flex; justify-content:space-between; margin-top:5px; font-size:12px; color:#999;">
-      <span id="nextLevelName">Classic Master</span>
-      <span id="nextLevelMiles">5000</span>
-    </div>
-
-    <div style="margin-top:15px; font-size:14px; color:#666;">
-      Статусных миль: <b id="statusMiles">0</b><br>
-      Полётов: <b id="flights">0</b>
-    </div>
-
-    <!-- Привилегии -->
-    <div style="margin-top:20px;">
-      <h3 style="font-size:15px; margin-bottom:10px; color:#444;">Привилегии статуса:</h3>
-      <ul id="privileges" style="list-style:none; padding-left:15px; color:#333;">
-        <!-- сюда вставим пункты -->
-      </ul>
-    </div>
-
-    <hr style="margin:15px 0; border:0; border-top:1px solid #eee;">
-
-    <div style="font-size:14px; color:#444; display:flex; justify-content:space-between; align-items:center;">
-      <div>
-        Дата регистрации: <b id="registrationDate"></b>
-      </div>
-      <div>
-        Состояние счёта: <b style="color:#2e7d32;" id="accountStatus">Активный</b>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<script>
-  // Настройки статусов
-  const statuses = {
-    Classic: {
-      name: "Classic",
-      nextLevel: "Classic Master",
-      maxMiles: 5000,
-      color: "#8bc34a",
-      privileges: [
-        "Бонусные мили копятся за покупки на сайте и в приложении. Можно тратить на авиабилеты и допуслуги.",
-        "Статусные мили копятся за полеты и покупки по карте S7 — T-Bank."
-      ]
-    },
-    VIP: {
-      name: "VIP",
-      nextLevel: "VIP Gold",
-      maxMiles: 25000,
-      color: "#fbc02d",
-      privileges: [
-        "Приоритетная регистрация и посадка.",
-        "Доступ в бизнес-залы аэропортов.",
-        "Бонусные и статусные мили за полёты и покупки."
-      ]
-    }
-  };
-
-  function updateStatus(type, miles, flights=0, registration="06 июл 2021", account="Активный") {
-    const s = statuses[type];
-    const percent = Math.min(100, (miles / s.maxMiles) * 100);
-
-    document.getElementById("statusName").textContent = s.name;
-    document.getElementById("milesValue").textContent = miles;
-    document.getElementById("statusMiles").textContent = miles;
-    document.getElementById("flights").textContent = flights;
-    document.getElementById("currentMiles").textContent = miles + " миль";
-    document.getElementById("nextLevelName").textContent = s.nextLevel;
-    document.getElementById("nextLevelMiles").textContent = s.maxMiles;
-
-    const progress = document.getElementById("milesProgress");
-    progress.style.width = percent + "%";
-    progress.style.background = s.color;
-    document.getElementById("currentMiles").style.background = s.color;
-
-    // Привилегии
-    const list = document.getElementById("privileges");
-    list.innerHTML = "";
-    s.privileges.forEach(p => {
-      const li = document.createElement("li");
-      li.innerHTML = "• " + p;
-      li.style.marginBottom = "5px";
-      list.appendChild(li);
-    });
-
-    // Дата и статус
-    document.getElementById("registrationDate").textContent = registration;
-    document.getElementById("accountStatus").textContent = account;
-  }
-
-  // 🔹 Тест: Classic
-  updateStatus("Classic", 1057, 0, "06 июл 2021", "Активный");
-
-  // 🔹 Пример VIP:
-  // updateStatus("VIP", 12340, 5, "15 мар 2022", "Активный");
-</script>
-
-
-      <!-- Shop tab -->
+      <!-- Shop -->
       <div id="shopTab" class="card" style="margin-top:16px;display:none">
         <h3>S7avelii Shop</h3>
         <div class="muted">Товары, которые можно купить прямо сейчас</div>
@@ -361,13 +255,13 @@
             <button id="checkoutBtn" class="btn" onclick="checkout()">Оформить</button>
           </div>
         </div>
+        <div id="cartMsg" class="small-muted" style="margin-top:8px"></div>
       </div>
 
-      <!-- Настройки -->
+      <!-- Settings -->
       <div id="settingsTab" class="card" style="margin-top:16px;display:none">
         <h3>Настройки</h3>
 
-        <!-- change password -->
         <div style="margin-top:8px">
           <h4>Смена пароля</h4>
           <form id="passwordForm" onsubmit="return changePassword(event)" style="display:flex;flex-direction:column;gap:8px;max-width:360px">
@@ -382,7 +276,6 @@
           </form>
         </div>
 
-        <!-- social link -->
         <div style="margin-top:18px">
           <h4>Привязка аккаунтов</h4>
           <div style="display:flex;flex-direction:column;gap:10px;max-width:360px">
@@ -397,12 +290,10 @@
             <div id="linkMsg" class="small-muted"></div>
           </div>
         </div>
-
       </div>
-
     </div>
 
-    <!-- RIGHT: Summary / quick-actions -->
+    <!-- RIGHT -->
     <aside>
       <div class="card">
         <h3>Краткая информация</h3>
@@ -427,34 +318,35 @@
         </div>
       </div>
 
+      <div class="card" style="margin-top:16px">
+        <button class="btn secondary" onclick="logout()" style="background:#fff;border:1px solid rgba(0,0,0,0.06)">Выйти</button>
+      </div>
     </aside>
-
   </div>
 </div>
 
 <script>
-/* ============================
-   Helpers & config
-   ============================ */
+/* -------------------------
+   Helpers
+   ------------------------- */
 const el = id => document.getElementById(id);
 let currentUser = null;
+const API = ''; // same origin
 
-function formatPrice(n){ return (typeof n === 'number' ? n.toLocaleString('ru-RU') : n) + ' ₽'; }
 function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+function formatPrice(n){ return (typeof n === 'number' ? n.toLocaleString('ru-RU') : n) + ' ₽'; }
 
-/* ============================
-   Products (Shop) - keep old list
-   ============================ */
+/* -------------------------
+   Product list (unchanged)
+   ------------------------- */
 const PRODUCTS = [
   { id:'p1', title:'Блокнот S7avelii', price:550, image:'images/photo_5330078908990750485_y.avif' },
   { id:'p2', title:'Комбо Блокнот + Футболка', price:2350, image:'images/photo_5330078908990750484_y.avif' },
   { id:'p3', title:'Фирменная футболка', price:1900, image:'images/photo_5332515869139530693_y.avif' },
   { id:'p4', title:'Комбо Путешественник', price:4500, image:'images/photo_5330078908990750483_y.avif' }
 ];
-
 function renderProducts(){
-  const grid = el('productGrid');
-  if(!grid) return;
+  const grid = el('productGrid'); if(!grid) return;
   grid.innerHTML = '';
   PRODUCTS.forEach(p=>{
     const card = document.createElement('div');
@@ -483,16 +375,14 @@ function renderProducts(){
       const id = btn.getAttribute('data-buy');
       const p = PRODUCTS.find(x=>x.id===id);
       if(!p) return;
-      addToCartBackend({ title: p.title, price: String(p.price) + ' ₽', qty:1, image: p.image }).then(()=>{
-        goTo('shopTab');
-      });
+      addToCartBackend({ title: p.title, price: String(p.price) + ' ₽', qty:1, image: p.image }).then(()=> goTo('shopTab'));
     });
   });
 }
 
-/* ============================
-   Tabs & navigation
-   ============================ */
+/* -------------------------
+   Tabs
+   ------------------------- */
 function showTab(evt){
   evt && evt.preventDefault();
   const tabId = evt ? evt.currentTarget.getAttribute('data-tab') : 'profileTab';
@@ -509,46 +399,35 @@ function goTo(tab){
   if (a) { a.classList.add('active'); showTab({ currentTarget: a, preventDefault: ()=>{} }); }
 }
 
-/* ============================
-   Load profile from server
-   ============================ */
+/* -------------------------
+   Load profile
+   ------------------------- */
 async function loadProfile(){
   try {
-    const res = await fetch('/api/profile', { credentials: 'include' });
-    if(!res.ok){
-      // not logged in -> redirect to auth page
-      // keep page usable: show guest state
-      showGuestState();
+    const res = await fetch(API + '/api/profile', { credentials: 'include' });
+    if (!res.ok) {
+      // not logged in -> redirect to auth
+      window.location.href = '/auth.html';
       return;
     }
     const j = await res.json();
     currentUser = j.user || j;
     applyProfile(currentUser);
-  } catch (err) {
-    console.error('loadProfile err', err);
-    showGuestState();
+  } catch (e) {
+    console.error('loadProfile error', e);
+    window.location.href = '/auth.html';
   }
 }
 
-function showGuestState(){
-  currentUser = null;
-  el('fioHeader').innerText = 'Гость';
-  el('avatar').src = 'https://via.placeholder.com/150';
-  el('topSmallAvatar').src = 'https://via.placeholder.com/36';
-  el('phoneHeader').innerText = '';
-  el('bonusMiles').innerText = '—';
-  renderProducts();
-}
-
-/* ============================
-   Apply profile -> fill UI
-   ============================ */
+/* -------------------------
+   Apply profile -> fills UI + miles bar
+   ------------------------- */
 function applyProfile(p){
-  if (!p) { showGuestState(); return; }
-  // header avatars
+  if (!p) return;
+  // avatars
   el('topSmallAvatar').src = p.avatar || 'https://via.placeholder.com/36';
   el('avatar').src = p.avatar || 'https://via.placeholder.com/150';
-  // main fields
+  // fields
   el('fioHeader').innerText = p.fio || 'Пользователь';
   el('phoneHeader').innerText = p.phone || '';
   el('fioField').innerText = p.fio || '—';
@@ -559,9 +438,10 @@ function applyProfile(p){
   el('cardField').innerText = p.cardNumber || '—';
   el('cardTypeField').innerText = p.cardType || '—';
   // miles
-  el('bonusMiles').innerText = p.bonusMiles ?? '—';
-  el('milesBonusStat').innerText = p.bonusMiles ?? '—';
-  el('milesStatusStat').innerText = p.statusMiles ?? '—';
+  const miles = Number(p.bonusMiles || 0);
+  el('bonusMiles').innerText = miles;
+  el('milesValue').innerText = miles;
+  el('statusMilesStat').innerText = p.statusMiles ?? '—';
   // card badge
   const badge = el('cardTypeImg');
   const cardTypeText = el('cardTypeText');
@@ -572,14 +452,12 @@ function applyProfile(p){
   } else if (p.cardType === 'Classic') {
     badge.src = 'images/classic_card.png';
     badge.style.display = 'inline-block';
-    cardTypeText.innerText = 'Classic';
+    cardTypeText.innerText = p.cardType || '';
   } else {
     badge.style.display = 'none';
     cardTypeText.innerText = '';
   }
-  // orders
-  renderOrders(p.orders || []);
-  // link statuses (VK / Telegram)
+  // links
   if (el('vkStatus')) el('vkStatus').innerText = p.linkedVK ? '✅ Привязан' : '❌ Не привязан';
   if (el('tgStatus')) el('tgStatus').innerText = p.linkedTelegram ? '✅ Привязан' : '❌ Не привязан';
   // admin panel
@@ -589,22 +467,56 @@ function applyProfile(p){
   } else {
     el('adminPanel').style.display = 'none';
   }
-  // render shop
+  // orders
+  renderOrders(p.orders || []);
+  // products + cart
   renderProducts();
-  // load cart for this user
   loadCart();
+  // update miles bar
+  updateMilesBar(miles);
 }
 
-/* ============================
-   Inline edit fields
-   ============================ */
+/* -------------------------
+   Miles: levels & progress
+   ------------------------- */
+const MILE_LEVELS = [
+  { name: 'Bronze', from: 0, to: 4999 },
+  { name: 'Silver', from: 5000, to: 14999 },
+  { name: 'Gold', from: 15000, to: 29999 },
+  { name: 'Platinum', from: 30000, to: 9999999 }
+];
+
+function findLevel(miles){
+  for (let i=0;i<MILE_LEVELS.length;i++){
+    const lv = MILE_LEVELS[i];
+    if (miles >= lv.from && miles <= lv.to) return { index:i, level:lv };
+  }
+  return { index:0, level:MILE_LEVELS[0] };
+}
+
+function updateMilesBar(miles){
+  const { index, level } = findLevel(miles);
+  const nextLevel = MILE_LEVELS[Math.min(index+1, MILE_LEVELS.length-1)];
+  const from = level.from;
+  const to = Math.max(level.to, from+1);
+  const percent = Math.max(0, Math.min(100, Math.round(((miles - from) / (to - from)) * 100)));
+  el('milesFill').style.width = percent + '%';
+  el('currentLevel').innerText = level.name;
+  el('levelFrom').innerText = from + ' м';
+  el('levelTo').innerText = nextLevel.to ? Math.max(nextLevel.from, miles) + ' м' : '—';
+  el('milesValue').innerText = miles;
+}
+
+/* -------------------------
+   Inline edit
+   ------------------------- */
 function enableEdit(field) {
   const map = {
-    fio: {id:'fioField', key:'fio', extraHeader:'fioHeader'},
+    fio: {id:'fioField', key:'fio', header:'fioHeader'},
     dob: {id:'dobField', key:'dob'},
     gender: {id:'genderField', key:'gender'},
     email: {id:'emailField', key:'email'},
-    phone: {id:'phoneField', key:'phone', extraHeader:'phoneHeader'},
+    phone: {id:'phoneField', key:'phone', header:'phoneHeader'},
     cardNumber: {id:'cardField', key:'cardNumber'}
   };
   const m = map[field];
@@ -623,57 +535,52 @@ function enableEdit(field) {
   ok.onclick = async () => {
     const value = input.value.trim();
     container.textContent = value || '—';
-    if (m.extraHeader && el(m.extraHeader)) el(m.extraHeader).textContent = value || (m.extraHeader === 'fioHeader' ? 'Пользователь' : '');
-    // push to server
+    if (m.header && el(m.header)) el(m.header).textContent = value || (m.header === 'fioHeader' ? 'Пользователь' : '');
     try {
       const body = { [m.key]: value || '' };
-      const r = await fetch('/api/profile/update', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify(body) });
-      if (!r.ok) {
-        console.warn('update failed', r.status);
-      } else {
+      const r = await fetch(API + '/api/profile/update', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify(body) });
+      if (!r.ok) console.warn('update failed', r.status);
+      else {
         const j = await r.json();
-        if (j.user) applyProfile(j.user);
+        if (j.user) { currentUser = j.user; applyProfile(j.user); }
       }
-    } catch(e){ console.error('profile update failed', e); }
+    } catch(e){ console.error(e); }
   };
   container.appendChild(input);
   container.appendChild(ok);
   input.focus();
 }
 
-/* ============================
+/* -------------------------
    Avatar upload
-   ============================ */
+   ------------------------- */
 el('avatarInput').addEventListener('change', function(){
-  const f = this.files[0];
-  if (!f) return;
+  const f = this.files[0]; if(!f) return;
   const reader = new FileReader();
   reader.onload = async (ev) => {
     const dataUrl = ev.target.result;
     el('avatar').src = dataUrl;
     el('topSmallAvatar').src = dataUrl;
-    // push to server
     try {
-      const r = await fetch('/api/profile/update', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ avatar: dataUrl }) });
+      const r = await fetch(API + '/api/profile/update', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ avatar: dataUrl })});
       if (!r.ok) console.warn('avatar push failed', r.status);
       else {
         const j = await r.json();
-        if (j.user) applyProfile(j.user);
+        if (j.user) { currentUser = j.user; applyProfile(j.user); }
       }
-    } catch (e) { console.warn('avatar push failed', e); }
+    } catch(e){ console.error('avatar upload', e); }
   };
   reader.readAsDataURL(f);
 });
 
-/* ============================
+/* -------------------------
    Cart (server-backed)
-   ============================ */
+   ------------------------- */
 async function loadCart(){
-  const list = el('cartList');
-  if (!list) return;
+  const list = el('cartList'); if(!list) return;
   list.innerHTML = '<div class="muted">Загрузка корзины...</div>';
   try {
-    const res = await fetch('/api/cart', { credentials: 'include' });
+    const res = await fetch(API + '/api/cart', { credentials:'include' });
     if (!res.ok) {
       list.innerHTML = `<div class="muted">Корзина доступна только для авторизованных — <a href="/auth.html">войти</a></div>`;
       el('checkoutBtn').disabled = true;
@@ -681,15 +588,11 @@ async function loadCart(){
     }
     const j = await res.json();
     renderCart(j.cart || []);
-  } catch(e) {
-    list.innerHTML = `<div class="muted">Ошибка сети</div>`;
-    el('checkoutBtn').disabled = true;
-  }
+  } catch(e){ list.innerHTML = `<div class="muted">Ошибка сети</div>`; el('checkoutBtn').disabled = true; }
 }
 
 function renderCart(items){
-  const list = el('cartList');
-  list.innerHTML = '';
+  const list = el('cartList'); list.innerHTML = '';
   if (!items || items.length === 0) {
     list.innerHTML = '<div class="muted">Корзина пуста</div>';
     el('cartTotal').textContent = 'Итого: 0 ₽';
@@ -726,37 +629,34 @@ function renderCart(items){
     });
   });
   list.querySelectorAll('[data-qty]').forEach(inp=>{
-    inp.addEventListener('change', async ()=> {
+    inp.addEventListener('change', async ()=>{
       const id = inp.getAttribute('data-qty');
       let q = parseInt(inp.value,10) || 1;
       if (q < 1) q = 1;
-      // change qty on server: remove and add simplified approach (server doesn't have qty update endpoint)
-      // We'll simulate by removing that item and adding same with qty
+      // Server doesn't provide qty update in generic API — implement by deleting and re-adding
       try {
-        // server expects items with their own id; to update qty properly server-side you'd implement endpoint.
-        // For now we attempt to clear cart and re-add with new qty by requesting full cart and rebuilding.
-        const res = await fetch('/api/cart', { credentials:'include' });
+        // fetch current cart item template
+        const res = await fetch(API + '/api/cart', { credentials:'include' });
         if (!res.ok) { alert('Нужно войти'); return; }
         const j = await res.json();
         const items = j.cart || [];
-        // find item template for this id
-        const it = items.find(x=>String(x.id) === String(id));
+        const it = items.find(x => String(x.id) === String(id));
         if (!it) { loadCart(); return; }
-        // remove this item
-        await fetch('/api/cart/' + encodeURIComponent(id), { method:'DELETE', credentials:'include' });
-        // add same item qty times (server will create new ids)
+        // delete original
+        await fetch(API + '/api/cart/' + encodeURIComponent(id), { method:'DELETE', credentials:'include' });
+        // add same item q times (server will create new ids)
         for (let i=0;i<q;i++){
-          await fetch('/api/cart/add', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ title: it.title, price: it.price, image: it.image, qty:1 })});
+          await fetch(API + '/api/cart/add', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ title: it.title, price: it.price, image: it.image, qty:1 })});
         }
         loadCart();
-      } catch(e) { console.error(e); alert('Ошибка обновления количества'); }
+      } catch(e){ console.error(e); alert('Ошибка обновления количества'); }
     });
   });
 }
 
 async function addToCartBackend(item){
   try {
-    const res = await fetch('/api/cart/add', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify(item) });
+    const res = await fetch(API + '/api/cart/add', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify(item) });
     if (!res.ok) {
       const j = await res.json().catch(()=>({}));
       alert(j.error || 'Ошибка добавления в корзину');
@@ -764,27 +664,26 @@ async function addToCartBackend(item){
       return;
     }
     alert('Добавлено в корзину');
-    // refresh cart if visible
     if (document.querySelector('.tabs a.active').getAttribute('data-tab') === 'shopTab') loadCart();
-  } catch(e) { alert('Ошибка сети'); }
+  } catch(e){ alert('Ошибка сети'); }
 }
 
 async function removeFromCart(id){
   try {
-    const res = await fetch('/api/cart/' + encodeURIComponent(id), { method:'DELETE', credentials:'include' });
+    const res = await fetch(API + '/api/cart/' + encodeURIComponent(id), { method:'DELETE', credentials:'include' });
     if (!res.ok) {
       const j = await res.json().catch(()=>({}));
       alert(j.error || 'Ошибка удаления');
       return;
     }
     loadCart();
-  } catch(e) { alert('Ошибка сети'); }
+  } catch(e){ alert('Ошибка сети'); }
 }
 
 async function clearCart(){
   if(!confirm('Очистить всю корзину?')) return;
   try {
-    const res = await fetch('/api/cart/clear', { method:'POST', credentials:'include' });
+    const res = await fetch(API + '/api/cart/clear', { method:'POST', credentials:'include' });
     if (res.ok) {
       loadCart();
       el('cartMsg').innerText = 'Корзина очищена';
@@ -799,8 +698,8 @@ async function clearCart(){
 async function checkout(){
   if(!confirm('Перейти к оформлению заказа?')) return;
   try {
-    // no universal checkout endpoint in generic server; simulate by clearing cart
-    const res = await fetch('/api/cart/clear', { method:'POST', credentials:'include' });
+    // simulate checkout by clearing cart
+    const res = await fetch(API + '/api/cart/clear', { method:'POST', credentials:'include' });
     if (!res.ok) {
       const j = await res.json().catch(()=>({}));
       alert(j.error || 'Ошибка оформления');
@@ -809,14 +708,13 @@ async function checkout(){
     loadCart();
     el('cartMsg').innerText = 'Заказ принят, спасибо!';
     setTimeout(()=> el('cartMsg').innerText = '', 3000);
-    // refresh profile/orders
     setTimeout(()=> loadProfile(), 800);
   } catch(e){ alert('Ошибка сети'); }
 }
 
-/* ============================
-   Orders rendering
-   ============================ */
+/* -------------------------
+   Orders
+   ------------------------- */
 function renderOrders(orders){
   const o = el('ordersContainer');
   if(!o) return;
@@ -832,9 +730,9 @@ function renderOrders(orders){
 }
 function formatTotal(t){ return (isNaN(t) ? t : t + ' ₽'); }
 
-/* ============================
-   Password change & social link toggles
-   ============================ */
+/* -------------------------
+   Password change & social toggles
+   ------------------------- */
 async function changePassword(e){
   if (e) e.preventDefault();
   const oldPass = el('oldPassword').value.trim();
@@ -844,7 +742,7 @@ async function changePassword(e){
   if (!oldPass || !newPass || !confirm) { msg.innerText = 'Заполните все поля'; return false; }
   if (newPass !== confirm) { msg.innerText = 'Пароли не совпадают'; return false; }
   try {
-    const res = await fetch('/api/change-password', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ oldPassword: oldPass, newPassword: newPass })});
+    const res = await fetch(API + '/api/change-password', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ oldPassword: oldPass, newPassword: newPass })});
     const j = await res.json();
     if (!res.ok) msg.innerText = j.error || 'Ошибка';
     else { msg.innerText = 'Пароль изменён'; el('passwordForm').reset(); }
@@ -855,31 +753,29 @@ function clearPasswordForm(){ el('passwordForm').reset(); el('passwordMsg').inne
 
 async function toggleVK(){
   try {
-    // flip current state
     const now = !!(currentUser && currentUser.linkedVK);
-    const res = await fetch('/api/profile/update', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ linkedVK: !now })});
+    const res = await fetch(API + '/api/profile/update', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ linkedVK: !now })});
     if (!res.ok) { const j = await res.json().catch(()=>({})); el('linkMsg').innerText = j.error || 'Ошибка'; return; }
     const j = await res.json();
     if (j.user) { currentUser = j.user; applyProfile(j.user); el('linkMsg').innerText = !now ? 'VK привязан' : 'VK отвязан'; }
   } catch(e){ el('linkMsg').innerText = 'Ошибка сети'; }
 }
-
 async function toggleTelegram(){
   try {
     const now = !!(currentUser && currentUser.linkedTelegram);
-    const res = await fetch('/api/profile/update', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ linkedTelegram: !now })});
+    const res = await fetch(API + '/api/profile/update', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ linkedTelegram: !now })});
     if (!res.ok) { const j = await res.json().catch(()=>({})); el('linkMsg').innerText = j.error || 'Ошибка'; return; }
     const j = await res.json();
     if (j.user) { currentUser = j.user; applyProfile(j.user); el('linkMsg').innerText = !now ? 'Telegram привязан' : 'Telegram отвязан'; }
   } catch(e){ el('linkMsg').innerText = 'Ошибка сети'; }
 }
 
-/* ============================
-   Admin: list users
-   ============================ */
+/* -------------------------
+   Admin: users list
+   ------------------------- */
 async function loadAdminUsers(){
   try {
-    const res = await fetch('/api/admin/users', { credentials:'include' });
+    const res = await fetch(API + '/api/admin/users', { credentials:'include' });
     if (!res.ok) { el('adminUsersList').textContent = 'Нет доступа или эндпоинт отсутствует'; return; }
     const j = await res.json();
     if (j.ok && Array.isArray(j.users)) {
@@ -896,7 +792,7 @@ async function loadAdminUsers(){
         btn.addEventListener('click', async ()=>{
           if (!confirm('Удалить пользователя?')) return;
           const id = btn.getAttribute('data-del');
-          const r = await fetch('/api/admin/users/' + encodeURIComponent(id), { method:'DELETE', credentials:'include' });
+          const r = await fetch(API + '/api/admin/users/' + encodeURIComponent(id), { method:'DELETE', credentials:'include' });
           if (r.ok) btn.closest('div').remove();
           else alert('Ошибка удаления');
         });
@@ -905,27 +801,23 @@ async function loadAdminUsers(){
   } catch(e){ console.warn('loadAdminUsers fail', e); el('adminUsersList').textContent = 'Ошибка загрузки'; }
 }
 
-/* ============================
+/* -------------------------
    Logout
-   ============================ */
+   ------------------------- */
 async function logout(){
-  try { await fetch('/api/logout', { method:'POST', credentials:'include' }); } catch(e){}
-  // redirect to main or auth
+  try { await fetch(API + '/api/logout', { method:'POST', credentials:'include' }); } catch(e){}
   window.location.href = '/';
 }
 
-/* ============================
+/* -------------------------
    Init
-   ============================ */
+   ------------------------- */
 document.addEventListener('DOMContentLoaded', async ()=>{
   renderProducts();
-  await loadProfile();
-  // ensure cart loaded after profile
-  // loadCart called from applyProfile
-  // bind dismiss
-  el('dismissPassportNotice').addEventListener('click', ()=> el('dismissPassportNotice').closest('.notice').style.display='none');
-  el('subscribeTelegramBtn').addEventListener('click', ()=> { if (!currentUser) { alert('Чтобы подписаться — войдите'); window.location.href='/auth.html'; return; } alert('Отправлено приглашение в Telegram (симуляция).'); });
-  // expose adding for shop pages
+  await loadProfile(); // will redirect to auth.html if not logged in
+  // helpers
+  el('dismissPassportNotice')?.addEventListener('click', ()=> el('dismissPassportNotice').closest('.notice').style.display='none');
+  el('subscribeTelegramBtn')?.addEventListener('click', ()=> { if (!currentUser) { alert('Чтобы подписаться — войдите'); window.location.href='/auth.html'; return; } alert('Отправлено приглашение в Telegram (симуляция).'); });
   window.addToCartBackend = addToCartBackend;
 });
 </script>
