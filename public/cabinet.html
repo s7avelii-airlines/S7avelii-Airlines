@@ -1,217 +1,101 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Личный кабинет — S7avelii</title>
-  <link rel="icon" href="images/favicon.png" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    :root{
-      --bg:#f3f6f9;
-      --card:#ffffff;
-      --accent:#9cc42f;
-      --muted:#6b7280;
-      --radius:12px;
-      --shadow: 0 6px 20px rgba(16,24,40,0.06);
-      --container:1100px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
-      background:var(--bg);
-      color:#111827;
-    }
-    .wrap{max-width:var(--container);margin:18px auto;padding:18px}
-    .top {
-      background: #fff;
-      border-radius:12px;
-      box-shadow: var(--shadow);
-      padding:18px 22px;
-      display:flex;
-      align-items:center;
-      gap:16px;
-      position:sticky;
-      top:12px;
-      z-index:30;
-    }
-    .logo { display:flex; align-items:center; gap:12px; font-weight:700; font-size:18px; color:#111 }
-    .logo img{width:46px;height:46px;border-radius:999px;object-fit:cover}
-    .top-right{margin-left:auto;display:flex;gap:12px;align-items:center}
-    .lang-flag{width:28px;height:18px;border-radius:3px;object-fit:cover}
-    .small-avatar{width:36px;height:36px;border-radius:999px;object-fit:cover;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.08)}
-    .profile-card{margin-top:18px;background:var(--card);padding:22px;border-radius:16px;box-shadow:var(--shadow);display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
-    .avatar{width:118px;height:118px;border-radius:999px;object-fit:cover;border:4px solid #fff;box-shadow:0 6px 18px rgba(0,0,0,0.06);cursor:pointer;}
-    .user-info{min-width:260px}
-    .user-info h1{margin:0;font-size:20px;display:flex;align-items:center;gap:12px}
-    .user-info .sub{color:var(--muted);margin-top:6px}
-    .card-badge{width:72px;height:auto;border-radius:8px;display:inline-block;vertical-align:middle}
-    .stats{margin-left:auto;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-    .stat{background:linear-gradient(180deg,#fff,#fcfff0);padding:12px 18px;border-radius:12px;text-align:center;border:1px solid rgba(0,0,0,0.04)}
-    .stat .num{font-weight:700;font-size:20px}
-    .stat .label{font-size:12px;color:var(--muted);margin-top:6px}
-    .tabs{display:flex;gap:12px;margin-top:16px;padding:10px 6px}
-    .tabs a{padding:10px 14px;border-radius:10px;text-decoration:none;color:#475569;background:transparent}
-    .tabs a.active{background:rgba(156,196,47,0.06);color:var(--accent);font-weight:600}
-    .grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:18px}
-    .card{background:var(--card);padding:18px;border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.03)}
-    .card h3{margin:0 0 12px;font-size:18px}
-    .field{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid rgba(0,0,0,0.04)}
-    .field:first-of-type{border-top:0}
-    .label{color:var(--muted);font-size:13px}
-    .value{font-size:15px;max-width:70%;word-wrap:break-word}
-    .edit-btn{background:transparent;border:0;color:var(--accent);cursor:pointer;font-weight:600;padding:8px 10px;border-radius:8px}
-    .small-muted{color:var(--muted);font-size:13px;margin-top:8px}
-    .notice{background:linear-gradient(180deg,#fff,#f6f8fb);border-radius:12px;padding:12px 16px;border:1px solid rgba(0,0,0,0.03);display:flex;align-items:center;gap:12px}
-    .notice .dot{width:36px;height:36px;display:grid;place-items:center;border-radius:999px;background:rgba(156,196,47,0.12);color:var(--accent);font-weight:700}
-    .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-    .product{border-radius:12px;border:1px solid rgba(0,0,0,0.03);background:#fff;padding:12px;display:flex;flex-direction:column;gap:8px}
-    .product img{width:100%;height:140px;object-fit:cover;border-radius:8px}
-    .product .title{font-weight:600}
-    .product .price{font-weight:700}
-    .cart-item{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px dashed rgba(0,0,0,0.04)}
-    .cart-item img{width:64px;height:64px;object-fit:cover;border-radius:8px}
-    .btn{display:inline-block;background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:0;cursor:pointer}
-    .btn.secondary{background:#eef2f7;color:#111;border:0}
-    .muted{color:var(--muted)}
-    /* miles progress */
-    .miles-bar { background:#eef2f4; border-radius:12px; height:18px; overflow:hidden; width:100%; }
-    .miles-fill { height:100%; width:0%; transition: width .6s ease; background: linear-gradient(90deg,#9cc42f,#6cc100); }
-    .miles-info { display:flex; justify-content:space-between; margin-top:8px; font-size:13px; color:var(--muted); }
-    @media (max-width:980px){
-      .grid{grid-template-columns:1fr}
-      .stats{margin-left:0;margin-top:12px}
-      .top{padding:12px}
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кабинет — S7avelii</title>
+<link rel="icon" href="images/favicon.png" type="image/png">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { margin:0; font-family: Arial, sans-serif; background:#f5f7fa; }
+  header { display:flex; align-items:center; justify-content:space-between; padding:0 16px; height:60px; border-bottom:1px solid #ccc; position:fixed; top:0; width:100%; background:#fff; z-index:1000; }
+  .logo-img { height:45px; cursor:pointer; }
+  nav ul { display:flex; gap:20px; margin:0; padding:0; list-style:none; }
+  nav a { text-decoration:none; color:#000; font-size:14px; }
+  .right-menu { display:flex; align-items:center; gap:10px; font-size:14px; }
+  .hamburger { display:none; flex-direction:column; gap:4px; cursor:pointer; }
+  .hamburger span { width:22px; height:2px; background:#000; }
+  .bottom-nav { display:none; position:fixed; bottom:0; left:0; width:100%; background:rgba(255,255,255,0.95); border-top:1px solid #ddd; justify-content:space-around; padding:6px 0; z-index:1000; }
+  .bottom-nav a { text-decoration:none; color:#666; font-size:12px; display:flex; flex-direction:column; align-items:center; }
+  .bottom-nav a.active { color:#6cd100; font-weight:bold; }
+  .bottom-nav svg { width:22px; height:22px; margin-bottom:3px; }
+  @media (max-width:768px) { nav{display:none;} .hamburger{display:flex;} .bottom-nav{display:flex;} header{height:60px;padding:0 12px;} .logo-img{height:40px;} }
+  .page{max-width:1180px;margin:80px auto;padding:0 20px}
+  .full-header{width:100%;background:#fff;display:flex;align-items:center;gap:24px;padding:28px 36px;border-radius:12px;box-shadow:0 6px 20px rgba(16,24,40,0.06);flex-wrap:wrap}
+  .avatar{width:118px;height:118px;border-radius:999px;object-fit:cover;border:4px solid #fff}
+  .tabs{display:flex;gap:14px;margin-top:18px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,0.04);overflow-x:auto}
+  .tabs a{padding:10px 14px;text-decoration:none;color:#495057;border-radius:8px;cursor:pointer}
+  .tabs a.active{color:#9cc42f;background:rgba(156,196,47,0.06)}
+  .grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:18px}
+  .card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 4px 12px rgba(16,24,40,0.04)}
+  .field{display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid rgba(0,0,0,0.03)}
+  .small-muted{color:#8b97a6;font-size:13px}
+  .btn{background:#9cc42f;color:#fff;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
+  .btn-red{background:#e66}
+  .progress-bar{width:100%;height:18px;background:#eee;border-radius:10px;overflow:hidden;margin-top:6px}
+  .progress-fill{height:100%;width:0%;background:#9cc42f;text-align:center;color:#fff;line-height:18px;font-size:12px;transition:width 0.5s ease}
+  .cart-table{width:100%;border-collapse:collapse}
+  .cart-table th,.cart-table td{padding:8px;border-bottom:1px solid #eee;text-align:left}
+  .cart-empty{color:#777;padding:12px}
+</style>
 </head>
 <body>
-<div class="wrap">
-
-  <!-- TOP -->
-  <div class="top" role="banner">
-    <div class="logo">
-      <img src="images/photo_5276207082657412564_y.avif" alt="logo">
-      <div>S7avelii Airlines</div>
-    </div>
-
-    <div class="top-right">
-      <img src="images/flag_ru.png" alt="ru" class="lang-flag" onerror="this.style.display='none'">
-      <img id="topSmallAvatar" src="https://via.placeholder.com/36" alt="avatar" class="small-avatar" title="Открыть профиль" onclick="location.href='/cabinet.html'">
-    </div>
+<header>
+  <div class="logo">
+    <a href="index.html"><img src="images/1757683264306.avif" alt="S7avelii" class="logo-img"></a>
   </div>
-
-  <!-- PROFILE header -->
-  <section class="profile-card" aria-label="profile header">
-    <div class="avatar-wrap">
-      <label for="avatarInput" title="Нажмите чтобы загрузить фото">
-        <img id="avatar" class="avatar" src="https://via.placeholder.com/150" alt="avatar">
-      </label>
-      <input id="avatarInput" type="file" accept="image/*" style="display:none">
-      <div class="user-info">
-        <h1 id="fioHeader">Загрузка...</h1>
-        <div class="sub" id="phoneHeader">—</div>
-        <div style="margin-top:10px">
-          <img id="cardTypeImg" class="card-badge" src="" style="display:none" alt="card">
-          <span id="cardTypeText" class="muted" style="margin-left:8px"></span>
-        </div>
-      </div>
-    </div>
-
-    <div class="stats" aria-hidden="false">
-      <div class="stat"><div class="num" id="bonusMiles">—</div><div class="label">бонусные мили</div></div>
-      <div class="stat"><div class="num" id="statusMiles">—</div><div class="label">статусные мили</div></div>
-    </div>
-  </section>
-
-  <!-- Tabs -->
-  <nav class="tabs" role="tablist" aria-label="tabs">
-    <a href="#" class="active" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
-    <a href="#" data-tab="milesTab" onclick="showTab(event)">Мои мили</a>
-    <a href="#" data-tab="shopTab" onclick="showTab(event)">S7avelii Shop</a>
-    <a href="#" data-tab="settingsTab" onclick="showTab(event)">Настройки</a>
+  <nav>
+    <ul>
+      <li><a href="bilet.html">Купить билет</a></li>
+      <li><a href="priority.html">S7avelii Priority</a></li>
+      <li><a href="body.html">Информация</a></li>
+    </ul>
   </nav>
+  <div class="right-menu">
+    <button>RUB</button>
+  </div>
+</header>
 
-  <!-- Notices -->
-  <div class="notice-row" style="margin-top:12px">
-    <div class="notice">
-      <div class="dot">✈</div>
+<div class="page">
+  <div class="full-header">
+    <div style="display:flex;align-items:center;gap:16px">
+      <label for="avatarInput"><img id="avatar" class="avatar" src="https://via.placeholder.com/150" alt="avatar"></label>
+      <input id="avatarInput" type="file" accept="image/*" style="display:none">
       <div>
-        <div style="font-weight:700">Уведомления в Телеграме</div>
-        <div class="muted">Получайте важную информацию о полёте прямо в мессенджере.</div>
+        <h1 id="fioHeader">Загрузка...</h1>
+        <div class="small-muted" id="phoneHeader">—</div>
       </div>
-      <div style="margin-left:auto"><button class="btn secondary" id="subscribeTelegramBtn">Подписаться</button></div>
+    </div>
+    <div style="margin-left:auto" class="small-muted">Бонусные мили: <strong id="bonusMiles">—</strong>
+      <div class="progress-bar"><div class="progress-fill" id="milesProgress">0%</div></div>
     </div>
   </div>
 
-  <!-- Grid -->
+  <div class="tabs" role="tablist">
+    <a class="active" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
+    <a data-tab="milesTab" onclick="showTab(event)">Мои мили</a>
+    <a data-tab="shopTab" onclick="showTab(event)">S7avelii Shop</a>
+    <a data-tab="settingsTab" onclick="showTab(event)">Настройки</a>
+  </div>
+
   <div class="grid">
-
-    <!-- LEFT -->
     <div>
-      <!-- Profile -->
-      <div id="profileTab" class="card" role="region" aria-label="profile">
+      <div id="profileTab" class="card">
         <h3>Персональные данные</h3>
-        <div style="padding:8px 0 0 0" class="muted">ФИО / отображаемое имя</div>
-        <div class="field">
-          <div>
-            <div class="label">ФИО</div>
-            <div id="fioField" class="value">—</div>
-          </div>
-          <button class="edit-btn" onclick="enableEdit('fio')">Изменить</button>
-        </div>
-
-        <div class="field">
-          <div>
-            <div class="label">Дата рождения</div>
-            <div id="dobField" class="value">—</div>
-          </div>
-          <button class="edit-btn" onclick="enableEdit('dob')">Изменить</button>
-        </div>
-
-        <div class="field">
-          <div>
-            <div class="label">Пол</div>
-            <div id="genderField" class="value">—</div>
-          </div>
-          <button class="edit-btn" onclick="enableEdit('gender')">Изменить</button>
-        </div>
+        <div class="field"><div><div class="small-muted">ФИО</div><div id="fioField">—</div></div><button class="btn" onclick="enableEdit('fio')">Изменить</button></div>
+        <div class="field"><div><div class="small-muted">Дата рождения</div><div id="dobField">—</div></div><button class="btn" onclick="enableEdit('dob')">Изменить</button></div>
+        <div class="field"><div><div class="small-muted">Пол</div><div id="genderField">—</div></div><button class="btn" onclick="enableEdit('gender')">Изменить</button></div>
 
         <h3 style="margin-top:16px">Контакты</h3>
-        <div class="field">
-          <div>
-            <div class="label">E-mail</div>
-            <div id="emailField" class="value">—</div>
-          </div>
-          <button class="edit-btn" onclick="enableEdit('email')">Изменить</button>
-        </div>
-
-        <div class="field">
-          <div>
-            <div class="label">Телефон</div>
-            <div id="phoneField" class="value">—</div>
-          </div>
-          <button class="edit-btn" onclick="enableEdit('phone')">Изменить</button>
-        </div>
+        <div class="field"><div><div class="small-muted">Email</div><div id="emailField">—</div></div><button class="btn" onclick="enableEdit('email')">Изменить</button></div>
+        <div class="field"><div><div class="small-muted">Телефон</div><div id="phoneField">—</div></div><button class="btn" onclick="enableEdit('phone')">Изменить</button></div>
 
         <h3 style="margin-top:16px">Карта</h3>
-        <div class="field">
-          <div>
-            <div class="label">Номер карты</div>
-            <div id="cardField" class="value">—</div>
-          </div>
-          <button class="edit-btn" onclick="enableEdit('cardNumber')">Изменить</button>
-        </div>
-        <div class="field">
-          <div>
-            <div class="label">Тип карты</div>
-            <div id="cardTypeField" class="value">—</div>
-          </div>
-        </div>
+        <div class="field"><div><div class="small-muted">Номер карты</div><div id="cardField">—</div></div><button class="btn" onclick="enableEdit('cardNumber')">Изменить</button></div>
+        <div class="field"><div><div class="small-muted">Тип карты</div><div id="cardTypeField">—</div></div></div>
       </div>
 
-    <div style="max-width:600px; margin:20px auto; font-family:Arial, sans-serif; color:#333;">
+     <div style="max-width:600px; margin:20px auto; font-family:Arial, sans-serif; color:#333;">
   <div style="background:#fff; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.1); padding:20px;">
     
     <h2 style="font-size:18px; font-weight:600; margin-bottom:10px;">
@@ -337,67 +221,38 @@
 </script>
 
 
-      <!-- Shop -->
-      <div id="shopTab" class="card" style="margin-top:16px;display:none">
-        <h3>S7avelii Shop</h3>
-        <div class="muted">Товары, которые можно купить прямо сейчас</div>
-        <div id="productGrid" style="margin-top:12px" class="product-grid"></div>
-
-        <h3 style="margin-top:16px">В корзине</h3>
-        <div id="cartList" style="min-height:40px"></div>
-        <div style="display:flex;gap:10px;margin-top:10px;align-items:center">
-          <div id="cartTotal" class="muted">Итого: 0 ₽</div>
-          <div style="margin-left:auto">
-            <button id="checkoutBtn" class="btn" onclick="checkout()">Оформить</button>
-          </div>
+      <div id="shopTab" class="card" style="display:none">
+        <h3>Корзина</h3>
+        <div id="cartContainer"><div class="cart-empty">Загрузка корзины...</div></div>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn" id="checkoutBtn" onclick="checkout()" disabled>Оформить заказ</button>
+          <button class="btn" id="clearCartBtn" onclick="clearCart()" style="background:#999">Очистить корзину</button>
         </div>
         <div id="cartMsg" class="small-muted" style="margin-top:8px"></div>
       </div>
 
-      <!-- Settings -->
-      <div id="settingsTab" class="card" style="margin-top:16px;display:none">
+      <div id="settingsTab" class="card" style="display:none">
         <h3>Настройки</h3>
-
-        <div style="margin-top:8px">
-          <h4>Смена пароля</h4>
-          <form id="passwordForm" onsubmit="return changePassword(event)" style="display:flex;flex-direction:column;gap:8px;max-width:360px">
-            <input id="oldPassword" type="password" placeholder="Старый пароль" class="border p-2 rounded">
-            <input id="newPassword" type="password" placeholder="Новый пароль" class="border p-2 rounded">
-            <input id="confirmPassword" type="password" placeholder="Подтвердите новый пароль" class="border p-2 rounded">
-            <div style="display:flex;gap:8px">
-              <button class="btn" type="submit">Сменить пароль</button>
-              <button type="button" class="btn secondary" onclick="clearPasswordForm()">Очистить</button>
-            </div>
-            <div id="passwordMsg" class="small-muted"></div>
-          </form>
+        <div class="field">
+          <div><div class="small-muted">Сменить пароль</div><input type="password" id="newPassword" placeholder="Новый пароль"></div>
+          <button class="btn" onclick="changePassword()">Сменить</button>
         </div>
-
-        <div style="margin-top:18px">
-          <h4>Привязка аккаунтов</h4>
-          <div style="display:flex;flex-direction:column;gap:10px;max-width:360px">
-            <div style="display:flex;align-items:center;gap:10px">
-              <button class="btn" id="vkBtn" style="background:#4c75a3" onclick="toggleVK()">Привязать ВКонтакте</button>
-              <span id="vkStatus" class="small-muted">—</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px">
-              <button class="btn" id="tgBtn" style="background:#2ca5e0" onclick="toggleTelegram()">Привязать Telegram</button>
-              <span id="tgStatus" class="small-muted">—</span>
-            </div>
-            <div id="linkMsg" class="small-muted"></div>
-          </div>
+        <div class="field">
+          <div><div class="small-muted">Привязка VK</div><button class="btn" onclick="bindVK()">Привязать</button></div>
+        </div>
+        <div class="field">
+          <div><div class="small-muted">Привязка Telegram</div><button class="btn" onclick="bindTelegram()">Привязать</button></div>
         </div>
       </div>
     </div>
 
-    <!-- RIGHT -->
-    <aside>
+    <div>
       <div class="card">
-        <h3>Краткая информация</h3>
-        <div class="muted" style="margin-top:8px">Быстрые действия</div>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
-          <button class="edit-btn" onclick="goTo('profileTab')">Редактировать профиль</button>
-          <button class="edit-btn" onclick="goTo('milesTab')">Посмотреть мили</button>
-          <button class="edit-btn" onclick="goTo('shopTab')">Открыть Shop</button>
+        <h3>Быстрые действия</h3>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn" onclick="goTo('profileTab')">Редактировать профиль</button>
+          <button class="btn" onclick="goTo('shopTab')">Открыть корзину</button>
+          <button class="btn btn-red" onclick="logout()">Выйти</button>
         </div>
       </div>
 
@@ -405,516 +260,135 @@
         <h3>Заказы</h3>
         <div id="ordersContainer" class="small-muted" style="margin-top:8px">Загрузка...</div>
       </div>
-
-      <div class="card" style="margin-top:16px">
-        <h3>Администрирование</h3>
-        <div id="adminPanel" style="display:none;margin-top:8px">
-          <h4>Пользователи</h4>
-          <div id="adminUsersList" class="muted"></div>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top:16px">
-        <button class="btn secondary" onclick="logout()" style="background:#fff;border:1px solid rgba(0,0,0,0.06)">Выйти</button>
-      </div>
-    </aside>
+    </div>
   </div>
 </div>
 
 <script>
-/* -------------------------
-   Helpers
-   ------------------------- */
 const el = id => document.getElementById(id);
-let currentUser = null;
-const API = ''; // same origin
-
-function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
-function formatPrice(n){ return (typeof n === 'number' ? n.toLocaleString('ru-RU') : n) + ' ₽'; }
-
-/* -------------------------
-   Product list (unchanged)
-   ------------------------- */
-const PRODUCTS = [
-  { id:'p1', title:'Блокнот S7avelii', price:550, image:'images/photo_5330078908990750485_y.avif' },
-  { id:'p2', title:'Комбо Блокнот + Футболка', price:2350, image:'images/photo_5330078908990750484_y.avif' },
-  { id:'p3', title:'Фирменная футболка', price:1900, image:'images/photo_5332515869139530693_y.avif' },
-  { id:'p4', title:'Комбо Путешественник', price:4500, image:'images/photo_5330078908990750483_y.avif' }
-];
-function renderProducts(){
-  const grid = el('productGrid'); if(!grid) return;
-  grid.innerHTML = '';
-  PRODUCTS.forEach(p=>{
-    const card = document.createElement('div');
-    card.className = 'product';
-    card.innerHTML = `
-      <img src="${p.image}" alt="${escapeHtml(p.title)}">
-      <div class="title">${escapeHtml(p.title)}</div>
-      <div class="price">${formatPrice(p.price)}</div>
-      <div style="display:flex;gap:8px;margin-top:auto">
-        <button class="btn" data-buy="${p.id}">Купить</button>
-        <button class="btn secondary" data-add="${p.id}">В корзину</button>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-  grid.querySelectorAll('[data-add]').forEach(btn=>{
-    btn.addEventListener('click', ()=> {
-      const id = btn.getAttribute('data-add');
-      const p = PRODUCTS.find(x=>x.id===id);
-      if(!p) return;
-      addToCartBackend({ title: p.title, price: String(p.price) + ' ₽', qty:1, image: p.image });
-    });
-  });
-  grid.querySelectorAll('[data-buy]').forEach(btn=>{
-    btn.addEventListener('click', ()=> {
-      const id = btn.getAttribute('data-buy');
-      const p = PRODUCTS.find(x=>x.id===id);
-      if(!p) return;
-      addToCartBackend({ title: p.title, price: String(p.price) + ' ₽', qty:1, image: p.image }).then(()=> goTo('shopTab'));
-    });
-  });
-}
-
-/* -------------------------
-   Tabs
-   ------------------------- */
-function showTab(evt){
+function showTab(evt){ 
   evt && evt.preventDefault();
   const tabId = evt ? evt.currentTarget.getAttribute('data-tab') : 'profileTab';
   document.querySelectorAll('.tabs a').forEach(a=>a.classList.remove('active'));
   if(evt) evt.currentTarget.classList.add('active');
-  ['profileTab','milesTab','shopTab','settingsTab'].forEach(id=>{
-    const node = document.getElementById(id);
-    if (node) node.style.display = (id === tabId ? 'block' : 'none');
-  });
-  if (tabId === 'shopTab') loadCart();
-}
-function goTo(tab){
-  const a = [...document.querySelectorAll('.tabs a')].find(x=>x.getAttribute('data-tab')===tab);
-  if (a) { a.classList.add('active'); showTab({ currentTarget: a, preventDefault: ()=>{} }); }
+  ['profileTab','milesTab','shopTab','settingsTab'].forEach(id=>{ const e = el(id); e.style.display = id===tabId?'block':'none'; });
+  if(tabId==='shopTab') loadCart();
 }
 
-/* -------------------------
-   Load profile
-   ------------------------- */
+// profile
 async function loadProfile(){
-  try {
-    const res = await fetch(API + '/api/profile', { credentials: 'include' });
-    if (!res.ok) {
-      // not logged in -> redirect to auth
-      window.location.href = '/auth.html';
-      return;
-    }
+  try{
+    const res = await fetch('/api/profile',{credentials:'include'});
+    if(!res.ok){ window.location.href='auth.html'; return; }
     const j = await res.json();
-    currentUser = j.user || j;
-    applyProfile(currentUser);
-  } catch (e) {
-    console.error('loadProfile error', e);
-    window.location.href = '/auth.html';
-  }
+    applyProfile(j.user || j);
+  } catch(e){ window.location.href='auth.html'; }
 }
-
-/* -------------------------
-   Apply profile -> fills UI + miles bar
-   ------------------------- */
 function applyProfile(p){
-  if (!p) return;
-  // avatars
-  el('topSmallAvatar').src = p.avatar || 'https://via.placeholder.com/36';
-  el('avatar').src = p.avatar || 'https://via.placeholder.com/150';
-  // fields
-  el('fioHeader').innerText = p.fio || 'Пользователь';
-  el('phoneHeader').innerText = p.phone || '';
-  el('fioField').innerText = p.fio || '—';
-  el('dobField').innerText = p.dob || '—';
-  el('genderField').innerText = p.gender || '—';
-  el('emailField').innerText = p.email || '—';
-  el('phoneField').innerText = p.phone || '—';
-  el('cardField').innerText = p.cardNumber || '—';
-  el('cardTypeField').innerText = p.cardType || '—';
-  // miles
-  const miles = Number(p.bonusMiles || 0);
-  el('bonusMiles').innerText = miles;
-  el('milesValue').innerText = miles;
-  el('statusMilesStat').innerText = p.statusMiles ?? '—';
-  // card badge
-  const badge = el('cardTypeImg');
-  const cardTypeText = el('cardTypeText');
-  if (p.cardType === 'VIP') {
-    badge.src = 'images/vip_card.png';
-    badge.style.display = 'inline-block';
-    cardTypeText.innerText = 'VIP';
-  } else if (p.cardType === 'Classic') {
-    badge.src = 'images/classic_card.png';
-    badge.style.display = 'inline-block';
-    cardTypeText.innerText = p.cardType || '';
-  } else {
-    badge.style.display = 'none';
-    cardTypeText.innerText = '';
-  }
-  // links
-  if (el('vkStatus')) el('vkStatus').innerText = p.linkedVK ? '✅ Привязан' : '❌ Не привязан';
-  if (el('tgStatus')) el('tgStatus').innerText = p.linkedTelegram ? '✅ Привязан' : '❌ Не привязан';
-  // admin panel
-  if (p.role === 'admin') {
-    el('adminPanel').style.display = 'block';
-    loadAdminUsers();
-  } else {
-    el('adminPanel').style.display = 'none';
-  }
-  // orders
-  renderOrders(p.orders || []);
-  // products + cart
-  renderProducts();
-  loadCart();
-  // update miles bar
-  updateMilesBar(miles);
+  el('fioField').innerText = p.fio||'—';
+  el('dobField').innerText = p.dob||'—';
+  el('genderField').innerText = p.gender||'—';
+  el('emailField').innerText = p.email||'—';
+  el('phoneField').innerText = p.phone||'—';
+  el('cardField').innerText = p.cardNumber||'—';
+  el('cardTypeField').innerText = p.cardType||'—';
+  el('fioHeader').innerText = p.fio||'Пользователь';
+  el('bonusMiles').innerText = p.bonusMiles||0;
+  el('milesBar').style.width = Math.min((p.bonusMiles||0)/1000*100,100)+'%';
+  el('milesBar').innerText = p.bonusMiles||0;
+  if(p.avatar) el('avatar').src=p.avatar;
+  renderOrders(p.orders||[]);
+}
+function renderOrders(orders){
+  const o = el('ordersContainer'); o.innerHTML='';
+  if(!orders.length){ o.innerText='Заказы отсутствуют'; return; }
+  orders.slice().reverse().forEach(ord=>{
+    const d = document.createElement('div');
+    d.style.marginBottom='10px';
+    d.innerHTML=`<strong>Заказ ${ord.id}</strong> — ${new Date(ord.createdAt).toLocaleString()} — ${ord.status}<br>Товаров: ${ord.items.length} — Сумма: ${ord.total} ₽`;
+    o.appendChild(d);
+  });
 }
 
-/* -------------------------
-   Miles: levels & progress
-   ------------------------- */
-const MILE_LEVELS = [
-  { name: 'Bronze', from: 0, to: 4999 },
-  { name: 'Silver', from: 5000, to: 14999 },
-  { name: 'Gold', from: 15000, to: 29999 },
-  { name: 'Platinum', from: 30000, to: 9999999 }
-];
-
-function findLevel(miles){
-  for (let i=0;i<MILE_LEVELS.length;i++){
-    const lv = MILE_LEVELS[i];
-    if (miles >= lv.from && miles <= lv.to) return { index:i, level:lv };
-  }
-  return { index:0, level:MILE_LEVELS[0] };
-}
-
-function updateMilesBar(miles){
-  const { index, level } = findLevel(miles);
-  const nextLevel = MILE_LEVELS[Math.min(index+1, MILE_LEVELS.length-1)];
-  const from = level.from;
-  const to = Math.max(level.to, from+1);
-  const percent = Math.max(0, Math.min(100, Math.round(((miles - from) / (to - from)) * 100)));
-  el('milesFill').style.width = percent + '%';
-  el('currentLevel').innerText = level.name;
-  el('levelFrom').innerText = from + ' м';
-  el('levelTo').innerText = nextLevel.to ? Math.max(nextLevel.from, miles) + ' м' : '—';
-  el('milesValue').innerText = miles;
-}
-
-/* -------------------------
-   Inline edit
-   ------------------------- */
-function enableEdit(field) {
-  const map = {
-    fio: {id:'fioField', key:'fio', header:'fioHeader'},
-    dob: {id:'dobField', key:'dob'},
-    gender: {id:'genderField', key:'gender'},
-    email: {id:'emailField', key:'email'},
-    phone: {id:'phoneField', key:'phone', header:'phoneHeader'},
-    cardNumber: {id:'cardField', key:'cardNumber'}
+// edit profile
+function enableEdit(field){
+  const map={fio:['fioField','fioHeader'],dob:['dobField'],gender:['genderField'],email:['emailField'],phone:['phoneField'],cardNumber:['cardField']};
+  const ids=map[field]; if(!ids) return;
+  const cur = el(ids[0]).innerText==='—'?'':el(ids[0]).innerText;
+  const input=document.createElement('input'); input.value=cur; input.style.width='220px';
+  const ok=document.createElement('button'); ok.innerText='OK'; ok.className='btn'; ok.style.marginLeft='8px';
+  const wrapper=document.createElement('div'); wrapper.appendChild(input); wrapper.appendChild(ok);
+  const container = el(ids[0]); container.innerHTML=''; container.appendChild(wrapper); input.focus();
+  ok.onclick=async()=>{
+    const val=input.value.trim()||'';
+    ids.forEach(id=>{ if(el(id)) el(id).innerText=val||'—'; });
+    if(field==='fio' && el('fioHeader')) el('fioHeader').innerText=val||'Пользователь';
+    try{
+      await fetch('/api/profile/update',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({[field]:val})});
+      await loadProfile();
+    }catch(e){console.error(e);}
   };
-  const m = map[field];
-  if (!m) return;
-  const container = el(m.id);
-  const current = container.textContent === '—' ? '' : container.textContent;
-  container.innerHTML = '';
-  const input = document.createElement('input');
-  input.value = current;
-  input.style.width = '220px';
-  input.type = (field === 'email') ? 'email' : (field === 'phone') ? 'tel' : 'text';
-  const ok = document.createElement('button');
-  ok.className = 'btn';
-  ok.textContent = 'OK';
-  ok.style.marginLeft = '8px';
-  ok.onclick = async () => {
-    const value = input.value.trim();
-    container.textContent = value || '—';
-    if (m.header && el(m.header)) el(m.header).textContent = value || (m.header === 'fioHeader' ? 'Пользователь' : '');
-    try {
-      const body = { [m.key]: value || '' };
-      const r = await fetch(API + '/api/profile/update', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify(body) });
-      if (!r.ok) console.warn('update failed', r.status);
-      else {
-        const j = await r.json();
-        if (j.user) { currentUser = j.user; applyProfile(j.user); }
-      }
-    } catch(e){ console.error(e); }
-  };
-  container.appendChild(input);
-  container.appendChild(ok);
-  input.focus();
 }
 
-/* -------------------------
-   Avatar upload
-   ------------------------- */
+// avatar
 el('avatarInput').addEventListener('change', function(){
-  const f = this.files[0]; if(!f) return;
-  const reader = new FileReader();
-  reader.onload = async (ev) => {
-    const dataUrl = ev.target.result;
-    el('avatar').src = dataUrl;
-    el('topSmallAvatar').src = dataUrl;
-    try {
-      const r = await fetch(API + '/api/profile/update', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ avatar: dataUrl })});
-      if (!r.ok) console.warn('avatar push failed', r.status);
-      else {
-        const j = await r.json();
-        if (j.user) { currentUser = j.user; applyProfile(j.user); }
-      }
-    } catch(e){ console.error('avatar upload', e); }
+  const f=this.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=async e=>{
+    el('avatar').src=e.target.result;
+    await fetch('/api/profile/update',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({avatar:e.target.result})});
   };
-  reader.readAsDataURL(f);
+  r.readAsDataURL(f);
 });
 
-/* -------------------------
-   Cart (server-backed)
-   ------------------------- */
+// cart
 async function loadCart(){
-  const list = el('cartList'); if(!list) return;
-  list.innerHTML = '<div class="muted">Загрузка корзины...</div>';
-  try {
-    const res = await fetch(API + '/api/cart', { credentials:'include' });
-    if (!res.ok) {
-      list.innerHTML = `<div class="muted">Корзина доступна только для авторизованных — <a href="/auth.html">войти</a></div>`;
-      el('checkoutBtn').disabled = true;
-      return;
-    }
-    const j = await res.json();
-    renderCart(j.cart || []);
-  } catch(e){ list.innerHTML = `<div class="muted">Ошибка сети</div>`; el('checkoutBtn').disabled = true; }
+  const container=el('cartContainer'); container.innerHTML='<div class="cart-empty">Загрузка корзины...</div>';
+  try{
+    const res=await fetch('/api/cart',{credentials:'include'});
+    if(!res.ok){ container.innerHTML='Для работы корзины нужно войти — <a href="/auth.html">войти</a>'; el('checkoutBtn').disabled=true; return; }
+    const j=await res.json(); renderCart(j.cart||[]);
+  }catch(e){ container.innerHTML='<div class="cart-empty">Ошибка сети</div>'; el('checkoutBtn').disabled=true; }
 }
-
-function renderCart(items){
-  const list = el('cartList'); list.innerHTML = '';
-  if (!items || items.length === 0) {
-    list.innerHTML = '<div class="muted">Корзина пуста</div>';
-    el('cartTotal').textContent = 'Итого: 0 ₽';
-    el('checkoutBtn').disabled = true;
-    return;
-  }
-  let total = 0;
-  items.forEach(it=>{
-    const row = document.createElement('div');
-    row.className = 'cart-item';
-    const priceNum = parseFloat(String(it.price||'').replace(/[^\d,.-]/g,'').replace(',','.')) || 0;
-    const qty = it.qty || 1;
-    total += priceNum * qty;
-    row.innerHTML = `
-      <img src="${it.image || ''}" alt="${escapeHtml(it.title)}">
-      <div style="flex:1">
-        <div style="font-weight:600">${escapeHtml(it.title)}</div>
-        <div class="muted">${formatPrice(priceNum)} × <input type="number" value="${qty}" min="1" style="width:64px" data-qty="${it.id}"></div>
-      </div>
-      <div style="text-align:right">
-        <div style="font-weight:700">${formatPrice(priceNum * qty)}</div>
-        <div style="margin-top:8px"><button class="edit-btn" data-remove="${it.id}">Удалить</button></div>
-      </div>
-    `;
-    list.appendChild(row);
+function renderCart(cart){
+  const container=el('cartContainer'); if(!cart.length){ container.innerHTML='<div class="cart-empty">Корзина пуста</div>'; el('checkoutBtn').disabled=true; return; }
+  const table=document.createElement('table'); table.className='cart-table';
+  table.innerHTML='<thead><tr><th>Товар</th><th>Цена</th><th>Кол-во</th><th>Действие</th></tr></thead>';
+  const tbody=document.createElement('tbody'); let total=0;
+  cart.forEach(item=>{
+    const tr=document.createElement('tr'); const priceNum=parseFloat((item.price||0)); total+=priceNum*(item.qty||1);
+    tr.innerHTML=`<td><img src="${item.image||''}" style="width:48px;height:48px;object-fit:cover;margin-right:8px;vertical-align:middle">${item.title}</td>
+      <td>${item.price}</td><td>${item.qty||1}</td><td><button class="btn" onclick="removeFromCart('${item.id}')">Удалить</button></td>`;
+    tbody.appendChild(tr);
   });
-  el('cartTotal').textContent = 'Итого: ' + formatPrice(total);
-  el('checkoutBtn').disabled = false;
-  // events
-  list.querySelectorAll('[data-remove]').forEach(btn=>{
-    btn.addEventListener('click', ()=> {
-      const id = btn.getAttribute('data-remove');
-      removeFromCart(id);
-    });
-  });
-  list.querySelectorAll('[data-qty]').forEach(inp=>{
-    inp.addEventListener('change', async ()=>{
-      const id = inp.getAttribute('data-qty');
-      let q = parseInt(inp.value,10) || 1;
-      if (q < 1) q = 1;
-      // Server doesn't provide qty update in generic API — implement by deleting and re-adding
-      try {
-        // fetch current cart item template
-        const res = await fetch(API + '/api/cart', { credentials:'include' });
-        if (!res.ok) { alert('Нужно войти'); return; }
-        const j = await res.json();
-        const items = j.cart || [];
-        const it = items.find(x => String(x.id) === String(id));
-        if (!it) { loadCart(); return; }
-        // delete original
-        await fetch(API + '/api/cart/' + encodeURIComponent(id), { method:'DELETE', credentials:'include' });
-        // add same item q times (server will create new ids)
-        for (let i=0;i<q;i++){
-          await fetch(API + '/api/cart/add', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ title: it.title, price: it.price, image: it.image, qty:1 })});
-        }
-        loadCart();
-      } catch(e){ console.error(e); alert('Ошибка обновления количества'); }
-    });
-  });
+  table.appendChild(tbody); const footer=document.createElement('div'); footer.style.marginTop='12px'; footer.innerHTML=`<strong>Итого: ${total} ₽</strong>`;
+  container.innerHTML=''; container.appendChild(table); container.appendChild(footer); el('checkoutBtn').disabled=false;
 }
-
-async function addToCartBackend(item){
-  try {
-    const res = await fetch(API + '/api/cart/add', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify(item) });
-    if (!res.ok) {
-      const j = await res.json().catch(()=>({}));
-      alert(j.error || 'Ошибка добавления в корзину');
-      if (res.status === 401) window.location.href = '/auth.html';
-      return;
-    }
-    alert('Добавлено в корзину');
-    if (document.querySelector('.tabs a.active').getAttribute('data-tab') === 'shopTab') loadCart();
-  } catch(e){ alert('Ошибка сети'); }
-}
-
-async function removeFromCart(id){
-  try {
-    const res = await fetch(API + '/api/cart/' + encodeURIComponent(id), { method:'DELETE', credentials:'include' });
-    if (!res.ok) {
-      const j = await res.json().catch(()=>({}));
-      alert(j.error || 'Ошибка удаления');
-      return;
-    }
-    loadCart();
-  } catch(e){ alert('Ошибка сети'); }
-}
-
-async function clearCart(){
-  if(!confirm('Очистить всю корзину?')) return;
-  try {
-    const res = await fetch(API + '/api/cart/clear', { method:'POST', credentials:'include' });
-    if (res.ok) {
-      loadCart();
-      el('cartMsg').innerText = 'Корзина очищена';
-      setTimeout(()=> el('cartMsg').innerText = '', 2000);
-    } else {
-      const j = await res.json().catch(()=>({}));
-      alert(j.error || 'Ошибка очистки');
-    }
-  } catch(e){ alert('Ошибка сети'); }
-}
-
 async function checkout(){
-  if(!confirm('Перейти к оформлению заказа?')) return;
-  try {
-    // simulate checkout by clearing cart
-    const res = await fetch(API + '/api/cart/clear', { method:'POST', credentials:'include' });
-    if (!res.ok) {
-      const j = await res.json().catch(()=>({}));
-      alert(j.error || 'Ошибка оформления');
-      return;
-    }
-    loadCart();
-    el('cartMsg').innerText = 'Заказ принят, спасибо!';
-    setTimeout(()=> el('cartMsg').innerText = '', 3000);
-    setTimeout(()=> loadProfile(), 800);
-  } catch(e){ alert('Ошибка сети'); }
+  if(!confirm('Оформить заказ?')) return;
+  const res=await fetch('/api/cart/checkout',{method:'POST',credentials:'include'}); const j=await res.json();
+  if(!res.ok){ alert(j.error||'Ошибка'); return; }
+  loadCart(); el('cartMsg').innerText='Заказ принят!'; setTimeout(()=>el('cartMsg').innerText='',2000); loadProfile();
 }
+async function clearCart(){ if(!confirm('Очистить корзину?')) return;
+  await fetch('/api/cart/clear',{method:'POST',credentials:'include'}); loadCart(); el('cartMsg').innerText='Корзина очищена'; setTimeout(()=>el('cartMsg').innerText='',2000);
+}
+async function removeFromCart(id){ await fetch('/api/cart/remove',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})}); loadCart(); }
 
-/* -------------------------
-   Orders
-   ------------------------- */
-function renderOrders(orders){
-  const o = el('ordersContainer');
-  if(!o) return;
-  if(!orders || !orders.length) { o.innerText = 'Заказы отсутствуют'; return; }
-  o.innerHTML = '';
-  orders.slice().reverse().forEach(ord=>{
-    const div = document.createElement('div');
-    div.style.marginBottom='10px';
-    div.innerHTML = `<strong>Заказ ${escapeHtml(String(ord.id||'—'))}</strong> — ${ord.createdAt ? new Date(ord.createdAt).toLocaleString() : '—'} — ${escapeHtml(ord.status||'—')}<br>
-      Товаров: ${Array.isArray(ord.items)? ord.items.length : '—'} — Сумма: ${formatTotal(ord.total)}`;
-    o.appendChild(div);
-  });
+// settings
+async function changePassword(){
+  const val=el('newPassword').value.trim(); if(!val){alert('Введите новый пароль');return;}
+  const res=await fetch('/api/profile/update',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({password:val})});
+  if(res.ok){alert('Пароль изменён'); el('newPassword').value='';} else alert('Ошибка');
 }
-function formatTotal(t){ return (isNaN(t) ? t : t + ' ₽'); }
+function bindVK(){alert('Привязка VK пока не реализована');}
+function bindTelegram(){alert('Привязка Telegram пока не реализована');}
 
-/* -------------------------
-   Password change & social toggles
-   ------------------------- */
-async function changePassword(e){
-  if (e) e.preventDefault();
-  const oldPass = el('oldPassword').value.trim();
-  const newPass = el('newPassword').value.trim();
-  const confirm = el('confirmPassword').value.trim();
-  const msg = el('passwordMsg');
-  if (!oldPass || !newPass || !confirm) { msg.innerText = 'Заполните все поля'; return false; }
-  if (newPass !== confirm) { msg.innerText = 'Пароли не совпадают'; return false; }
-  try {
-    const res = await fetch(API + '/api/change-password', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ oldPassword: oldPass, newPassword: newPass })});
-    const j = await res.json();
-    if (!res.ok) msg.innerText = j.error || 'Ошибка';
-    else { msg.innerText = 'Пароль изменён'; el('passwordForm').reset(); }
-  } catch(e){ msg.innerText = 'Ошибка сети'; }
-  return false;
-}
-function clearPasswordForm(){ el('passwordForm').reset(); el('passwordMsg').innerText=''; }
+function goTo(tab){ document.querySelectorAll('.tabs a').forEach(a=>a.classList.remove('active')); const a=[...document.querySelectorAll('.tabs a')].find(x=>x.dataset.tab===tab); if(a) a.classList.add('active'); showTab({currentTarget:a,preventDefault:()=>{}});}
+async function logout(){ await fetch('/api/logout',{method:'POST',credentials:'include'}); window.location.href='auth.html'; }
 
-async function toggleVK(){
-  try {
-    const now = !!(currentUser && currentUser.linkedVK);
-    const res = await fetch(API + '/api/profile/update', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ linkedVK: !now })});
-    if (!res.ok) { const j = await res.json().catch(()=>({})); el('linkMsg').innerText = j.error || 'Ошибка'; return; }
-    const j = await res.json();
-    if (j.user) { currentUser = j.user; applyProfile(j.user); el('linkMsg').innerText = !now ? 'VK привязан' : 'VK отвязан'; }
-  } catch(e){ el('linkMsg').innerText = 'Ошибка сети'; }
-}
-async function toggleTelegram(){
-  try {
-    const now = !!(currentUser && currentUser.linkedTelegram);
-    const res = await fetch(API + '/api/profile/update', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({ linkedTelegram: !now })});
-    if (!res.ok) { const j = await res.json().catch(()=>({})); el('linkMsg').innerText = j.error || 'Ошибка'; return; }
-    const j = await res.json();
-    if (j.user) { currentUser = j.user; applyProfile(j.user); el('linkMsg').innerText = !now ? 'Telegram привязан' : 'Telegram отвязан'; }
-  } catch(e){ el('linkMsg').innerText = 'Ошибка сети'; }
-}
-
-/* -------------------------
-   Admin: users list
-   ------------------------- */
-async function loadAdminUsers(){
-  try {
-    const res = await fetch(API + '/api/admin/users', { credentials:'include' });
-    if (!res.ok) { el('adminUsersList').textContent = 'Нет доступа или эндпоинт отсутствует'; return; }
-    const j = await res.json();
-    if (j.ok && Array.isArray(j.users)) {
-      const listEl = el('adminUsersList');
-      listEl.innerHTML = '';
-      j.users.forEach(u=>{
-        const row = document.createElement('div');
-        row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.padding='6px 0';
-        row.innerHTML = `<div><strong>${escapeHtml(u.fio||u.email||u.phone||u.id)}</strong> <span class="muted">(${escapeHtml(u.email||'')})</span></div>
-                         <div><button class="edit-btn" data-del="${u.id}">Удалить</button></div>`;
-        listEl.appendChild(row);
-      });
-      listEl.querySelectorAll('[data-del]').forEach(btn=>{
-        btn.addEventListener('click', async ()=>{
-          if (!confirm('Удалить пользователя?')) return;
-          const id = btn.getAttribute('data-del');
-          const r = await fetch(API + '/api/admin/users/' + encodeURIComponent(id), { method:'DELETE', credentials:'include' });
-          if (r.ok) btn.closest('div').remove();
-          else alert('Ошибка удаления');
-        });
-      });
-    }
-  } catch(e){ console.warn('loadAdminUsers fail', e); el('adminUsersList').textContent = 'Ошибка загрузки'; }
-}
-
-/* -------------------------
-   Logout
-   ------------------------- */
-async function logout(){
-  try { await fetch(API + '/api/logout', { method:'POST', credentials:'include' }); } catch(e){}
-  window.location.href = '/';
-}
-
-/* -------------------------
-   Init
-   ------------------------- */
-document.addEventListener('DOMContentLoaded', async ()=>{
-  renderProducts();
-  await loadProfile(); // will redirect to auth.html if not logged in
-  // helpers
-  el('dismissPassportNotice')?.addEventListener('click', ()=> el('dismissPassportNotice').closest('.notice').style.display='none');
-  el('subscribeTelegramBtn')?.addEventListener('click', ()=> { if (!currentUser) { alert('Чтобы подписаться — войдите'); window.location.href='/auth.html'; return; } alert('Отправлено приглашение в Telegram (симуляция).'); });
-  window.addToCartBackend = addToCartBackend;
+document.addEventListener('DOMContentLoaded',async()=>{
+  await loadProfile(); showTab({currentTarget:document.querySelector('.tabs a.active'),preventDefault:()=>{}});
 });
 </script>
 </body>
