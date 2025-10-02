@@ -29,58 +29,146 @@
     .group:hover .dropdown-menu { display: block; }
   </style>
 </head>
-<body class="text-gray-900 font-sans">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
 
-  <!-- Header -->
-  <header class="flex flex-wrap justify-between items-center px-4 py-3 border-b">
-    <div class="flex items-center space-x-2">
-      <img src="images/photo_5238163653918846596_y (3).avif" alt="Logo" class="h-12">
-    </div>
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    height: 60px;
+    border-bottom: 1px solid #ccc;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: #fff;
+  }
 
-    <!-- Десктоп меню -->
-    <nav class="hidden md:flex space-x-6 text-sm items-center relative">
-      <div class="relative group">
-        <a href="Index.html" class="hover:underline">Покупка и управление</a>
-        <div class="dropdown-menu mt-2 py-2">
-          <a href="HOTEL.html" class="block px-4 py-2 hover:bg-gray-100">Отели</a>
-          <a href="arrivel.html" class="block px-4 py-2 hover:bg-gray-100">Направления</a>
-          <a href="class.html" class="block px-4 py-2 hover:bg-gray-100">Выбор класса</a>
-        </div>
-      </div>
-      <a href="priority.html" class="hover:text-green-600">S7avelii Priority</a>
-      <div class="relative group">
-        <a href="infom.html" class="hover:underline">Информация</a>
-        <div class="dropdown-menu mt-2 py-2">
-          <a href="body.html" class="block px-4 py-2 hover:bg-gray-100">О нас</a>
-          <a href="office.html" class="block px-4 py-2 hover:bg-gray-100">Представительство</a>
-          <a href="plane.html" class="block px-4 py-2 hover:bg-gray-100">Наш Флот</a>
-          <a href="eat.html" class="block px-4 py-2 hover:bg-gray-100">Питание</a>
-          <a href="VIP.html" class="block px-4 py-2 hover:bg-gray-100">VIP-залы</a>
-        </div>
-      </div>
-      <a href="busines.html" class="hover:underline">Бизнесу</a>
-      <a href="https://t.me/S7avelii7plane7" class="hover:underline">7PLANE7</a>
-    </nav>
+  .logo-img {
+    height: 45px;
+    width: auto;
+    cursor: pointer;
+  }
 
-    <!-- Бургер для мобилы -->
-    <button id="menuBtn" class="md:hidden text-2xl">&#9776;</button>
+  nav {
+    display: flex;
+  }
 
-    <!-- Авторизация -->
-    <div class="flex items-center space-x-4 text-sm">
-      <span>RUB</span>
-      <span id="userArea"></span>
-    </div>
-  </header>
+  nav ul {
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
 
-  <!-- Мобильное меню -->
-  <div id="mobileMenu" class="hidden flex-col space-y-2 px-4 py-3 border-b md:hidden">
-    <a href="Index.html">Покупка и управление</a>
-    <a href="priority.html">S7avelii Priority</a>
-    <a href="infom.html">Информация</a>
-    <a href="s7hop.html">S7avelii Shop</a>
-    <a href="busines.html">Бизнесу</a>
-    <a href="https://t.me/S7avelii7plane7">7PLANE7</a>
+  nav a {
+    color: #000;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .right-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+
+  /* гамбургер */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+  }
+  .hamburger span {
+    width: 22px;
+    height: 2px;
+    background: #000;
+  }
+
+  /* нижнее меню */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255,255,255,0.95);
+    border-top: 1px solid #ddd;
+    display: none; /* показываем только на мобилке */
+    justify-content: space-around;
+    padding: 6px 0;
+    z-index: 1000;
+  }
+
+  .bottom-nav a {
+    text-decoration: none;
+    color: #666;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .bottom-nav a.active {
+    color: #6cd100;
+    font-weight: bold;
+  }
+  .bottom-nav svg {
+    width: 22px;
+    height: 22px;
+    margin-bottom: 3px;
+  }
+
+  /* адаптив */
+  @media (max-width: 768px) {
+    nav { display: none; }
+    .hamburger { display: flex; }
+    .bottom-nav { display: flex; }
+    header { height: 60px; padding: 0 12px; }
+    .logo-img { height: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <a href="index.html">
+      <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
+    </a>
   </div>
+
+  <!-- десктоп меню -->
+  <nav>
+    <ul>
+      <li><a href="bilet.html">Купить билет</a></li>
+      <li><a href="priority.html">S7avelii Priority</a></li>
+      <li><a href="body.html">Информация</a></li>
+      <li><a href="busines.html">Бизнесу</a></li>
+    </ul>
+  </nav>
+
+  <!-- гамбургер на мобилке -->
+  <div class="hamburger" onclick="alert('Здесь будет мобильное меню')">
+    <span></span><span></span><span></span>
+  </div>
+
+  <div class="right-menu">
+    <button>RUB</button>
+    <div class="flag">
+      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" width="20" />
+    </div>
+  </div>
+</header>
 
   <!-- Hero -->
   <img src="images/1000035559.avif" alt="Header Banner" class="w-full h-auto">
