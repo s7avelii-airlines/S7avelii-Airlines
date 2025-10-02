@@ -344,46 +344,34 @@
 </header>
 
 <script>
-/* ==========================
-   Функция обновления User Area
-   ========================== */
-function updateUserArea() {
+window.addEventListener("DOMContentLoaded", () => {
   const userArea = document.getElementById("userArea");
+
   const fio = localStorage.getItem("fio");
   const avatar = localStorage.getItem("avatar");
-  const phone = localStorage.getItem("phone");
+  const username = localStorage.getItem("username");
 
-  if (fio && phone) {
+  if (fio) {
     if (avatar) {
-      userArea.innerHTML = `<img src="${avatar}" alt="avatar"
-        style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
-        onclick="window.location.href='cabinet.html'" 
-      />`;
+      userArea.innerHTML = `
+        <img src="${avatar}" alt="avatar" 
+          style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
+          onclick="window.location.href='cabinet.html'" 
+        />
+      `;
     } else {
-      userArea.innerHTML = `<span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">
-        ${fio.split(" ")[0]}
-      </span>`;
+      userArea.innerHTML = `
+        <span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">
+          ${username || fio.split(" ")[0]}
+        </span>
+      `;
     }
   } else {
     userArea.innerHTML = `<a href="auth.html">Вход</a>`;
   }
-}
-
-/* ==========================
-   Обновление при загрузке страницы
-   ========================== */
-window.addEventListener("DOMContentLoaded", updateUserArea);
-
-/* ==========================
-   Слушатель изменений профиля
-   ========================== */
-// Если кабинет меняет данные, скрипт отправит событие
-window.addEventListener("storage", (e) => {
-  if (["fio", "avatar", "phone"].includes(e.key)) {
-    updateUserArea();
-  }
 });
 </script>
+
 
 <head>
 <meta charset="utf-8" />
