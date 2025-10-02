@@ -342,11 +342,10 @@
     <div id="userArea"></div>
   </div>
 </header>
-<!-- В HTML -->
-<div id="userArea">
-  <a href="auth.html">Вход</a>
-</div>
-
+<header>
+  <div class="logo">Мой сайт</div>
+  <div id="userArea"></div> <!-- сюда только кнопка/аватар -->
+</header>
 <script>
   async function updateUserArea() {
     const userArea = document.getElementById("userArea");
@@ -379,9 +378,6 @@
 
   window.addEventListener("DOMContentLoaded", updateUserArea);
 </script>
-
-
-
 
 <head>
 <meta charset="utf-8" />
