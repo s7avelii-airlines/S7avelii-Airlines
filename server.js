@@ -1,196 +1,173 @@
 // server.js
-import express from 'express';
-import session from 'express-session';
-import fs from 'fs';
-import path from 'path';
-import crypto from 'crypto';
+const express = require('express');
+const session = require('express-session');
+const bcrypt = require('bcryptjs');
+const fs = require('fs');
+const fsp = fs.promises;
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const USERS_FILE = path.resolve('./users.json');
 
-app.use(express.json());
-app.set('trust proxy', 1); // важно для продакшн (за прокси)
+const DATA_DIR = path.join(__dirname, 'data');
+const USERS_FILE = path.join(DATA_DIR, 'users.json');
+const PUBLIC_DIR = path.join(__dirname, 'public');
+
+// --- Middleware ---
+app.use(express.json({ limit: '5mb' }));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(PUBLIC_DIR));
 
 app.use(session({
   name: 's7avelii.sid',
-  secret: process.env.SESSION_SECRET || 'change-me',
+  secret: process.env.SESSION_SECRET || 'please-change-this-secret',
   resave: false,
   saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // требует HTTPS
-    sameSite: 'lax',
-    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 дней
-  }
+  cookie: { httpOnly: true, maxAge: 7*24*60*60*1000 } // 7 дней
 }));
 
-// ----- HELPERS -----
-function loadUsers() {
-  try {
-    const data = fs.readFileSync(USERS_FILE, 'utf-8');
-    return JSON.parse(data || '[]');
-  } catch (e) {
-    return [];
-  }
+// --- Helpers ---
+async function ensureFiles() {
+  await fsp.mkdir(DATA_DIR, { recursive: true });
+  try { await fsp.access(USERS_FILE); } 
+  catch(e){ await safeWrite(USERS_FILE, '[]'); }
 }
 
-function saveUsers(users) {
-  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+async function safeWrite(file, content) {
+  const tmp = file + '.tmp-' + Date.now();
+  await fsp.writeFile(tmp, content, 'utf8');
+  await fsp.rename(tmp, file);
 }
 
-function hashPassword(password) {
-  return crypto.createHash('sha256').update(password).digest('hex');
+async function loadUsers() {
+  await ensureFiles();
+  const raw = await fsp.readFile(USERS_FILE, 'utf8');
+  try { return JSON.parse(raw || '[]'); }
+  catch(e){ await safeWrite(USERS_FILE,'[]'); return []; }
 }
 
-function findUserByPhone(phone) {
-  const users = loadUsers();
-  return users.find(u => u.phone === phone);
-}
+async function saveUsers(users){ await safeWrite(USERS_FILE, JSON.stringify(users,null,2)); }
 
-function findUserById(id) {
-  const users = loadUsers();
-  return users.find(u => u.id === id);
-}
+function makeId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
+function withoutPassword(u){ const c={...u}; delete c.password; return c; }
 
-// ----- API -----
-// регистрация
-app.post('/api/register', (req, res) => {
+// --- Auth Routes ---
+
+// Register
+app.post('/api/register', async (req,res)=>{
   const { fio, dob, gender, email, phone, password, cardNumber, cardType } = req.body;
-  if (!fio || !email || !phone || !password) {
-    return res.status(400).json({ error: 'Обязательные поля не заполнены' });
-  }
-  const users = loadUsers();
-  if (users.some(u => u.phone === phone)) return res.status(400).json({ error: 'Телефон уже зарегистрирован' });
-
-  const id = crypto.randomUUID();
-  const newUser = {
-    id, fio, dob, gender, email, phone,
-    password: hashPassword(password),
-    cardNumber, cardType,
-    bonusMiles: 0,
-    orders: [],
-    cart: [],
-    avatar: ''
-  };
+  if(!fio || !email || !phone || !password) return res.status(400).json({error:'Обязательные поля: ФИО, email, телефон, пароль'});
+  const users = await loadUsers();
+  if(users.find(u=>u.email?.toLowerCase()===email.toLowerCase())) return res.status(400).json({error:'Email уже зарегистрирован'});
+  if(users.find(u=>u.phone===phone)) return res.status(400).json({error:'Телефон уже зарегистрирован'});
+  const hashed = await bcrypt.hash(password,10);
+  const newUser = { id:makeId(), fio, dob, gender, email, phone, password:hashed, cardNumber:cardNumber||'', cardType:cardType||'', avatar:'', bonusMiles:0, role:'user', cart:[], orders:[], createdAt:new Date().toISOString() };
   users.push(newUser);
-  saveUsers(users);
-
-  req.session.userId = id; // логиним сразу
-  res.json({ message: 'Регистрация успешна', user: newUser });
+  await saveUsers(users);
+  req.session.userId = newUser.id;
+  res.json({ ok:true, user: withoutPassword(newUser) });
 });
 
-// логин
-app.post('/api/login', (req, res) => {
-  const { phone, password } = req.body;
-  if (!phone || !password) return res.status(400).json({ error: 'Телефон и пароль обязательны' });
-
-  const user = findUserByPhone(phone);
-  if (!user || user.password !== hashPassword(password)) return res.status(401).json({ error: 'Неверные данные' });
-
+// Login
+app.post('/api/login', async (req,res)=>{
+  const { phone, email, password } = req.body;
+  if((!phone && !email) || !password) return res.status(400).json({error:'Нужен телефон/email и пароль'});
+  const users = await loadUsers();
+  const user = users.find(u=> (phone&&u.phone===phone) || (email&&u.email.toLowerCase()===email.toLowerCase()));
+  if(!user) return res.status(400).json({error:'Пользователь не найден'});
+  const ok = await bcrypt.compare(password,user.password);
+  if(!ok) return res.status(400).json({error:'Неверный пароль'});
   req.session.userId = user.id;
-  res.json({ message: 'Вход успешен', user });
+  res.json({ ok:true, user: withoutPassword(user) });
 });
 
-// логаут
-app.post('/api/logout', (req, res) => {
-  req.session.destroy(err => {
-    res.json({ message: 'Вышли' });
-  });
+// Logout
+app.post('/api/logout', (req,res)=>{
+  req.session.destroy(err=>{ if(err) console.warn(err); res.clearCookie('s7avelii.sid'); res.json({ok:true}); });
 });
 
-// профиль
-app.get('/api/profile', (req, res) => {
-  const user = findUserById(req.session.userId);
-  if (!user) return res.status(401).json({ error: 'Не авторизован' });
-  res.json({ user });
+// Profile
+app.get('/api/profile', async (req,res)=>{
+  if(!req.session.userId) return res.status(401).json({error:'Не авторизован'});
+  const users = await loadUsers();
+  const user = users.find(u=>u.id===req.session.userId);
+  if(!user) return res.status(404).json({error:'Пользователь не найден'});
+  res.json({ ok:true, user:withoutPassword(user) });
 });
 
-// обновление профиля
-app.post('/api/profile/update', (req, res) => {
-  const user = findUserById(req.session.userId);
-  if (!user) return res.status(401).json({ error: 'Не авторизован' });
-
-  const allowed = ['fio','dob','gender','email','phone','cardNumber','cardType','avatar','password'];
-  allowed.forEach(k => {
-    if (req.body[k] !== undefined) {
-      user[k] = k === 'password' ? hashPassword(req.body[k]) : req.body[k];
-    }
-  });
-
-  const users = loadUsers().map(u => u.id === user.id ? user : u);
-  saveUsers(users);
-  res.json({ message: 'Обновлено', user });
+// Update profile
+app.post(['/api/profile/update','/api/update-profile'], async (req,res)=>{
+  if(!req.session.userId) return res.status(401).json({error:'Не авторизован'});
+  const users = await loadUsers();
+  const user = users.find(u=>u.id===req.session.userId);
+  if(!user) return res.status(404).json({error:'Пользователь не найден'});
+  const allowed=['fio','dob','gender','email','phone','cardNumber','cardType','avatar','bonusMiles','password'];
+  for(const k of allowed) if(req.body[k]!==undefined) user[k]=req.body[k];
+  await saveUsers(users);
+  res.json({ ok:true, user:withoutPassword(user) });
 });
 
-// ----- CART -----
-app.get('/api/cart', (req, res) => {
-  const user = findUserById(req.session.userId);
-  if (!user) return res.status(401).json({ error: 'Не авторизован' });
-  res.json({ cart: user.cart || [] });
+// --- Cart ---
+app.get('/api/cart', async (req,res)=>{
+  if(!req.session.userId) return res.status(401).json({error:'Не авторизован'});
+  const users = await loadUsers();
+  const user = users.find(u=>u.id===req.session.userId);
+  if(!user) return res.status(404).json({error:'Пользователь не найден'});
+  res.json({ ok:true, cart: user.cart||[] });
 });
 
-app.post('/api/cart/add', (req, res) => {
-  const user = findUserById(req.session.userId);
-  if (!user) return res.status(401).json({ error: 'Не авторизован' });
+app.post('/api/cart/add', async (req,res)=>{
+  if(!req.session.userId) return res.status(401).json({error:'Не авторизован'});
   const item = req.body;
-  if (!item.id || !item.title || !item.price) return res.status(400).json({ error: 'Некорректный товар' });
-
-  user.cart = user.cart || [];
-  const exist = user.cart.find(i => i.id === item.id);
-  if (exist) exist.qty = (exist.qty||1)+1;
-  else user.cart.push({ ...item, qty: 1 });
-
-  const users = loadUsers().map(u => u.id === user.id ? user : u);
-  saveUsers(users);
-  res.json({ message: 'Добавлено в корзину' });
+  const users = await loadUsers();
+  const user = users.find(u=>u.id===req.session.userId);
+  if(!user) return res.status(404).json({error:'Пользователь не найден'});
+  user.cart = user.cart||[];
+  user.cart.push({ id:makeId(), addedAt:new Date().toISOString(), ...item });
+  await saveUsers(users);
+  res.json({ ok:true, cart:user.cart });
 });
 
-app.post('/api/cart/remove', (req, res) => {
-  const user = findUserById(req.session.userId);
-  if (!user) return res.status(401).json({ error: 'Не авторизован' });
-  const { id } = req.body;
-  user.cart = (user.cart||[]).filter(i => i.id !== id);
-  const users = loadUsers().map(u => u.id === user.id ? user : u);
-  saveUsers(users);
-  res.json({ message: 'Удалено' });
-});
-
-app.post('/api/cart/clear', (req, res) => {
-  const user = findUserById(req.session.userId);
-  if (!user) return res.status(401).json({ error: 'Не авторизован' });
+app.post('/api/cart/clear', async (req,res)=>{
+  if(!req.session.userId) return res.status(401).json({error:'Не авторизован'});
+  const users = await loadUsers();
+  const user = users.find(u=>u.id===req.session.userId);
+  if(!user) return res.status(404).json({error:'Пользователь не найден'});
   user.cart = [];
-  const users = loadUsers().map(u => u.id === user.id ? user : u);
-  saveUsers(users);
-  res.json({ message: 'Корзина очищена' });
+  await saveUsers(users);
+  res.json({ ok:true, cart:[] });
 });
 
-// checkout - создаём заказ
-app.post('/api/cart/checkout', (req, res) => {
-  const user = findUserById(req.session.userId);
-  if (!user) return res.status(401).json({ error: 'Не авторизован' });
-  if (!user.cart || !user.cart.length) return res.status(400).json({ error: 'Корзина пуста' });
-
-  const orderId = crypto.randomUUID();
-  const total = user.cart.reduce((a,i)=>a+(parseFloat((i.price||'0').toString().replace(/[^\d.-]/g,''))||0)*(i.qty||1),0);
-  const newOrder = {
-    id: orderId,
-    createdAt: new Date(),
-    items: user.cart,
-    total,
-    status: 'Принят'
-  };
+// Checkout (создание заказа)
+app.post('/api/cart/checkout', async (req,res)=>{
+  if(!req.session.userId) return res.status(401).json({error:'Не авторизован'});
+  const users = await loadUsers();
+  const user = users.find(u=>u.id===req.session.userId);
+  if(!user) return res.status(404).json({error:'Пользователь не найден'});
+  if(!user.cart || !user.cart.length) return res.status(400).json({error:'Корзина пуста'});
+  const total = user.cart.reduce((sum,it)=>{
+    const price = parseFloat((it.price||'').replace(/[^\d,.-]/g,'').replace(',','.'))||0;
+    return sum + price*(it.qty||1);
+  },0);
+  const order = { id:makeId(), createdAt:new Date().toISOString(), status:'Принят', items:user.cart, total };
   user.orders = user.orders||[];
-  user.orders.push(newOrder);
-
-  user.cart = []; // очистка корзины
-  const users = loadUsers().map(u => u.id === user.id ? user : u);
-  saveUsers(users);
-
-  res.json({ message: 'Заказ создан', order: newOrder });
+  user.orders.push(order);
+  user.cart = [];
+  await saveUsers(users);
+  res.json({ ok:true, order });
 });
 
-// ----- STATIC -----
-app.use(express.static(path.join(process.cwd(), 'public'))); // тут лежат auth.html, cabinet.html и все ресурсы
+// --- SPA fallback ---
+app.get('*', (req,res)=>{
+  if(req.path.startsWith('/api/')) return res.status(404).json({error:'API not found'});
+  const indexFile = path.join(PUBLIC_DIR,'index.html');
+  if(fs.existsSync(indexFile)) return res.sendFile(indexFile);
+  res.send('S7avelii server');
+});
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// --- Start ---
+(async()=>{
+  try{ await ensureFiles(); app.listen(PORT,()=>{ console.log(`Server running on port ${PORT}`); }); }
+  catch(err){ console.error('Failed to start', err); process.exit(1); }
+})();
+
