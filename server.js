@@ -1,89 +1,196 @@
-const express = require('express');
-const session = require('express-session');
-const bcrypt = require('bcryptjs');
-const fs = require('fs').promises;
-const path = require('path');
+// server.js
+import express from 'express';
+import session from 'express-session';
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+const USERS_FILE = path.resolve('./users.json');
 
-const DATA_DIR = path.join(__dirname, 'data');
-const USERS_FILE = path.join(DATA_DIR, 'users.json');
-const PUBLIC_DIR = path.join(__dirname, 'public');
-
-// Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(PUBLIC_DIR));
+app.set('trust proxy', 1); // важно для продакшн (за прокси)
 
-// Session
 app.use(session({
-  secret: 'secret_s7avelii',
+  name: 's7avelii.sid',
+  secret: process.env.SESSION_SECRET || 'change-me',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 1000*60*60*24*7 }
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // требует HTTPS
+    sameSite: 'lax',
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 дней
+  }
 }));
 
-// Ensure users.json exists
-async function ensureUsersFile() {
-  try { await fs.access(USERS_FILE); } 
-  catch { await fs.mkdir(DATA_DIR, { recursive:true }); await fs.writeFile(USERS_FILE,'[]'); }
+// ----- HELPERS -----
+function loadUsers() {
+  try {
+    const data = fs.readFileSync(USERS_FILE, 'utf-8');
+    return JSON.parse(data || '[]');
+  } catch (e) {
+    return [];
+  }
 }
-async function loadUsers() { await ensureUsersFile(); const data = await fs.readFile(USERS_FILE,'utf8'); return JSON.parse(data||'[]'); }
-async function saveUsers(users){ await fs.writeFile(USERS_FILE, JSON.stringify(users,null,2)); }
 
-// Helpers
-function withoutPassword(u){ const copy = {...u}; delete copy.password; return copy; }
-function makeId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
+function saveUsers(users) {
+  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+}
 
-// ---------- REGISTER ----------
-app.post('/api/register', async (req,res)=>{
-  const { fio, phone, email, password } = req.body;
-  if(!fio||!phone||!password) return res.status(400).json({error:'ФИО, телефон и пароль обязательны'});
+function hashPassword(password) {
+  return crypto.createHash('sha256').update(password).digest('hex');
+}
 
-  const users = await loadUsers();
-  if(users.find(u=>u.phone===phone)) return res.status(400).json({error:'Телефон занят'});
-  if(email && users.find(u=>u.email===email)) return res.status(400).json({error:'Email занят'});
+function findUserByPhone(phone) {
+  const users = loadUsers();
+  return users.find(u => u.phone === phone);
+}
 
-  const hashed = await bcrypt.hash(password,10);
-  const newUser = { id:makeId(), fio, phone, email: email||'', password:hashed, cart:[], orders:[], bonusMiles:0 };
+function findUserById(id) {
+  const users = loadUsers();
+  return users.find(u => u.id === id);
+}
+
+// ----- API -----
+// регистрация
+app.post('/api/register', (req, res) => {
+  const { fio, dob, gender, email, phone, password, cardNumber, cardType } = req.body;
+  if (!fio || !email || !phone || !password) {
+    return res.status(400).json({ error: 'Обязательные поля не заполнены' });
+  }
+  const users = loadUsers();
+  if (users.some(u => u.phone === phone)) return res.status(400).json({ error: 'Телефон уже зарегистрирован' });
+
+  const id = crypto.randomUUID();
+  const newUser = {
+    id, fio, dob, gender, email, phone,
+    password: hashPassword(password),
+    cardNumber, cardType,
+    bonusMiles: 0,
+    orders: [],
+    cart: [],
+    avatar: ''
+  };
   users.push(newUser);
-  await saveUsers(users);
-  req.session.userId = newUser.id;
-  res.json({ok:true, user: withoutPassword(newUser)});
+  saveUsers(users);
+
+  req.session.userId = id; // логиним сразу
+  res.json({ message: 'Регистрация успешна', user: newUser });
 });
 
-// ---------- LOGIN ----------
-app.post('/api/login', async (req,res)=>{
+// логин
+app.post('/api/login', (req, res) => {
   const { phone, password } = req.body;
-  if(!phone||!password) return res.status(400).json({error:'Телефон и пароль обязательны'});
+  if (!phone || !password) return res.status(400).json({ error: 'Телефон и пароль обязательны' });
 
-  const users = await loadUsers();
-  const user = users.find(u=>u.phone===phone);
-  if(!user) return res.status(400).json({error:'Пользователь не найден'});
-
-  const ok = await bcrypt.compare(password,user.password);
-  if(!ok) return res.status(400).json({error:'Неверный пароль'});
+  const user = findUserByPhone(phone);
+  if (!user || user.password !== hashPassword(password)) return res.status(401).json({ error: 'Неверные данные' });
 
   req.session.userId = user.id;
-  res.json({ok:true, user: withoutPassword(user)});
+  res.json({ message: 'Вход успешен', user });
 });
 
-// ---------- LOGOUT ----------
-app.post('/api/logout', (req,res)=>{ req.session.destroy(()=>res.json({ok:true})); });
-
-// ---------- GET PROFILE ----------
-app.get('/api/profile', async (req,res)=>{
-  if(!req.session.userId) return res.status(401).json({error:'Не авторизован'});
-  const users = await loadUsers();
-  const user = users.find(u=>u.id===req.session.userId);
-  if(!user) return res.status(404).json({error:'Не найден'});
-  res.json({ok:true, user: withoutPassword(user)});
+// логаут
+app.post('/api/logout', (req, res) => {
+  req.session.destroy(err => {
+    res.json({ message: 'Вышли' });
+  });
 });
 
-// ---------- SPA fallback ----------
-app.get('*',(req,res)=> res.sendFile(path.join(PUBLIC_DIR,'auth.html')));
+// профиль
+app.get('/api/profile', (req, res) => {
+  const user = findUserById(req.session.userId);
+  if (!user) return res.status(401).json({ error: 'Не авторизован' });
+  res.json({ user });
+});
 
-// Start
-app.listen(PORT,()=>console.log(`Server running on http://localhost:${PORT}`));
+// обновление профиля
+app.post('/api/profile/update', (req, res) => {
+  const user = findUserById(req.session.userId);
+  if (!user) return res.status(401).json({ error: 'Не авторизован' });
 
+  const allowed = ['fio','dob','gender','email','phone','cardNumber','cardType','avatar','password'];
+  allowed.forEach(k => {
+    if (req.body[k] !== undefined) {
+      user[k] = k === 'password' ? hashPassword(req.body[k]) : req.body[k];
+    }
+  });
+
+  const users = loadUsers().map(u => u.id === user.id ? user : u);
+  saveUsers(users);
+  res.json({ message: 'Обновлено', user });
+});
+
+// ----- CART -----
+app.get('/api/cart', (req, res) => {
+  const user = findUserById(req.session.userId);
+  if (!user) return res.status(401).json({ error: 'Не авторизован' });
+  res.json({ cart: user.cart || [] });
+});
+
+app.post('/api/cart/add', (req, res) => {
+  const user = findUserById(req.session.userId);
+  if (!user) return res.status(401).json({ error: 'Не авторизован' });
+  const item = req.body;
+  if (!item.id || !item.title || !item.price) return res.status(400).json({ error: 'Некорректный товар' });
+
+  user.cart = user.cart || [];
+  const exist = user.cart.find(i => i.id === item.id);
+  if (exist) exist.qty = (exist.qty||1)+1;
+  else user.cart.push({ ...item, qty: 1 });
+
+  const users = loadUsers().map(u => u.id === user.id ? user : u);
+  saveUsers(users);
+  res.json({ message: 'Добавлено в корзину' });
+});
+
+app.post('/api/cart/remove', (req, res) => {
+  const user = findUserById(req.session.userId);
+  if (!user) return res.status(401).json({ error: 'Не авторизован' });
+  const { id } = req.body;
+  user.cart = (user.cart||[]).filter(i => i.id !== id);
+  const users = loadUsers().map(u => u.id === user.id ? user : u);
+  saveUsers(users);
+  res.json({ message: 'Удалено' });
+});
+
+app.post('/api/cart/clear', (req, res) => {
+  const user = findUserById(req.session.userId);
+  if (!user) return res.status(401).json({ error: 'Не авторизован' });
+  user.cart = [];
+  const users = loadUsers().map(u => u.id === user.id ? user : u);
+  saveUsers(users);
+  res.json({ message: 'Корзина очищена' });
+});
+
+// checkout - создаём заказ
+app.post('/api/cart/checkout', (req, res) => {
+  const user = findUserById(req.session.userId);
+  if (!user) return res.status(401).json({ error: 'Не авторизован' });
+  if (!user.cart || !user.cart.length) return res.status(400).json({ error: 'Корзина пуста' });
+
+  const orderId = crypto.randomUUID();
+  const total = user.cart.reduce((a,i)=>a+(parseFloat((i.price||'0').toString().replace(/[^\d.-]/g,''))||0)*(i.qty||1),0);
+  const newOrder = {
+    id: orderId,
+    createdAt: new Date(),
+    items: user.cart,
+    total,
+    status: 'Принят'
+  };
+  user.orders = user.orders||[];
+  user.orders.push(newOrder);
+
+  user.cart = []; // очистка корзины
+  const users = loadUsers().map(u => u.id === user.id ? user : u);
+  saveUsers(users);
+
+  res.json({ message: 'Заказ создан', order: newOrder });
+});
+
+// ----- STATIC -----
+app.use(express.static(path.join(process.cwd(), 'public'))); // тут лежат auth.html, cabinet.html и все ресурсы
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
