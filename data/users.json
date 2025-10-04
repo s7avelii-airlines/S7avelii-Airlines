@@ -1,19 +1,18 @@
 [
   {
-    "id": "u_demo123",
+    "id": "mbr92a6zqk",
     "fio": "Иван Иванов",
     "dob": "01.01.1990",
-    "gender": "Мужской",
-    "email": "demo@s7avelii.ru",
-    "phone": "+79990000000",
-    "password": "$2a$10$L1Qqu7YzB2yHb2iZl4pP4eOjG5VzECXcA4Oi0VJYgL0qBC6dngeJa",
-    "cardNumber": "7777 8888 9999 0000",
+    "gender": "М",
+    "email": "ivan@example.com",
+    "phone": "+79991234567",
+    "password": "$2a$10$0FzzmPr5M...",
+    "cardNumber": "1234567890",
     "cardType": "VIP",
-    "avatar": "",
-    "bonusMiles": 2500,
-    "role": "user",
+    "bonusMiles": 0,
     "cart": [],
     "orders": [],
-    "createdAt": "2025-10-04T10:00:00.000Z"
+    "createdAt": "2025-10-04T20:32:00.000Z"
   }
 ]
+
