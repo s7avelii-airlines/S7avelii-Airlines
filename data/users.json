@@ -1,18 +1,19 @@
 [
   {
-    "id": "admin-k0p3abc",
-    "fio": "Администратор",
-    "phone": "+70000000001",
-    "email": "admin@s7avelii.example",
-    "password": "$2b$10$...bcrypt hash...",
-    "cardNumber": "00000001",
-    "cardType": "VIP",
+    "id": "u_demo123",
+    "fio": "Иван Иванов",
     "dob": "01.01.1990",
-    "gender": "М",
+    "gender": "Мужской",
+    "email": "demo@s7avelii.ru",
+    "phone": "+79990000000",
+    "password": "$2a$10$L1Qqu7YzB2yHb2iZl4pP4eOjG5VzECXcA4Oi0VJYgL0qBC6dngeJa",
+    "cardNumber": "7777 8888 9999 0000",
+    "cardType": "VIP",
     "avatar": "",
-    "bonusMiles": 10000,
-    "role": "admin",
-    "createdAt": "2025-09-30T12:34:56.789Z"
-  },
-  ...
+    "bonusMiles": 2500,
+    "role": "user",
+    "cart": [],
+    "orders": [],
+    "createdAt": "2025-10-04T10:00:00.000Z"
+  }
 ]
