@@ -49,8 +49,40 @@ document.addEventListener("DOMContentLoaded", () => {
     <!-- Кнопки -->
     <div class="flex gap-2">
       <!-- Войти -->
-      <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
-        Войти
+       <div id="userArea"></div> <!-- сюда только кнопка/аватар -->
+</header>
+<script>
+  async function updateUserArea() {
+    const userArea = document.getElementById("userArea");
+
+    try {
+      const res = await fetch("/api/profile");
+      if (!res.ok) throw new Error("Не авторизован");
+      const data = await res.json();
+      const user = data.user;
+
+      if (user.avatar) {
+        userArea.innerHTML = `
+          <img src="${user.avatar}" alt="avatar"
+            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
+            onclick="window.location.href='cabinet.html'" 
+          />
+        `;
+      } else {
+        userArea.innerHTML = `
+          <span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">
+            ${user.fio.split(" ")[0]}
+          </span>
+        `;
+      }
+    } catch (err) {
+      // если не залогинен
+      userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+    }
+  }
+
+  window.addEventListener("DOMContentLoaded", updateUserArea);
+</script>
         <!-- Иконка пользователя -->
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
