@@ -1,28 +1,10 @@
-{
-  "name": "s7avelii-server",
-  "version": "1.0.0",
-  "description": "S7avelii server with PostgreSQL and sessions",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
-  },
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "cookie-parser": "^1.4.6",
-    "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "pg": "^8.11.1",
-    "pg-pool": "^3.4.0",
-    "connect-pg-simple": "^8.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "keywords": [],
-  "author": "S7avelii",
-  "license": "MIT"
+"dependencies": {
+  "bcryptjs": "^2.4.3",
+  "connect-pg-simple": "^8.0.0",
+  "cookie-parser": "^1.4.6",
+  "express": "^4.18.2",
+  "express-session": "^1.17.3",
+  "pg": "^8.11.1",
+  "dotenv": "^16.3.1"
 }
+
