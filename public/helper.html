@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S7avelii Airlines</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+   body {
+      font-family: sans-serif;
+      background: #f1f5f9;
+      display: flex;
+      justify-content: center;
+    }
+    .mobile-wrapper {
+      width: 430px;
+      min-height: 100vh;
+      background: #f1f5f9;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+
+<body>
+<div class="mobile-wrapper">
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const isMobile = /Android|iPhone|iPad|iPod|Windows Phone|Mobi/i.test(navigator.userAgent);
+  if (!isMobile) {
+    window.location.href = "index.html"; // редирект обратно на ПК-версию
+  }
+});
+</script>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S7 — Шапка</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+
+  <!-- Шапка -->
+  <header class="fixed top-0 left-0 w-full flex justify-between items-center p-4 bg-white shadow z-50">
+    <!-- Логотип -->
+    <img src="images/photo_5276207082657412564_y.avif" alt="S7" class="w-10 h-10">
+
+    <!-- Кнопки -->
+    <div class="flex gap-2">
+      <!-- Войти -->
+       <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
+        Войти
+        <!-- Иконка пользователя -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
+        </svg>
+      </a>
+
+      <!-- Выбор языка -->
+      <a href="inform.html" class="flex items-center justify-center w-10 h-10 rounded-xl border text-sm font-semibold">
+        RU
+      </a>
+
+      <!-- Чат -->
+      <button class="flex items-center justify-center w-10 h-10 rounded-xl border">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h6m-6 4h4m-5 4h10a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14l3-2z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+<!-- Пробел между слайдером и акциями -->
+    <div class="h-20"></div>
+  <title>Справочный центр</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: #fff;
+      color: #111;
+    }
+
+    .page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  
+  display: flex;
+  justify-content: center;   /* центр по горизонтали */
+  align-items: center;       /* центр по вертикали */
+  min-height: 100vh;         /* занимаем всю высоту экрана */
+}
+    /* Сетка */
+    .columns {
+      display: grid;
+      grid-template-columns: minmax(280px, 1fr) minmax(400px, 2fr);
+      gap: 40px;
+      align-items: start;
+    }
+
+    .left {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .headline {
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #111;
+      white-space: pre-line;
+      text-align: left;
+    }
+
+    .art {
+      max-width: 280px;
+      height: auto;
+    }
+
+    .right {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
+      max-width: 500px;
+    }
+
+    .text-block {
+      line-height: 1.6;
+      text-align: left;
+      white-space: normal !important;
+      word-break: break-word;
+    }
+
+    .faq-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .faq-item {
+      font-size: 18px;
+      font-weight: 500;
+      color: #222;
+      margin-bottom: 8px;
+    }
+
+    .faq-item a {
+      text-decoration: none;
+      color: inherit;
+      transition: color .2s;
+    }
+    .faq-item a:hover {
+      color: #0078d4;
+      text-decoration: underline;
+    }
+
+    .long {
+      margin-top: 16px;
+      font-size: 16px;
+      line-height: 1.4;
+      color: #333;
+    }
+
+    /* адаптивность */
+    @media (max-width: 900px) {
+      .columns {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .left { align-items: center; }
+      .headline { font-size: 32px; text-align: center; }
+      .art { max-width: 200px; }
+      .right { align-items: center; max-width: 100%; }
+      .text-block { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="columns">
+      <!-- левая колонка -->
+      <div class="left">
+        <div class="headline">
+Найти ответ
+в Справочном
+центре
+        </div>
+        <img class="art" src="images/1757601548123.avif" alt="иллюстрация вопроса">
+      </div>
+
+      <!-- правая колонка -->
+      <div class="right">
+        <div class="text-block">
+          <ul class="faq-list" aria-label="Список вопросов">
+            <li class="faq-item"><a href="faq1.html">Можно ли взять чемодан в самолёт?</a></li>
+            <li class="faq-item"><a href="arrivel.html">В какие города вы летаете?</a></li>
+            <li class="faq-item"><a href="https://t.me/s7aveliihelper">Что даёт карта S7avelii Priority?</a></li>
+            <li class="faq-item"><a href="https://t.me/s7aveliihelper">Где узнать статус заказа S7avelii Shop?</a></li>
+            <li class="faq-item"><a href="https://t.me/s7aveliihelper">Как разобраться с личным кабинетом?</a></li>
+            <li class="faq-item"><a href="https://t.me/s7aveliihelper">Как можно накопить мили S7avelii?</a></li>
+            <li class="faq-item"><a href="https://t.me/s7aveliihelper">Как работает оплата «Милями»?</a></li>
+            <li class="faq-item"><a href="https://t.me/s7aveliihelper">Как я могу заказать билет на сайте?</a></li>
+          </ul>
+
+          <div class="long">
+            Я никак не могу понять как работает ваш сайт, запутался не могу. 
+            <a href="https://t.me/s7aveliihelper">Служба поддержки?</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    
+<footer class="mobile-footer">
+  <!-- Подписка -->
+  <div class="subscribe-box">
+    <h3>Подпишитесь на рассылку <span>S7avelii </span></h3>
+    <p>Будьте в курсе акций, открывайте новые маршруты</p>
+    <form class="subscribe-form">
+      <input 
+        type="email" 
+        placeholder="Ваша почта" 
+        required
+      >
+      <button type="submit">→</button>
+    </form>
+    <label class="checkbox">
+      <input type="checkbox">
+      Хочу узнавать про скидки и идеи путешествий по почте и соглашаюсь на 
+      <a href="#">обработку персональных данных</a>
+    </label>
+  </div>
+
+  <!-- Низ -->
+  <div class="footer-bottom">
+    <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
+    <div class="socials">
+      <a href="https://vk.com/s7avelii"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
+      <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1 "><img src="images/icons8-tiktok-logo-50 (1).avif" alt="OK"></a>
+      <a href="https://youtu.be/Dy31uUCFaWw?si=2gyqNYaT3ZVO8WJa"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
+      <a href="https://t.me/S7saveliiairlines"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
+    </div>
+  </div>
+</footer>
+
+<style>
+.mobile-footer {
+  background: #f1f5f9;   /* светло-серый фон */
+  padding: 20px;
+  font-family: Inter, sans-serif;
+  color: #111;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Блок подписки */
+.subscribe-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid #d1d5db;
+  margin-bottom: 20px;
+}
+.subscribe-box h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.subscribe-box h3 span {
+  font-family: "Comic Sans MS", cursive; /* на фото декоративный шрифт */
+  font-weight: 400;
+}
+.subscribe-box p {
+  color: #333;
+  margin-bottom: 14px;
+  font-size: 14px;
+}
+
+.subscribe-form {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.subscribe-form input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 20px 0 0 20px;
+  font-size: 14px;
+  outline: none;
+}
+.subscribe-form button {
+  background: #a6d463;
+  border: none;
+  border-radius: 0 20px 20px 0;
+  padding: 0 20px;
+  font-size: 22px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.checkbox {
+  font-size: 13px;
+  color: #333;
+  line-height: 1.4;
+}
+.checkbox input {
+  margin-right: 6px;
+}
+.checkbox a {
+  color: #99d812;
+  text-decoration: underline;
+}
+
+/* Низ */
+.footer-bottom {
+  text-align: center;
+}
+.copy {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 14px;
+}
+.socials {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+.socials a img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff;
+  padding: 8px;
+}
+</style>
+</div>
+  <!-- Нижнее меню -->
+<nav class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur border-t border-gray-200 shadow z-50">
+  <div class="flex justify-around py-2">
+    <!-- Главная -->
+    <a href="phone.html" class="flex flex-col items-center text-xs font-medium text-lime-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M3 9.75L12 3l9 6.75V21a.75.75 0 01-.75.75H3.75A.75.75 0 013 21V9.75z"/>
+      </svg>
+      Главная
+    </a>
+    <!-- Путешествия -->
+    <a href="priority.html" class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2l4 8H8l4-8zm0 20v-8m0 0l-8-4m8 4l8-4"/>
+      </svg>
+      Priority
+    </a>
+    <!-- Купить -->
+    <a href="bilet.html" class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20h6m-6 0a2 2 0 01-2-2V8h10v10a2 2 0 01-2 2m-6 0h6"/>
+      </svg>
+      Купить
+    </a>
+    <!-- Информация -->
+    <a href="https://t.me/s7aveliihelper" class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h.01M12 4v10"/>
+      </svg>
+      Информация
+    </a>
+    <!-- Профиль -->
+    <a href="auth.html" class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1118.879 17.8M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+      </svg>
+      Профиль
+    </a>
+  </div>
+</nav>
+
+</body>
+</html>
