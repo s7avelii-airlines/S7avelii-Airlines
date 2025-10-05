@@ -1866,6 +1866,43 @@ function setDefaultCity(input){
   <div class="h-20"></div>
   
 <footer class="footer">
+  <!-- Верхняя часть (меню, как на картинке) -->
+<div class="footer-menu">
+  <div class="footer-column">
+    <h3>S7avelii Airlines</h3>
+    <ul>
+      <li><a href="#">О компании</a></li>
+      <li><a href="#">Устойчивое развитие</a></li>
+      <li><a href="#">Партнеры</a></li>
+      <li><a href="#">Контакты</a></li>
+      <li><a href="#">Вакансии</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-column">
+    <ul>
+      <li><a href="#">Офисы продаж и представительства</a></li>
+      <li><a href="#">Новости</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-column">
+    <h3>Информация</h3>
+    <ul>
+      <li><a href="#">Направления</a></li>
+      <li><a href="#">Рейсы</a></li>
+      <li><a href="#">Справочный центр</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-column">
+    <ul>
+      <li><a href="#">Подготовка груза к перевозке</a></li>
+      <li><a href="#">Требования по качеству для поставщиков</a></li>
+    </ul>
+  </div>
+</div>
+<hr>
   <!-- Верх -->
   <div class="footer-top">
     <div class="footer-actions">
@@ -1918,6 +1955,41 @@ function setDefaultCity(input){
   color:#111;
 }
 
+/* Меню в верхней части футера */
+.footer-menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+  margin-bottom: 30px;
+}
+.footer-column h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.footer-column ul li {
+  margin-bottom: 8px;
+}
+.footer-column ul li a {
+  color: #111;
+  text-decoration: none;
+  font-size: 14px;
+}
+.footer-column ul li a:hover {
+  text-decoration: underline;
+}
+hr {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 30px 0;
+}
+
+  
 /* Верх */
 .footer-top {
   display:flex;
