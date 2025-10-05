@@ -7,7 +7,6 @@
   <link rel="icon" href="images/favicon.png" type="image/png">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* сохранён внешний вид близкий к твоему */
     :root{--accent:#9cc42f;--muted:#8b97a6}
     *{box-sizing:border-box}
     body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f7fa;color:#1f2937}
@@ -87,12 +86,10 @@
           <div><div class="small-muted">ФИО</div><div id="fioField">—</div></div>
           <button class="btn" onclick="enableEdit('fio')">Изменить</button>
         </div>
-
         <div class="field">
           <div><div class="small-muted">Дата рождения</div><div id="dobField">—</div></div>
           <button class="btn" onclick="enableEdit('dob')">Изменить</button>
         </div>
-
         <div class="field">
           <div><div class="small-muted">Пол</div><div id="genderField">—</div></div>
           <button class="btn" onclick="enableEdit('gender')">Изменить</button>
@@ -103,7 +100,6 @@
           <div><div class="small-muted">E-mail</div><div id="emailField">—</div></div>
           <button class="btn" onclick="enableEdit('email')">Изменить</button>
         </div>
-
         <div class="field">
           <div><div class="small-muted">Телефон</div><div id="phoneField">—</div></div>
           <button class="btn" onclick="enableEdit('phone')">Изменить</button>
@@ -225,7 +221,7 @@
 
 <script>
 /* ================ CONFIG ================ */
-const API = ''; // same origin
+const API = ''; // если сервер на том же домене
 const el = id => document.getElementById(id);
 let currentUser = null;
 
@@ -237,450 +233,156 @@ function safeJson(res){ return res.json().catch(()=>({})); }
 document.addEventListener('DOMContentLoaded', async () => {
   attachHandlers();
   renderProducts();
-  await loadProfile();       // attempt load profile but do NOT redirect to auth on 401
+  await loadProfile();
   await loadCart();
 });
 
 /* ================ Handlers & UI ================ */
 function attachHandlers(){
-  // avatar input
   el('avatarInput').addEventListener('change', function(){
     const f = this.files[0]; if(!f) return;
     const r = new FileReader();
-    r.onload = async (ev) => {
-      const dataUrl = ev.target.result;
-      el('avatar').src = dataUrl;
-      // optimistic update
-      try {
-        await fetch(API + '/api/profile/update', {
-          method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include',
-          body: JSON.stringify({ avatar: dataUrl })
-        });
-        await loadProfile();
-      } catch(e){ console.warn('avatar update failed', e); }
-    };
+    r.onload = e=>{ el('avatar').src = e.target.result; updateProfile({avatar:e.target.result}); };
     r.readAsDataURL(f);
   });
-
-  // home user button (top-right) toggles to cabinet or auth
-  const homeBtn = document.getElementById('homeUserBtn');
-  homeBtn.addEventListener('click', () => {
-    if (currentUser) window.location.href = '/cabinet.html';
-    else window.location.href = '/auth.html';
-  });
 }
 
-// show/hide tab
-function showTab(evt){
-  evt && evt.preventDefault();
-  const tabId = evt ? evt.currentTarget.getAttribute('data-tab') : 'profileTab';
+function showTab(e){
   document.querySelectorAll('.tabs a').forEach(a=>a.classList.remove('active'));
-  if (evt) evt.currentTarget.classList.add('active');
-  ['profileTab','milesTab','shopTab','settingsTab'].forEach(id=>{
-    const node = el(id);
-    if(!node) return;
-    node.style.display = (id === tabId ? 'block' : 'none');
-  });
-  if (tabId === 'shopTab') loadCart();
+  e.currentTarget.classList.add('active');
+  const tab = e.currentTarget.dataset.tab;
+  document.querySelectorAll('.grid > div > section').forEach(s=>s.style.display='none');
+  el(tab).style.display='block';
 }
 
-/* ================ Profile load / apply ================ */
+function goTo(tabId){ document.querySelector(`.tabs a[data-tab="${tabId}"]`).click(); }
+
+/* ================ Profile ================ */
 async function loadProfile(){
-  try {
-    const res = await fetch(API + '/api/profile', { credentials: 'include' });
-    if (!res.ok) {
-      // not logged in or server error -> show guest state but don't redirect
-      showGuestState();
-      return;
-    }
-    const j = await res.json().catch(()=>({}));
-    currentUser = j.user || null;
-    applyProfile(currentUser);
-  } catch (e) {
-    console.warn('loadProfile failed', e);
-    showGuestState();
-  }
+  try{
+    const res = await fetch(API+'/api/profile'); 
+    if(res.status===401){ showGuestState(); return; }
+    const u = await safeJson(res);
+    currentUser = u;
+
+    el('fioHeader').textContent = u.fio || '—';
+    el('phoneHeader').textContent = u.phone || '—';
+    el('avatar').src = u.avatar || 'https://via.placeholder.com/150';
+
+    el('fioField').textContent = u.fio || '—';
+    el('dobField').textContent = u.dob || '—';
+    el('genderField').textContent = u.gender || '—';
+    el('emailField').textContent = u.email || '—';
+    el('phoneField').textContent = u.phone || '—';
+    el('cardField').textContent = u.card_number || '—';
+    el('cardTypeField').textContent = u.card_type || '—';
+    el('bonusMiles').textContent = u.bonus_miles ?? 0;
+    el('milesBonusStat').textContent = u.bonus_miles ?? 0;
+    el('milesStatusStat').textContent = u.status_miles ?? 0;
+  }catch(err){ console.error(err); }
 }
 
-function showGuestState(){
-  currentUser = null;
-  el('fioHeader').textContent = 'Гость';
-  el('fioField').textContent = '—';
-  el('dobField').textContent = '—';
-  el('genderField').textContent = '—';
-  el('emailField').textContent = '—';
-  el('phoneField').textContent = '—';
-  el('cardField').textContent = '—';
-  el('cardTypeField').textContent = '—';
-  el('avatar').src = 'https://via.placeholder.com/150';
-  el('bonusMiles').textContent = '—';
-  el('milesProgressBar').style.width = '0%';
-  el('milesProgressBar2').style.width = '0%';
-  el('homeUserBtn').textContent = 'Вход';
-  renderOrders([]);
+async function enableEdit(field){
+  const val = prompt('Введите новое значение:', currentUser?.[field==='cardNumber'?'card_number':field] || '');
+  if(val===null) return;
+  const data = {};
+  if(field==='cardNumber') data.card_number = val;
+  else data[field] = val;
+  await updateProfile(data);
+  await loadProfile();
 }
 
-// apply profile data into UI
-function applyProfile(u){
-  if(!u) return showGuestState();
-  currentUser = u;
-  el('fioHeader').textContent = u.fio || 'Пользователь';
-  el('phoneHeader').textContent = u.phone || '';
-  el('fioField').textContent = u.fio || '—';
-  el('dobField').textContent = u.dob || '—';
-  el('genderField').textContent = u.gender || '—';
-  el('emailField').textContent = u.email || '—';
-  el('phoneField').textContent = u.phone || '—';
-  el('cardField').textContent = u.cardNumber || '—';
-  el('cardTypeField').textContent = u.cardType || '—';
-  el('bonusMiles').textContent = (u.bonusMiles ?? 0);
-  if (u.avatar) el('avatar').src = u.avatar;
-  el('homeUserBtn').textContent = u.avatar ? '' : (u.fio ? u.fio.split(' ')[0] : 'Профиль');
-  if (u.avatar) {
-    // show small image inside home button
-    el('homeUserBtn').innerHTML = `<img src="${u.avatar}" alt="avatar" style="width:36px;height:36px;border-radius:999px;object-fit:cover">`;
-  }
-  // progress bars
-  const bonus = Number(u.bonusMiles || 0);
-  const status = Number(u.statusMiles || 0);
-  // define thresholds (example) — you can adapt thresholds per cardType
-  const nextLevelTarget = determineNextLevelTarget(u.cardType || 'Classic');
-  const percent = Math.min(100, Math.round((bonus/nextLevelTarget)*100));
-  el('milesProgressBar').style.width = percent + '%';
-  el('milesLabelLeft').textContent = bonus + ' миль';
-  el('milesLabelRight').textContent = nextLevelTarget + ' для уровня';
-  el('milesBonusStat').textContent = bonus;
-  el('milesStatusStat').textContent = status;
-  // second miles progress (status miles)
-  const statusTarget = Math.max(1, nextLevelTarget); // reuse
-  const percent2 = Math.min(100, Math.round((status / statusTarget) * 100));
-  el('milesProgressBar2').style.width = percent2 + '%';
-  el('nextLevelLeft').textContent = `${status} / ${statusTarget}`;
-  el('nextLevelRight').textContent = `${u.cardType || 'Classic'}`;
-  // privileges example
-  renderPrivileges(u.cardType || 'Classic');
-  // orders
-  renderOrders(u.orders || []);
-}
-
-/* determine target miles for next level (simple rules, can be adjusted) */
-function determineNextLevelTarget(cardType){
-  if (cardType === 'VIP') return 50000;
-  if (cardType === 'Classic') return 5000;
-  return 5000;
-}
-
-function renderPrivileges(cardType){
-  const map = {
-    Classic: ['Накопление бонусных миль', 'Акции и спецпредложения'],
-    VIP: ['Приоритетная регистрация', 'Доступ в бизнес-зал', 'Дополнительные бонусы']
-  };
-  const list = el('privilegesList');
-  list.innerHTML = '<h4>Привилегии:</h4>';
-  const ul = document.createElement('ul');
-  (map[cardType] || map['Classic']).forEach(p => {
-    const li = document.createElement('li');
-    li.textContent = '• ' + p;
-    ul.appendChild(li);
-  });
-  list.appendChild(ul);
-}
-
-/* ================ Inline edit ================ */
-function enableEdit(field){
-  const map = {
-    fio: 'fioField', dob: 'dobField', gender: 'genderField',
-    email: 'emailField', phone: 'phoneField', cardNumber: 'cardField'
-  };
-  const id = map[field];
-  if(!id) return;
-  const container = el(id);
-  const current = container.textContent === '—' ? '' : container.textContent;
-  container.innerHTML = '';
-  const input = document.createElement('input');
-  input.value = current;
-  input.style.width = '220px';
-  input.type = (field === 'email') ? 'email' : (field === 'phone') ? 'tel' : 'text';
-  const ok = document.createElement('button');
-  ok.className = 'btn';
-  ok.textContent = 'OK';
-  ok.style.marginLeft = '8px';
-  ok.onclick = async () => {
-    const value = input.value.trim();
-    container.textContent = value || '—';
-    if (field === 'fio') el('fioHeader').textContent = value || 'Пользователь';
-    // send update
-    try {
-      const body = {};
-      // server expects keys like 'fio', 'phone', etc. For cardNumber use cardNumber
-      body[field] = value || '';
-      const res = await fetch(API + '/api/profile/update', {
-        method: 'POST', headers: {'Content-Type':'application/json'}, credentials: 'include',
-        body: JSON.stringify(body)
-      });
-      if (res.ok) {
-        const j = await safeJson(res);
-        if (j.user) applyProfile(j.user);
-        else await loadProfile();
-      } else {
-        // reload to show true server state
-        await loadProfile();
-      }
-    } catch (e) {
-      console.warn('update failed', e);
-      await loadProfile();
-    }
-  };
-  container.appendChild(input);
-  container.appendChild(ok);
-  input.focus();
-}
-
-/* ================ Products (simple static list) ================ */
-const PRODUCTS = [
-  { id:'p1', title:'Блокнот S7avelii', price:550, image:'images/photo_5330078908990750485_y.avif' },
-  { id:'p2', title:'Комбо Блокнот + Футболка', price:2350, image:'images/photo_5330078908990750484_y.avif' },
-  { id:'p3', title:'Фирменная футболка', price:1900, image:'images/photo_5332515869139530693_y.avif' },
-  { id:'p4', title:'Комбо Путешественник', price:4500, image:'images/photo_5330078908990750483_y.avif' }
-];
-
-function renderProducts(){
-  const grid = el('productGrid');
-  grid.innerHTML = '';
-  PRODUCTS.forEach(p => {
-    const card = document.createElement('div');
-    card.style.background = '#fff';
-    card.style.borderRadius = '10px';
-    card.style.padding = '10px';
-    card.style.display = 'flex';
-    card.style.flexDirection = 'column';
-    card.style.gap = '8px';
-    card.innerHTML = `
-      <img src="${p.image}" alt="${p.title}" style="width:100%;height:140px;object-fit:cover;border-radius:8px">
-      <div style="font-weight:600">${p.title}</div>
-      <div style="font-weight:700">${fmtPrice(p.price)}</div>
-      <div style="margin-top:auto;display:flex;gap:8px">
-        <button class="btn" data-buy="${p.id}">Купить</button>
-        <button class="btn secondary" data-add="${p.id}">В корзину</button>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-  // attach handlers
-  grid.querySelectorAll('[data-add]').forEach(btn=>{
-    btn.addEventListener('click', async () => {
-      const id = btn.getAttribute('data-add');
-      const product = PRODUCTS.find(x=>x.id===id);
-      if (!product) return alert('Товар не найден');
-      try {
-        const res = await fetch(API + '/api/cart/add', {
-          method: 'POST', headers: {'Content-Type':'application/json'}, credentials:'include',
-          body: JSON.stringify({ title: product.title, price: product.price, image: product.image, qty: 1 })
-        });
-        if (!res.ok) {
-          const j = await safeJson(res);
-          if (res.status === 401) return window.location.href = '/auth.html';
-          return alert(j.error || 'Ошибка добавления в корзину');
-        }
-        alert('Добавлено в корзину');
-        if (document.querySelector('.tabs a.active')?.getAttribute('data-tab') === 'shopTab') loadCart();
-      } catch (e) { alert('Ошибка сети'); }
+async function updateProfile(data){
+  try{
+    await fetch(API+'/api/profile/update',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(data)
     });
-  });
-  grid.querySelectorAll('[data-buy]').forEach(btn=>{
-    btn.addEventListener('click', async ()=>{
-      const id = btn.getAttribute('data-buy');
-      const product = PRODUCTS.find(x=>x.id===id);
-      if (!product) return;
-      // redirect to telegram/shop link or add and checkout; here we add then open checkout
-      try {
-        const addRes = await fetch(API + '/api/cart/add', {
-          method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include',
-          body: JSON.stringify({ title: product.title, price: product.price, image: product.image, qty: 1 })
-        });
-        if (!addRes.ok) {
-          const j = await safeJson(addRes);
-          if (addRes.status === 401) return window.location.href = '/auth.html';
-          return alert(j.error || 'Ошибка добавления');
-        }
-        // go to shop tab
-        goTo('shopTab');
-        loadCart();
-      } catch (e) { alert('Ошибка сети'); }
-    });
-  });
+  }catch(err){ console.error(err); }
 }
 
-/* ================ Cart ================ */
-async function loadCart(){
-  const list = el('cartList');
-  list.innerHTML = '<div class="muted">Загрузка...</div>';
-  try {
-    const res = await fetch(API + '/api/cart', { credentials: 'include' });
-    if (!res.ok) {
-      const j = await safeJson(res);
-      if (res.status === 401) {
-        list.innerHTML = `<div class="muted">Корзина доступна после входа — <a href="/auth.html">войти</a></div>`;
-        el('checkoutBtn').disabled = true;
-        return;
-      }
-      list.innerHTML = `<div class="muted">Ошибка загрузки корзины</div>`;
-      el('checkoutBtn').disabled = true;
-      return;
-    }
-    const j = await res.json();
-    renderCart(j.cart || []);
-  } catch (e) {
-    list.innerHTML = `<div class="muted">Ошибка сети</div>`;
-    el('checkoutBtn').disabled = true;
-  }
-}
-
-function renderCart(items){
-  const list = el('cartList');
-  if (!items || items.length === 0) {
-    list.innerHTML = '<div class="muted">Корзина пуста</div>';
-    el('cartTotal').textContent = 'Итого: 0 ₽';
-    el('checkoutBtn').disabled = true;
-    return;
-  }
-  let total = 0;
-  const container = document.createElement('div');
-  container.style.display = 'flex';
-  container.style.flexDirection = 'column';
-  container.style.gap = '10px';
-  items.forEach(it=>{
-    const div = document.createElement('div');
-    div.style.display = 'flex';
-    div.style.alignItems = 'center';
-    div.style.justifyContent = 'space-between';
-    div.style.borderBottom = '1px dashed rgba(0,0,0,0.06)';
-    div.style.padding = '8px 0';
-    const priceNum = Number(it.price) || 0;
-    total += priceNum * (it.qty || 1);
-    div.innerHTML = `
-      <div style="display:flex;gap:10px;align-items:center;flex:1">
-        <img src="${it.image||'https://via.placeholder.com/64'}" style="width:64px;height:64px;object-fit:cover;border-radius:8px">
-        <div>
-          <div style="font-weight:600">${it.title}</div>
-          <div class="muted">${fmtPrice(it.price)} × ${it.qty || 1}</div>
-        </div>
-      </div>
-      <div style="text-align:right">
-        <div style="font-weight:700">${fmtPrice(priceNum*(it.qty||1))}</div>
-        <div style="margin-top:8px"><button class="btn secondary" data-remove="${it.id}">Удалить</button></div>
-      </div>
-    `;
-    container.appendChild(div);
-  });
-  list.innerHTML = '';
-  list.appendChild(container);
-  el('cartTotal').textContent = 'Итого: ' + fmtPrice(total);
-  el('checkoutBtn').disabled = false;
-  // attach remove handlers
-  list.querySelectorAll('[data-remove]').forEach(btn=>{
-    btn.addEventListener('click', async () => {
-      const id = btn.getAttribute('data-remove');
-      if (!confirm('Удалить товар из корзины?')) return;
-      try {
-        const res = await fetch(API + '/api/cart/' + encodeURIComponent(id), { method: 'DELETE', credentials: 'include' });
-        if (!res.ok) { const j = await safeJson(res); return alert(j.error || 'Ошибка удаления'); }
-        await loadCart();
-      } catch (e) { alert('Ошибка сети'); }
-    });
-  });
-}
-
-async function checkout(){
-  if(!confirm('Оформить заказ?')) return;
-  try {
-    const res = await fetch(API + '/api/cart/checkout', { method: 'POST', credentials: 'include' });
-    const j = await safeJson(res);
-    if (!res.ok) return alert(j.error || 'Ошибка оформления');
-    // on success, refresh cart and profile (orders)
-    await loadCart();
-    await loadProfile();
-    el('cartMsg').textContent = 'Заказ принят';
-    setTimeout(()=> el('cartMsg').textContent = '', 3000);
-  } catch (e) { alert('Ошибка сети'); }
-}
-
-/* ================ Orders rendering ================ */
-function renderOrders(orders){
-  const dest = el('ordersContainer');
-  dest.innerHTML = '';
-  if (!orders || !orders.length) { dest.textContent = 'Заказы отсутствуют'; return; }
-  orders.slice().reverse().forEach(o=>{
-    const d = document.createElement('div');
-    d.style.padding = '8px 0';
-    d.style.borderBottom = '1px solid rgba(0,0,0,0.04)';
-    d.innerHTML = `<strong>Заказ ${o.id}</strong> — ${new Date(o.createdAt).toLocaleString()} — ${o.status}<br>Товаров: ${o.items.length} — Сумма: ${fmtPrice(o.total)}`;
-    dest.appendChild(d);
-  });
-}
-
-/* ================ Settings actions ================ */
+/* ================ Password & VK/Telegram ================ */
 async function changePassword(){
   const v = el('newPassword').value.trim();
-  if (!v) return alert('Введите новый пароль');
-  try {
-    const res = await fetch(API + '/api/profile/update', {
-      method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include',
-      body: JSON.stringify({ password: v })
-    });
-    const j = await safeJson(res);
-    if (!res.ok) return alert(j.error || 'Ошибка');
-    el('pwdMsg').textContent = 'Пароль обновлён';
-    el('newPassword').value = '';
-    setTimeout(()=> el('pwdMsg').textContent = '', 3000);
-  } catch (e) { alert('Ошибка сети'); }
+  if(!v){ el('pwdMsg').textContent='Введите пароль'; return; }
+  await updateProfile({password:v});
+  el('pwdMsg').textContent='Пароль обновлён';
+  el('newPassword').value='';
 }
-
 async function bindVK(){
   const v = el('vkHandle').value.trim();
-  if (!v) return el('vkMsg').textContent = 'Введите VK id';
-  try {
-    const res = await fetch(API + '/api/profile/update', {
-      method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include',
-      body: JSON.stringify({ vk: v })
-    });
-    const j = await safeJson(res);
-    if (!res.ok) return el('vkMsg').textContent = j.error || 'Ошибка';
-    el('vkMsg').textContent = 'VK привязан';
-    setTimeout(()=> el('vkMsg').textContent = '', 3000);
-  } catch (e) { el('vkMsg').textContent = 'Ошибка сети'; }
+  if(!v){ el('vkMsg').textContent='Введите VK'; return; }
+  await updateProfile({vk:v});
+  el('vkMsg').textContent='Привязано';
 }
-
 async function bindTelegram(){
   const v = el('tgHandle').value.trim();
-  if (!v) return el('tgMsg').textContent = 'Введите telegram handle';
-  try {
-    const res = await fetch(API + '/api/profile/update', {
-      method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include',
-      body: JSON.stringify({ telegram: v })
-    });
-    const j = await safeJson(res);
-    if (!res.ok) return el('tgMsg').textContent = j.error || 'Ошибка';
-    el('tgMsg').textContent = 'Telegram привязан';
-    setTimeout(()=> el('tgMsg').textContent = '', 3000);
-  } catch (e) { el('tgMsg').textContent = 'Ошибка сети'; }
+  if(!v){ el('tgMsg').textContent='Введите Telegram'; return; }
+  await updateProfile({telegram:v});
+  el('tgMsg').textContent='Привязано';
+}
+function logout(){ fetch(API+'/api/logout'); location.reload(); }
+
+/* ================ Guest ================ */
+function showGuestState(){
+  el('fioHeader').textContent='Гость';
+  el('phoneHeader').textContent='—';
+  document.querySelectorAll('.grid > div > section').forEach(s=>s.style.display='none');
 }
 
-/* ================ Logout ================ */
-async function logout(){
-  try {
-    await fetch(API + '/api/logout', { method: 'POST', credentials: 'include' });
-  } catch (e) { console.warn('logout failed', e); }
-  // show guest state and redirect to auth page
-  showGuestState();
-  window.location.href = '/auth.html';
+/* ================ Shop & Cart ================ */
+let products = [];
+async function renderProducts(){
+  try{
+    const res = await fetch(API+'/api/products');
+    products = await safeJson(res);
+    const html = products.map(p=>`<div class="card"><div><strong>${p.name}</strong></div><div>${fmtPrice(p.price)}</div><button class="btn" onclick="addToCart(${p.id})">В корзину</button></div>`).join('');
+    el('productGrid').innerHTML = html;
+  }catch(err){ console.error(err); }
 }
 
-/* ================ Helpers ================ */
-function goTo(tab){
-  const a = [...document.querySelectorAll('.tabs a')].find(x=>x.getAttribute('data-tab')===tab);
-  if(a) { a.click(); a.classList.add('active'); showTab({ currentTarget: a, preventDefault: ()=>{} }); }
+let cart = [];
+async function loadCart(){
+  try{
+    const res = await fetch(API+'/api/cart'); cart = await safeJson(res);
+    renderCart();
+  }catch(err){ console.error(err); }
 }
+function renderCart(){
+  if(!cart.length){ el('cartList').textContent='Корзина пуста'; el('cartTotal').textContent='Итого: 0 ₽'; return; }
+  let total = 0;
+  const html = cart.map(item=>{
+    total+=item.price*item.qty;
+    return `<div class="field"><div>${item.name} x${item.qty}</div><div>${fmtPrice(item.price*item.qty)}</div><button class="btn red" onclick="removeFromCart(${item.id})">Удалить</button></div>`;
+  }).join('');
+  el('cartList').innerHTML = html;
+  el('cartTotal').textContent='Итого: '+fmtPrice(total);
+}
+async function addToCart(id){
+  await fetch(API+'/api/cart/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+  await loadCart();
+}
+async function removeFromCart(id){
+  await fetch(API+'/api/cart/remove',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+  await loadCart();
+}
+async function checkout(){
+  await fetch(API+'/api/cart/checkout',{method:'POST'});
+  cart=[]; renderCart();
+  alert('Заказ оформлен');
+}
+
+/* ================ Orders ================ */
+async function loadOrders(){
+  try{
+    const res = await fetch(API+'/api/orders'); 
+    const orders = await safeJson(res);
+    if(!orders.length){ el('ordersContainer').textContent='Нет заказов'; return; }
+    el('ordersContainer').innerHTML = orders.map(o=>`<div class="field"><div>${o.name} x${o.qty}</div><div>${fmtPrice(o.price*o.qty)}</div></div>`).join('');
+  }catch(err){ console.error(err); }
+}
+loadOrders();
 </script>
 </body>
 </html>
