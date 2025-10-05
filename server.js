@@ -14,86 +14,68 @@ const PORT = process.env.PORT || 3000;
 // PostgreSQL
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
 });
 
-// Middleware
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Session store
+// Сессии
 app.use(session({
   store: new PgSession({ pool, tableName: 'session' }),
   name: 's7avelii.sid',
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 7 * 24 * 60 * 60 * 1000
-  }
+  cookie: { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', maxAge: 7*24*60*60*1000 }
 }));
 
-// Helpers
-function makeId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-}
+// Хелперы
 function withoutPassword(user) {
-  const copy = { ...user };
-  delete copy.password;
-  return copy;
+  const u = { ...user };
+  delete u.password;
+  return u;
 }
 
-// ==========================
-// Authentication
-// ==========================
-
-// Register
+// Регистрация
 app.post('/api/register', async (req, res) => {
   try {
     const { fio, phone, email, password, cardNumber, cardType, dob, gender } = req.body;
-    if (!fio || !phone || !password)
-      return res.status(400).json({ error: 'ФИО, телефон и пароль обязательны' });
+    if (!fio || !phone || !password) return res.status(400).json({ error: 'ФИО, телефон и пароль обязательны' });
 
     const { rows: exists } = await pool.query(
       'SELECT * FROM users WHERE phone=$1 OR (email=$2 AND $2<>\'\')', [phone, email]
     );
-    if (exists.length > 0)
-      return res.status(400).json({ error: 'Пользователь уже существует' });
+    if (exists.length) return res.status(400).json({ error: 'Пользователь уже существует' });
 
     const hashed = await bcrypt.hash(password, 10);
-    const id = makeId();
-
     const { rows } = await pool.query(`
-      INSERT INTO users (id,fio,phone,email,password,card_number,card_type,dob,gender,avatar,bonus_miles,role,created_at)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'',0,'user',NOW()) RETURNING *`,
-      [id,fio,phone,email||'',hashed,cardNumber||'',cardType||'',dob||'',gender||'']
+      INSERT INTO users (fio, phone, email, password, card_number, card_type, dob, gender, role, created_at)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'user',NOW()) RETURNING *`,
+      [fio, phone, email||'', hashed, cardNumber||'', cardType||'', dob||'', gender||'']
     );
 
     const user = rows[0];
     req.session.userId = user.id;
     res.json({ ok: true, user: withoutPassword(user) });
   } catch (err) {
-    console.error('register error', err);
+    console.error(err);
     res.status(500).json({ error: 'Ошибка сервера' });
   }
 });
 
-// Login
+// Вход
 app.post('/api/login', async (req, res) => {
   try {
     const { phone, email, password } = req.body;
-    if ((!phone && !email) || !password)
-      return res.status(400).json({ error: 'Телефон/email и пароль обязательны' });
+    if ((!phone && !email) || !password) return res.status(400).json({ error: 'Телефон/email и пароль обязательны' });
 
     const { rows } = await pool.query(
       'SELECT * FROM users WHERE phone=$1 OR (email=$2 AND $2<>\'\')', [phone, email]
     );
-    if (rows.length === 0) return res.status(400).json({ error: 'Пользователь не найден' });
+    if (!rows.length) return res.status(400).json({ error: 'Пользователь не найден' });
 
     const user = rows[0];
     const ok = await bcrypt.compare(password, user.password);
@@ -102,12 +84,12 @@ app.post('/api/login', async (req, res) => {
     req.session.userId = user.id;
     res.json({ ok: true, user: withoutPassword(user) });
   } catch (err) {
-    console.error('login error', err);
+    console.error(err);
     res.status(500).json({ error: 'Ошибка сервера' });
   }
 });
 
-// Logout
+// Выход
 app.post('/api/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) console.warn(err);
@@ -116,110 +98,64 @@ app.post('/api/logout', (req, res) => {
   });
 });
 
-// ==========================
-// Profile
-// ==========================
+// Профиль
 app.get('/api/profile', async (req, res) => {
   if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
   const { rows } = await pool.query('SELECT * FROM users WHERE id=$1', [req.session.userId]);
-  if (rows.length === 0) return res.status(404).json({ error: 'Пользователь не найден' });
+  if (!rows.length) return res.status(404).json({ error: 'Пользователь не найден' });
   res.json({ ok: true, user: withoutPassword(rows[0]) });
 });
 
+// Обновление профиля
 app.post('/api/profile/update', async (req, res) => {
   if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
   const allowed = ['fio','phone','email','cardNumber','cardType','dob','gender','avatar','bonusMiles'];
-  const updates = [];
-  const values = [];
+  const updates = [], values = [];
   let i = 1;
   for (const k of allowed) {
     if (req.body[k] !== undefined) {
-      updates.push(`${k === 'cardNumber' ? 'card_number' : k}=$${i}`);
+      updates.push(`${k==='cardNumber'?'card_number':k}=$${i}`);
       values.push(req.body[k]);
       i++;
     }
   }
-  if (updates.length === 0) return res.json({ ok: true });
+  if (!updates.length) return res.json({ ok: true });
   values.push(req.session.userId);
-  const { rows } = await pool.query(
-    `UPDATE users SET ${updates.join(', ')} WHERE id=$${i} RETURNING *`, values
-  );
+  const { rows } = await pool.query(`UPDATE users SET ${updates.join(', ')} WHERE id=$${i} RETURNING *`, values);
   res.json({ ok: true, user: withoutPassword(rows[0]) });
 });
 
-// ==========================
-// Cart (магазин)
-// ==========================
-
-// Создать/обновить корзину
-app.post('/api/cart', async (req, res) => {
-  if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
-  try {
-    const { productId, quantity } = req.body;
-    if (!productId || !quantity) return res.status(400).json({ error: 'Неверные данные' });
-
-    // Проверка существующего товара в корзине
-    const { rows: exists } = await pool.query(
-      'SELECT * FROM cart_items WHERE user_id=$1 AND product_id=$2',
-      [req.session.userId, productId]
-    );
-
-    if (exists.length > 0) {
-      await pool.query(
-        'UPDATE cart_items SET quantity=$1 WHERE id=$2',
-        [quantity, exists[0].id]
-      );
-    } else {
-      await pool.query(
-        'INSERT INTO cart_items (user_id, product_id, quantity) VALUES ($1,$2,$3)',
-        [req.session.userId, productId, quantity]
-      );
-    }
-
-    res.json({ ok: true });
-  } catch (err) {
-    console.error('cart error', err);
-    res.status(500).json({ error: 'Ошибка сервера' });
-  }
-});
-
-// Получить корзину пользователя
+// Корзина магазина
 app.get('/api/cart', async (req, res) => {
   if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
-  try {
-    const { rows } = await pool.query(`
-      SELECT ci.id as cart_item_id, ci.quantity, p.*
-      FROM cart_items ci
-      JOIN products p ON p.id=ci.product_id
-      WHERE ci.user_id=$1
-    `, [req.session.userId]);
-    res.json({ ok: true, items: rows });
-  } catch (err) {
-    console.error('cart get error', err);
-    res.status(500).json({ error: 'Ошибка сервера' });
-  }
+  const { rows } = await pool.query('SELECT * FROM cart WHERE user_id=$1', [req.session.userId]);
+  res.json({ ok: true, cart: rows });
 });
 
-// Удалить товар из корзины
-app.delete('/api/cart/:id', async (req, res) => {
+app.post('/api/cart/add', async (req, res) => {
   if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
-  try {
-    await pool.query('DELETE FROM cart_items WHERE id=$1 AND user_id=$2', [req.params.id, req.session.userId]);
-    res.json({ ok: true });
-  } catch (err) {
-    console.error('cart delete error', err);
-    res.status(500).json({ error: 'Ошибка сервера' });
+  const { productId, quantity } = req.body;
+  if (!productId || !quantity) return res.status(400).json({ error: 'productId и quantity обязательны' });
+
+  const { rows: exists } = await pool.query('SELECT * FROM cart WHERE user_id=$1 AND product_id=$2', [req.session.userId, productId]);
+  if (exists.length) {
+    await pool.query('UPDATE cart SET quantity=quantity+$1 WHERE user_id=$2 AND product_id=$3', [quantity, req.session.userId, productId]);
+  } else {
+    await pool.query('INSERT INTO cart (user_id, product_id, quantity) VALUES ($1,$2,$3)', [req.session.userId, productId, quantity]);
   }
+  res.json({ ok: true });
 });
 
-// ==========================
+app.post('/api/cart/remove', async (req, res) => {
+  if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
+  const { productId } = req.body;
+  if (!productId) return res.status(400).json({ error: 'productId обязателен' });
+  await pool.query('DELETE FROM cart WHERE user_id=$1 AND product_id=$2', [req.session.userId, productId]);
+  res.json({ ok: true });
+});
+
 // SPA fallback
-// ==========================
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 
-// ==========================
-// Listen
-// ==========================
 app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+
