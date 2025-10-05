@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
@@ -10,23 +11,21 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// PostgreSQL
+// --- Подключение к PostgreSQL ---
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false } // Для облачных БД
 });
 
+// --- Middleware ---
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Session store
+// --- Сессии через PostgreSQL ---
 app.use(session({
-  store: new PgSession({
-    pool: pool,
-    tableName: 'session'
-  }),
+  store: new PgSession({ pool, tableName: 'session' }),
   name: 's7avelii.sid',
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -39,7 +38,7 @@ app.use(session({
   }
 }));
 
-// Helpers
+// --- Хелперы ---
 function makeId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
@@ -49,7 +48,7 @@ function withoutPassword(user) {
   return copy;
 }
 
-// Register
+// --- Регистрация ---
 app.post('/api/register', async (req, res) => {
   try {
     const { fio, phone, email, password, cardNumber, cardType, dob, gender } = req.body;
@@ -57,7 +56,7 @@ app.post('/api/register', async (req, res) => {
       return res.status(400).json({ error: 'ФИО, телефон и пароль обязательны' });
 
     const { rows: exists } = await pool.query(
-      'SELECT * FROM users WHERE phone=$1 OR (email=$2 AND $2<>\'\')', [phone, email]
+      'SELECT 1 FROM users WHERE phone=$1 OR (email=$2 AND $2<>\'\')', [phone, email]
     );
     if (exists.length > 0)
       return res.status(400).json({ error: 'Пользователь уже существует' });
@@ -66,8 +65,10 @@ app.post('/api/register', async (req, res) => {
     const id = makeId();
 
     const { rows } = await pool.query(`
-      INSERT INTO users (id,fio,phone,email,password,card_number,card_type,dob,gender,avatar,bonus_miles,role,created_at)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'',0,'user',NOW()) RETURNING *`,
+      INSERT INTO users
+      (id,fio,phone,email,password,card_number,card_type,dob,gender,avatar,bonus_miles,role,created_at)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'',0,'user',NOW())
+      RETURNING *`,
       [id,fio,phone,email||'',hashed,cardNumber||'',cardType||'',dob||'',gender||'']
     );
 
@@ -80,7 +81,7 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// Login
+// --- Вход ---
 app.post('/api/login', async (req, res) => {
   try {
     const { phone, email, password } = req.body;
@@ -104,7 +105,7 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Logout
+// --- Выход ---
 app.post('/api/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) console.warn(err);
@@ -113,7 +114,7 @@ app.post('/api/logout', (req, res) => {
   });
 });
 
-// Profile
+// --- Профиль ---
 app.get('/api/profile', async (req, res) => {
   if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
   const { rows } = await pool.query('SELECT * FROM users WHERE id=$1', [req.session.userId]);
@@ -121,7 +122,7 @@ app.get('/api/profile', async (req, res) => {
   res.json({ ok: true, user: withoutPassword(rows[0]) });
 });
 
-// Update profile
+// --- Обновление профиля ---
 app.post('/api/profile/update', async (req, res) => {
   if (!req.session.userId) return res.status(401).json({ error: 'Не авторизован' });
   const allowed = ['fio','phone','email','cardNumber','cardType','dob','gender','avatar','bonusMiles'];
@@ -130,7 +131,7 @@ app.post('/api/profile/update', async (req, res) => {
   let i = 1;
   for (const k of allowed) {
     if (req.body[k] !== undefined) {
-      updates.push(`${k === 'cardNumber' ? 'card_number' : k}=$${i}`);
+      updates.push(`${k==='cardNumber'?'card_number':k}=$${i}`);
       values.push(req.body[k]);
       i++;
     }
@@ -143,9 +144,9 @@ app.post('/api/profile/update', async (req, res) => {
   res.json({ ok: true, user: withoutPassword(rows[0]) });
 });
 
-// SPA fallback
+// --- SPA fallback ---
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => console.log(`Server on ${PORT}`));
+app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
