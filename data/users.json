@@ -1,19 +1,14 @@
 [
   {
-    "id": "mbr92a6zqk",
+    "id": "u12345",
     "fio": "Иван Иванов",
-    "dob": "01.01.1990",
-    "gender": "М",
     "email": "ivan@example.com",
-    "phone": "+79991234567",
-    "password": "$2a$10$0FzzmPr5M...",
-    "cardNumber": "1234567890",
-    "cardType": "VIP",
-    "bonusMiles": 0,
-    "cart": [],
-    "orders": [],
-    "createdAt": "2025-10-04T20:32:00.000Z"
+    "password": "hashed_password",
+    "bonusMiles": 5320,
+    "avatar": "",
+    "cardNumber": "S7A123456",
+    "cardType": "Classic",
+    "registeredAt": "2024-05-10T12:40:00Z"
   }
-  
 ]
 
