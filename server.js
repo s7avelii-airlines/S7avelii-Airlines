@@ -136,3 +136,4 @@ app.get("/api/profile", async (req, res) => {
 app.get("/", (_, res) => res.send("✅ Сервер S7avelii работает! 🚀"));
 
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
