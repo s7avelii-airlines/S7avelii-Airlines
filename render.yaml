@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: s7avelii-server
+    env: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node server.js
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
