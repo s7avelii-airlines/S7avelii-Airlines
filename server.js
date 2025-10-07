@@ -2,7 +2,6 @@
 // Simple file-based server for users + cart + profile
 // Uses bcryptjs (no native build), express-session for sessions.
 // Configure SESSION_SECRET in env for production.
-
 const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
