@@ -1,19 +1,16 @@
 import express from 'express';
 import path from 'path';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// Папка с твоим статичным сайтом
 const __dirname = path.resolve();
+
+// Папка со статичным сайтом
 const PUBLIC_DIR = path.join(__dirname, 'public');
 
 app.use(express.static(PUBLIC_DIR));
 
-// SPA fallback: если путь не найден, отдаём index.html
+// SPA fallback: отдаём index.html для всех маршрутов
 app.get('*', (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
