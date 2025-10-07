@@ -1,5 +1,5 @@
 {
-  "name": "s7avelii-server",
+  "name": "s7avelii-static-server",
   "version": "1.0.0",
   "type": "module",
   "main": "server.js",
@@ -7,7 +7,6 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.19.2",
-    "dotenv": "^16.3.1"
+    "express": "^4.19.2"
   }
 }
