@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: s7avelii-frontend
+    env: static
+    buildCommand: ""
+    staticPublishPath: public
+    pullRequestPreviewsEnabled: false
+
+  - type: web
+    name: s7avelii-api
+    env: node
+    rootDir: server
+    buildCommand: "npm install"
+    startCommand: "npm start"
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
