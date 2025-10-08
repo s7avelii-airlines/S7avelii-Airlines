@@ -13,7 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const __dirname = path.resolve();
 
-// ==== Настройки базы ====
+// ==== База данных ====
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
@@ -32,8 +32,8 @@ app.use(
   })
 );
 
-// ==== Папка со статикой ====
-const PUBLIC_DIR = path.join(__dirname, "../public");
+// ==== Статика ====
+const PUBLIC_DIR = path.join(__dirname, "public");
 app.use(express.static(PUBLIC_DIR));
 
 // ==== Инициализация таблиц ====
@@ -85,7 +85,7 @@ async function initDB() {
 }
 initDB();
 
-// ==== Пользователь ====
+// ==== API Пользователи ====
 app.post("/api/register", async (req, res) => {
   try {
     const { fio, phone, email, password } = req.body;
@@ -140,13 +140,13 @@ app.post("/api/profile/update", async (req, res) => {
   res.json({ ok: true });
 });
 
-// ==== Продукты ====
+// ==== API Продукты ====
 app.get("/api/products", async (req, res) => {
   const { rows } = await pool.query("SELECT * FROM products ORDER BY id");
   res.json(rows);
 });
 
-// ==== Корзина ====
+// ==== API Корзина ====
 app.get("/api/cart", async (req, res) => {
   if (!req.session.userId) return res.json([]);
   const { rows } = await pool.query("SELECT cart FROM users WHERE id=$1", [req.session.userId]);
@@ -184,7 +184,7 @@ app.post("/api/cart/checkout", async (req, res) => {
   res.json({ ok: true });
 });
 
-// ==== Заказы ====
+// ==== API Заказы ====
 app.get("/api/orders", async (req, res) => {
   if (!req.session.userId) return res.json([]);
   const { rows } = await pool.query("SELECT * FROM orders WHERE user_id=$1 ORDER BY id DESC", [req.session.userId]);
@@ -194,5 +194,5 @@ app.get("/api/orders", async (req, res) => {
 // ==== SPA fallback ====
 app.get("*", (req, res) => res.sendFile(path.join(PUBLIC_DIR, "index.html")));
 
-// ==== Запуск ====
+// ==== Запуск сервера ====
 app.listen(PORT, () => console.log(`✅ Server started on ${PORT}`));
