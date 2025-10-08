@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Вход / Регистрация S7avelii</title>
+<title>Вход/Регистрация — S7avelii</title>
 <link rel="icon" href="images/favicon.png" type="image/png">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
@@ -49,9 +49,10 @@
   .hidden{display:none}
   .fade{opacity:0;transform:translateY(12px);pointer-events:none}
   .fade.show{display:block;opacity:1;transform:translateY(0);pointer-events:auto}
-  .row { display:flex; gap:10px; }
-  .card-type { display:inline-flex; align-items:center; gap:8px; margin-right:8px; margin-top:8px; }
+  .row { display:flex; gap:10px; flex-wrap: wrap; }
+  .card-type { display:inline-flex; align-items:center; gap:8px; margin-top:6px; }
   .card-type img { display:inline-block; vertical-align:middle; border-radius:6px; }
+  .small-muted{font-size:13px;color:var(--muted);margin-top:8px}
 </style>
 </head>
 <body>
@@ -80,9 +81,19 @@
 
     <form id="registerForm" class="fade hidden" autocomplete="on" novalidate>
       <input id="regFio" type="text" placeholder="ФИО" required autocomplete="name">
+      <input id="regDob" type="text" placeholder="Дата рождения (ДД.MM.ГГГГ)" autocomplete="bday">
+      <input id="regGender" type="text" placeholder="Пол">
       <input id="regEmail" type="email" placeholder="Email" required autocomplete="email">
       <input id="regPhone" type="tel" placeholder="Телефон" required autocomplete="tel" inputmode="tel">
       <input id="regPassword" type="password" placeholder="Пароль (мин. 6 символов)" required>
+      <input id="regCard" type="text" placeholder="Номер карты S7avelii Priority">
+
+      <div class="small-muted">Выберите тип карты:</div>
+      <div class="row">
+        <label class="card-type"><input type="radio" name="regCardType" value="VIP"> VIP <img src="images/vip_card.png" alt="VIP" width="60"></label>
+        <label class="card-type"><input type="radio" name="regCardType" value="Classic"> Classic <img src="images/classic_card.png" alt="Classic" width="60"></label>
+      </div>
+
       <button class="btn" id="regBtn" type="submit">Зарегистрироваться</button>
       <div id="regError" class="error" role="status" aria-live="assertive"></div>
       <div id="regSuccess" class="success" role="status" aria-live="polite"></div>
@@ -93,7 +104,7 @@
 </main>
 
 <script>
-const API = 'https://s7avelii-airlines-1.onrender.com'; // адрес твоего сервера Render
+const API = 'https://s7avelii-airlines-1.onrender.com';
 
 const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
@@ -110,7 +121,7 @@ function showForm(showLogin){
   const toShow = showLogin ? loginForm : registerForm;
   const toHide = showLogin ? registerForm : loginForm;
   toHide.classList.remove('show');
-  setTimeout(() => toHide.classList.add('hidden'), 360);
+  setTimeout(() => { toHide.classList.add('hidden'); }, 360);
   toShow.classList.remove('hidden');
   setTimeout(() => toShow.classList.add('show'), 10);
 
@@ -129,73 +140,92 @@ function showForm(showLogin){
   regSuccess.textContent = '';
 }
 
-switchBtn.addEventListener('click', e => {
+switchBtn.addEventListener('click', (e) => {
   e.preventDefault();
   showForm(!loginForm.classList.contains('show'));
 });
 
-// ======= Login =======
-loginForm.addEventListener('submit', async e => {
+loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   loginError.textContent = '';
   const phone = document.getElementById('loginPhone').value.trim();
   const password = document.getElementById('loginPassword').value;
-  if (!phone || !password) { loginError.textContent = 'Заполните все поля'; return; }
+
+  if (!phone || !password) {
+    loginError.textContent = 'Введите телефон и пароль.';
+    return;
+  }
 
   loginBtn.disabled = true;
   loginBtn.textContent = 'Проверка...';
 
   try {
-    const res = await fetch(`${API}/api/login`, {
-      method:'POST',
-      credentials:'include',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({phone,password})
+    const resp = await fetch(API + '/api/login', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({phone, password})
     });
-    const data = await res.json().catch(()=>({}));
-    if (!res.ok) {
+    const data = await resp.json().catch(()=>({}));
+    if (!resp.ok) {
       loginError.textContent = data.error || 'Ошибка входа';
-      loginBtn.disabled = false; loginBtn.textContent = 'Войти';
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Войти';
       return;
     }
     window.location.href = 'cabinet.html';
   } catch {
-    loginError.textContent = 'Ошибка сети';
-    loginBtn.disabled = false; loginBtn.textContent = 'Войти';
+    loginError.textContent = 'Ошибка сети. Попробуйте позже.';
+    loginBtn.disabled = false;
+    loginBtn.textContent = 'Войти';
   }
 });
 
-// ======= Register =======
-registerForm.addEventListener('submit', async e => {
+registerForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  regError.textContent = ''; regSuccess.textContent = '';
+  regError.textContent = '';
+  regSuccess.textContent = '';
+
   const fio = document.getElementById('regFio').value.trim();
+  const dob = document.getElementById('regDob').value.trim();
+  const gender = document.getElementById('regGender').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const phone = document.getElementById('regPhone').value.trim();
   const password = document.getElementById('regPassword').value;
+  const card = document.getElementById('regCard').value.trim();
+  const cardType = document.querySelector('input[name="regCardType"]:checked')?.value || '';
 
-  if (!fio || !email || !phone || !password) { regError.textContent = 'Заполните все поля'; return; }
+  if(!fio || !email || !phone || !password || password.length<6){
+    regError.textContent = 'Заполните обязательные поля корректно.';
+    return;
+  }
 
-  regBtn.disabled = true; regBtn.textContent = 'Регистрация...';
+  regBtn.disabled = true;
+  regBtn.textContent = 'Регистрация...';
 
   try {
-    const res = await fetch(`${API}/api/register`, {
-      method:'POST',
-      credentials:'include',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({fio,email,phone,password})
+    const resp = await fetch(API + '/api/register', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        fio, dob, gender, email, phone, password,
+        cardNumber: card, cardType
+      })
     });
-    const data = await res.json().catch(()=>({}));
-    if (!res.ok) {
+    const data = await resp.json().catch(()=>({}));
+    if(!resp.ok){
       regError.textContent = data.error || 'Ошибка регистрации';
-      regBtn.disabled = false; regBtn.textContent = 'Зарегистрироваться';
+      regBtn.disabled = false;
+      regBtn.textContent = 'Зарегистрироваться';
       return;
     }
-    regSuccess.textContent = 'Регистрация успешна! Перенаправляем...';
-    setTimeout(()=>window.location.href='cabinet.html',900);
+    regSuccess.textContent = 'Регистрация успешна — перенаправляем в кабинет...';
+    setTimeout(()=>window.location.href='cabinet.html', 800);
   } catch {
-    regError.textContent = 'Ошибка сети';
-    regBtn.disabled = false; regBtn.textContent = 'Зарегистрироваться';
+    regError.textContent = 'Ошибка сети. Попробуйте позже.';
+    regBtn.disabled = false;
+    regBtn.textContent = 'Зарегистрироваться';
   }
 });
 </script>
