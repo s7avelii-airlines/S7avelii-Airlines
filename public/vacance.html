@@ -1,105 +1,271 @@
- <!DOCTYPE html>
-
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>S7avelii Airlines</title>
- <!-- Иконка сайта (favicon) -->
-  <link rel="icon" href="images/favicon.png" type="image/favicon.png">
+  <title>S7avelii | Вакансии</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-    }
-    .gradient-green {
-      background: linear-gradient(90deg, rgb(163, 213, 13) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-      color: white;
-    }
-   <style>
-    body {
-      background: linear-gradient(90deg,rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-    }
-    .gradient-green {
-      background: linear-gradient(90deg, rgb(165, 214, 15) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-      color: white;
-    }
-    <style>
-  body {
-    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100%);
-  }
-
-  .dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 0.25rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 50;
-    min-width: 160px;
-  }
-
-  .group:hover .dropdown-menu {
-    display: block;
-  }
-</style>
 </head>
 
 <body class="text-gray-900 font-sans">
-   <!-- Header -->
-  <header class="flex justify-between items-center px-6 py-4 border-b">
-    <div class="flex items-center space-x-2">
-      <img src="images/photo_5238163653918846596_y (3).avif" alt="Savelii Airlines Logo" style="height: 60px;"
-    </div>
-    <nav class="space-x-20 text-sm flex items-center relative" >
-      <div class="relative group inline-block">
-      <a href="Index.html" class="hover:underline">Покупка и управление</a>
-      <div class="dropdown-menu mt-2 py-2">
-        <a href="HOTEL.html" class="block px-4 py-2 hover:bg-gray-100">Отели</a>
-        <a href="arrivel.html" class="block px-4 py-2 hover:bg-gray-100">Направления</a>
-        <a href="class.html" class="block px-4 py-2 hover:bg-gray-100">Выбор класса</a>
-      </div>
-      </div>
-      <a href="priority.html" class="text-gray-700 hover:text-green-600">S7avelii Priority</a>
-       <div class="relative group inline-block">
-      <a href="infom.html" class="hover:underline">Информация</a>
-      <div class="dropdown-menu mt-2 py-2">
-        <a href="body.html" class="text-gray-700 hover:text-green-600">О нас</a>
-        <a href="office.html" class="block px-4 py-2 hover:bg-gray-100">Представительство</a>
-        <a href="plane.html" class="block px-4 py-2 hover:bg-gray-100">Наш Флот</a>
-        <a href="eat.html" class="block px-4 py-2 hover:bg-gray-100">Питание</a>
-        <a href="VIP.html" class="block px-4 py-2 hover:bg-gray-100">VIP-залы</a>
-      </div>
-      </div>>
-      <a href="s7hop.html" class="text-gray-700 hover:text-green-600">S7avelii Shop</a>
-      <a href="busines.html" class="hover:underline">Бизнесу</a>
-      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-    <a href="https://t.me/S7avelii7plane7" class="block px-4 py-2 hover:bg-gray-100">7PLANE7</a>
-    </nav>
-    <div class="flex items-center space-x-4">
-      <button class="text-gray-500"></button>
-      <nav class="space-x-50 text-sm flex items-center relative" ></nav>
-      <span>RUB</span>
-      <span id="userArea"></span>
-  </nav>
-</header>
+</style>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
 
+    header {
+      display: flex;
+      align-items: center;
+      padding: 0 60px;
+      height: 80px;
+      border-bottom: 1px solid #ccc;
+      position: fixed;      /* фиксируем */
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: #fff;
+    }
+
+    .logo-img {
+      height: 70px;
+      width: auto;
+      cursor: pointer;
+    }
+
+    .logo-circle {
+      background-color: #93bd0a;
+      color: white;
+      font-weight: 700;
+      font-size: 20px;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 9px;
+      font-family: Arial, sans-serif;
+    }
+
+    nav {
+      display: flex;
+      flex-grow: 1;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 40px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    nav li {
+      position: relative;
+    }
+
+    nav a {
+      position: relative;
+      color: #000;
+      text-decoration: none;
+      font-size: 16px;
+      padding: 28px 0;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background-color: #b3c900;
+      transition: width 0.3s ease;
+    }
+    nav li:hover > a::after {
+      width: 100%;
+    }
+
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #fff;
+      padding: 20px;
+      border-top: 2px solid #b3c900;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+      min-width: 240px;
+      z-index: 999;
+
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    nav li:hover .dropdown {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .dropdown a {
+      display: block;
+      padding: 8px 0;
+      color: #000;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .dropdown a:hover {
+      color: #b3c900;
+    }
+
+    .right-menu {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 16px;
+    }
+
+    .right-menu button,
+    .right-menu select {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .right-menu select {
+      border-left: 1px solid #ccc;
+      padding-left: 12px;
+      margin-left: 12px;
+      appearance: none;
+      background: none;
+    }
+
+    .icon-search {
+      width: 20px;
+      height: 20px;
+      stroke: black;
+      stroke-width: 2;
+      cursor: pointer;
+    }
+
+    .flag {
+      width: 20px;
+      height: 14px;
+      border-radius: 2px;
+      overflow: hidden;
+      box-shadow: 0 0 2px rgba(0,0,0,0.15);
+    }
+
+    .flag img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #userArea {
+      display: flex;
+      align-items: center;
+    }
+    #userArea a {
+      padding: 8px 14px;
+      border: 1px solid #7ad30d;
+      border-radius: 6px;
+      color: #6dd808;
+      text-decoration: none;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    /* фикс перекрытия */
+    .hero {
+      padding-top: 80px; /* отступ равен высоте header */
+    }
+
+    main {
+      height: 2000px;
+      background: linear-gradient(to bottom, #f9f9f9, #e1e1e1);
+      padding: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <a href="index.html">
+      <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
+    </a>
+  </div>
+
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Покупка и управление</a>
+        <div class="dropdown">
+          <a href="bilet.html">Купить билет</a>
+          <a href="auth.html">Управление бронированием</a>
+          <a href="arrivel.html">Направления</a>
+          <a href="HOTEL.html">Отели</a>
+          <a href="class.html">Выбор класса</a>
+        </div>
+      </li>
+      <li>
+        <a href="priority.html">S7avelii Priority</a>
+        <div class="dropdown">
+          <a href="priority.html">О программе</a>
+          <a href="https://t.me/s7aveliihelper">Как копить</a>
+        </div>
+      </li>
+      <li>
+        <a href="#">Информация</a>
+        <div class="dropdown">
+          <a href="body.html">О нас</a>
+          <a href="office.html">Представительство</a>
+          <a href="plane.html">Наш флот</a>
+          <a href="eat.html">Питание</a>
+          <a href="https://t.me/s7aveliihelper">Контакты</a>
+        </div>
+      </li>
+      <li><a href="busines.html">Бизнесу</a></li>
+      <li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
+    </ul>
+  </nav>
+
+  <div class="right-menu">
+    <button aria-label="Search">
+      <circle cx="11" cy="11" r="7"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </button>
+    <button>RUB</button>
+    <div class="flag" title="Russian flag">
+      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" />
+    </div>
+    <div id="userArea"></div>
+  </div>
+
+
+  <div id="userArea"></div> <!-- сюда только кнопка/аватар -->
+</header>
 <script>
-  window.addEventListener("DOMContentLoaded", () => {
+  async function updateUserArea() {
     const userArea = document.getElementById("userArea");
 
-    const fio = localStorage.getItem("fio");
-    const avatar = localStorage.getItem("avatar"); // если пользователь загружал картинку
-    const username = localStorage.getItem("username");
+    try {
+      const res = await fetch("/api/profile");
+      if (!res.ok) throw new Error("Не авторизован");
+      const data = await res.json();
+      const user = data.user;
 
-    if (fio && localStorage.getItem("phone")) {
-      // Пользователь вошёл
-      if (avatar) {
+      if (user.avatar) {
         userArea.innerHTML = `
-          <img src="${avatar}" alt="avatar" 
+          <img src="${user.avatar}" alt="avatar"
             style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
             onclick="window.location.href='cabinet.html'" 
           />
@@ -107,14 +273,487 @@
       } else {
         userArea.innerHTML = `
           <span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">
-            ${username || fio.split(" ")[0]}
+            ${user.fio.split(" ")[0]}
           </span>
         `;
       }
-    } else {
-      // Не вошёл
-      userArea.innerHTML = `<a href="auth.html" style="padding:8px 14px;border:1px solid #2196f3;border-radius:6px;color:#2196f3;text-decoration:none;">Вход</a>`;
+    } catch (err) {
+      // если не залогинен
+      userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+    }
+  }
+
+  window.addEventListener("DOMContentLoaded", updateUserArea);
+</script>
+
+ 
+<body class="bg-white text-[#222] font-sans leading-relaxed">
+
+  <!-- Основной контейнер -->
+  <div class="max-w-6xl mx-auto px-6 py-12">
+
+    <!-- Заголовок и описание -->
+    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
+      <div class="flex-1">
+        <h1 class="text-5xl font-bold mb-6">Вакансии S7avelii Airlines</h1>
+        <p class="text-lg text-gray-700 mb-4">
+          В данный момент мы являемся только миниатюрной аиакомпанией, но уже
+          сейчас мы страремся радовать вас новыми видео и рассказами о городах
+          каждый месяц договариваясь с миниатюрными аэропортами о новых рейсах,
+          а улыбка и хорошее настроение представителя авиакомпании всегда скоординирует
+          нашего клиета. Мы всегда рады дарить пассажирам впечатления и комфорт.
+          Присоединяйтесь к нашей команде получайте удовольствие от новых задач
+          и интересных проектов, находите новых друзей и покажите себя.
+        </p>
+
+        <button class="bg-[#95c11f] hover:bg-[#7fa61a] text-white font-semibold py-3 px-6 rounded-lg transition">
+          Присоеденяйтесь к нашей дружной каманде 
+        </button>
+      </div>
+
+      <!-- Карточка -->
+      <div class="w-full md:w-[360px] bg-white rounded-2xl overflow-hidden shadow-md">
+        <div class="relative">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Placeholder_view_vector.svg"
+            alt="Магистерская программа"
+            class="w-full h-64 object-cover"
+          />
+          <div class="absolute bottom-6 left-6">
+            <p class="text-white text-xl font-semibold mb-3">
+              Проявление ваших талантов<br />S7avelii
+            </p>
+            <button class="bg-white text-gray-800 px-5 py-2 rounded-lg font-medium hover:bg-gray-100 transition">
+              Пусть мы и миниатюрны, но мы едины!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Разделитель -->
+    <hr class="my-12 border-gray-200" />
+
+    <!-- Раздел Москва -->
+    <div>
+      <h2 class="text-4xl font-bold mb-6">Саратов</h2>
+
+      <div class="grid md:grid-cols-2 gap-10">
+        <!-- Лётный персонал -->
+        <div>
+          <h3 class="text-2xl font-semibold mb-2">Медиацент</h3>
+          <p class="text-[#95c11f] font-medium">Креативщик</p>
+          <p class="text-[#95c11f] font-medium">Маркетолог</p>
+          <p class="text-[#95c11f] font-medium">Монтажёр</p>
+          <p class="text-[#95c11f] font-medium">Рекламщик</p>
+        </div>
+
+        <!-- Инженеры -->
+        <div>
+          <h3 class="text-2xl font-semibold mb-2">Работа в дистанционном формате</h3>
+          <p class="text-[#95c11f] font-medium">
+            Главный бухгалтер
+            Филолог
+            Экономист
+          </p>
+        </div>
+      </div>
+    </div>
+
+<body class="bg-white text-[#222] font-sans leading-relaxed">
+
+  <div class="max-w-6xl mx-auto px-6 py-16">
+
+    <!-- Блок "Пригласили на собеседование?" -->
+    <div class="bg-[#f7f9fc] rounded-2xl p-10 shadow-sm">
+      <h2 class="text-3xl font-bold mb-4 text-[#111]">Пригласили на собеседование?</h2>
+      <p class="text-gray-700 mb-4">
+        Собеседование с кандидатом проводятся по предварительной записи.<br>
+      </p>
+
+      <ul class="list-disc pl-6 space-y-2 text-[#95c11f] font-medium">
+        <li><a href="#" class="hover:underline">Центральный офис S7avelii Airlines</a></li>
+        <li><a href="#" class="hover:underline">Офис S7avelii Airlines в аэропорту «Григорьев»(Миниатюрный аэропорт)</a></li>
+      </ul>
+    </div>
+
+    <!-- Ссылка внизу -->
+    <div class="mt-12">
+      <a href="#" class="text-[#95c11f] font-medium hover:underline">
+        Специальная оценка условий труда
+      </a>
+    </div>
+  </div>
+
+   
+<footer class="footer">
+  <div class="footer-inner">
+    <!-- Верхнее меню -->
+    <div class="footer-menu fade-in">
+      <div class="footer-column">
+        <h3>S7avelii Airlines</h3>
+        <ul>
+          <li><a href="body.html">О компании</a></li>
+          <li><a href="https://t.me/s7aveliihelper">Партнеры</a></li>
+          <li><a href="https://t.me/s7aveliihelper">Контакты</a></li>
+          <li><a href="#">Вакансии</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <ul>
+          <li><a href="office.html">Офисы продаж и представительства</a></li>
+          <li><a href="https://t.me/S7saveliiairlines">Новости</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Информация</h3>
+        <ul>
+          <li><a href="arrivel.html">Направления</a></li>
+          <li><a href="bilet.html">Рейсы</a></li>
+          <li><a href="https://t.me/s7aveliihelper">Справочный центр</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <ul>
+          <li><a href="https://t.me/s7aveliihelper">Перевозка грузов</a></li>
+          <li><a href="plane.html">Наш флот</a></li>
+          <li><a href="mailto:s7avelii_airlines@mail.ru">Подать заявление на партнёрство</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="footer-top fade-in">
+      <div class="footer-actions">
+        <a href="https://t.me/s7aveliihelper" class="action"><img src="icons/chat.svg" alt=""> Чат</a>
+      </div>
+      <div class="footer-phone">
+        <div class="label">тел: Бесплатно по России</div>
+        <div class="number">8 962 629–81–05</div>
+      </div>
+    </div>
+
+    <div class="footer-subscribe fade-in">
+      <h3>Подпишитесь на рассылку S7avelii</h3>
+      <p>Будьте в курсе акций, открывайте новые маршруты</p>
+      <form class="subscribe-form">
+        <input type="email" placeholder="Ваша почта" required>
+        <button type="submit">→</button>
+      </form>
+      <label class="checkbox">
+        <input type="checkbox" required>
+        Хочу узнавать про скидки и идеи путешествий по почте и соглашаюсь на 
+        <a href="#">обработку персональных данных</a>
+      </label>
+    </div>
+
+    <div class="footer-bottom fade-in">
+      <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
+      <div class="socials">
+        <a href="https://vk.com/s7avelii"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
+        <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1"><img src="images/icons8-tiktok-logo-50 (1).avif" alt="TikTok"></a>
+        <a href="https://youtu.be/Dy31uUCFaWw?si=2gyqNYaT3ZVO8WJa"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
+        <a href="https://t.me/S7saveliiairlines"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+/* ==== FOOTER ==== */
+.footer {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  background: #f1f5f9;
+  padding: 40px 60px;
+  font-family: "Inter", sans-serif;
+  color: #111;
+  box-sizing: border-box;
+}
+
+/* Верхнее меню */
+.footer-menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.footer-column h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+  color: #111;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.footer-column ul li a:hover {
+  text-decoration: underline;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 30px 0;
+  width: 100%;
+}
+
+/* Верх футера */
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 30px;
+}
+
+.footer-actions .action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  color: #111;
+}
+
+.footer-actions img {
+  width: 20px;
+}
+
+.footer-phone {
+  text-align: right;
+}
+
+.footer-phone .label {
+  font-size: 14px;
+  color: #555;
+}
+
+.footer-phone .number {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Подписка */
+.footer-subscribe {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+  border: 1px solid #d1d5db;
+}
+
+.footer-subscribe h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.footer-subscribe p {
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.subscribe-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.subscribe-form input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.subscribe-form button {
+  background: #9ac208;
+  border: none;
+  border-radius: 8px;
+  padding: 0 20px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.subscribe-form button:hover {
+  background: #8db807;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #333;
+}
+
+.checkbox a {
+  color: #abc70f;
+  text-decoration: underline;
+}
+
+/* Низ футера */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: #555;
+}
+
+.socials {
+  display: flex;
+  gap: 12px;
+}
+
+.socials a img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  padding: 6px;
+  transition: transform 0.2s ease;
+}
+
+.socials a img:hover {
+  transform: scale(1.1);
+}
+
+/* === АНИМАЦИЯ ПОЯВЛЕНИЯ === */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === АДАПТАЦИЯ === */
+@media (max-width: 1024px) {
+  .footer {
+    padding: 30px 40px;
+  }
+  .footer-menu {
+    gap: 25px;
+  }
+  .footer-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .footer-phone {
+    text-align: left;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 30px 20px;
+  }
+  .footer-menu {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .footer-column h3 {
+    font-size: 16px;
+  }
+  .footer-column ul li a {
+    font-size: 13px;
+  }
+  .footer-subscribe {
+    padding: 16px;
+  }
+  .subscribe-form {
+    flex-direction: column;
+  }
+  .subscribe-form button {
+    width: 100%;
+    padding: 10px;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .socials {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-menu {
+    grid-template-columns: 1fr;
+  }
+  .footer-subscribe h3 {
+    font-size: 16px;
+  }
+  .footer-subscribe p {
+    font-size: 13px;
+  }
+  .footer-phone .number {
+    font-size: 16px;
+  }
+  .footer-phone .label {
+    font-size: 12px;
+  }
+  .footer-actions .action {
+    font-size: 14px;
+  }
+  .socials a img {
+    width: 28px;
+    height: 28px;
+  }
+}
+</style>
+
+<script>
+/* === Плавное появление при прокрутке === */
+const fadeElements = document.querySelectorAll('.fade-in');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
     }
   });
+}, { threshold: 0.2 });
+
+fadeElements.forEach(el => observer.observe(el));
 </script>
-  </header>
+ 
+</body>
+</html>
