@@ -57,14 +57,15 @@ async function initDB() {
 }
 initDB();
 
-// ==== Тест подключения к БД ====
+// ==== Тест подключения к базе ====
 app.get("/api/testdb", async (req, res) => {
   try {
-    const { rows } = await pool.query("SELECT NOW() AS now");
-    res.json({ ok: true, server_time: rows[0].now });
+    // Простая проверка: SELECT 1 + 1
+    const { rows } = await pool.query("SELECT 1 + 1 AS result");
+    res.json({ ok: true, result: rows[0].result });
   } catch (e) {
-    console.error("Ошибка подключения к БД:", e);
-    res.status(500).json({ ok: false, error: "Не удалось подключиться к базе" });
+    console.error("DB Test Error:", e);
+    res.status(500).json({ ok: false, error: e.message });
   }
 });
 
