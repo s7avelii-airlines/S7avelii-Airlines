@@ -5,10 +5,10 @@ import bcrypt from "bcryptjs";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import pkg from "pg";
+import cors from "cors";
 
 dotenv.config();
 const { Pool } = pkg;
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 const __dirname = path.resolve();
@@ -23,12 +23,23 @@ const pool = new Pool({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// 🔥 Разрешаем запросы с твоего статичного сайта:
+app.use(cors({
+  origin: ["https://www.s7avelii-airlines.ru"], // ← твой домен
+  credentials: true
+}));
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "supersecret",
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 }
+    cookie: {
+      secure: true,               // обязательно для HTTPS
+      sameSite: "none",           // чтобы кросс-доменно работали куки
+      maxAge: 1000 * 60 * 60 * 24 * 7
+    }
   })
 );
 
@@ -85,16 +96,18 @@ async function initDB() {
 }
 initDB();
 
-// ==== API Пользователи ====
+// ==== API ====
 app.post("/api/register", async (req, res) => {
   try {
-    const { fio, phone, email, password } = req.body;
-    if (!phone || !password)
-      return res.status(400).json({ error: "Введите телефон и пароль" });
+    const { fio, phone, email, password, dob, gender, card_number, card_type } = req.body;
+    if (!phone || !password) return res.status(400).json({ error: "Введите телефон и пароль" });
+
     const hash = await bcrypt.hash(password, 10);
     const { rows } = await pool.query(
-      "INSERT INTO users (fio, phone, email, password) VALUES ($1,$2,$3,$4) RETURNING *",
-      [fio, phone, email, hash]
+      `INSERT INTO users (fio, phone, email, password, dob, gender, card_number, card_type)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+       RETURNING id, fio, phone, email, card_number, card_type`,
+      [fio, phone, email, hash, dob, gender, card_number, card_type]
     );
     req.session.userId = rows[0].id;
     res.json(rows[0]);
@@ -112,11 +125,7 @@ app.post("/api/login", async (req, res) => {
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) return res.status(400).json({ error: "Неверный пароль" });
   req.session.userId = user.id;
-  res.json(user);
-});
-
-app.get("/api/logout", (req, res) => {
-  req.session.destroy(() => res.json({ ok: true }));
+  res.json({ id: user.id, fio: user.fio, phone: user.phone });
 });
 
 app.get("/api/profile", async (req, res) => {
@@ -125,74 +134,8 @@ app.get("/api/profile", async (req, res) => {
   res.json(rows[0]);
 });
 
-app.post("/api/profile/update", async (req, res) => {
-  if (!req.session.userId) return res.status(401).json({ error: "Не авторизован" });
-  const updates = [];
-  const values = [];
-  let i = 1;
-  for (const key in req.body) {
-    updates.push(`${key}=$${i++}`);
-    values.push(req.body[key]);
-  }
-  if (!updates.length) return res.json({ ok: true });
-  values.push(req.session.userId);
-  await pool.query(`UPDATE users SET ${updates.join(",")} WHERE id=$${i}`, values);
-  res.json({ ok: true });
-});
-
-// ==== API Продукты ====
-app.get("/api/products", async (req, res) => {
-  const { rows } = await pool.query("SELECT * FROM products ORDER BY id");
-  res.json(rows);
-});
-
-// ==== API Корзина ====
-app.get("/api/cart", async (req, res) => {
-  if (!req.session.userId) return res.json([]);
-  const { rows } = await pool.query("SELECT cart FROM users WHERE id=$1", [req.session.userId]);
-  res.json(rows[0].cart || []);
-});
-
-app.post("/api/cart/add", async (req, res) => {
-  if (!req.session.userId) return res.status(401).json({ error: "Не авторизован" });
-  const { id } = req.body;
-  const { rows: pr } = await pool.query("SELECT * FROM products WHERE id=$1", [id]);
-  if (!pr.length) return res.status(404).json({ error: "Нет такого товара" });
-  const item = { id: pr[0].id, name: pr[0].name, price: pr[0].price, qty: 1 };
-  await pool.query(
-    "UPDATE users SET cart = COALESCE(cart,'[]')::jsonb || $1::jsonb WHERE id=$2",
-    [JSON.stringify([item]), req.session.userId]
-  );
-  res.json({ ok: true });
-});
-
-app.post("/api/cart/remove", async (req, res) => {
-  const { id } = req.body;
-  const { rows } = await pool.query("SELECT cart FROM users WHERE id=$1", [req.session.userId]);
-  const newCart = (rows[0].cart || []).filter((x) => x.id !== id);
-  await pool.query("UPDATE users SET cart=$1 WHERE id=$2", [JSON.stringify(newCart), req.session.userId]);
-  res.json({ ok: true });
-});
-
-app.post("/api/cart/checkout", async (req, res) => {
-  if (!req.session.userId) return res.status(401).json({ error: "Не авторизован" });
-  const { rows } = await pool.query("SELECT cart FROM users WHERE id=$1", [req.session.userId]);
-  const cart = rows[0].cart || [];
-  if (!cart.length) return res.json({ error: "Корзина пуста" });
-  await pool.query("INSERT INTO orders (user_id, items) VALUES ($1,$2)", [req.session.userId, JSON.stringify(cart)]);
-  await pool.query("UPDATE users SET cart='[]', bonus_miles = bonus_miles + 100 WHERE id=$1", [req.session.userId]);
-  res.json({ ok: true });
-});
-
-// ==== API Заказы ====
-app.get("/api/orders", async (req, res) => {
-  if (!req.session.userId) return res.json([]);
-  const { rows } = await pool.query("SELECT * FROM orders WHERE user_id=$1 ORDER BY id DESC", [req.session.userId]);
-  res.json(rows.map((o) => ({ ...o, items: o.items || [] })));
-});
-
-// ==== SPA fallback ====
+// ==== Fallback ====
 app.get("*", (req, res) => res.sendFile(path.join(PUBLIC_DIR, "index.html")));
 
-// ==== Запуск сервера ====
+// ==== Запуск ====
 app.listen(PORT, () => console.log(`✅ Server started on ${PORT}`));
