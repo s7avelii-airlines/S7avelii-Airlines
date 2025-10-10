@@ -1,98 +1,101 @@
 import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import session from "express-session";
-import pkg from "pg";
+import MongoStore from "connect-mongo";
 
 dotenv.config();
-const { Pool } = pkg;
-
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// ==== Подключение к базе ====
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
+// ==== Настройки CORS ====
+app.use(cors({
+  origin: "https://www.s7avelii-airlines.ru", // ⚠️ замени на свой статичный домен
+  credentials: true
+}));
 
-// ==== Middleware ====
 app.use(express.json());
+
+// ==== Сессии ====
 app.use(session({
   secret: process.env.SESSION_SECRET || "supersecret",
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 1000*60*60*24 }
+  store: MongoStore.create({ mongoUrl: process.env.MONGO_URL }),
+  cookie: { secure: true, sameSite: "none", maxAge: 1000 * 60 * 60 * 24 * 7 }
 }));
 
-// ==== Инициализация таблицы пользователей ====
-async function initDB() {
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS users (
-      id SERIAL PRIMARY KEY,
-      fio TEXT,
-      phone TEXT UNIQUE,
-      email TEXT,
-      password TEXT,
-      card_number TEXT,
-      card_type TEXT
-    );
-  `);
-}
-initDB();
+// ==== Подключение к Mongo ====
+mongoose.connect(process.env.MONGO_URL)
+  .then(() => console.log("✅ Подключено к MongoDB"))
+  .catch(err => console.error("❌ Ошибка Mongo:", err));
 
-// ==== Тест подключения к базе ====
-app.get("/api/testdb", async (req, res) => {
-  try {
-    const { rows } = await pool.query("SELECT 1 + 1 AS result");
-    res.json({ ok: true, result: rows[0].result });
-  } catch (e) {
-    console.error("DB Test Error:", e);
-    res.status(500).json({ ok: false, error: e.message });
-  }
+// ==== Модель пользователя ====
+const userSchema = new mongoose.Schema({
+  fio: String,
+  email: String,
+  phone: { type: String, unique: true },
+  password: String,
+  cardNumber: String,
+  cardType: String,
+  dob: String,
+  gender: String
 });
+const User = mongoose.model("User", userSchema);
+
+// ==== Тестовый маршрут ====
+app.get("/", (req, res) => res.send("Server OK ✅"));
 
 // ==== Регистрация ====
 app.post("/api/register", async (req, res) => {
   try {
-    const { fio, phone, email, password, card_number, card_type } = req.body;
-    if (!phone || !password) return res.status(400).json({ error: "Введите телефон и пароль" });
+    const { fio, email, phone, password, cardNumber, cardType, dob, gender } = req.body;
+    if (!fio || !email || !phone || !password)
+      return res.status(400).json({ error: "Не все поля заполнены" });
+
+    const exist = await User.findOne({ phone });
+    if (exist) return res.status(400).json({ error: "Пользователь уже существует" });
+
     const hash = await bcrypt.hash(password, 10);
-    const { rows } = await pool.query(
-      "INSERT INTO users (fio, phone, email, password, card_number, card_type) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
-      [fio, phone, email, hash, card_number, card_type]
-    );
-    req.session.userId = rows[0].id;
-    res.json({ ok: true, user: rows[0] });
-  } catch (e) {
-    console.error("Register Error:", e);
-    res.status(500).json({ ok: false, error: e.message });
+    const user = await User.create({ fio, email, phone, password: hash, cardNumber, cardType, dob, gender });
+    req.session.userId = user._id;
+    res.json({ message: "Регистрация успешна", user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Ошибка сервера" });
   }
 });
 
-// ==== Логин ====
+// ==== Авторизация ====
 app.post("/api/login", async (req, res) => {
   try {
     const { phone, password } = req.body;
-    const { rows } = await pool.query("SELECT * FROM users WHERE phone=$1", [phone]);
-    const user = rows[0];
-    if (!user) return res.status(400).json({ ok: false, error: "Пользователь не найден" });
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(400).json({ ok: false, error: "Неверный пароль" });
-    req.session.userId = user.id;
-    res.json({ ok: true, user });
-  } catch (e) {
-    console.error("Login Error:", e);
-    res.status(500).json({ ok: false, error: e.message });
+    const user = await User.findOne({ phone });
+    if (!user) return res.status(400).json({ error: "Пользователь не найден" });
+
+    const ok = await bcrypt.compare(password, user.password);
+    if (!ok) return res.status(400).json({ error: "Неверный пароль" });
+
+    req.session.userId = user._id;
+    res.json({ message: "Успешный вход", user });
+  } catch (err) {
+    res.status(500).json({ error: "Ошибка сервера" });
   }
 });
 
 // ==== Профиль ====
 app.get("/api/profile", async (req, res) => {
-  if (!req.session.userId) return res.status(401).json({ ok: false, error: "Не авторизован" });
-  const { rows } = await pool.query("SELECT * FROM users WHERE id=$1", [req.session.userId]);
-  res.json({ ok: true, user: rows[0] });
+  if (!req.session.userId) return res.status(401).json({ error: "Не авторизован" });
+  const user = await User.findById(req.session.userId).select("-password");
+  res.json(user);
 });
 
-// ==== Запуск сервера ====
-app.listen(PORT, () => console.log(`✅ Server started on port ${PORT}`));
+// ==== Выход ====
+app.get("/api/logout", (req, res) => {
+  req.session.destroy(() => res.json({ ok: true }));
+});
+
+// ==== Запуск ====
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`🚀 Сервер запущен на порту ${PORT}`));
