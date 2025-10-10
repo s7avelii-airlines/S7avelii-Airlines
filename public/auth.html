@@ -22,7 +22,7 @@
   main{display:flex;justify-content:center;align-items:flex-start;padding:110px 20px 40px}
   .card{width:100%;max-width:420px;background:rgba(255,255,255,0.96);border-radius:12px;padding:22px;box-shadow:0 8px 24px rgba(0,0,0,0.15);}
   h2{margin:0 0 14px;font-size:20px}
-  input{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d6d8db;margin-top:10px;font-size:14px}
+  input, select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d6d8db;margin-top:10px;font-size:14px}
   .btn{width:100%;padding:12px;border-radius:8px;border:0;background:var(--green);color:#fff;font-weight:600;margin-top:14px;cursor:pointer}
   .btn:hover{background:var(--green-dark)}
   .btn[disabled]{opacity:.6;cursor:not-allowed}
@@ -30,13 +30,12 @@
   .switch button{background:none;border:0;color:var(--green);text-decoration:underline;cursor:pointer;font:inherit}
   .error{color:#d23f44;margin-top:10px;font-size:13px}
   .success{color:green;margin-top:10px;font-size:13px}
-  form{transition:opacity .35s ease, transform .35s ease;will-change:opacity,transform}
   .hidden{display:none}
-  .fade{opacity:0;transform:translateY(12px);pointer-events:none}
-  .fade.show{display:block;opacity:1;transform:translateY(0);pointer-events:auto}
   .row { display:flex; gap:10px; flex-wrap:wrap; }
+  .half{flex:1; min-width:120px}
   .card-type { display:inline-flex; align-items:center; gap:8px; margin-right:8px; margin-top:8px; }
   .card-type img { display:inline-block; vertical-align:middle; border-radius:6px; }
+  @media(max-width:600px){ .row{flex-direction:column} }
 </style>
 </head>
 <body>
@@ -57,7 +56,7 @@
     <h2 id="title">Вход</h2>
 
     <!-- форма входа -->
-    <form id="loginForm" class="fade show" autocomplete="on" novalidate>
+    <form id="loginForm" autocomplete="on" novalidate>
       <input id="loginPhone" type="tel" placeholder="Телефон" required autocomplete="tel" inputmode="tel">
       <input id="loginPassword" type="password" placeholder="Пароль" required>
       <button class="btn" id="loginBtn" type="submit">Войти</button>
@@ -65,17 +64,37 @@
     </form>
 
     <!-- форма регистрации -->
-    <form id="registerForm" class="fade hidden" autocomplete="on" novalidate>
+    <form id="registerForm" class="hidden" autocomplete="on" novalidate>
       <input id="regFio" type="text" placeholder="ФИО" required autocomplete="name">
       <input id="regEmail" type="email" placeholder="Email" required autocomplete="email">
-      <input id="regPhone" type="tel" placeholder="Телефон" required autocomplete="tel" inputmode="tel">
-      <input id="regPassword" type="password" placeholder="Пароль (мин. 6 символов)" required>
+      <div class="row">
+        <div class="half"><input id="regPhone" type="tel" placeholder="Телефон" required autocomplete="tel" inputmode="tel"></div>
+        <div class="half"><input id="regPassword" type="password" placeholder="Пароль (мин. 6 символов)" required></div>
+      </div>
+
+      <div class="row">
+        <div class="half">
+          <label class="small-muted">Дата рождения</label>
+          <input id="regDob" type="date" placeholder="Дата рождения">
+        </div>
+        <div class="half">
+          <label class="small-muted">Пол</label>
+          <select id="regGender">
+            <option value="">Не указан</option>
+            <option value="male">Мужской</option>
+            <option value="female">Женский</option>
+            <option value="other">Другое</option>
+          </select>
+        </div>
+      </div>
+
       <input id="regCard" type="text" placeholder="Номер карты S7avelii Priority">
 
       <div class="small-muted">Выберите тип карты:</div>
       <div class="row">
         <label class="card-type"><input type="radio" name="regCardType" value="VIP"> VIP <img src="images/vip_card.png" alt="VIP" width="60"></label>
         <label class="card-type"><input type="radio" name="regCardType" value="Classic"> Classic <img src="images/classic_card.png" alt="Classic" width="60"></label>
+        <label class="card-type"><input type="radio" name="regCardType" value="None" checked> Нет</label>
       </div>
 
       <button class="btn" id="regBtn" type="submit">Зарегистрироваться</button>
@@ -88,7 +107,8 @@
 </main>
 
 <script>
-const API = 'https://твой-сервер-Render'; // сюда адрес сервера
+/* === API URL (вставил твой Render backend) === */
+const API = 'https://s7avelii-airlines-1.onrender.com';
 
 const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
@@ -102,23 +122,19 @@ const loginBtn = document.getElementById('loginBtn');
 const regBtn = document.getElementById('regBtn');
 
 function showForm(showLogin){
-  const toShow = showLogin ? loginForm : registerForm;
-  const toHide = showLogin ? registerForm : loginForm;
-  toHide.classList.remove('show');
-  setTimeout(() => { toHide.classList.add('hidden'); }, 360);
-  toShow.classList.remove('hidden');
-  setTimeout(() => toShow.classList.add('show'), 10);
-
   if(showLogin){
+    loginForm.classList.remove('hidden');
+    registerForm.classList.add('hidden');
     title.textContent = 'Вход';
     switchText.textContent = 'Нет аккаунта?';
     switchBtn.textContent = 'Зарегистрироваться';
   } else {
+    loginForm.classList.add('hidden');
+    registerForm.classList.remove('hidden');
     title.textContent = 'Регистрация';
     switchText.textContent = 'Уже есть аккаунт?';
     switchBtn.textContent = 'Войти';
   }
-
   loginError.textContent = '';
   regError.textContent = '';
   regSuccess.textContent = '';
@@ -126,8 +142,7 @@ function showForm(showLogin){
 
 switchBtn.addEventListener('click', (e) => {
   e.preventDefault();
-  const showingLogin = loginForm.classList.contains('show');
-  showForm(!showingLogin);
+  showForm(loginForm.classList.contains('hidden'));
 });
 
 // Авторизация
@@ -150,14 +165,15 @@ loginForm.addEventListener('submit', async (e) => {
     });
     const data = await resp.json().catch(()=>({}));
     if (!resp.ok) {
-      loginError.textContent = data.error||'Ошибка входа';
+      loginError.textContent = data.error || 'Ошибка входа';
       loginBtn.disabled = false;
       loginBtn.textContent = 'Войти';
       return;
     }
     window.location.href = 'cabinet.html';
-  } catch {
-    loginError.textContent = 'Ошибка сети. Попробуйте позже.';
+  } catch (err) {
+    console.error('login fetch error', err);
+    loginError.textContent = 'Ошибка сети. Проверь сервер и CORS.';
     loginBtn.disabled = false;
     loginBtn.textContent = 'Войти';
   }
@@ -173,6 +189,8 @@ registerForm.addEventListener('submit', async (e) => {
   const email = document.getElementById('regEmail').value.trim();
   const phone = document.getElementById('regPhone').value.trim();
   const password = document.getElementById('regPassword').value;
+  const dob = document.getElementById('regDob').value || '';
+  const gender = document.getElementById('regGender').value || '';
   const cardNumber = document.getElementById('regCard').value.trim();
   const cardType = document.querySelector('input[name="regCardType"]:checked')?.value || '';
 
@@ -188,7 +206,13 @@ registerForm.addEventListener('submit', async (e) => {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fio,email,phone,password,cardNumber,cardType })
+      body: JSON.stringify({
+        fio, email, phone, password,
+        dob, gender,
+        cardNumber, cardType,
+        // отправляем также snake_case на случай, если backend ожидает такие поля
+        card_number: cardNumber, card_type: cardType
+      })
     });
     const data = await resp.json().catch(()=>({}));
     if (!resp.ok) {
@@ -199,8 +223,9 @@ registerForm.addEventListener('submit', async (e) => {
     }
     regSuccess.textContent = 'Регистрация успешна — перенаправляем в кабинет...';
     setTimeout(()=> window.location.href='cabinet.html', 900);
-  } catch {
-    regError.textContent = 'Ошибка сети. Попробуйте позже.';
+  } catch (err) {
+    console.error('register fetch error', err);
+    regError.textContent = 'Ошибка сети. Проверь сервер и CORS.';
     regBtn.disabled = false;
     regBtn.textContent = 'Зарегистрироваться';
   }
