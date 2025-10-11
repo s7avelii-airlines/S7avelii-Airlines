@@ -475,91 +475,322 @@ nav li:hover .dropdown {
     </a>
   </section>
 
-  <!-- Описание -->
-  <section class="bg-gray-100 py-8 px-4 text-center md:text-left md:px-20">
-    <p class="text-lg max-w-4xl mx-auto">
-      Получайте кэшбэк за покупки картой <strong>S7avelii Priority</strong> в магазине <strong>S7avelii Shop</strong> и меняйте их на авиабилеты и деньги.
-      Для вас <strong>более 140 направлений</strong> маршрутной сети! Владельцы карт получают
-      <a href="#" class="text-lime-600 underline">закрытые распродажи</a>, <strong>двойные мили</strong> и все привилегии программы.
-    </p>
-  </section>
+     <!-- Пробел между слайдером и акциями -->
+  <div class="h-30"></div>
 
-  <!-- Привилегии -->
-  <section class="py-12 px-4 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-    <div class="flex space-x-4">
-      <div class="w-14 h-14 rounded-full bg-green-600 text-white flex items-center justify-center text-xl font-bold">₽</div>
-      <div>
-        <h3 class="font-bold">Бонусный кэшбэк</h3>
-        <p class="text-gray-600">До 1% кэшбэка с покупок</p>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Как тратить бонусные мили</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+.card p {
+font-size: 16px;
+color: #555;
+margin-bottom: 20px;
+}
+
+
+.card .cta {
+display: inline-block;
+background: linear-gradient(180deg, #d5ff00 0%, #b7e000 100%);
+color: #1a2600;
+padding: 14px 26px;
+border-radius: 12px;
+font-weight: 700;
+text-decoration: none;
+transition: background 0.3s ease;
+}
+
+
+.card .cta:hover {
+background: linear-gradient(180deg, #b7e000 0%, #a2cd00 100%);
+}
+
+
+.card img {
+position: absolute;
+right: 24px;
+bottom: 20px;
+width: 220px;
+max-width: 45%;
+border-radius: 12px;
+object-fit: cover;
+opacity: 0.95;
+pointer-events: none;
+}
+
+
+/* адаптив */
+@media (max-width: 768px) {
+h1 {font-size: 36px; margin-bottom: 40px;}
+.card {padding: 30px 24px 50px;}
+.card img {position: static; width: 100%; margin-top: 20px;}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>Для чего вам карты S7avelii Priority?</h1>
+
+
+<div class="cards">
+<div class="card">
+<div>
+<h2>Купите билеты с Miles &amp; Cash</h2>
+<p>Оплатите часть билета милями, остальное — деньгами.</p>
+</div>
+<a href="#" class="cta">Найти билет</a>
+<img src="img/1.jpg" alt="Placeholder 1">
+</div>
+
+
+<div class="card">
+<div>
+<h2>Пересадите себя в бизнес‑класс</h2>
+<p>Комфорт, питание и приоритетная посадка — за мили.</p>
+</div>
+<a href="#" class="cta">Узнать больше</a>
+<img src="img/2.jpg" alt="Placeholder 2">
+</div>
+
+
+<div class="card">
+<div>
+<h2>Выберите лучшее место</h2>
+<p>У окна, у прохода или посередине — как вам удобно.</p>
+</div>
+<a href="#" class="cta">Узнать больше</a>
+<img src="img/3.jpg" alt="Placeholder 3">
+</div>
+</div>
+</div>
+
+ <!-- Пробел между слайдером и акциями -->
+  <div class="h-20"></div>
+
+ <section class="promo-section">
+  <div class="promo-bg"></div>
+
+  <div class="promo-content">
+    <div class="promo-text">
+      <p>Копить бонусные мили легко</p>
+      <h1>Представьте, что планируете путешествие</h1>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <img src="images/card1.png" alt="">
+        <p><strong>+900 миль</strong><br>в S7 Priority — получите 500 приветственных миль и ещё 400 за полёты до регистрации.</p>
+      </div>
+
+      <div class="card">
+        <img src="images/card2.png" alt="">
+        <p><strong>+6400 миль</strong><br>Создайте семейный счёт и копите мили за перелёт четырёх человек туда-обратно.</p>
+      </div>
+
+      <div class="card">
+        <img src="images/card3.png" alt="">
+        <p>Обменивайте мили на скидки и летите выгоднее!</p>
       </div>
     </div>
-    <div class="flex space-x-4">
-      <div class="w-14 h-14 rounded-full bg-green-600 text-white flex items-center justify-center text-xl font-bold">%</div>
-      <div>
-        <h3 class="font-bold">Закрытые распродажи</h3>
-        <p class="text-gray-600">Только для участников программы</p>
-      </div>
-    </div>
-  </section>
+  </div>
+</section>
 
-  <!-- VIP -->
-  <section class="bg-gray-100 py-8 text-center">
-    <h2 class="text-xl md:text-2xl font-bold text-green-700">По картам S7avelii Priority VIP</h2>
-  </section>
+<style>
+.promo-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #00c96b;
+}
 
-  <!-- VIP преимущества -->
-  <section class="py-12 px-4 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-    <div class="flex space-x-4">
-      <div class="w-14 h-14 rounded-full bg-green-600 text-white flex items-center justify-center">₽₽</div>
-      <div><h3 class="font-bold">Удвоенный кэшбэк</h3></div>
-    </div>
-    <div class="flex space-x-4">
-      <div class="w-14 h-14 rounded-full bg-gray-700 text-white flex items-center justify-center">★</div>
-      <div><h3 class="font-bold">Приоритетное обслуживание</h3></div>
-    </div>
-    <div class="flex space-x-4">
-      <div class="w-14 h-14 rounded-full bg-gray-700 text-white flex items-center justify-center">👤</div>
-      <div><h3 class="font-bold">Доступ к ивентам</h3></div>
-    </div>
-  </section>
+.promo-bg {
+  position: absolute;
+  inset: 0;
+  background: url('images/background.jpg') center/cover no-repeat;
+  filter: brightness(0.95);
+  z-index: 1;
+}
 
-  <!-- Карты -->
-  <section class="bg-gray-50 py-14 px-4 text-center">
-    <h2 class="text-2xl md:text-3xl font-bold">Выберите свою карту</h2>
-    <p class="mt-2 text-gray-700">Оформите онлайн и получите за 5 дней</p>
+.promo-content {
+  position: relative;
+  z-index: 2;
+  color: white;
+  width: 90%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 
-    <div class="mt-10 space-y-10">
-      <a href="https://forms.yandex.ru/cloud/67d9a11a90fa7bedd501abc8" target="_blank" class="block">
-        <div class="flex flex-col md:flex-row items-center gap-4">
-          <img src="images/photo_5390993038580515190_y.avif" class="w-56 rounded shadow">
-          <div class="text-left">
-            <span class="text-xl font-bold underline block">S7avelii Priority VIP</span>
-            <p class="text-green-700">7% кэшбэк и привилегии</p>
-          </div>
-        </div>
-      </a>
-      <a href="https://forms.yandex.ru/cloud/67d9a021d04688f0a4d873f3" target="_blank" class="block">
-        <div class="flex flex-col md:flex-row items-center gap-4">
-          <img src="images/photo_5391198234938043960_y.avif" class="w-56 rounded shadow">
-          <div class="text-left">
-            <span class="text-xl font-bold underline block">S7avelii Priority Classic</span>
-            <p class="text-green-700">1% кэшбэк</p>
-          </div>
-        </div>
-      </a>
-    </div>
-  </section>
+.promo-text {
+  margin-bottom: 40px;
+  animation: fadeIn 1s ease forwards;
+}
 
-  <!-- Условия -->
-  <section class="py-12 text-center">
-    <h2 class="text-green-500 text-2xl font-bold">Условия оформления</h2>
-    <h3 class="mt-6 font-bold">VIP</h3>
-    <p>Стоимость выпуска — 150 ₽</p>
-    <p>Обслуживание бесплатно при покупках, иначе 10 ₽/мес</p>
-    <h3 class="mt-6 font-bold">Classic</h3>
-    <p>Бесплатная карта</p>
-    <p>Выпуск — 150 ₽</p>
-  </section>
+.promo-text p {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.promo-text h1 {
+  font-size: 48px;
+  line-height: 1.2;
+  margin: 10px 0 0;
+}
+
+.cards {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+/* Карточки */
+.card {
+  background: #fff;
+  color: #111;
+  border-radius: 16px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+  width: 320px;
+  padding: 20px;
+  opacity: 0;
+  transform: translateY(80px) scale(0.95);
+  transition: all 0.8s ease;
+  will-change: transform, opacity;
+}
+.card img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+/* Активное состояние при появлении */
+.card.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Адаптивность */
+@media (max-width: 900px) {
+  .promo-text h1 {
+    font-size: 32px;
+  }
+
+  .cards {
+    justify-content: center;
+  }
+
+  .card {
+    width: 90%;
+  }
+}
+
+@media (max-width: 600px) {
+  .promo-section {
+    min-height: auto;
+    padding: 80px 20px;
+  }
+  .promo-content {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+<script>
+// Плавное появление карточек при скролле
+const cards = document.querySelectorAll('.card');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('show');
+      entry.target.style.transitionDelay = `${i * 0.2}s`;
+    }
+  });
+}, { threshold: 0.3 });
+
+cards.forEach(card => observer.observe(card));
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* {box-sizing: border-box; margin: 0; padding: 0;}
+body {
+font-family: 'Inter', sans-serif;
+background-color: #f5f6f4;
+color: #1e1e1e;
+line-height: 1.4;
+}
+
+a.link {
+color: #00a651;
+text-decoration: underline;
+font-weight: 600;
+}
+
+
+/* адаптив */
+@media (max-width: 768px) {
+h1 {font-size: 36px; margin-bottom: 40px;}
+.card {padding: 28px 22px 60px;}
+.card img {position: static; width: 100%; margin-top: 20px;}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>Как копить бонусные мили</h1>
+
+
+<div class="cards">
+<div class="card">
+<div>
+<h2>Летайте с S7<br>и <a href="#" class="link">авиакомпаниями‑партнерами</a></h2>
+</div>
+<a href="#">Найти билет</a>
+<img src="img/plane.jpg" alt="Самолет">
+</div>
+
+
+<div class="card">
+<div>
+<h2>Выбирайте<br>дополнительные услуги</h2>
+</div>
+<a href="#">Узнать больше</a>
+<img src="img/car.jpg" alt="Автомобиль">
+</div>
+
+
+<div class="card">
+<div>
+<h2>Создайте семейный счет<br>и копите вместе</h2>
+</div>
+<a href="#">Создать счет</a>
+<img src="img/family.jpg" alt="Семейный счет">
+</div>
+
+
+<div class="card">
+<div>
+<h2>Участвуйте в акциях<br>наших партнеров</h2>
+</div>
+<a href="#">Посмотреть предложения</a>
+<img src="img/cards.jpg" alt="Карты партнеров">
+</div>
+</div>
+</div>
 
 <footer class="footer">
   <div class="footer-inner">
