@@ -424,8 +424,9 @@
       </div>
     </div>
 
-    <hr>
+     <hr>
 
+    <!-- Верх футера -->
     <div class="footer-top fade-in">
       <div class="footer-actions">
         <a href="https://t.me/s7aveliihelper" class="action"><img src="icons/chat.svg" alt=""> Чат</a>
@@ -436,6 +437,7 @@
       </div>
     </div>
 
+    <!-- Подписка -->
     <div class="footer-subscribe fade-in">
       <h3>Подпишитесь на рассылку S7avelii</h3>
       <p>Будьте в курсе акций, открывайте новые маршруты</p>
@@ -450,6 +452,7 @@
       </label>
     </div>
 
+    <!-- Низ футера -->
     <div class="footer-bottom fade-in">
       <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
       <div class="socials">
@@ -463,14 +466,16 @@
 </footer>
 
 <style>
+/* === Убираем горизонтальный скролл и белые полосы === */
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
 /* ==== FOOTER ==== */
 .footer {
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
+  width: 100%;
   background: #f1f5f9;
   padding: 40px 60px;
   font-family: "Inter", sans-serif;
@@ -669,9 +674,6 @@ hr {
   .footer {
     padding: 30px 40px;
   }
-  .footer-menu {
-    gap: 25px;
-  }
   .footer-top {
     flex-direction: column;
     align-items: flex-start;
@@ -743,19 +745,20 @@ hr {
 </style>
 
 <script>
-/* === Плавное появление при прокрутке === */
-const fadeElements = document.querySelectorAll('.fade-in');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.2 });
-
-fadeElements.forEach(el => observer.observe(el));
+/* === Плавное появление футера при прокрутке === */
+document.addEventListener("DOMContentLoaded", () => {
+  const fadeElements = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  fadeElements.forEach(el => observer.observe(el));
+});
 </script>
- 
+
 </body>
 </html>
