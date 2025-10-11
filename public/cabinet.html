@@ -43,17 +43,10 @@
       <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
     </a>
   </div>
-
-  <!-- Кнопка-бургер -->
-  <button class="burger" aria-label="Открыть меню">
-    <span></span><span></span><span></span>
-  </button>
-
-  <!-- Главное меню -->
+  <button class="burger" aria-label="Открыть меню"><span></span><span></span><span></span></button>
   <nav class="nav">
     <ul>
-      <li>
-        <a href="index.html">Покупка и управление</a>
+      <li><a href="index.html">Покупка и управление</a>
         <div class="dropdown">
           <a href="bilet.html">Купить билет</a>
           <a href="auth.html">Управление бронированием</a>
@@ -62,15 +55,13 @@
           <a href="class.html">Выбор класса</a>
         </div>
       </li>
-      <li>
-        <a href="priority.html">S7avelii Priority</a>
+      <li><a href="priority.html">S7avelii Priority</a>
         <div class="dropdown">
           <a href="priority.html">О программе</a>
           <a href="https://t.me/s7aveliihelper">Как копить</a>
         </div>
       </li>
-      <li>
-        <a href="#">Информация</a>
+      <li><a href="#">Информация</a>
         <div class="dropdown">
           <a href="body.html">О нас</a>
           <a href="office.html">Представительство</a>
@@ -83,282 +74,13 @@
       <li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
     </ul>
   </nav>
-
   <div class="right-menu">
-    <button aria-label="Search">
-      <svg class="icon-search" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle cx="11" cy="11" r="7"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
-    </button>
+    <button aria-label="Search"><svg class="icon-search" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
     <button>RUB</button>
-    <div class="flag" title="Russian flag">
-      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" />
-    </div>
+    <div class="flag" title="Russian flag"><img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" /></div>
     <div id="userArea"></div>
   </div>
 </header>
-
-<style>
-/* === БАЗОВЫЙ СТИЛЬ ДЛЯ ПК === */
-header {
-  display: flex;
-  align-items: center;
-  padding: 0 60px;
-  height: 80px;
-  border-bottom: 1px solid #ccc;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  background: #fff;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
-
-.logo-img {
-  height: 70px;
-  width: auto;
-  cursor: pointer;
-}
-
-nav {
-  display: flex;
-  flex-grow: 1;
-  justify-content: center;
-}
-
-nav ul {
-  display: flex;
-  gap: 40px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-nav li {
-  position: relative;
-}
-
-nav a {
-  color: #000;
-  text-decoration: none;
-  font-size: 16px;
-  padding: 28px 0;
-  position: relative;
-}
-
-nav a::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 3px;
-  background-color: #b3c900;
-  transition: width 0.3s ease;
-}
-nav li:hover > a::after {
-  width: 100%;
-}
-
-.dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #fff;
-  padding: 20px;
-  border-top: 2px solid #b3c900;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-  min-width: 240px;
-  z-index: 999;
-  opacity: 0;
-  transform: translateY(-10px);
-  pointer-events: none;
-  transition: all 0.3s ease;
-}
-nav li:hover .dropdown {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-.dropdown a {
-  display: block;
-  padding: 8px 0;
-  color: #000;
-  font-size: 14px;
-}
-.dropdown a:hover {
-  color: #b3c900;
-}
-
-.right-menu {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  font-size: 16px;
-}
-.right-menu button,
-.right-menu select {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-}
-.flag {
-  width: 20px;
-  height: 14px;
-  border-radius: 2px;
-  overflow: hidden;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
-}
-.flag img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-#userArea a {
-  padding: 8px 14px;
-  border: 1px solid #7ad30d;
-  border-radius: 6px;
-  color: #6dd808;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-/* === КНОПКА-БУРГЕР === */
-.burger {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  width: 28px;
-  height: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  gap: 4px;
-  z-index: 1001;
-}
-.burger span {
-  display: block;
-  height: 3px;
-  background: #000;
-  border-radius: 2px;
-  transition: 0.3s;
-}
-
-/* === МЕДИА (адаптация под мобилки) === */
-@media (max-width: 992px) {
-  header {
-    padding: 0 20px;
-  }
-
-  nav ul {
-    gap: 24px;
-  }
-}
-
-@media (max-width: 768px) {
-  .burger {
-    display: flex;
-  }
-
-  nav {
-    position: fixed;
-    top: 80px;
-    left: 0;
-    right: 0;
-    background: white;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 20px 30px;
-    border-top: 1px solid #eee;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    transform: translateY(-120%);
-    transition: transform 0.3s ease;
-  }
-
-  nav.open {
-    transform: translateY(0);
-  }
-
-  nav ul {
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-  }
-
-  .dropdown {
-    position: static;
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    display: none;
-  }
-
-  nav li:hover .dropdown {
-    display: block;
-  }
-
-  .right-menu {
-    display: none;
-  }
-
-  /* Анимация крестика */
-  .burger.active span:nth-child(1) {
-    transform: rotate(45deg) translateY(8px);
-  }
-  .burger.active span:nth-child(2) {
-    opacity: 0;
-  }
-  .burger.active span:nth-child(3) {
-    transform: rotate(-45deg) translateY(-8px);
-  }
-}
-</style>
-
-<script>
-  // --- Бургер-меню ---
-  const burger = document.querySelector(".burger");
-  const nav = document.querySelector("nav");
-
-  burger.addEventListener("click", () => {
-    burger.classList.toggle("active");
-    nav.classList.toggle("open");
-  });
-
-  // --- Авторизация ---
-  async function updateUserArea() {
-    const userArea = document.getElementById("userArea");
-    try {
-      const res = await fetch("/api/profile");
-      if (!res.ok) throw new Error("Не авторизован");
-      const data = await res.json();
-      const user = data.user;
-
-      if (user.avatar) {
-        userArea.innerHTML = `
-          <img src="${user.avatar}" alt="avatar"
-            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;"
-            onclick="window.location.href='cabinet.html'" />
-        `;
-      } else {
-        userArea.innerHTML = `
-          <span style="cursor:pointer;color:#2196f3;font-weight:500;"
-            onclick="window.location.href='cabinet.html'">${user.fio.split(" ")[0]}</span>`;
-      }
-    } catch {
-      userArea.innerHTML = `<a href="auth.html">Вход</a>`;
-    }
-  }
-  window.addEventListener("DOMContentLoaded", updateUserArea);
-</script>
-
 
 <div class="page">
   <div class="full-header">
@@ -394,7 +116,6 @@ nav li:hover .dropdown {
 
   <div class="grid">
     <div>
-      <!-- Profile -->
       <section id="profileTab" class="card" aria-label="profile">
         <h3>Персональные данные</h3>
         <div class="field">
@@ -430,11 +151,9 @@ nav li:hover .dropdown {
         </div>
       </section>
 
-      <!-- Miles -->
       <section id="milesTab" class="card" style="margin-top:16px;display:none">
         <h3>Мои мили</h3>
         <div class="muted">Состояние бонусов и прогресс статуса</div>
-
         <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
           <div class="card" style="flex:1;min-width:200px">
             <div class="small-muted">Бонусные мили</div>
@@ -458,619 +177,176 @@ nav li:hover .dropdown {
         <div style="margin-top:12px" id="privilegesList"></div>
       </section>
 
-      <!-- Shop -->
       <section id="shopTab" class="card" style="margin-top:16px;display:none">
         <h3>S7avelii Shop</h3>
         <div class="muted">Товары, доступные к покупке</div>
         <div id="productGrid" class="product-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px"></div>
-
-        <h3 style="margin-top:16px">В корзине</h3>
-        <div id="cartList" style="min-height:40px"></div>
-        <div style="display:flex;gap:10px;margin-top:10px;align-items:center">
-          <div id="cartTotal" class="muted">Итого: 0 ₽</div>
-          <div style="margin-left:auto">
-            <button id="checkoutBtn" class="btn" onclick="checkout()">Оформить</button>
-          </div>
-        </div>
       </section>
 
-      <!-- Settings -->
       <section id="settingsTab" class="card" style="margin-top:16px;display:none">
         <h3>Настройки</h3>
-
-        <div class="field">
-          <div>
-            <div class="small-muted">Сменить пароль</div>
-            <input id="newPassword" type="password" placeholder="Новый пароль" style="padding:8px;border-radius:8px;border:1px solid #e6e6e6;width:260px">
-          </div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <button class="btn" onclick="changePassword()">Сменить</button>
-            <div id="pwdMsg" class="muted"></div>
-          </div>
-        </div>
-
-        <div class="field">
-          <div>
-            <div class="small-muted">Привязка VK</div>
-            <input id="vkHandle" placeholder="vk_id или ссылка" style="padding:8px;border-radius:8px;border:1px solid #e6e6e6;width:220px;margin-top:6px">
-          </div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <button class="btn" onclick="bindVK()">Привязать VK</button>
-            <div id="vkMsg" class="muted"></div>
-          </div>
-        </div>
-
-        <div class="field">
-          <div>
-            <div class="small-muted">Привязка Telegram</div>
-            <input id="tgHandle" placeholder="@username" style="padding:8px;border-radius:8px;border:1px solid #e6e6e6;width:220px;margin-top:6px">
-          </div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <button class="btn" onclick="bindTelegram()">Привязать Telegram</button>
-            <div id="tgMsg" class="muted"></div>
-          </div>
-        </div>
-
-        <div style="margin-top:12px"><button class="btn red" onclick="logout()">Выйти</button></div>
+        <button class="btn red" onclick="logout()">Выйти</button>
       </section>
     </div>
 
-    <!-- Right column -->
     <aside>
-      <div class="card">
-        <h3>Быстрые действия</h3>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
-          <button class="btn" onclick="goTo('profileTab')">Редактировать профиль</button>
-          <button class="btn" onclick="goTo('milesTab')">Посмотреть мили</button>
-          <button class="btn" onclick="goTo('shopTab')">Открыть Shop</button>
+      <section class="card">
+        <h3>Корзина</h3>
+        <table class="cart-table" id="cartTable">
+          <thead><tr><th>Товар</th><th>Цена</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div style="margin-top:12px;display:flex;justify-content:space-between;font-weight:600">
+          <span>Итого:</span>
+          <span id="cartTotal">0 ₽</span>
         </div>
-      </div>
-
-      <div class="card" style="margin-top:16px">
-        <h3>Заказы</h3>
-        <div id="ordersContainer" class="muted" style="margin-top:8px">Загрузка...</div>
-      </div>
+        <button class="btn" style="width:100%;margin-top:12px" onclick="checkout()">Оформить</button>
+      </section>
     </aside>
   </div>
 </div>
+
+<footer class="footer" style="margin-top:30px;text-align:center;padding:16px;background:#fff;color:#555;border-top:1px solid #eee">
+  S7avelii Airlines &copy; 2025
+</footer>
+
 <script>
-/* ================ CONFIG ================ */
-const API = ''; // если сервер на том же домене
-const el = id => document.getElementById(id);
-let currentUser = null;
+const el=id=>document.getElementById(id);
+let currentUser=null;
+let products=[];
+let cart=[];
 
-/* ================ Utilities ================ */
-function fmtPrice(n){ return (typeof n==='number' ? n.toLocaleString('ru-RU') : n) + ' ₽' }
-function safeJson(res){ return res.json().catch(()=>({})); }
+// ==== API через JWT ====
+const API='https://your-server.com';
+const token=localStorage.getItem('token');
 
-/* ================ Init ================ */
-document.addEventListener('DOMContentLoaded', async () => {
-  attachHandlers();
-  renderProducts();
-  await loadProfile();
-  await loadCart();
+async function apiFetch(endpoint, options={}) {
+  options.headers={ 'Content-Type':'application/json', ...(options.headers||{}), ...(token?{'Authorization':'Bearer '+token}:{}) };
+  if(options.body && typeof options.body!=='string') options.body=JSON.stringify(options.body);
+  const res=await fetch(API+endpoint, options);
+  if(res.status===401){ showGuestState(); return null; }
+  return res.json().catch(()=>({}));
+}
+
+async function updateUserArea(){
+  const userArea=el("userArea");
+  if(!token){ userArea.innerHTML=`<a href="auth.html">Вход</a>`; return; }
+  try{
+    const data=await apiFetch('/api/profile');
+    const user=data.user||data;
+    currentUser=user;
+    if(user.avatar){
+      userArea.innerHTML=`<img src="${user.avatar}" alt="avatar" style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;" onclick="window.location.href='cabinet.html'" />`;
+      el("avatar").src=user.avatar;
+    }else{
+      userArea.innerHTML=`<span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">${user.fio.split(" ")[0]}</span>`;
+    }
+    loadProfile();
+  }catch{ userArea.innerHTML=`<a href="auth.html">Вход</a>`; }
+}
+
+function showGuestState(){ localStorage.removeItem('token'); location.reload(); }
+
+// ==== Tabs ====
+function showTab(evt){
+  const tab=evt.currentTarget.dataset.tab;
+  document.querySelectorAll(".tabs a").forEach(a=>a.classList.remove("active"));
+  evt.currentTarget.classList.add("active");
+  document.querySelectorAll(".grid section").forEach(s=>s.style.display="none");
+  el(tab).style.display="block";
+}
+
+// ==== Profile ====
+function loadProfile(){
+  if(!currentUser) return;
+  el("fioHeader").textContent=currentUser.fio;
+  el("phoneHeader").textContent=currentUser.phone;
+  el("fioField").textContent=currentUser.fio;
+  el("dobField").textContent=currentUser.dob||'—';
+  el("genderField").textContent=currentUser.gender||'—';
+  el("emailField").textContent=currentUser.email||'—';
+  el("phoneField").textContent=currentUser.phone||'—';
+  el("cardField").textContent=currentUser.cardNumber||'—';
+  el("cardTypeField").textContent=currentUser.cardType||'—';
+
+  el("bonusMiles").textContent=currentUser.bonusMiles||0;
+  const perc=Math.min(100,(currentUser.bonusMiles||0)/1000*100);
+  el("milesProgressBar").style.width=perc+"%";
+  el("milesLabelLeft").textContent="0 миль";
+  el("milesLabelRight").textContent=(currentUser.bonusMiles||0)+" миль";
+
+  el("milesBonusStat").textContent=currentUser.bonusMiles||0;
+  el("milesStatusStat").textContent=currentUser.statusMiles||0;
+  el("milesProgressBar2").style.width=Math.min(100,(currentUser.statusMiles||0)/1000*100)+"%";
+  el("nextLevelLeft").textContent=(currentUser.statusMiles||0)+"/1000";
+  el("nextLevelRight").textContent="Следующий уровень";
+}
+
+// ==== Avatar Upload ====
+el("avatarInput").addEventListener("change",async function(){
+  const file=this.files[0];
+  if(!file) return;
+  const formData=new FormData();
+  formData.append("avatar",file);
+  await fetch(API+'/api/profile/avatar',{method:'POST',headers:{'Authorization':'Bearer '+token},body:formData});
+  const reader=new FileReader();
+  reader.onload=e=>el("avatar").src=e.target.result;
+  reader.readAsDataURL(file);
 });
 
-/* ================ Handlers & UI ================ */
-function attachHandlers(){
-  el('avatarInput').addEventListener('change', function(){
-    const f = this.files[0]; if(!f) return;
-    const r = new FileReader();
-    r.onload = e=>{ el('avatar').src = e.target.result; updateProfile({avatar:e.target.result}); };
-    r.readAsDataURL(f);
+// ==== Shop & Cart ====
+async function loadShop(){
+  const data=await apiFetch('/api/shop');
+  products=data.products||[];
+  renderProducts();
+}
+
+function renderProducts(){
+  const grid=el("productGrid"); grid.innerHTML="";
+  products.forEach(p=>{
+    const div=document.createElement("div");
+    div.className="card";
+    div.innerHTML=`<div style="font-weight:600">${p.name}</div>
+                   <div class="small-muted">${p.price} ₽</div>
+                   <button class="btn" onclick="addToCart(${p.id})">В корзину</button>`;
+    grid.appendChild(div);
   });
 }
 
-function showTab(e){
-  document.querySelectorAll('.tabs a').forEach(a=>a.classList.remove('active'));
-  e.currentTarget.classList.add('active');
-  const tab = e.currentTarget.dataset.tab;
-  document.querySelectorAll('.grid > div > section').forEach(s=>s.style.display='none');
-  el(tab).style.display='block';
+function addToCart(id){
+  const p=products.find(p=>p.id===id);
+  if(!p) return;
+  cart.push(p);
+  renderCart();
 }
 
-function goTo(tabId){ document.querySelector(`.tabs a[data-tab="${tabId}"]`).click(); }
+function removeFromCart(index){ cart.splice(index,1); renderCart(); }
 
-/* ================ Profile ================ */
-async function loadProfile(){
-  try{
-    const res = await fetch(API+'/api/profile'); 
-    if(res.status===401){ showGuestState(); return; }
-    const u = await safeJson(res);
-    currentUser = u;
-
-    el('fioHeader').textContent = u.fio || '—';
-    el('phoneHeader').textContent = u.phone || '—';
-    el('avatar').src = u.avatar || 'https://via.placeholder.com/150';
-
-    el('fioField').textContent = u.fio || '—';
-    el('dobField').textContent = u.dob || '—';
-    el('genderField').textContent = u.gender || '—';
-    el('emailField').textContent = u.email || '—';
-    el('phoneField').textContent = u.phone || '—';
-    el('cardField').textContent = u.card_number || '—';
-    el('cardTypeField').textContent = u.card_type || '—';
-    el('bonusMiles').textContent = u.bonus_miles ?? 0;
-    el('milesBonusStat').textContent = u.bonus_miles ?? 0;
-    el('milesStatusStat').textContent = u.status_miles ?? 0;
-  }catch(err){ console.error(err); }
-}
-
-async function enableEdit(field){
-  const val = prompt('Введите новое значение:', currentUser?.[field==='cardNumber'?'card_number':field] || '');
-  if(val===null) return;
-  const data = {};
-  if(field==='cardNumber') data.card_number = val;
-  else data[field] = val;
-  await updateProfile(data);
-  await loadProfile();
-}
-
-async function updateProfile(data){
-  try{
-    await fetch(API+'/api/profile/update',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(data)
-    });
-  }catch(err){ console.error(err); }
-}
-
-/* ================ Password & VK/Telegram ================ */
-async function changePassword(){
-  const v = el('newPassword').value.trim();
-  if(!v){ el('pwdMsg').textContent='Введите пароль'; return; }
-  await updateProfile({password:v});
-  el('pwdMsg').textContent='Пароль обновлён';
-  el('newPassword').value='';
-}
-async function bindVK(){
-  const v = el('vkHandle').value.trim();
-  if(!v){ el('vkMsg').textContent='Введите VK'; return; }
-  await updateProfile({vk:v});
-  el('vkMsg').textContent='Привязано';
-}
-async function bindTelegram(){
-  const v = el('tgHandle').value.trim();
-  if(!v){ el('tgMsg').textContent='Введите Telegram'; return; }
-  await updateProfile({telegram:v});
-  el('tgMsg').textContent='Привязано';
-}
-function logout(){ fetch(API+'/api/logout'); location.reload(); }
-
-/* ================ Guest ================ */
-function showGuestState(){
-  el('fioHeader').textContent='Гость';
-  el('phoneHeader').textContent='—';
-  document.querySelectorAll('.grid > div > section').forEach(s=>s.style.display='none');
-}
-
-/* ================ Shop & Cart ================ */
-let products = [];
-async function renderProducts(){
-  try{
-    const res = await fetch(API+'/api/products');
-    products = await safeJson(res);
-    const html = products.map(p=>`<div class="card"><div><strong>${p.name}</strong></div><div>${fmtPrice(p.price)}</div><button class="btn" onclick="addToCart(${p.id})">В корзину</button></div>`).join('');
-    el('productGrid').innerHTML = html;
-  }catch(err){ console.error(err); }
-}
-
-let cart = [];
-async function loadCart(){
-  try{
-    const res = await fetch(API+'/api/cart'); cart = await safeJson(res);
-    renderCart();
-  }catch(err){ console.error(err); }
-}
 function renderCart(){
-  if(!cart.length){ el('cartList').textContent='Корзина пуста'; el('cartTotal').textContent='Итого: 0 ₽'; return; }
-  let total = 0;
-  const html = cart.map(item=>{
-    total+=item.price*item.qty;
-    return `<div class="field"><div>${item.name} x${item.qty}</div><div>${fmtPrice(item.price*item.qty)}</div><button class="btn red" onclick="removeFromCart(${item.id})">Удалить</button></div>`;
-  }).join('');
-  el('cartList').innerHTML = html;
-  el('cartTotal').textContent='Итого: '+fmtPrice(total);
+  const tbody=el("cartTable").querySelector("tbody");
+  tbody.innerHTML="";
+  let total=0;
+  cart.forEach((p,i)=>{
+    total+=p.price;
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td>${p.name}</td><td>${p.price} ₽</td><td><button class="btn secondary" onclick="removeFromCart(${i})">×</button></td>`;
+    tbody.appendChild(tr);
+  });
+  el("cartTotal").textContent=total+" ₽";
 }
-async function addToCart(id){
-  await fetch(API+'/api/cart/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
-  await loadCart();
-}
-async function removeFromCart(id){
-  await fetch(API+'/api/cart/remove',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
-  await loadCart();
-}
+
 async function checkout(){
-  await fetch(API+'/api/cart/checkout',{method:'POST'});
+  if(cart.length===0){ alert("Корзина пуста"); return; }
+  await apiFetch('/api/checkout',{method:'POST',body:{items:cart}});
   cart=[]; renderCart();
-  alert('Заказ оформлен');
+  alert("Заказ оформлен!");
 }
 
-/* ================ Orders ================ */
-async function loadOrders(){
-  try{
-    const res = await fetch(API+'/api/orders'); 
-    const orders = await safeJson(res);
-    if(!orders.length){ el('ordersContainer').textContent='Нет заказов'; return; }
-    el('ordersContainer').innerHTML = orders.map(o=>`<div class="field"><div>${o.name} x${o.qty}</div><div>${fmtPrice(o.price*o.qty)}</div></div>`).join('');
-  }catch(err){ console.error(err); }
-}
-loadOrders();
+// ==== Logout ====
+function logout(){ localStorage.removeItem('token'); fetch(API+'/api/logout',{method:'POST'}); location.reload(); }
+
+window.addEventListener("DOMContentLoaded",()=>{ updateUserArea(); loadShop(); });
 </script>
 
-<footer class="footer">
-  <div class="footer-inner">
-    <!-- Верхнее меню -->
-    <div class="footer-menu fade-in">
-      <div class="footer-column">
-        <h3>S7avelii Airlines</h3>
-        <ul>
-          <li><a href="body.html">О компании</a></li>
-          <li><a href="https://t.me/s7aveliihelper">Партнеры</a></li>
-          <li><a href="https://t.me/s7aveliihelper">Контакты</a></li>
-          <li><a href="#">Вакансии</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <ul>
-          <li><a href="office.html">Офисы продаж и представительства</a></li>
-          <li><a href="https://t.me/S7saveliiairlines">Новости</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <h3>Информация</h3>
-        <ul>
-          <li><a href="arrivel.html">Направления</a></li>
-          <li><a href="bilet.html">Рейсы</a></li>
-          <li><a href="https://t.me/s7aveliihelper">Справочный центр</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <ul>
-          <li><a href="https://t.me/s7aveliihelper">Перевозка грузов</a></li>
-          <li><a href="plane.html">Наш флот</a></li>
-          <li><a href="mailto:s7avelii_airlines@mail.ru">Подать заявление на партнёрство</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <hr>
-
-    <!-- Верх футера -->
-    <div class="footer-top fade-in">
-      <div class="footer-actions">
-        <a href="https://t.me/s7aveliihelper" class="action"><img src="icons/chat.svg" alt=""> Чат</a>
-      </div>
-      <div class="footer-phone">
-        <div class="label">тел: Бесплатно по России</div>
-        <div class="number">8 962 629–81–05</div>
-      </div>
-    </div>
-
-    <!-- Подписка -->
-    <div class="footer-subscribe fade-in">
-      <h3>Подпишитесь на рассылку S7avelii</h3>
-      <p>Будьте в курсе акций, открывайте новые маршруты</p>
-      <form class="subscribe-form">
-        <input type="email" placeholder="Ваша почта" required>
-        <button type="submit">→</button>
-      </form>
-      <label class="checkbox">
-        <input type="checkbox" required>
-        Хочу узнавать про скидки и идеи путешествий по почте и соглашаюсь на 
-        <a href="#">обработку персональных данных</a>
-      </label>
-    </div>
-
-    <!-- Низ футера -->
-    <div class="footer-bottom fade-in">
-      <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
-      <div class="socials">
-        <a href="https://vk.com/s7avelii"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
-        <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1"><img src="images/icons8-tiktok-logo-50 (1).avif" alt="TikTok"></a>
-        <a href="https://youtu.be/Dy31uUCFaWw?si=2gyqNYaT3ZVO8WJa"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
-        <a href="https://t.me/S7saveliiairlines"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<style>
-/* === Убираем горизонтальный скролл и белые полосы === */
-html, body {
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-}
-
-/* ==== FOOTER ==== */
-.footer {
-  width: 100%;
-  background: #f1f5f9;
-  padding: 40px 60px;
-  font-family: "Inter", sans-serif;
-  color: #111;
-  box-sizing: border-box;
-}
-
-/* Верхнее меню */
-.footer-menu {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 40px;
-  margin-bottom: 30px;
-}
-
-.footer-column h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-.footer-column ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footer-column ul li {
-  margin-bottom: 8px;
-}
-
-.footer-column ul li a {
-  color: #111;
-  text-decoration: none;
-  font-size: 14px;
-  transition: all 0.2s ease;
-}
-
-.footer-column ul li a:hover {
-  text-decoration: underline;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid #e2e8f0;
-  margin: 30px 0;
-  width: 100%;
-}
-
-/* Верх футера */
-.footer-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 30px;
-}
-
-.footer-actions {
-  display: flex;
-  gap: 30px;
-}
-
-.footer-actions .action {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  color: #111;
-}
-
-.footer-actions img {
-  width: 20px;
-}
-
-.footer-phone {
-  text-align: right;
-}
-
-.footer-phone .label {
-  font-size: 14px;
-  color: #555;
-}
-
-.footer-phone .number {
-  font-size: 18px;
-  font-weight: 600;
-}
-
-/* Подписка */
-.footer-subscribe {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 30px;
-  border: 1px solid #d1d5db;
-}
-
-.footer-subscribe h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.footer-subscribe p {
-  color: #555;
-  margin-bottom: 16px;
-}
-
-.subscribe-form {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.subscribe-form input {
-  flex: 1;
-  padding: 12px 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.subscribe-form button {
-  background: #9ac208;
-  border: none;
-  border-radius: 8px;
-  padding: 0 20px;
-  font-size: 20px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.subscribe-form button:hover {
-  background: #8db807;
-}
-
-.checkbox {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 10px;
-  font-size: 13px;
-  color: #333;
-}
-
-.checkbox a {
-  color: #abc70f;
-  text-decoration: underline;
-}
-
-/* Низ футера */
-.footer-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  font-size: 14px;
-  color: #555;
-}
-
-.socials {
-  display: flex;
-  gap: 12px;
-}
-
-.socials a img {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #fff;
-  padding: 6px;
-  transition: transform 0.2s ease;
-}
-
-.socials a img:hover {
-  transform: scale(1.1);
-}
-
-/* === АНИМАЦИЯ ПОЯВЛЕНИЯ === */
-.fade-in {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* === АДАПТАЦИЯ === */
-@media (max-width: 1024px) {
-  .footer {
-    padding: 30px 40px;
-  }
-  .footer-top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-  }
-  .footer-phone {
-    text-align: left;
-  }
-}
-
-@media (max-width: 768px) {
-  .footer {
-    padding: 30px 20px;
-  }
-  .footer-menu {
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-  .footer-column h3 {
-    font-size: 16px;
-  }
-  .footer-column ul li a {
-    font-size: 13px;
-  }
-  .footer-subscribe {
-    padding: 16px;
-  }
-  .subscribe-form {
-    flex-direction: column;
-  }
-  .subscribe-form button {
-    width: 100%;
-    padding: 10px;
-  }
-  .footer-bottom {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .socials {
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 480px) {
-  .footer-menu {
-    grid-template-columns: 1fr;
-  }
-  .footer-subscribe h3 {
-    font-size: 16px;
-  }
-  .footer-subscribe p {
-    font-size: 13px;
-  }
-  .footer-phone .number {
-    font-size: 16px;
-  }
-  .footer-phone .label {
-    font-size: 12px;
-  }
-  .footer-actions .action {
-    font-size: 14px;
-  }
-  .socials a img {
-    width: 28px;
-    height: 28px;
-  }
-}
-</style>
-
-<script>
-/* === Плавное появление футера при прокрутке === */
-document.addEventListener("DOMContentLoaded", () => {
-  const fadeElements = document.querySelectorAll('.fade-in');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.2 });
-  fadeElements.forEach(el => observer.observe(el));
-});
-</script>
-
-  
 </body>
 </html>
