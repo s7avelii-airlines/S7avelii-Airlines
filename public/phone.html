@@ -334,7 +334,6 @@ setInterval(autoSlide, 4000);
 </div>
 </section>  
 
-    
 <footer class="footer">
   <div class="footer-inner">
     <!-- Верхнее меню -->
@@ -373,6 +372,7 @@ setInterval(autoSlide, 4000);
 
     <hr>
 
+    <!-- Верх футера -->
     <div class="footer-top fade-in">
       <div class="footer-actions">
         <a href="https://t.me/s7aveliihelper" class="action"><img src="icons/chat.svg" alt=""> Чат</a>
@@ -383,6 +383,7 @@ setInterval(autoSlide, 4000);
       </div>
     </div>
 
+    <!-- Подписка -->
     <div class="footer-subscribe fade-in">
       <h3>Подпишитесь на рассылку S7avelii</h3>
       <p>Будьте в курсе акций, открывайте новые маршруты</p>
@@ -397,6 +398,7 @@ setInterval(autoSlide, 4000);
       </label>
     </div>
 
+    <!-- Низ футера -->
     <div class="footer-bottom fade-in">
       <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
       <div class="socials">
@@ -410,14 +412,16 @@ setInterval(autoSlide, 4000);
 </footer>
 
 <style>
+/* === Убираем горизонтальный скролл и белые полосы === */
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
 /* ==== FOOTER ==== */
 .footer {
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
+  width: 100%;
   background: #f1f5f9;
   padding: 40px 60px;
   font-family: "Inter", sans-serif;
@@ -616,9 +620,6 @@ hr {
   .footer {
     padding: 30px 40px;
   }
-  .footer-menu {
-    gap: 25px;
-  }
   .footer-top {
     flex-direction: column;
     align-items: flex-start;
@@ -690,112 +691,21 @@ hr {
 </style>
 
 <script>
-/* === Плавное появление при прокрутке === */
-const fadeElements = document.querySelectorAll('.fade-in');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.2 });
-
-fadeElements.forEach(el => observer.observe(el));
+/* === Плавное появление футера при прокрутке === */
+document.addEventListener("DOMContentLoaded", () => {
+  const fadeElements = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  fadeElements.forEach(el => observer.observe(el));
+});
 </script>
 
-<style>
-.mobile-footer {
-  background: #f1f5f9;   /* светло-серый фон */
-  padding: 20px;
-  font-family: Inter, sans-serif;
-  color: #111;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Блок подписки */
-.subscribe-box {
-  background: #fff;
-  border-radius: 16px;
-  padding: 20px;
-  border: 1px solid #d1d5db;
-  margin-bottom: 20px;
-}
-.subscribe-box h3 {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-.subscribe-box h3 span {
-  font-family: "Comic Sans MS", cursive; /* на фото декоративный шрифт */
-  font-weight: 400;
-}
-.subscribe-box p {
-  color: #333;
-  margin-bottom: 14px;
-  font-size: 14px;
-}
-
-.subscribe-form {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-}
-.subscribe-form input {
-  flex: 1;
-  padding: 12px 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 20px 0 0 20px;
-  font-size: 14px;
-  outline: none;
-}
-.subscribe-form button {
-  background: #a6d463;
-  border: none;
-  border-radius: 0 20px 20px 0;
-  padding: 0 20px;
-  font-size: 22px;
-  cursor: pointer;
-  color: #fff;
-}
-
-.checkbox {
-  font-size: 13px;
-  color: #333;
-  line-height: 1.4;
-}
-.checkbox input {
-  margin-right: 6px;
-}
-.checkbox a {
-  color: #99d812;
-  text-decoration: underline;
-}
-
-/* Низ */
-.footer-bottom {
-  text-align: center;
-}
-.copy {
-  font-size: 13px;
-  color: #555;
-  margin-bottom: 14px;
-}
-.socials {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-}
-.socials a img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #fff;
-  padding: 8px;
-}
-</style>
-</div>
   <!-- Нижнее меню -->
 <nav class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur border-t border-gray-200 shadow z-50">
   <div class="flex justify-around py-2">
