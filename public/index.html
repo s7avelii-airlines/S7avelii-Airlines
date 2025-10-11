@@ -1941,17 +1941,28 @@ function setDefaultCity(input){
 html, body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Убирает горизонтальную прокрутку и белые полосы */
+  overflow-x: hidden;
 }
 
 /* ==== FOOTER ==== */
 .footer {
-  width: 100%; /* исправлено с 100vw */
+  position: relative;
+  left: 50%;
+  right: 50%;
+  width: 100vw; /* по-прежнему во всю ширину */
+  margin-left: -50vw; /* но сбалансировано */
   background: #f1f5f9;
   padding: 40px 60px;
   font-family: "Inter", sans-serif;
   color: #111;
   box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Основная сетка */
+.footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 /* Верхнее меню */
@@ -1989,6 +2000,7 @@ html, body {
   text-decoration: underline;
 }
 
+/* Разделительная линия */
 hr {
   border: none;
   border-top: 1px solid #e2e8f0;
@@ -2133,17 +2145,20 @@ hr {
   .footer {
     padding: 30px 20px;
   }
+
   .footer-menu {
     grid-template-columns: 1fr 1fr;
     gap: 20px;
   }
+
   .footer-bottom {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
-  .socials {
-    justify-content: flex-start;
+
+  .footer-phone {
+    text-align: left;
   }
 }
 
@@ -2151,9 +2166,12 @@ hr {
   .footer-menu {
     grid-template-columns: 1fr;
   }
+
+  .footer-phone {
+    text-align: left;
+  }
 }
 </style>
-
 
 </body>
 </html>
