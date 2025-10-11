@@ -1861,20 +1861,18 @@ function setDefaultCity(input){
 <footer class="footer">
   <div class="footer-inner">
     <!-- Верхнее меню -->
-    <div class="footer-menu">
+    <div class="footer-menu fade-in">
       <div class="footer-column">
         <h3>S7avelii Airlines</h3>
         <ul>
           <li><a href="body.html">О компании</a></li>
           <li><a href="https://t.me/s7aveliihelper">Партнеры</a></li>
           <li><a href="https://t.me/s7aveliihelper">Контакты</a></li>
-          <li><a href="vacance.html">Вакансии</a></li>
+          <li><a href="#">Вакансии</a></li>
         </ul>
       </div>
       <div class="footer-column">
         <ul>
-          <li><a href="office.html"></a></li>
-          <li><a href="office.html"></a></li>
           <li><a href="office.html">Офисы продаж и представительства</a></li>
           <li><a href="https://t.me/S7saveliiairlines">Новости</a></li>
         </ul>
@@ -1891,18 +1889,15 @@ function setDefaultCity(input){
         <ul>
           <li><a href="https://t.me/s7aveliihelper">Перевозка грузов</a></li>
           <li><a href="plane.html">Наш флот</a></li>
-          <li><a href="s7avelii_airlines@mail.ru">Подать заявление на партнёрство</a></li>
+          <li><a href="mailto:s7avelii_airlines@mail.ru">Подать заявление на партнёрство</a></li>
         </ul>
       </div>
     </div>
 
     <hr>
-<!-- Иконка пользователя -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
-        </svg>
-      </a>
-    <div class="footer-top">
+
+    <!-- Верх футера -->
+    <div class="footer-top fade-in">
       <div class="footer-actions">
         <a href="https://t.me/s7aveliihelper" class="action"><img src="icons/chat.svg" alt=""> Чат</a>
       </div>
@@ -1912,7 +1907,8 @@ function setDefaultCity(input){
       </div>
     </div>
 
-    <div class="footer-subscribe">
+    <!-- Подписка -->
+    <div class="footer-subscribe fade-in">
       <h3>Подпишитесь на рассылку S7avelii</h3>
       <p>Будьте в курсе акций, открывайте новые маршруты</p>
       <form class="subscribe-form">
@@ -1920,13 +1916,14 @@ function setDefaultCity(input){
         <button type="submit">→</button>
       </form>
       <label class="checkbox">
-        <input type="checkbox">
+        <input type="checkbox" required>
         Хочу узнавать про скидки и идеи путешествий по почте и соглашаюсь на 
         <a href="#">обработку персональных данных</a>
       </label>
     </div>
 
-    <div class="footer-bottom">
+    <!-- Низ футера -->
+    <div class="footer-bottom fade-in">
       <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
       <div class="socials">
         <a href="https://vk.com/s7avelii"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
@@ -1939,14 +1936,16 @@ function setDefaultCity(input){
 </footer>
 
 <style>
+/* === Убираем горизонтальный скролл и белые полосы === */
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
 /* ==== FOOTER ==== */
 .footer {
-  width: 100vw; /* Во всю ширину экрана */
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
+  width: 100%;
   background: #f1f5f9;
   padding: 40px 60px;
   font-family: "Inter", sans-serif;
@@ -2127,6 +2126,109 @@ hr {
 .socials a img:hover {
   transform: scale(1.1);
 }
+
+/* === АНИМАЦИЯ ПОЯВЛЕНИЯ === */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === АДАПТАЦИЯ === */
+@media (max-width: 1024px) {
+  .footer {
+    padding: 30px 40px;
+  }
+  .footer-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .footer-phone {
+    text-align: left;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 30px 20px;
+  }
+  .footer-menu {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .footer-column h3 {
+    font-size: 16px;
+  }
+  .footer-column ul li a {
+    font-size: 13px;
+  }
+  .footer-subscribe {
+    padding: 16px;
+  }
+  .subscribe-form {
+    flex-direction: column;
+  }
+  .subscribe-form button {
+    width: 100%;
+    padding: 10px;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .socials {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-menu {
+    grid-template-columns: 1fr;
+  }
+  .footer-subscribe h3 {
+    font-size: 16px;
+  }
+  .footer-subscribe p {
+    font-size: 13px;
+  }
+  .footer-phone .number {
+    font-size: 16px;
+  }
+  .footer-phone .label {
+    font-size: 12px;
+  }
+  .footer-actions .action {
+    font-size: 14px;
+  }
+  .socials a img {
+    width: 28px;
+    height: 28px;
+  }
+}
 </style>
+
+<script>
+/* === Плавное появление футера при прокрутке === */
+document.addEventListener("DOMContentLoaded", () => {
+  const fadeElements = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  fadeElements.forEach(el => observer.observe(el));
+});
+</script>
+
 </body>
 </html>
