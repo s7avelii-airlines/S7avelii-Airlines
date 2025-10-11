@@ -1,126 +1,186 @@
+// server/server.js
 import express from "express";
-import dotenv from "dotenv";
-import bcrypt from "bcryptjs";
-import pg from "pg";
-import session from "express-session";
-import cookieParser from "cookie-parser";
 import cors from "cors";
+import cookieParser from "cookie-parser";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import pg from "pg";
+import dotenv from "dotenv";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 10000;
+const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
 
-const { Pool } = pg;
-
-// подключение к Neon
-const pool = new Pool({
+// Подключение к базе Neon
+const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
 });
 
-// middleware
-app.use(express.json());
+// Middleware
+app.use(express.json({ limit: "5mb" }));
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: "https://www.s7avelii-airlines.ru", // твой статичный сайт
-    credentials: true
-  })
-);
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "s7avelii-secret",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: true, sameSite: "none" }
-  })
-);
+app.use(cors({ origin: true, credentials: true }));
 
-// тест соединения с базой
-app.get("/api/test-db", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT NOW()");
-    res.json({ ok: true, time: result.rows[0].now });
-  } catch (err) {
-    console.error("Ошибка подключения к БД:", err);
-    res.status(500).json({ ok: false, error: "DB connection failed" });
-  }
-});
+/* ===================== 🔐 AUTH ===================== */
 
-// регистрация
+// Регистрация
 app.post("/api/register", async (req, res) => {
+  const { fio, email, phone, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: "Заполните все поля" });
+
   try {
-    const { fio, email, phone, password, cardNumber, cardType } = req.body;
-
-    if (!fio || !email || !phone || !password)
-      return res.status(400).json({ error: "Все поля обязательны" });
-
-    const hash = await bcrypt.hash(password, 10);
-    await pool.query(
-      `CREATE TABLE IF NOT EXISTS users(
-        id SERIAL PRIMARY KEY,
-        fio TEXT,
-        email TEXT UNIQUE,
-        phone TEXT UNIQUE,
-        password TEXT,
-        card_number TEXT,
-        card_type TEXT
-      )`
+    const hashed = await bcrypt.hash(password, 10);
+    const user = await pool.query(
+      `INSERT INTO users (fio, email, phone, password) VALUES ($1,$2,$3,$4) RETURNING id,fio,email,phone`,
+      [fio, email, phone, hashed]
     );
-
-    const existing = await pool.query(
-      "SELECT * FROM users WHERE email=$1 OR phone=$2",
-      [email, phone]
-    );
-    if (existing.rows.length > 0)
-      return res.status(400).json({ error: "Пользователь уже существует" });
-
-    await pool.query(
-      `INSERT INTO users (fio,email,phone,password,card_number,card_type)
-       VALUES ($1,$2,$3,$4,$5,$6)`,
-      [fio, email, phone, hash, cardNumber, cardType]
-    );
-
-    res.json({ ok: true, message: "Регистрация успешна" });
+    const token = jwt.sign({ id: user.rows[0].id }, JWT_SECRET, { expiresIn: "7d" });
+    res.cookie("token", token, { httpOnly: true, sameSite: "lax" });
+    res.json({ user: user.rows[0] });
   } catch (err) {
-    console.error("Ошибка регистрации:", err);
+    console.error(err);
     res.status(500).json({ error: "Ошибка регистрации" });
   }
 });
 
-// вход
+// Вход
 app.post("/api/login", async (req, res) => {
+  const { email, password } = req.body;
   try {
-    const { phone, password } = req.body;
-    if (!phone || !password)
-      return res.status(400).json({ error: "Введите телефон и пароль" });
-
-    const result = await pool.query("SELECT * FROM users WHERE phone=$1", [
-      phone
-    ]);
+    const result = await pool.query("SELECT * FROM users WHERE email=$1", [email]);
+    if (!result.rows.length) return res.status(401).json({ error: "Неверные данные" });
     const user = result.rows[0];
-    if (!user) return res.status(400).json({ error: "Пользователь не найден" });
+    const ok = await bcrypt.compare(password, user.password);
+    if (!ok) return res.status(401).json({ error: "Неверный пароль" });
 
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(400).json({ error: "Неверный пароль" });
-
-    req.session.user = { id: user.id, fio: user.fio };
-    res.json({ ok: true, user: { fio: user.fio, email: user.email } });
+    const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "7d" });
+    res.cookie("token", token, { httpOnly: true, sameSite: "lax" });
+    res.json({ user: { id: user.id, fio: user.fio, email: user.email, phone: user.phone } });
   } catch (err) {
-    console.error("Ошибка входа:", err);
+    console.error(err);
     res.status(500).json({ error: "Ошибка входа" });
   }
 });
 
-// личный кабинет
-app.get("/api/me", (req, res) => {
-  if (!req.session.user)
-    return res.status(401).json({ error: "Не авторизован" });
-  res.json({ ok: true, user: req.session.user });
+// Выход
+app.get("/api/logout", (req, res) => {
+  res.clearCookie("token");
+  res.json({ message: "Вы вышли" });
 });
 
-// запуск
-app.listen(PORT, () =>
-  console.log(`✅ Сервер запущен на порту ${PORT}`)
-);
+// Middleware для проверки токена
+async function auth(req, res, next) {
+  const token = req.cookies.token;
+  if (!token) return res.status(401).json({ error: "Нет токена" });
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch {
+    res.status(401).json({ error: "Неверный токен" });
+  }
+}
+
+/* ===================== 👤 PROFILE ===================== */
+
+app.get("/api/profile", auth, async (req, res) => {
+  const { id } = req.user;
+  try {
+    const result = await pool.query("SELECT * FROM users WHERE id=$1", [id]);
+    res.json(result.rows[0]);
+  } catch {
+    res.status(500).json({ error: "Ошибка профиля" });
+  }
+});
+
+app.post("/api/profile/update", auth, async (req, res) => {
+  const { id } = req.user;
+  const fields = req.body;
+  const entries = Object.entries(fields);
+  if (!entries.length) return res.json({ message: "Нечего обновлять" });
+
+  try {
+    const updates = [];
+    const values = [];
+    entries.forEach(([key, val], i) => {
+      updates.push(`${key}=$${i + 1}`);
+      values.push(val);
+    });
+    values.push(id);
+    await pool.query(`UPDATE users SET ${updates.join(",")} WHERE id=$${values.length}`, values);
+    res.json({ message: "Профиль обновлён" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Ошибка обновления профиля" });
+  }
+});
+
+/* ===================== 🛍️ PRODUCTS ===================== */
+
+app.get("/api/products", async (_, res) => {
+  try {
+    const r = await pool.query("SELECT * FROM products ORDER BY id");
+    res.json(r.rows);
+  } catch {
+    res.status(500).json({ error: "Ошибка товаров" });
+  }
+});
+
+/* ===================== 🧺 CART ===================== */
+
+app.get("/api/cart", auth, async (req, res) => {
+  const { id } = req.user;
+  try {
+    const r = await pool.query("SELECT * FROM cart WHERE user_id=$1", [id]);
+    res.json(r.rows);
+  } catch {
+    res.status(500).json({ error: "Ошибка корзины" });
+  }
+});
+
+app.post("/api/cart/add", auth, async (req, res) => {
+  const { id } = req.user;
+  const { id: productId } = req.body;
+  try {
+    const product = await pool.query("SELECT * FROM products WHERE id=$1", [productId]);
+    if (!product.rows.length) return res.status(404).json({ error: "Товар не найден" });
+    const p = product.rows[0];
+    await pool.query(
+      `INSERT INTO cart (user_id, product_id, name, price, qty) VALUES ($1,$2,$3,$4,1)
+       ON CONFLICT (user_id, product_id) DO UPDATE SET qty = cart.qty + 1`,
+      [id, p.id, p.name, p.price]
+    );
+    res.json({ message: "Добавлено" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Ошибка добавления в корзину" });
+  }
+});
+
+app.post("/api/cart/remove", auth, async (req, res) => {
+  const { id } = req.user;
+  const { id: productId } = req.body;
+  try {
+    await pool.query("DELETE FROM cart WHERE user_id=$1 AND product_id=$2", [id, productId]);
+    res.json({ message: "Удалено" });
+  } catch {
+    res.status(500).json({ error: "Ошибка удаления" });
+  }
+});
+
+app.post("/api/cart/checkout", auth, async (req, res) => {
+  const { id } = req.user;
+  try {
+    await pool.query("DELETE FROM cart WHERE user_id=$1", [id]);
+    res.json({ message: "Заказ оформлен" });
+  } catch {
+    res.status(500).json({ error: "Ошибка оформления" });
+  }
+});
+
+/* ===================== 🚀 START ===================== */
+
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
