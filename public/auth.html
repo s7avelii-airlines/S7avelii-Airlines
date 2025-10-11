@@ -1,375 +1,58 @@
 <!doctype html>
 <html lang="ru">
 <head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Вход/Регистрация S7avelii</title>
+  <link rel="icon" href="images/favicon.png" type="image/png">
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-  .search-section {
-    margin-bottom: 10px;
-  }
-  .special-offers {
-    margin-top: 10px;
-  }
-</style>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Вход/Регистрация S7avelii</title>
-<link rel="icon" href="images/favicon.png" type="image/png">
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-  :root{
-    --green:#9cc42f;
-    --green-dark:#8ab12a;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Inter,Arial,sans-serif;min-height:100vh;background:url("images/Blue Modern Business Proposal Presentation.avif") no-repeat center/cover;}
-  header{position:fixed;top:0;left:0;width:100%;height:70px;display:flex;align-items:center;gap:20px;padding:0 20px;background:#fff;z-index:1000;border-bottom:1px solid #e5e5e5;}
-  .logo-img{height:50px}
-  nav ul{margin:0;padding:0;list-style:none;display:flex;gap:20px}
-  nav a{text-decoration:none;color:#111;position:relative;padding:25px 0}
-  nav a::after{content:"";position:absolute;bottom:0;left:0;height:2px;width:0;background:var(--green);transition:.25s}
-  nav li:hover>a::after{width:100%}
-  main{display:flex;justify-content:center;align-items:flex-start;padding:110px 20px 40px}
-  .card{width:100%;max-width:420px;background:rgba(255,255,255,0.96);border-radius:12px;padding:22px;box-shadow:0 8px 24px rgba(0,0,0,0.15);}
-  h2{margin:0 0 14px;font-size:20px}
-  input, select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d6d8db;margin-top:10px;font-size:14px}
-  .btn{width:100%;padding:12px;border-radius:8px;border:0;background:var(--green);color:#fff;font-weight:600;margin-top:14px;cursor:pointer}
-  .btn:hover{background:var(--green-dark)}
-  .btn[disabled]{opacity:.6;cursor:not-allowed}
-  .switch{text-align:center;margin-top:14px;font-size:14px}
-  .switch button{background:none;border:0;color:var(--green);text-decoration:underline;cursor:pointer;font:inherit}
-  .error{color:#d23f44;margin-top:10px;font-size:13px}
-  .success{color:green;margin-top:10px;font-size:13px}
-  .hidden{display:none}
-  .row { display:flex; gap:10px; flex-wrap:wrap; }
-  .half{flex:1; min-width:120px}
-  .card-type { display:inline-flex; align-items:center; gap:8px; margin-right:8px; margin-top:8px; }
-  .card-type img { display:inline-block; vertical-align:middle; border-radius:6px; }
-  @media(max-width:600px){ .row{flex-direction:column} }
-</style>
+    :root{--green:#9cc42f;--green-dark:#8ab12a}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,Arial,sans-serif;min-height:100vh;background:url("images/Blue Modern Business Proposal Presentation.avif") no-repeat center/cover}
+    header{position:fixed;top:0;left:0;width:100%;height:70px;display:flex;align-items:center;gap:20px;padding:0 20px;background:#fff;z-index:1000;border-bottom:1px solid #e5e5e5}
+    .logo-img{height:50px}
+    nav ul{margin:0;padding:0;list-style:none;display:flex;gap:20px}
+    nav a{text-decoration:none;color:#111;position:relative;padding:25px 0}
+    nav a::after{content:"";position:absolute;bottom:0;left:0;height:2px;width:0;background:var(--green);transition:.25s}
+    nav li:hover>a::after{width:100%}
+    main{display:flex;justify-content:center;align-items:flex-start;padding:110px 20px 40px}
+    .card{width:100%;max-width:520px;background:rgba(255,255,255,0.96);border-radius:12px;padding:22px;box-shadow:0 8px 24px rgba(0,0,0,0.15)}
+    h2{margin:0 0 14px;font-size:20px}
+    input, select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d6d8db;margin-top:10px;font-size:14px}
+    .btn{width:100%;padding:12px;border-radius:8px;border:0;background:var(--green);color:#fff;font-weight:600;margin-top:14px;cursor:pointer}
+    .btn:hover{background:var(--green-dark)}
+    .btn[disabled]{opacity:.6;cursor:not-allowed}
+    .switch{text-align:center;margin-top:14px;font-size:14px}
+    .switch button{background:none;border:0;color:var(--green);text-decoration:underline;cursor:pointer;font:inherit}
+    .error{color:#d23f44;margin-top:10px;font-size:13px}
+    .success{color:green;margin-top:10px;font-size:13px}
+    .hidden{display:none}
+    .row { display:flex; gap:10px; flex-wrap:wrap; }
+    .half{flex:1; min-width:120px}
+    .card-type { display:inline-flex; align-items:center; gap:8px; margin-right:8px; margin-top:8px; }
+    .card-type img { display:inline-block; vertical-align:middle; border-radius:6px; }
+    @media(max-width:600px){ .row{flex-direction:column} }
+  </style>
 </head>
 <body>
 
 <header>
   <div class="logo">
-    <a href="index.html">
-      <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
-    </a>
+    <a href="index.html"><img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" /></a>
   </div>
-
-  <!-- Кнопка-бургер -->
-  <button class="burger" aria-label="Открыть меню">
-    <span></span><span></span><span></span>
-  </button>
-
-  <!-- Главное меню -->
   <nav class="nav">
     <ul>
-      <li>
-        <a href="index.html">Покупка и управление</a>
-        <div class="dropdown">
-          <a href="bilet.html">Купить билет</a>
-          <a href="auth.html">Управление бронированием</a>
-          <a href="arrivel.html">Направления</a>
-          <a href="HOTEL.html">Отели</a>
-          <a href="class.html">Выбор класса</a>
-        </div>
-      </li>
-      <li>
-        <a href="priority.html">S7avelii Priority</a>
-        <div class="dropdown">
-          <a href="priority.html">О программе</a>
-          <a href="https://t.me/s7aveliihelper">Как копить</a>
-        </div>
-      </li>
-      <li>
-        <a href="#">Информация</a>
-        <div class="dropdown">
-          <a href="body.html">О нас</a>
-          <a href="office.html">Представительство</a>
-          <a href="plane.html">Наш флот</a>
-          <a href="eat.html">Питание</a>
-          <a href="https://t.me/s7aveliihelper">Контакты</a>
-        </div>
-      </li>
-      <li><a href="busines.html">Бизнесу</a></li>
-      <li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
+      <li><a href="index.html">Покупка и управление</a></li>
+      <li><a href="priority.html">S7avelii Priority</a></li>
+      <li><a href="body.html">Информация</a></li>
     </ul>
   </nav>
 
   <div class="right-menu">
-    <button aria-label="Search">
-      <svg class="icon-search" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle cx="11" cy="11" r="7"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
-    </button>
-    <button>RUB</button>
-    <div class="flag" title="Russian flag">
-      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" />
-    </div>
     <div id="userArea"></div>
   </div>
 </header>
-
-<style>
-/* === БАЗОВЫЙ СТИЛЬ ДЛЯ ПК === */
-header {
-  display: flex;
-  align-items: center;
-  padding: 0 60px;
-  height: 80px;
-  border-bottom: 1px solid #ccc;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  background: #fff;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
-
-.logo-img {
-  height: 70px;
-  width: auto;
-  cursor: pointer;
-}
-
-nav {
-  display: flex;
-  flex-grow: 1;
-  justify-content: center;
-}
-
-nav ul {
-  display: flex;
-  gap: 40px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-nav li {
-  position: relative;
-}
-
-nav a {
-  color: #000;
-  text-decoration: none;
-  font-size: 16px;
-  padding: 28px 0;
-  position: relative;
-}
-
-nav a::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 3px;
-  background-color: #b3c900;
-  transition: width 0.3s ease;
-}
-nav li:hover > a::after {
-  width: 100%;
-}
-
-.dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #fff;
-  padding: 20px;
-  border-top: 2px solid #b3c900;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-  min-width: 240px;
-  z-index: 999;
-  opacity: 0;
-  transform: translateY(-10px);
-  pointer-events: none;
-  transition: all 0.3s ease;
-}
-nav li:hover .dropdown {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-.dropdown a {
-  display: block;
-  padding: 8px 0;
-  color: #000;
-  font-size: 14px;
-}
-.dropdown a:hover {
-  color: #b3c900;
-}
-
-.right-menu {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  font-size: 16px;
-}
-.right-menu button,
-.right-menu select {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-}
-.flag {
-  width: 20px;
-  height: 14px;
-  border-radius: 2px;
-  overflow: hidden;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
-}
-.flag img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-#userArea a {
-  padding: 8px 14px;
-  border: 1px solid #7ad30d;
-  border-radius: 6px;
-  color: #6dd808;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-/* === КНОПКА-БУРГЕР === */
-.burger {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  width: 28px;
-  height: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  gap: 4px;
-  z-index: 1001;
-}
-.burger span {
-  display: block;
-  height: 3px;
-  background: #000;
-  border-radius: 2px;
-  transition: 0.3s;
-}
-
-/* === МЕДИА (адаптация под мобилки) === */
-@media (max-width: 992px) {
-  header {
-    padding: 0 20px;
-  }
-
-  nav ul {
-    gap: 24px;
-  }
-}
-
-@media (max-width: 768px) {
-  .burger {
-    display: flex;
-  }
-
-  nav {
-    position: fixed;
-    top: 80px;
-    left: 0;
-    right: 0;
-    background: white;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 20px 30px;
-    border-top: 1px solid #eee;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    transform: translateY(-120%);
-    transition: transform 0.3s ease;
-  }
-
-  nav.open {
-    transform: translateY(0);
-  }
-
-  nav ul {
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-  }
-
-  .dropdown {
-    position: static;
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    display: none;
-  }
-
-  nav li:hover .dropdown {
-    display: block;
-  }
-
-  .right-menu {
-    display: none;
-  }
-
-  /* Анимация крестика */
-  .burger.active span:nth-child(1) {
-    transform: rotate(45deg) translateY(8px);
-  }
-  .burger.active span:nth-child(2) {
-    opacity: 0;
-  }
-  .burger.active span:nth-child(3) {
-    transform: rotate(-45deg) translateY(-8px);
-  }
-}
-</style>
-
-<script>
-  // --- Бургер-меню ---
-  const burger = document.querySelector(".burger");
-  const nav = document.querySelector("nav");
-
-  burger.addEventListener("click", () => {
-    burger.classList.toggle("active");
-    nav.classList.toggle("open");
-  });
-
-  // --- Авторизация ---
-  async function updateUserArea() {
-    const userArea = document.getElementById("userArea");
-    try {
-      const res = await fetch("/api/profile");
-      if (!res.ok) throw new Error("Не авторизован");
-      const data = await res.json();
-      const user = data.user;
-
-      if (user.avatar) {
-        userArea.innerHTML = `
-          <img src="${user.avatar}" alt="avatar"
-            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;"
-            onclick="window.location.href='cabinet.html'" />
-        `;
-      } else {
-        userArea.innerHTML = `
-          <span style="cursor:pointer;color:#2196f3;font-weight:500;"
-            onclick="window.location.href='cabinet.html'">${user.fio.split(" ")[0]}</span>`;
-      }
-    } catch {
-      userArea.innerHTML = `<a href="auth.html">Вход</a>`;
-    }
-  }
-  window.addEventListener("DOMContentLoaded", updateUserArea);
-</script>
-
 
 <main>
   <div class="card" aria-live="polite">
@@ -411,7 +94,7 @@ nav li:hover .dropdown {
       <input id="regCard" type="text" placeholder="Номер карты S7avelii Priority">
 
       <div class="small-muted">Выберите тип карты:</div>
-      <div class="row">
+      <div class="row" style="margin-bottom:6px;">
         <label class="card-type"><input type="radio" name="regCardType" value="VIP"> VIP <img src="images/vip_card.png" alt="VIP" width="60"></label>
         <label class="card-type"><input type="radio" name="regCardType" value="Classic"> Classic <img src="images/classic_card.png" alt="Classic" width="60"></label>
         <label class="card-type"><input type="radio" name="regCardType" value="None" checked> Нет</label>
@@ -427,7 +110,7 @@ nav li:hover .dropdown {
 </main>
 
 <script>
-/* === API URL (вставил твой Render backend) === */
+/* === API URL (если сменится, замени тут) === */
 const API = 'https://s7avelii-airlines-1.onrender.com';
 
 const loginForm = document.getElementById('loginForm');
@@ -465,11 +148,38 @@ switchBtn.addEventListener('click', (e) => {
   showForm(loginForm.classList.contains('hidden'));
 });
 
-// Авторизация
+/* === updateUserArea теперь использует API и credentials === */
+async function updateUserArea(){
+  const userArea = document.getElementById('userArea');
+  try {
+    const res = await fetch(API + '/api/profile', { credentials: 'include' });
+    if (!res.ok) throw new Error('not-auth');
+    const data = await res.json().catch(()=>({}));
+    const user = data.user || data;
+    if (user && user.fio) {
+      const short = user.fio.split(' ')[0] || user.fio;
+      userArea.innerHTML = `<a href="cabinet.html" style="padding:8px 14px;border:1px solid #7ad30d;border-radius:6px;color:#6dd808;text-decoration:none">${short}</a>`;
+    } else {
+      userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+    }
+  } catch (err) {
+    userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+  }
+}
+window.addEventListener('DOMContentLoaded', updateUserArea);
+
+/* === Helpers === */
+function normalizePhone(p){ return String(p||'').replace(/[^0-9+]/g,''); }
+function showNetworkError(el, err){
+  console.error('network error', err);
+  el.textContent = 'Ошибка сети. Проверь сервер и CORS.';
+}
+
+/* === Login === */
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   loginError.textContent = '';
-  const phone = document.getElementById('loginPhone').value.trim();
+  const phone = normalizePhone(document.getElementById('loginPhone').value);
   const password = document.getElementById('loginPassword').value;
   if (!phone) { loginError.textContent = 'Введите телефон.'; return; }
   if (!password) { loginError.textContent = 'Введите пароль.'; return; }
@@ -485,21 +195,22 @@ loginForm.addEventListener('submit', async (e) => {
     });
     const data = await resp.json().catch(()=>({}));
     if (!resp.ok) {
-      loginError.textContent = data.error || 'Ошибка входа';
+      loginError.textContent = data.error || `Ошибка входа (${resp.status})`;
       loginBtn.disabled = false;
       loginBtn.textContent = 'Войти';
       return;
     }
+    // success
+    updateUserArea().catch(()=>{});
     window.location.href = 'cabinet.html';
   } catch (err) {
-    console.error('login fetch error', err);
-    loginError.textContent = 'Ошибка сети. Проверь сервер и CORS.';
+    showNetworkError(loginError, err);
     loginBtn.disabled = false;
     loginBtn.textContent = 'Войти';
   }
 });
 
-// Регистрация
+/* === Register === */
 registerForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   regError.textContent = '';
@@ -507,7 +218,7 @@ registerForm.addEventListener('submit', async (e) => {
 
   const fio = document.getElementById('regFio').value.trim();
   const email = document.getElementById('regEmail').value.trim();
-  const phone = document.getElementById('regPhone').value.trim();
+  const phone = normalizePhone(document.getElementById('regPhone').value);
   const password = document.getElementById('regPassword').value;
   const dob = document.getElementById('regDob').value || '';
   const gender = document.getElementById('regGender').value || '';
@@ -522,408 +233,34 @@ registerForm.addEventListener('submit', async (e) => {
   regBtn.disabled = true;
   regBtn.textContent = 'Регистрация...';
   try {
+    const payload = {
+      fio, email, phone, password, dob, gender,
+      cardNumber, cardType,
+      card_number: cardNumber, card_type: cardType
+    };
     const resp = await fetch(API + '/api/register', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        fio, email, phone, password,
-        dob, gender,
-        cardNumber, cardType,
-        // отправляем также snake_case на случай, если backend ожидает такие поля
-        card_number: cardNumber, card_type: cardType
-      })
+      body: JSON.stringify(payload)
     });
     const data = await resp.json().catch(()=>({}));
     if (!resp.ok) {
-      regError.textContent = data.error||'Ошибка регистрации';
+      regError.textContent = data.error || `Ошибка регистрации (${resp.status})`;
       regBtn.disabled = false;
       regBtn.textContent = 'Зарегистрироваться';
       return;
     }
     regSuccess.textContent = 'Регистрация успешна — перенаправляем в кабинет...';
-    setTimeout(()=> window.location.href='cabinet.html', 900);
+    updateUserArea().catch(()=>{});
+    setTimeout(()=> window.location.href='cabinet.html', 800);
   } catch (err) {
-    console.error('register fetch error', err);
-    regError.textContent = 'Ошибка сети. Проверь сервер и CORS.';
+    showNetworkError(regError, err);
     regBtn.disabled = false;
     regBtn.textContent = 'Зарегистрироваться';
   }
 });
 </script>
 
-<footer class="footer">
-  <div class="footer-inner">
-    <!-- Верхнее меню -->
-    <div class="footer-menu fade-in">
-      <div class="footer-column">
-        <h3>S7avelii Airlines</h3>
-        <ul>
-          <li><a href="body.html">О компании</a></li>
-          <li><a href="https://t.me/s7aveliihelper">Партнеры</a></li>
-          <li><a href="https://t.me/s7aveliihelper">Контакты</a></li>
-          <li><a href="#">Вакансии</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <ul>
-          <li><a href="office.html">Офисы продаж и представительства</a></li>
-          <li><a href="https://t.me/S7saveliiairlines">Новости</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <h3>Информация</h3>
-        <ul>
-          <li><a href="arrivel.html">Направления</a></li>
-          <li><a href="bilet.html">Рейсы</a></li>
-          <li><a href="https://t.me/s7aveliihelper">Справочный центр</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <ul>
-          <li><a href="https://t.me/s7aveliihelper">Перевозка грузов</a></li>
-          <li><a href="plane.html">Наш флот</a></li>
-          <li><a href="mailto:s7avelii_airlines@mail.ru">Подать заявление на партнёрство</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <hr>
-
-    <!-- Верх футера -->
-    <div class="footer-top fade-in">
-      <div class="footer-actions">
-        <a href="https://t.me/s7aveliihelper" class="action"><img src="icons/chat.svg" alt=""> Чат</a>
-      </div>
-      <div class="footer-phone">
-        <div class="label">тел: Бесплатно по России</div>
-        <div class="number">8 962 629–81–05</div>
-      </div>
-    </div>
-
-    <!-- Подписка -->
-    <div class="footer-subscribe fade-in">
-      <h3>Подпишитесь на рассылку S7avelii</h3>
-      <p>Будьте в курсе акций, открывайте новые маршруты</p>
-      <form class="subscribe-form">
-        <input type="email" placeholder="Ваша почта" required>
-        <button type="submit">→</button>
-      </form>
-      <label class="checkbox">
-        <input type="checkbox" required>
-        Хочу узнавать про скидки и идеи путешествий по почте и соглашаюсь на 
-        <a href="#">обработку персональных данных</a>
-      </label>
-    </div>
-
-    <!-- Низ футера -->
-    <div class="footer-bottom fade-in">
-      <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
-      <div class="socials">
-        <a href="https://vk.com/s7avelii"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
-        <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1"><img src="images/icons8-tiktok-logo-50 (1).avif" alt="TikTok"></a>
-        <a href="https://youtu.be/Dy31uUCFaWw?si=2gyqNYaT3ZVO8WJa"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
-        <a href="https://t.me/S7saveliiairlines"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<style>
-/* === Убираем горизонтальный скролл и белые полосы === */
-html, body {
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-}
-
-/* ==== FOOTER ==== */
-.footer {
-  width: 100%;
-  background: #f1f5f9;
-  padding: 40px 60px;
-  font-family: "Inter", sans-serif;
-  color: #111;
-  box-sizing: border-box;
-}
-
-/* Верхнее меню */
-.footer-menu {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 40px;
-  margin-bottom: 30px;
-}
-
-.footer-column h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-.footer-column ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footer-column ul li {
-  margin-bottom: 8px;
-}
-
-.footer-column ul li a {
-  color: #111;
-  text-decoration: none;
-  font-size: 14px;
-  transition: all 0.2s ease;
-}
-
-.footer-column ul li a:hover {
-  text-decoration: underline;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid #e2e8f0;
-  margin: 30px 0;
-  width: 100%;
-}
-
-/* Верх футера */
-.footer-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 30px;
-}
-
-.footer-actions {
-  display: flex;
-  gap: 30px;
-}
-
-.footer-actions .action {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  color: #111;
-}
-
-.footer-actions img {
-  width: 20px;
-}
-
-.footer-phone {
-  text-align: right;
-}
-
-.footer-phone .label {
-  font-size: 14px;
-  color: #555;
-}
-
-.footer-phone .number {
-  font-size: 18px;
-  font-weight: 600;
-}
-
-/* Подписка */
-.footer-subscribe {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 30px;
-  border: 1px solid #d1d5db;
-}
-
-.footer-subscribe h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.footer-subscribe p {
-  color: #555;
-  margin-bottom: 16px;
-}
-
-.subscribe-form {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.subscribe-form input {
-  flex: 1;
-  padding: 12px 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.subscribe-form button {
-  background: #9ac208;
-  border: none;
-  border-radius: 8px;
-  padding: 0 20px;
-  font-size: 20px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.subscribe-form button:hover {
-  background: #8db807;
-}
-
-.checkbox {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 10px;
-  font-size: 13px;
-  color: #333;
-}
-
-.checkbox a {
-  color: #abc70f;
-  text-decoration: underline;
-}
-
-/* Низ футера */
-.footer-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  font-size: 14px;
-  color: #555;
-}
-
-.socials {
-  display: flex;
-  gap: 12px;
-}
-
-.socials a img {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #fff;
-  padding: 6px;
-  transition: transform 0.2s ease;
-}
-
-.socials a img:hover {
-  transform: scale(1.1);
-}
-
-/* === АНИМАЦИЯ ПОЯВЛЕНИЯ === */
-.fade-in {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* === АДАПТАЦИЯ === */
-@media (max-width: 1024px) {
-  .footer {
-    padding: 30px 40px;
-  }
-  .footer-top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-  }
-  .footer-phone {
-    text-align: left;
-  }
-}
-
-@media (max-width: 768px) {
-  .footer {
-    padding: 30px 20px;
-  }
-  .footer-menu {
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-  .footer-column h3 {
-    font-size: 16px;
-  }
-  .footer-column ul li a {
-    font-size: 13px;
-  }
-  .footer-subscribe {
-    padding: 16px;
-  }
-  .subscribe-form {
-    flex-direction: column;
-  }
-  .subscribe-form button {
-    width: 100%;
-    padding: 10px;
-  }
-  .footer-bottom {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .socials {
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 480px) {
-  .footer-menu {
-    grid-template-columns: 1fr;
-  }
-  .footer-subscribe h3 {
-    font-size: 16px;
-  }
-  .footer-subscribe p {
-    font-size: 13px;
-  }
-  .footer-phone .number {
-    font-size: 16px;
-  }
-  .footer-phone .label {
-    font-size: 12px;
-  }
-  .footer-actions .action {
-    font-size: 14px;
-  }
-  .socials a img {
-    width: 28px;
-    height: 28px;
-  }
-}
-</style>
-
-<script>
-/* === Плавное появление футера при прокрутке === */
-document.addEventListener("DOMContentLoaded", () => {
-  const fadeElements = document.querySelectorAll('.fade-in');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.2 });
-  fadeElements.forEach(el => observer.observe(el));
-});
-</script>
-
-  
 </body>
 </html>
