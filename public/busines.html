@@ -29,58 +29,327 @@
   </style>
 </head>
 
-<body class="text-gray-900 font-sans">
-  <!-- Header -->
-  <header class="flex flex-wrap justify-between items-center px-4 py-3 border-b">
-    <div class="flex items-center space-x-2">
-      <img src="images/photo_5238163653918846596_y (3).avif" alt="Logo" class="h-12">
-    </div>
-
-    <!-- Десктоп-меню -->
-    <nav class="hidden md:flex space-x-6 text-sm items-center relative">
-      <div class="relative group">
-        <a href="Index.html" class="hover:underline">Покупка и управление</a>
-        <div class="dropdown-menu mt-2 py-2">
-          <a href="HOTEL.html" class="block px-4 py-2 hover:bg-gray-100">Отели</a>
-          <a href="arrivel.html" class="block px-4 py-2 hover:bg-gray-100">Направления</a>
-          <a href="class.html" class="block px-4 py-2 hover:bg-gray-100">Выбор класса</a>
-        </div>
-      </div>
-      <a href="priority.html" class="hover:text-green-600">S7avelii Priority</a>
-      <div class="relative group">
-        <a href="infom.html" class="hover:underline">Информация</a>
-        <div class="dropdown-menu mt-2 py-2">
-          <a href="body.html" class="block px-4 py-2 hover:bg-gray-100">О нас</a>
-          <a href="office.html" class="block px-4 py-2 hover:bg-gray-100">Представительство</a>
-          <a href="plane.html" class="block px-4 py-2 hover:bg-gray-100">Наш Флот</a>
-          <a href="eat.html" class="block px-4 py-2 hover:bg-gray-100">Питание</a>
-          <a href="VIP.html" class="block px-4 py-2 hover:bg-gray-100">VIP-залы</a>
-        </div>
-      </div>
-      <a href="s7hop.html" class="hover:text-green-600">S7avelii Shop</a>
-      <a href="busines.html" class="hover:underline">Бизнесу</a>
-      <a href="https://t.me/S7avelii7plane7" class="hover:underline">7PLANE7</a>
-    </nav>
-
-    <!-- Бургер -->
-    <button id="menuBtn" class="md:hidden text-2xl">&#9776;</button>
-
-    <!-- Авторизация -->
-    <div class="flex items-center space-x-4 text-sm">
-      <span>RUB</span>
-      <span id="userArea"></span>
-    </div>
-  </header>
-
-  <!-- Мобильное меню -->
-  <div id="mobileMenu" class="hidden flex-col space-y-2 px-4 py-3 border-b md:hidden">
-    <a href="Index.html">Покупка и управление</a>
-    <a href="priority.html">S7avelii Priority</a>
-    <a href="infom.html">Информация</a>
-    <a href="s7hop.html">S7avelii Shop</a>
-    <a href="busines.html">Бизнесу</a>
-    <a href="https://t.me/S7avelii7plane7">7PLANE7</a>
+<header>
+  <div class="logo">
+    <a href="index.html">
+      <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
+    </a>
   </div>
+
+  <!-- Кнопка-бургер -->
+  <button class="burger" aria-label="Открыть меню">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- Главное меню -->
+  <nav class="nav">
+    <ul>
+      <li>
+        <a href="index.html">Покупка и управление</a>
+        <div class="dropdown">
+          <a href="bilet.html">Купить билет</a>
+          <a href="auth.html">Управление бронированием</a>
+          <a href="arrivel.html">Направления</a>
+          <a href="HOTEL.html">Отели</a>
+          <a href="class.html">Выбор класса</a>
+        </div>
+      </li>
+      <li>
+        <a href="priority.html">S7avelii Priority</a>
+        <div class="dropdown">
+          <a href="priority.html">О программе</a>
+          <a href="https://t.me/s7aveliihelper">Как копить</a>
+        </div>
+      </li>
+      <li>
+        <a href="#">Информация</a>
+        <div class="dropdown">
+          <a href="body.html">О нас</a>
+          <a href="office.html">Представительство</a>
+          <a href="plane.html">Наш флот</a>
+          <a href="eat.html">Питание</a>
+          <a href="https://t.me/s7aveliihelper">Контакты</a>
+        </div>
+      </li>
+      <li><a href="busines.html">Бизнесу</a></li>
+      <li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
+    </ul>
+  </nav>
+
+  <div class="right-menu">
+    <button aria-label="Search">
+      <svg class="icon-search" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </button>
+    <button>RUB</button>
+    <div class="flag" title="Russian flag">
+      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" />
+    </div>
+    <div id="userArea"></div>
+  </div>
+</header>
+
+<style>
+/* === БАЗОВЫЙ СТИЛЬ ДЛЯ ПК === */
+header {
+  display: flex;
+  align-items: center;
+  padding: 0 60px;
+  height: 80px;
+  border-bottom: 1px solid #ccc;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: #fff;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.logo-img {
+  height: 70px;
+  width: auto;
+  cursor: pointer;
+}
+
+nav {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+nav ul {
+  display: flex;
+  gap: 40px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+nav li {
+  position: relative;
+}
+
+nav a {
+  color: #000;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 28px 0;
+  position: relative;
+}
+
+nav a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background-color: #b3c900;
+  transition: width 0.3s ease;
+}
+nav li:hover > a::after {
+  width: 100%;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  padding: 20px;
+  border-top: 2px solid #b3c900;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  min-width: 240px;
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+nav li:hover .dropdown {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.dropdown a {
+  display: block;
+  padding: 8px 0;
+  color: #000;
+  font-size: 14px;
+}
+.dropdown a:hover {
+  color: #b3c900;
+}
+
+.right-menu {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 16px;
+}
+.right-menu button,
+.right-menu select {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+.flag {
+  width: 20px;
+  height: 14px;
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+}
+.flag img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#userArea a {
+  padding: 8px 14px;
+  border: 1px solid #7ad30d;
+  border-radius: 6px;
+  color: #6dd808;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* === КНОПКА-БУРГЕР === */
+.burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  width: 28px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  gap: 4px;
+  z-index: 1001;
+}
+.burger span {
+  display: block;
+  height: 3px;
+  background: #000;
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+/* === МЕДИА (адаптация под мобилки) === */
+@media (max-width: 992px) {
+  header {
+    padding: 0 20px;
+  }
+
+  nav ul {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .burger {
+    display: flex;
+  }
+
+  nav {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background: white;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 30px;
+    border-top: 1px solid #eee;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-120%);
+    transition: transform 0.3s ease;
+  }
+
+  nav.open {
+    transform: translateY(0);
+  }
+
+  nav ul {
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .dropdown {
+    position: static;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    display: none;
+  }
+
+  nav li:hover .dropdown {
+    display: block;
+  }
+
+  .right-menu {
+    display: none;
+  }
+
+  /* Анимация крестика */
+  .burger.active span:nth-child(1) {
+    transform: rotate(45deg) translateY(8px);
+  }
+  .burger.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .burger.active span:nth-child(3) {
+    transform: rotate(-45deg) translateY(-8px);
+  }
+}
+</style>
+
+<script>
+  // --- Бургер-меню ---
+  const burger = document.querySelector(".burger");
+  const nav = document.querySelector("nav");
+
+  burger.addEventListener("click", () => {
+    burger.classList.toggle("active");
+    nav.classList.toggle("open");
+  });
+
+  // --- Авторизация ---
+  async function updateUserArea() {
+    const userArea = document.getElementById("userArea");
+    try {
+      const res = await fetch("/api/profile");
+      if (!res.ok) throw new Error("Не авторизован");
+      const data = await res.json();
+      const user = data.user;
+
+      if (user.avatar) {
+        userArea.innerHTML = `
+          <img src="${user.avatar}" alt="avatar"
+            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;"
+            onclick="window.location.href='cabinet.html'" />
+        `;
+      } else {
+        userArea.innerHTML = `
+          <span style="cursor:pointer;color:#2196f3;font-weight:500;"
+            onclick="window.location.href='cabinet.html'">${user.fio.split(" ")[0]}</span>`;
+      }
+    } catch {
+      userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+    }
+  }
+  window.addEventListener("DOMContentLoaded", updateUserArea);
+</script>
 
   <!-- Баннер -->
   <img src="images/Airbrush-Image-Enhancer-1757149612827 (1).avif" alt="Header Banner" class="w-full h-auto">
