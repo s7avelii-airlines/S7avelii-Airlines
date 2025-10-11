@@ -4,50 +4,100 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Вход/Регистрация S7avelii</title>
+<link rel="icon" href="images/favicon.png" type="image/png">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-body { font-family: Inter, Arial, sans-serif; background:#f3f4f6; display:flex; justify-content:center; align-items:center; height:100vh; }
-.card { background:white; padding:24px; border-radius:12px; width:100%; max-width:400px; box-shadow:0 4px 12px rgba(0,0,0,0.15); }
-input { width:100%; padding:10px 12px; margin-top:10px; border-radius:8px; border:1px solid #d6d8db; }
-button { width:100%; margin-top:14px; padding:12px; border:none; border-radius:8px; background:#9cc42f; color:white; font-weight:600; cursor:pointer; }
-button:hover { background:#8ab12a; }
-.hidden { display:none; }
-.error { color:red; font-size:13px; margin-top:6px; }
-.success { color:green; font-size:13px; margin-top:6px; }
-.switch { margin-top:14px; text-align:center; font-size:14px; }
-.switch button { background:none; border:none; color:#9cc42f; cursor:pointer; text-decoration:underline; font:inherit; }
+:root{ --green:#9cc42f; --green-dark:#8ab12a; }
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Arial,sans-serif;min-height:100vh;background:url("images/Blue Modern Business Proposal Presentation.avif") no-repeat center/cover;}
+header{position:fixed;top:0;left:0;width:100%;height:70px;display:flex;align-items:center;gap:20px;padding:0 20px;background:#fff;z-index:1000;border-bottom:1px solid #e5e5e5;}
+.logo-img{height:50px}
+nav ul{margin:0;padding:0;list-style:none;display:flex;gap:20px}
+nav a{text-decoration:none;color:#111;position:relative;padding:25px 0}
+nav a::after{content:"";position:absolute;bottom:0;left:0;height:2px;width:0;background:var(--green);transition:.25s}
+nav li:hover>a::after{width:100%}
+main{display:flex;justify-content:center;align-items:flex-start;padding:110px 20px 40px}
+.card{width:100%;max-width:420px;background:rgba(255,255,255,0.96);border-radius:12px;padding:22px;box-shadow:0 8px 24px rgba(0,0,0,0.15);}
+h2{margin:0 0 14px;font-size:20px}
+input, select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d6d8db;margin-top:10px;font-size:14px}
+.btn{width:100%;padding:12px;border-radius:8px;border:0;background:var(--green);color:#fff;font-weight:600;margin-top:14px;cursor:pointer}
+.btn:hover{background:var(--green-dark)}
+.btn[disabled]{opacity:.6;cursor:not-allowed}
+.switch{text-align:center;margin-top:14px;font-size:14px}
+.switch button{background:none;border:0;color:var(--green);text-decoration:underline;cursor:pointer;font:inherit}
+.error{color:#d23f44;margin-top:10px;font-size:13px}
+.success{color:green;margin-top:10px;font-size:13px}
+.hidden{display:none}
+.row { display:flex; gap:10px; flex-wrap:wrap; }
+.half{flex:1; min-width:120px}
+.card-type { display:inline-flex; align-items:center; gap:8px; margin-right:8px; margin-top:8px; }
+.card-type img { display:inline-block; vertical-align:middle; border-radius:6px; }
+@media(max-width:600px){ .row{flex-direction:column} }
 </style>
 </head>
 <body>
-<div class="card">
+<header>
+<div class="logo">
+<a href="index.html">
+<img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
+</a>
+</div>
+<nav class="nav">
+<ul>
+<li><a href="index.html">Главная</a></li>
+<li><a href="#">S7avelii Priority</a></li>
+<li><a href="#">Информация</a></li>
+<li><a href="busines.html">Бизнесу</a></li>
+<li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
+</ul>
+</nav>
+<div class="right-menu" id="userArea"></div>
+</header>
+
+<main>
+<div class="card" aria-live="polite">
 <h2 id="title">Вход</h2>
 
-<form id="loginForm">
+<form id="loginForm" autocomplete="on" novalidate>
 <input id="loginIdentifier" type="text" placeholder="Телефон или Email" required>
 <input id="loginPassword" type="password" placeholder="Пароль" required>
-<button id="loginBtn" type="submit">Войти</button>
-<div id="loginError" class="error"></div>
+<button class="btn" id="loginBtn" type="submit">Войти</button>
+<div id="loginError" class="error" role="status" aria-live="assertive"></div>
 </form>
 
-<form id="registerForm" class="hidden">
+<form id="registerForm" class="hidden" autocomplete="on" novalidate>
 <input id="regFio" type="text" placeholder="ФИО" required>
 <input id="regEmail" type="email" placeholder="Email" required>
-<input id="regPhone" type="tel" placeholder="Телефон" required>
-<input id="regPassword" type="password" placeholder="Пароль (мин.6)" required>
-<button id="regBtn" type="submit">Зарегистрироваться</button>
-<div id="regError" class="error"></div>
-<div id="regSuccess" class="success"></div>
+<div class="row">
+<div class="half"><input id="regPhone" type="tel" placeholder="Телефон" required></div>
+<div class="half"><input id="regPassword" type="password" placeholder="Пароль (мин.6 символов)" required></div>
+</div>
+<div class="row">
+<div class="half"><label>Дата рождения</label><input id="regDob" type="date"></div>
+<div class="half"><label>Пол</label><select id="regGender">
+<option value="">Не указан</option>
+<option value="Мужской">Мужской</option>
+<option value="Женский">Женский</option>
+<option value="Другое">Другое</option>
+</select></div>
+</div>
+<input id="regCard" type="text" placeholder="Номер карты S7avelii Priority">
+<div class="row">
+<label class="card-type"><input type="radio" name="regCardType" value="VIP"> VIP <img src="images/vip_card.png" width="60"></label>
+<label class="card-type"><input type="radio" name="regCardType" value="Classic"> Classic <img src="images/classic_card.png" width="60"></label>
+<label class="card-type"><input type="radio" name="regCardType" value="None" checked> Нет</label>
+</div>
+<button class="btn" id="regBtn" type="submit">Зарегистрироваться</button>
+<div id="regError" class="error" role="status" aria-live="assertive"></div>
+<div id="regSuccess" class="success" role="status" aria-live="polite"></div>
 </form>
 
-<div class="switch">
-<span id="switchText">Нет аккаунта?</span>
-<button id="switchBtn">Зарегистрироваться</button>
+<div class="switch"><span id="switchText">Нет аккаунта?</span> <button id="switchBtn">Зарегистрироваться</button></div>
 </div>
-</div>
+</main>
 
 <script>
 const API = 'https://s7avelii-airlines-1.onrender.com';
-
 const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
 const switchBtn = document.getElementById('switchBtn');
@@ -71,72 +121,56 @@ function showForm(showLogin){
     switchText.textContent = 'Уже есть аккаунт?';
     switchBtn.textContent = 'Войти';
   }
-  loginError.textContent = '';
-  regError.textContent = '';
-  regSuccess.textContent = '';
+  loginError.textContent=''; regError.textContent=''; regSuccess.textContent='';
 }
+switchBtn.addEventListener('click', e=>{ e.preventDefault(); showForm(loginForm.classList.contains('hidden')); });
 
-switchBtn.addEventListener('click', e => { e.preventDefault(); showForm(loginForm.classList.contains('hidden')); });
-
-// --- LOGIN ---
-loginForm.addEventListener('submit', async e => {
-  e.preventDefault();
-  loginError.textContent = '';
+loginForm.addEventListener('submit', async e=>{
+  e.preventDefault(); loginError.textContent='';
   const identifier = document.getElementById('loginIdentifier').value.trim();
   const password = document.getElementById('loginPassword').value;
-  if(!identifier){ loginError.textContent='Введите телефон или Email.'; return; }
-  if(!password){ loginError.textContent='Введите пароль.'; return; }
-
-  try {
+  if(!identifier){ loginError.textContent='Введите телефон или Email'; return; }
+  if(!password){ loginError.textContent='Введите пароль'; return; }
+  try{
     const res = await fetch(`${API}/api/login`, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({identifier, password})
+      body:JSON.stringify({identifier,password})
     });
     const data = await res.json();
-    if(!res.ok){ loginError.textContent=data.error || 'Ошибка входа'; return; }
-
+    if(!res.ok){ loginError.textContent = data.error || 'Ошибка входа'; return; }
     localStorage.setItem('token', data.token);
-    window.location.href = 'cabinet.html';
-  } catch(err){
-    console.error(err);
-    loginError.textContent = 'Ошибка сети. Проверь сервер и CORS.';
-  }
+    window.location.href='cabinet.html';
+  }catch(err){ console.error(err); loginError.textContent='Ошибка сети. Проверь сервер и CORS.'; }
 });
 
-// --- REGISTER ---
-registerForm.addEventListener('submit', async e => {
-  e.preventDefault();
-  regError.textContent=''; regSuccess.textContent='';
-
+registerForm.addEventListener('submit', async e=>{
+  e.preventDefault(); regError.textContent=''; regSuccess.textContent='';
   const fio = document.getElementById('regFio').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const phone = document.getElementById('regPhone').value.trim();
   const password = document.getElementById('regPassword').value;
-
-  if(!fio){ regError.textContent='Введите ФИО.'; return; }
-  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ regError.textContent='Введите корректный email.'; return; }
-  if(!phone){ regError.textContent='Введите телефон.'; return; }
-  if(!password || password.length<6){ regError.textContent='Пароль должен быть не менее 6 символов.'; return; }
-
-  try {
+  const dob = document.getElementById('regDob').value || null;
+  const gender = document.getElementById('regGender').value || null;
+  const cardNumber = document.getElementById('regCard').value.trim();
+  const cardType = document.querySelector('input[name="regCardType"]:checked')?.value || 'None';
+  if(!fio){ regError.textContent='Введите ФИО'; return; }
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ regError.textContent='Введите корректный email'; return; }
+  if(!phone){ regError.textContent='Введите телефон'; return; }
+  if(!password || password.length<6){ regError.textContent='Пароль должен быть не менее 6 символов'; return; }
+  try{
     const res = await fetch(`${API}/api/register`, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({fio,email,phone,password})
+      body:JSON.stringify({fio,email,phone,password,dob,gender,cardNumber,cardType})
     });
     const data = await res.json();
     if(!res.ok){ regError.textContent=data.error || 'Ошибка регистрации'; return; }
-
     localStorage.setItem('token', data.token);
-    regSuccess.textContent = 'Регистрация успешна — перенаправляем...';
-    setTimeout(()=>window.location.href='cabinet.html', 700);
-  } catch(err){
-    console.error(err);
-    regError.textContent = 'Ошибка сети. Проверь сервер и CORS.';
-  }
+    regSuccess.textContent='Регистрация успешна — перенаправляем...';
+    setTimeout(()=>window.location.href='cabinet.html',700);
+  }catch(err){ console.error(err); regError.textContent='Ошибка сети. Проверь сервер и CORS.'; }
 });
 </script>
 </body>
 </html>
-
