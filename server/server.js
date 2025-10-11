@@ -1,187 +1,126 @@
 import express from "express";
-import path from "path";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
+import pg from "pg";
 import session from "express-session";
 import cookieParser from "cookie-parser";
-import pkg from "pg";
+import cors from "cors";
 
 dotenv.config();
-const { Pool } = pkg;
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const __dirname = path.resolve();
+const PORT = process.env.PORT || 10000;
 
-// ==== Подключение к базе PostgreSQL (Neon) ====
+const { Pool } = pg;
+
+// подключение к Neon
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
 
-// ==== Middleware ====
+// middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
+  cors({
+    origin: "https://www.s7avelii-airlines.ru", // твой статичный сайт
+    credentials: true
+  })
+);
+app.use(
   session({
-    secret: process.env.SESSION_SECRET || "supersecret",
+    secret: process.env.SESSION_SECRET || "s7avelii-secret",
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 } // 7 дней
+    cookie: { secure: true, sameSite: "none" }
   })
 );
 
-// ==== Статика ====
-const PUBLIC_DIR = path.join(__dirname, "public");
-app.use(express.static(PUBLIC_DIR));
-
-// ==== Инициализация таблиц ====
-async function initDB() {
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS users (
-      id SERIAL PRIMARY KEY,
-      fio TEXT,
-      phone TEXT UNIQUE,
-      email TEXT,
-      password TEXT,
-      dob TEXT,
-      gender TEXT,
-      card_number TEXT,
-      card_type TEXT,
-      cart JSONB DEFAULT '[]',
-      bonus_miles INTEGER DEFAULT 0
-    );
-  `);
-
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS products (
-      id SERIAL PRIMARY KEY,
-      name TEXT,
-      price INTEGER
-    );
-  `);
-
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS orders (
-      id SERIAL PRIMARY KEY,
-      user_id INTEGER REFERENCES users(id),
-      items JSONB,
-      created_at TIMESTAMP DEFAULT NOW()
-    );
-  `);
-
-  // Пример товаров
-  const { rows } = await pool.query("SELECT COUNT(*) FROM products");
-  if (Number(rows[0].count) === 0) {
-    await pool.query(`
-      INSERT INTO products (name, price)
-      VALUES ('Брелок S7avelii', 500),
-             ('Футболка S7avelii', 1200),
-             ('Кружка S7avelii', 800),
-             ('Модель самолёта', 2500);
-    `);
+// тест соединения с базой
+app.get("/api/test-db", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT NOW()");
+    res.json({ ok: true, time: result.rows[0].now });
+  } catch (err) {
+    console.error("Ошибка подключения к БД:", err);
+    res.status(500).json({ ok: false, error: "DB connection failed" });
   }
-}
-initDB().catch(console.error);
+});
 
-// ==== API: Регистрация ====
+// регистрация
 app.post("/api/register", async (req, res) => {
   try {
-    const { fio, email, phone, password, dob, gender, cardNumber, cardType } = req.body;
-    if (!fio || !email || !phone || !password) return res.status(400).json({ error: "Все поля обязательны" });
+    const { fio, email, phone, password, cardNumber, cardType } = req.body;
+
+    if (!fio || !email || !phone || !password)
+      return res.status(400).json({ error: "Все поля обязательны" });
 
     const hash = await bcrypt.hash(password, 10);
-    const { rows } = await pool.query(
-      `INSERT INTO users (fio, email, phone, password, dob, gender, card_number, card_type)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
-      [fio,email,phone,hash,dob,gender,cardNumber,cardType]
+    await pool.query(
+      `CREATE TABLE IF NOT EXISTS users(
+        id SERIAL PRIMARY KEY,
+        fio TEXT,
+        email TEXT UNIQUE,
+        phone TEXT UNIQUE,
+        password TEXT,
+        card_number TEXT,
+        card_type TEXT
+      )`
     );
 
-    req.session.userId = rows[0].id;
-    res.json({ ok: true, user: rows[0] });
-  } catch(e) {
-    console.error(e);
+    const existing = await pool.query(
+      "SELECT * FROM users WHERE email=$1 OR phone=$2",
+      [email, phone]
+    );
+    if (existing.rows.length > 0)
+      return res.status(400).json({ error: "Пользователь уже существует" });
+
+    await pool.query(
+      `INSERT INTO users (fio,email,phone,password,card_number,card_type)
+       VALUES ($1,$2,$3,$4,$5,$6)`,
+      [fio, email, phone, hash, cardNumber, cardType]
+    );
+
+    res.json({ ok: true, message: "Регистрация успешна" });
+  } catch (err) {
+    console.error("Ошибка регистрации:", err);
     res.status(500).json({ error: "Ошибка регистрации" });
   }
 });
 
-// ==== API: Логин ====
+// вход
 app.post("/api/login", async (req, res) => {
   try {
     const { phone, password } = req.body;
-    const { rows } = await pool.query("SELECT * FROM users WHERE phone=$1", [phone]);
-    const user = rows[0];
+    if (!phone || !password)
+      return res.status(400).json({ error: "Введите телефон и пароль" });
+
+    const result = await pool.query("SELECT * FROM users WHERE phone=$1", [
+      phone
+    ]);
+    const user = result.rows[0];
     if (!user) return res.status(400).json({ error: "Пользователь не найден" });
 
-    const ok = await bcrypt.compare(password, user.password);
-    if (!ok) return res.status(400).json({ error: "Неверный пароль" });
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.status(400).json({ error: "Неверный пароль" });
 
-    req.session.userId = user.id;
-    res.json({ ok: true, user });
-  } catch(e) {
-    console.error(e);
+    req.session.user = { id: user.id, fio: user.fio };
+    res.json({ ok: true, user: { fio: user.fio, email: user.email } });
+  } catch (err) {
+    console.error("Ошибка входа:", err);
     res.status(500).json({ error: "Ошибка входа" });
   }
 });
 
-// ==== API: Логаут ====
-app.get("/api/logout", (req, res) => {
-  req.session.destroy(() => res.json({ ok: true }));
+// личный кабинет
+app.get("/api/me", (req, res) => {
+  if (!req.session.user)
+    return res.status(401).json({ error: "Не авторизован" });
+  res.json({ ok: true, user: req.session.user });
 });
 
-// ==== API: Профиль ====
-app.get("/api/profile", async (req, res) => {
-  if (!req.session.userId) return res.status(401).json({ error: "Не авторизован" });
-  const { rows } = await pool.query("SELECT * FROM users WHERE id=$1", [req.session.userId]);
-  res.json(rows[0]);
-});
-
-// ==== API: Продукты ====
-app.get("/api/products", async (req, res) => {
-  const { rows } = await pool.query("SELECT * FROM products ORDER BY id");
-  res.json(rows);
-});
-
-// ==== API: Корзина ====
-app.get("/api/cart", async (req, res) => {
-  if (!req.session.userId) return res.json([]);
-  const { rows } = await pool.query("SELECT cart FROM users WHERE id=$1", [req.session.userId]);
-  res.json(rows[0].cart || []);
-});
-
-app.post("/api/cart/add", async (req, res) => {
-  if (!req.session.userId) return res.status(401).json({ error: "Не авторизован" });
-  const { id } = req.body;
-  const { rows } = await pool.query("SELECT * FROM products WHERE id=$1", [id]);
-  if (!rows[0]) return res.status(404).json({ error: "Нет такого товара" });
-
-  const item = { id: rows[0].id, name: rows[0].name, price: rows[0].price, qty: 1 };
-  await pool.query("UPDATE users SET cart = COALESCE(cart,'[]')::jsonb || $1::jsonb WHERE id=$2",
-    [JSON.stringify([item]), req.session.userId]);
-  res.json({ ok: true });
-});
-
-app.post("/api/cart/checkout", async (req, res) => {
-  if (!req.session.userId) return res.status(401).json({ error: "Не авторизован" });
-  const { rows } = await pool.query("SELECT cart FROM users WHERE id=$1", [req.session.userId]);
-  const cart = rows[0].cart || [];
-  if (!cart.length) return res.status(400).json({ error: "Корзина пуста" });
-
-  await pool.query("INSERT INTO orders (user_id, items) VALUES ($1,$2)", [req.session.userId, JSON.stringify(cart)]);
-  await pool.query("UPDATE users SET cart='[]', bonus_miles = bonus_miles + 100 WHERE id=$1", [req.session.userId]);
-  res.json({ ok: true });
-});
-
-// ==== API: Заказы ====
-app.get("/api/orders", async (req, res) => {
-  if (!req.session.userId) return res.json([]);
-  const { rows } = await pool.query("SELECT * FROM orders WHERE user_id=$1 ORDER BY id DESC", [req.session.userId]);
-  res.json(rows.map(o => ({ ...o, items: o.items || [] })));
-});
-
-// ==== SPA fallback ====
-app.get("*", (req, res) => res.sendFile(path.join(PUBLIC_DIR, "index.html")));
-
-// ==== Запуск сервера ====
-app.listen(PORT, () => console.log(`✅ Server started on ${PORT}`));
+// запуск
+app.listen(PORT, () =>
+  console.log(`✅ Сервер запущен на порту ${PORT}`)
+);
