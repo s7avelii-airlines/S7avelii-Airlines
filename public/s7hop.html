@@ -73,5 +73,377 @@ async function addToCart(id,title,price,image){
 }
 </script>
 
+<footer class="footer">
+  <div class="footer-inner">
+    <!-- Верхнее меню -->
+    <div class="footer-menu fade-in">
+      <div class="footer-column">
+        <h3>S7avelii Airlines</h3>
+        <ul>
+          <li><a href="body.html">О компании</a></li>
+          <li><a href="https://t.me/s7aveliihelper">Партнеры</a></li>
+          <li><a href="https://t.me/s7aveliihelper">Контакты</a></li>
+          <li><a href="#">Вакансии</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <ul>
+          <li><a href="office.html">Офисы продаж и представительства</a></li>
+          <li><a href="https://t.me/S7saveliiairlines">Новости</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Информация</h3>
+        <ul>
+          <li><a href="arrivel.html">Направления</a></li>
+          <li><a href="bilet.html">Рейсы</a></li>
+          <li><a href="https://t.me/s7aveliihelper">Справочный центр</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <ul>
+          <li><a href="https://t.me/s7aveliihelper">Перевозка грузов</a></li>
+          <li><a href="plane.html">Наш флот</a></li>
+          <li><a href="mailto:s7avelii_airlines@mail.ru">Подать заявление на партнёрство</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Верх футера -->
+    <div class="footer-top fade-in">
+      <div class="footer-actions">
+        <a href="https://t.me/s7aveliihelper" class="action"><img src="icons/chat.svg" alt=""> Чат</a>
+      </div>
+      <div class="footer-phone">
+        <div class="label">тел: Бесплатно по России</div>
+        <div class="number">8 962 629–81–05</div>
+      </div>
+    </div>
+
+    <!-- Подписка -->
+    <div class="footer-subscribe fade-in">
+      <h3>Подпишитесь на рассылку S7avelii</h3>
+      <p>Будьте в курсе акций, открывайте новые маршруты</p>
+      <form class="subscribe-form">
+        <input type="email" placeholder="Ваша почта" required>
+        <button type="submit">→</button>
+      </form>
+      <label class="checkbox">
+        <input type="checkbox" required>
+        Хочу узнавать про скидки и идеи путешествий по почте и соглашаюсь на 
+        <a href="#">обработку персональных данных</a>
+      </label>
+    </div>
+
+    <!-- Низ футера -->
+    <div class="footer-bottom fade-in">
+      <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
+      <div class="socials">
+        <a href="https://vk.com/s7avelii"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
+        <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1"><img src="images/icons8-tiktok-logo-50 (1).avif" alt="TikTok"></a>
+        <a href="https://youtu.be/Dy31uUCFaWw?si=2gyqNYaT3ZVO8WJa"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
+        <a href="https://t.me/S7saveliiairlines"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+/* === Убираем горизонтальный скролл и белые полосы === */
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* ==== FOOTER ==== */
+.footer {
+  width: 100%;
+  background: #f1f5f9;
+  padding: 40px 60px;
+  font-family: "Inter", sans-serif;
+  color: #111;
+  box-sizing: border-box;
+}
+
+/* Верхнее меню */
+.footer-menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.footer-column h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+  color: #111;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.footer-column ul li a:hover {
+  text-decoration: underline;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 30px 0;
+  width: 100%;
+}
+
+/* Верх футера */
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 30px;
+}
+
+.footer-actions .action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  color: #111;
+}
+
+.footer-actions img {
+  width: 20px;
+}
+
+.footer-phone {
+  text-align: right;
+}
+
+.footer-phone .label {
+  font-size: 14px;
+  color: #555;
+}
+
+.footer-phone .number {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Подписка */
+.footer-subscribe {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+  border: 1px solid #d1d5db;
+}
+
+.footer-subscribe h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.footer-subscribe p {
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.subscribe-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.subscribe-form input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.subscribe-form button {
+  background: #9ac208;
+  border: none;
+  border-radius: 8px;
+  padding: 0 20px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.subscribe-form button:hover {
+  background: #8db807;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #333;
+}
+
+.checkbox a {
+  color: #abc70f;
+  text-decoration: underline;
+}
+
+/* Низ футера */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: #555;
+}
+
+.socials {
+  display: flex;
+  gap: 12px;
+}
+
+.socials a img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  padding: 6px;
+  transition: transform 0.2s ease;
+}
+
+.socials a img:hover {
+  transform: scale(1.1);
+}
+
+/* === АНИМАЦИЯ ПОЯВЛЕНИЯ === */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === АДАПТАЦИЯ === */
+@media (max-width: 1024px) {
+  .footer {
+    padding: 30px 40px;
+  }
+  .footer-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .footer-phone {
+    text-align: left;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 30px 20px;
+  }
+  .footer-menu {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .footer-column h3 {
+    font-size: 16px;
+  }
+  .footer-column ul li a {
+    font-size: 13px;
+  }
+  .footer-subscribe {
+    padding: 16px;
+  }
+  .subscribe-form {
+    flex-direction: column;
+  }
+  .subscribe-form button {
+    width: 100%;
+    padding: 10px;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .socials {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-menu {
+    grid-template-columns: 1fr;
+  }
+  .footer-subscribe h3 {
+    font-size: 16px;
+  }
+  .footer-subscribe p {
+    font-size: 13px;
+  }
+  .footer-phone .number {
+    font-size: 16px;
+  }
+  .footer-phone .label {
+    font-size: 12px;
+  }
+  .footer-actions .action {
+    font-size: 14px;
+  }
+  .socials a img {
+    width: 28px;
+    height: 28px;
+  }
+}
+</style>
+
+<script>
+/* === Плавное появление футера при прокрутке === */
+document.addEventListener("DOMContentLoaded", () => {
+  const fadeElements = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  fadeElements.forEach(el => observer.observe(el));
+});
+</script>
+  
 </body>
 </html>
