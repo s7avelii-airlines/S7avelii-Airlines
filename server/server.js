@@ -38,7 +38,7 @@ app.use(session({
 
 /* ===================== MONGODB ===================== */
 mongoose.connect(process.env.MONGO_URL)
-  .then(() => console.log("✅ MongoDB подключено"))
+  .then(() => console.log("✅ Подключено к MongoDB"))
   .catch(err => console.error("❌ Ошибка Mongo:", err));
 
 /* ===================== SCHEMAS ===================== */
@@ -131,5 +131,6 @@ app.get("/api/logout", (req, res) => {
 });
 
 /* ===================== SERVER START ===================== */
-app.listen(PORT, () => console.log(`🚀 Сервер запущен на порту ${PORT}`));
-пущен на порту ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🚀 Сервер запущен на порту ${PORT}`);
+});
