@@ -141,9 +141,10 @@ input, select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d
 </main>
 
 <script>
-// === API ===
+// API URL
 const API = 'https://s7avelii-airlines-1.onrender.com';
 
+// --- UI Elements ---
 const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
 const title = document.getElementById('title');
@@ -155,6 +156,7 @@ const regSuccess = document.getElementById('regSuccess');
 const loginBtn = document.getElementById('loginBtn');
 const regBtn = document.getElementById('regBtn');
 
+// --- Switch Forms ---
 function showForm(showLogin){
   if(showLogin){
     loginForm.classList.remove('hidden');
@@ -169,29 +171,31 @@ function showForm(showLogin){
     switchText.textContent = 'Уже есть аккаунт?';
     switchBtn.textContent = 'Войти';
   }
-  loginError.textContent=''; regError.textContent=''; regSuccess.textContent='';
+  loginError.textContent='';
+  regError.textContent='';
+  regSuccess.textContent='';
 }
 switchBtn.addEventListener('click', e=>{e.preventDefault(); showForm(loginForm.classList.contains('hidden'));});
 
-// === Обновление шапки ===
+// --- Update User Area ---
 async function updateUserArea(){
   const userArea=document.getElementById("userArea");
-  const token=localStorage.getItem("token");
-  if(!token){userArea.innerHTML=`<a href="auth.html">Вход</a>`;return;}
   try{
-    const res=await fetch(API+'/api/profile',{headers:{Authorization:'Bearer '+token}});
-    if(!res.ok) throw new Error();
-    const data=await res.json();
-    if(data.avatar){
-      userArea.innerHTML=`<img src="${data.avatar}" alt="avatar" style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;" onclick="window.location.href='cabinet.html'" />`;
-    } else {
-      userArea.innerHTML=`<span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">${data.fio.split(" ")[0]}</span>`;
+    const res=await fetch(API+'/api/profile',{credentials:'include'});
+    if(!res.ok) throw new Error('Не авторизован');
+    const user=await res.json();
+    if(user.avatar){
+      userArea.innerHTML=`<img src="${user.avatar}" alt="avatar" style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;" onclick="window.location.href='cabinet.html'" />`;
+    }else{
+      userArea.innerHTML=`<span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">${user.fio.split(" ")[0]}</span>`;
     }
-  }catch{userArea.innerHTML=`<a href="auth.html">Вход</a>`;}
+  }catch{
+    userArea.innerHTML=`<a href="auth.html">Вход</a>`;
+  }
 }
 window.addEventListener("DOMContentLoaded",updateUserArea);
 
-// === Вход ===
+// --- Login ---
 loginForm.addEventListener('submit', async e=>{
   e.preventDefault();
   loginError.textContent='';
@@ -203,24 +207,21 @@ loginForm.addEventListener('submit', async e=>{
   try{
     const resp=await fetch(API+'/api/login',{
       method:'POST',
+      credentials:'include',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({phone,password})
     });
     const data=await resp.json().catch(()=>({}));
     if(!resp.ok){loginError.textContent=data.error||'Ошибка входа'; loginBtn.disabled=false; loginBtn.textContent='Войти'; return;}
-    localStorage.setItem('token', data.token);
     window.location.href='cabinet.html';
-  }catch(err){
-    console.error(err);
-    loginError.textContent='Ошибка сети. Проверь сервер и CORS.';
-    loginBtn.disabled=false; loginBtn.textContent='Войти';
-  }
+  }catch(err){console.error(err); loginError.textContent='Ошибка сети. Проверь сервер и CORS.'; loginBtn.disabled=false; loginBtn.textContent='Войти';}
 });
 
-// === Регистрация ===
+// --- Register ---
 registerForm.addEventListener('submit', async e=>{
   e.preventDefault();
-  regError.textContent=''; regSuccess.textContent='';
+  regError.textContent='';
+  regSuccess.textContent='';
   const fio=document.getElementById('regFio').value.trim();
   const email=document.getElementById('regEmail').value.trim();
   const phone=document.getElementById('regPhone').value.trim();
@@ -229,33 +230,45 @@ registerForm.addEventListener('submit', async e=>{
   const gender=document.getElementById('regGender').value||'';
   const cardNumber=document.getElementById('regCard').value.trim();
   const cardType=document.querySelector('input[name="regCardType"]:checked')?.value||'';
+  
   if(!fio){regError.textContent='Введите ФИО.';return;}
-  if(!email||!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){regError.textContent='Введите корректный email.';return;}
+  if(!email || !email.includes('@') || !email.includes('.')) { regError.textContent='Введите корректный email.'; return; }
   if(!phone){regError.textContent='Введите телефон.';return;}
   if(!password||password.length<6){regError.textContent='Пароль должен быть не менее 6 символов.';return;}
+  
   regBtn.disabled=true; regBtn.textContent='Регистрация...';
   try{
     const resp=await fetch(API+'/api/register',{
       method:'POST',
+      credentials:'include',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({fio,email,phone,password,dob,gender,cardNumber,cardType})
     });
     const data=await resp.json().catch(()=>({}));
     if(!resp.ok){regError.textContent=data.error||'Ошибка регистрации'; regBtn.disabled=false; regBtn.textContent='Зарегистрироваться'; return;}
-    localStorage.setItem('token', data.token);
     regSuccess.textContent='Регистрация успешна — перенаправляем в кабинет...';
     setTimeout(()=>window.location.href='cabinet.html',900);
-  }catch(err){
-    console.error(err);
-    regError.textContent='Ошибка сети. Проверь сервер и CORS.';
-    regBtn.disabled=false; regBtn.textContent='Зарегистрироваться';
-  }
+  }catch(err){console.error(err); regError.textContent='Ошибка сети. Проверь сервер и CORS.'; regBtn.disabled=false; regBtn.textContent='Зарегистрироваться';}
 });
 </script>
 
 <!-- Footer -->
 <footer class="footer">
-<!-- твой оригинальный футер без изменений -->
+<div class="footer-inner">
+<div class="footer-menu fade-in">
+<!-- ... здесь оставляем твой HTML футера без изменений ... -->
+</div>
 </footer>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+  const fadeElements=document.querySelectorAll('.fade-in');
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){entry.target.classList.add('visible'); observer.unobserve(entry.target);}
+    });
+  },{threshold:0.2});
+  fadeElements.forEach(el=>observer.observe(el));
+});
+</script>
 </body>
 </html>
