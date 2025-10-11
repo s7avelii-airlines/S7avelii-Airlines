@@ -1,380 +1,300 @@
-// server.js (CommonJS) — финальный рабочий сервер
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const session = require('express-session');
-const bcrypt = require('bcryptjs');
-const { Pool } = require('pg');
-const PgSession = require('connect-pg-simple')(session);
-const path = require('path');
+// server.js
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import pkg from "pg";
+
+dotenv.config();
+const { Pool } = pkg;
 
 const PORT = process.env.PORT || 10000;
-const NODE_ENV = process.env.NODE_ENV || 'development';
-const FRONT = process.env.CORS_ORIGIN || '*';
+const JWT_SECRET = process.env.JWT_SECRET || "change_this_secret";
+const STATIC_ORIGIN = process.env.STATIC_ORIGIN || "*"; // укажи домен статики, например https://www.s7avelii-airlines.ru
 
-if (!process.env.DATABASE_URL) {
-  console.error('FATAL: DATABASE_URL not set in env');
-  process.exit(1);
-}
-
+// Pool для Neon/Postgres
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
 
-pool.on('error', (err) => {
-  console.error('Unexpected pg pool error', err);
-});
-
-// express
 const app = express();
-app.use(express.json({ limit: '5mb' }));
-app.use(express.urlencoded({ extended: true }));
-
+app.use(express.json());
 app.use(cors({
-  origin: FRONT,
-  credentials: true
+  origin: STATIC_ORIGIN,
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type","Authorization"],
 }));
 
-// session store in Postgres
-app.use(session({
-  store: new PgSession({
-    pool: pool,
-    tableName: 'session'
-  }),
-  name: 's7avelii.sid',
-  secret: process.env.SESSION_SECRET || 'change_this_secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: NODE_ENV === 'production',
-    httpOnly: true,
-    sameSite: NODE_ENV === 'production' ? 'none' : 'lax',
-    maxAge: 7 * 24 * 60 * 60 * 1000
-  }
-}));
-
-/* ---------- DB init: create tables if not exists ---------- */
-async function initDB() {
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS session (
-      sid varchar NOT NULL COLLATE "default",
-      sess json NOT NULL,
-      expire timestamp(6) NOT NULL,
-      PRIMARY KEY (sid)
-    );
-  `);
-
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS users (
-      id SERIAL PRIMARY KEY,
-      fio TEXT,
-      phone TEXT UNIQUE,
-      email TEXT UNIQUE,
-      password TEXT,
-      dob TEXT,
-      gender TEXT,
-      card_number TEXT,
-      card_type TEXT,
-      avatar TEXT,
-      vk TEXT,
-      telegram TEXT,
-      bonus_miles INTEGER DEFAULT 0,
-      status_miles INTEGER DEFAULT 0,
-      created_at TIMESTAMP DEFAULT NOW()
-    );
-  `);
-
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS products (
-      id SERIAL PRIMARY KEY,
-      name TEXT,
-      price INTEGER
-    );
-  `);
-
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS cart (
-      user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-      product_id INTEGER,
-      name TEXT,
-      price INTEGER,
-      qty INTEGER DEFAULT 1,
-      PRIMARY KEY (user_id, product_id)
-    );
-  `);
-
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS orders (
-      id SERIAL PRIMARY KEY,
-      user_id INTEGER REFERENCES users(id),
-      items JSONB,
-      total INTEGER,
-      created_at TIMESTAMP DEFAULT NOW()
-    );
-  `);
-
-  // seed products if empty
-  const { rows } = await pool.query("SELECT COUNT(*) FROM products");
-  if (Number(rows[0].count) === 0) {
-    await pool.query(`
-      INSERT INTO products (name, price) VALUES
-        ('Брелок S7avelii', 500),
-        ('Футболка S7avelii', 1200),
-        ('Кружка S7avelii', 800),
-        ('Модель самолёта', 2500)
-    `);
-    console.log('Seeded products');
-  }
-
-  console.log('DB init ok');
-}
-
-/* ---------- Helpers ---------- */
-function safeUser(u) {
-  if (!u) return null;
-  const copy = { ...u };
-  delete copy.password;
-  return copy;
-}
-
-/* ---------- Routes ---------- */
-
-// health / DB test
-app.get('/api/test-db', async (req, res) => {
+// --- health / debug ---
+app.get("/api/health", async (req, res) => {
   try {
-    const r = await pool.query('SELECT NOW() as now');
-    res.json({ ok: true, now: r.rows[0].now });
+    await pool.query("SELECT 1");
+    res.json({ ok: true });
   } catch (err) {
-    console.error('test-db err:', err);
+    console.error("health err:", err);
     res.status(500).json({ ok: false, error: err.message });
   }
 });
 
-// register
-app.post('/api/register', async (req, res) => {
+// --- init DB (safe create) ---
+async function initDB(){
   try {
-    const { fio, phone, email, password, cardNumber, cardType, dob, gender } = req.body;
-    if (!password || (!phone && !email) || !fio) {
-      return res.status(400).json({ error: 'fio, (phone or email) and password required' });
-    }
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        fio TEXT,
+        email TEXT UNIQUE,
+        phone TEXT,
+        password TEXT,
+        avatar TEXT,
+        bonus_miles INTEGER DEFAULT 0,
+        status_miles INTEGER DEFAULT 0,
+        cart JSONB DEFAULT '[]',
+        dob TEXT,
+        gender TEXT,
+        vk TEXT,
+        telegram TEXT,
+        card_number TEXT,
+        card_type TEXT
+      );
+    `);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS products (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        price INTEGER NOT NULL
+      );
+    `);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS orders (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id),
+        items JSONB,
+        created_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
 
-    // unique checks
-    if (phone) {
-      const { rows } = await pool.query('SELECT id FROM users WHERE phone=$1', [phone]);
-      if (rows.length) return res.status(400).json({ error: 'Phone already registered' });
+    // seed products if empty
+    const r = await pool.query("SELECT COUNT(*) FROM products");
+    if (Number(r.rows[0].count) === 0) {
+      await pool.query(`
+        INSERT INTO products (name, price) VALUES
+        ('Брелок S7avelii', 500),
+        ('Футболка S7avelii', 1200),
+        ('Кружка S7avelii', 800),
+        ('Модель самолёта', 2500);
+      `);
     }
-    if (email) {
-      const { rows } = await pool.query('SELECT id FROM users WHERE email=$1', [email]);
-      if (rows.length) return res.status(400).json({ error: 'Email already registered' });
-    }
+    console.log("DB initialized");
+  } catch (err) {
+    console.error("DB init failed:", err);
+    throw err;
+  }
+}
+initDB().catch(()=>{ /* init error logged above */ });
 
-    const hashed = await bcrypt.hash(password, 10);
-    const r = await pool.query(
-      `INSERT INTO users (fio, phone, email, password, dob, gender, card_number, card_type)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
-      [fio, phone || null, email || null, hashed, dob || null, gender || null, cardNumber || null, cardType || null]
+// --- helpers ---
+function signToken(userId){
+  return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: "7d" });
+}
+async function getUserById(id){
+  const { rows } = await pool.query("SELECT * FROM users WHERE id=$1", [id]);
+  return rows[0] || null;
+}
+function authMiddleware(req, res, next){
+  const h = req.headers.authorization;
+  if (!h) return res.status(401).json({ error: "No token" });
+  const token = h.split(" ")[1];
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    req.userId = payload.id;
+    next();
+  } catch (e) {
+    return res.status(401).json({ error: "Invalid token" });
+  }
+}
+
+// --- register --- (accepts fio,email,phone,password,dob,gender,cardNumber,cardType)
+app.post("/api/register", async (req, res) => {
+  try {
+    const { fio, email, phone, password, dob, gender, cardNumber, cardType } = req.body;
+    if (!email || !password || !fio) return res.status(400).json({ error: "fio,email,password required" });
+
+    // check existing by email or phone
+    const check = await pool.query("SELECT id FROM users WHERE email=$1 OR phone=$2", [email, phone]);
+    if (check.rows.length) return res.status(400).json({ error: "User exists" });
+
+    const hash = await bcrypt.hash(password, 10);
+    const ins = await pool.query(
+      `INSERT INTO users (fio,email,phone,password,dob,gender,card_number,card_type,bonus_miles,status_miles)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,0,0) RETURNING id`,
+      [fio,email,phone,hash,dob||null,gender||null,cardNumber||null,cardType||null]
     );
-
-    req.session.userId = r.rows[0].id;
-    res.json({ ok: true, user: safeUser(r.rows[0]) });
+    const token = signToken(ins.rows[0].id);
+    res.json({ token });
   } catch (err) {
-    console.error('register err:', err);
-    res.status(500).json({ error: 'Registration failed', details: err.message });
+    console.error("register err:", err);
+    res.status(500).json({ error: "Registration failed" });
   }
 });
 
-// login (phone or email)
-app.post('/api/login', async (req, res) => {
+// --- login --- (accepts phone OR email + password)
+app.post("/api/login", async (req, res) => {
   try {
-    const { phone, email, password } = req.body;
-    if ((!phone && !email) || !password) return res.status(400).json({ error: 'Need phone/email + password' });
-
-    const q = phone ? 'SELECT * FROM users WHERE phone=$1' : 'SELECT * FROM users WHERE email=$1';
-    const param = phone || email;
-    const { rows } = await pool.query(q, [param]);
-    const user = rows[0];
-    if (!user) return res.status(400).json({ error: 'User not found' });
-
-    const ok = await bcrypt.compare(password, user.password);
-    if (!ok) return res.status(400).json({ error: 'Wrong password' });
-
-    req.session.userId = user.id;
-    res.json({ ok: true, user: safeUser(user) });
-  } catch (err) {
-    console.error('login err:', err);
-    res.status(500).json({ error: 'Login failed', details: err.message });
-  }
-});
-
-// logout
-app.post('/api/logout', (req, res) => {
-  req.session.destroy(err => {
-    if (err) console.warn('session destroy err', err);
-    res.clearCookie('s7avelii.sid', { path: '/' });
-    res.json({ ok: true });
-  });
-});
-
-// profile
-app.get('/api/profile', async (req, res) => {
-  try {
-    if (!req.session.userId) return res.status(401).json({ error: 'Not authenticated' });
-    const { rows } = await pool.query('SELECT * FROM users WHERE id=$1', [req.session.userId]);
-    res.json({ ok: true, user: safeUser(rows[0]) });
-  } catch (err) {
-    console.error('profile err:', err);
-    res.status(500).json({ error: 'Profile error', details: err.message });
-  }
-});
-
-app.post('/api/profile/update', async (req, res) => {
-  try {
-    if (!req.session.userId) return res.status(401).json({ error: 'Not authenticated' });
-    const allowed = ['fio','phone','email','dob','gender','card_number','card_type','avatar','bonus_miles','status_miles','vk','telegram','password'];
-    const updates = [];
-    const values = [];
-    let i = 1;
-    for (const k of allowed) {
-      if (req.body[k] !== undefined) {
-        if (k === 'password') {
-          const hashed = await bcrypt.hash(req.body.password, 10);
-          updates.push(`password=$${i++}`);
-          values.push(hashed);
-        } else {
-          updates.push(`${k}=$${i++}`);
-          values.push(req.body[k]);
-        }
+    const { identifier, password, phone, email } = req.body;
+    // support phone or email; some frontends send phone
+    let userRow;
+    if (phone || identifier) {
+      const key = phone || identifier;
+      const r = await pool.query("SELECT * FROM users WHERE phone=$1", [key]);
+      userRow = r.rows[0];
+    } else if (email) {
+      const r = await pool.query("SELECT * FROM users WHERE email=$1", [email]);
+      userRow = r.rows[0];
+    } else {
+      // try email in identifier
+      if (identifier) {
+        const r = await pool.query("SELECT * FROM users WHERE email=$1 OR phone=$1", [identifier]);
+        userRow = r.rows[0];
       }
     }
-    if (!updates.length) return res.json({ ok: true });
-    values.push(req.session.userId);
-    await pool.query(`UPDATE users SET ${updates.join(',')} WHERE id=$${values.length}`, values);
-    const { rows } = await pool.query('SELECT * FROM users WHERE id=$1', [req.session.userId]);
-    res.json({ ok: true, user: safeUser(rows[0]) });
+    if (!userRow) return res.status(400).json({ error: "User not found" });
+    const ok = await bcrypt.compare(password, userRow.password);
+    if (!ok) return res.status(400).json({ error: "Wrong password" });
+    const token = signToken(userRow.id);
+    res.json({ token });
   } catch (err) {
-    console.error('profile update err:', err);
-    res.status(500).json({ error: 'Update failed', details: err.message });
+    console.error("login err:", err);
+    res.status(500).json({ error: "Login failed" });
   }
 });
 
-/* Products */
-app.get('/api/products', async (req, res) => {
+// --- profile get ---
+app.get("/api/profile", authMiddleware, async (req, res) => {
   try {
-    const { rows } = await pool.query('SELECT * FROM products ORDER BY id');
-    res.json(rows);
+    const user = await getUserById(req.userId);
+    if (!user) return res.status(404).json({ error: "Not found" });
+    delete user.password;
+    res.json(user);
   } catch (err) {
-    console.error('products err:', err);
-    res.status(500).json({ error: 'Products error' });
+    console.error("profile err:", err);
+    res.status(500).json({ error: "Profile error" });
   }
 });
 
-/* Cart */
-app.get('/api/cart', async (req, res) => {
+// --- profile update ---
+app.post("/api/profile/update", authMiddleware, async (req, res) => {
   try {
-    if (!req.session.userId) return res.json([]);
-    const { rows } = await pool.query('SELECT product_id as id, name, price, qty FROM cart WHERE user_id=$1', [req.session.userId]);
-    res.json(rows);
-  } catch (err) {
-    console.error('cart get err:', err);
-    res.status(500).json({ error: 'Cart error' });
-  }
-});
-
-app.post('/api/cart/add', async (req, res) => {
-  try {
-    if (!req.session.userId) return res.status(401).json({ error: 'Not authenticated' });
-    const { id: productId, qty = 1 } = req.body;
-    const p = await pool.query('SELECT * FROM products WHERE id=$1', [productId]);
-    if (!p.rows.length) return res.status(404).json({ error: 'Product not found' });
-    const prod = p.rows[0];
-    await pool.query(`
-      INSERT INTO cart (user_id, product_id, name, price, qty)
-      VALUES ($1,$2,$3,$4,$5)
-      ON CONFLICT (user_id, product_id) DO UPDATE SET qty = cart.qty + EXCLUDED.qty
-    `, [req.session.userId, prod.id, prod.name, prod.price, qty]);
-    res.json({ ok: true });
-  } catch (err) {
-    console.error('cart add err:', err);
-    res.status(500).json({ error: 'Add to cart failed' });
-  }
-});
-
-app.post('/api/cart/remove', async (req, res) => {
-  try {
-    if (!req.session.userId) return res.status(401).json({ error: 'Not authenticated' });
-    const { id: productId } = req.body;
-    await pool.query('DELETE FROM cart WHERE user_id=$1 AND product_id=$2', [req.session.userId, productId]);
-    res.json({ ok: true });
-  } catch (err) {
-    console.error('cart remove err:', err);
-    res.status(500).json({ error: 'Remove failed' });
-  }
-});
-
-app.post('/api/cart/checkout', async (req, res) => {
-  try {
-    if (!req.session.userId) return res.status(401).json({ error: 'Not authenticated' });
-    const client = await pool.connect();
-    try {
-      await client.query('BEGIN');
-      const cartRes = await client.query('SELECT product_id, name, price, qty FROM cart WHERE user_id=$1', [req.session.userId]);
-      const items = cartRes.rows;
-      if (!items.length) { await client.query('ROLLBACK'); return res.status(400).json({ error: 'Cart empty' }); }
-      const total = items.reduce((s, it) => s + (it.price * it.qty), 0);
-      await client.query('INSERT INTO orders (user_id, items, total) VALUES ($1,$2,$3)', [req.session.userId, JSON.stringify(items), total]);
-      await client.query('DELETE FROM cart WHERE user_id=$1', [req.session.userId]);
-      const milesToAdd = Math.floor(total / 10);
-      await client.query('UPDATE users SET bonus_miles = bonus_miles + $1 WHERE id=$2', [milesToAdd, req.session.userId]);
-      await client.query('COMMIT');
-      res.json({ ok: true, total, milesAdded: milesToAdd });
-    } catch (txErr) {
-      await client.query('ROLLBACK');
-      throw txErr;
-    } finally {
-      client.release();
+    const body = req.body;
+    const sets = [];
+    const vals = [];
+    let i = 1;
+    if ("password" in body) {
+      const hash = await bcrypt.hash(body.password, 10);
+      sets.push(`password=$${i++}`); vals.push(hash);
+      delete body.password;
     }
+    for (const k of Object.keys(body)) {
+      // allow only known fields
+      if (["fio","email","phone","dob","gender","avatar","card_number","card_type","vk","telegram","bonus_miles","status_miles"].includes(k)) {
+        sets.push(`${k}=$${i++}`);
+        vals.push(body[k]);
+      }
+    }
+    if (!sets.length) return res.json({ ok: true });
+    vals.push(req.userId);
+    await pool.query(`UPDATE users SET ${sets.join(",")} WHERE id=$${i}`, vals);
+    res.json({ ok: true });
   } catch (err) {
-    console.error('checkout err:', err);
-    res.status(500).json({ error: 'Checkout failed' });
+    console.error("profile.update err:", err);
+    res.status(500).json({ error: "Update failed" });
   }
 });
 
-/* Orders */
-app.get('/api/orders', async (req, res) => {
+// --- products ---
+app.get("/api/products", async (req, res) => {
   try {
-    if (!req.session.userId) return res.json([]);
-    const { rows } = await pool.query('SELECT id, items, total, created_at FROM orders WHERE user_id=$1 ORDER BY id DESC', [req.session.userId]);
-    res.json(rows);
+    const r = await pool.query("SELECT * FROM products ORDER BY id");
+    res.json(r.rows);
   } catch (err) {
-    console.error('orders err:', err);
-    res.status(500).json({ error: 'Orders error' });
+    console.error("products err:", err);
+    res.status(500).json({ error: "Products error" });
   }
 });
 
-/* Miles */
-app.get('/api/miles', async (req, res) => {
+// --- cart stored in users.cart JSONB ---
+app.get("/api/cart", authMiddleware, async (req, res) => {
   try {
-    if (!req.session.userId) return res.status(401).json({ error: 'Not authenticated' });
-    const { rows } = await pool.query('SELECT bonus_miles, status_miles FROM users WHERE id=$1', [req.session.userId]);
-    res.json(rows[0] || { bonus_miles: 0, status_miles: 0 });
+    const r = await pool.query("SELECT cart FROM users WHERE id=$1", [req.userId]);
+    res.json(r.rows[0].cart || []);
   } catch (err) {
-    console.error('miles err:', err);
-    res.status(500).json({ error: 'Miles error' });
+    console.error("cart.get err:", err);
+    res.status(500).json({ error: "Cart error" });
   }
 });
 
-/* SPA fallback - serve index if you want to host static from this service (optional) */
-const PUBLIC_DIR = path.join(__dirname, '..', 'public'); // если статика в ../public
-// app.use(express.static(PUBLIC_DIR));
-// app.get('*', (req, res) => res.sendFile(path.join(PUBLIC_DIR, 'index.html')));
-
-app.listen(PORT, async () => {
-  console.log(`✅ Server started on ${PORT}`);
+app.post("/api/cart/add", authMiddleware, async (req, res) => {
   try {
-    await initDB();
+    const { id } = req.body;
+    const p = (await pool.query("SELECT id,name,price FROM products WHERE id=$1", [id])).rows[0];
+    if (!p) return res.status(404).json({ error: "Product not found" });
+    const r = await pool.query("SELECT cart FROM users WHERE id=$1", [req.userId]);
+    const cart = r.rows[0].cart || [];
+    const found = cart.find(x => x.id === p.id);
+    if (found) found.qty = (found.qty||1) + 1;
+    else cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
+    await pool.query("UPDATE users SET cart = $1 WHERE id=$2", [JSON.stringify(cart), req.userId]);
+    res.json({ ok: true });
   } catch (err) {
-    console.error('DB init failed:', err);
-    process.exit(1);
+    console.error("cart.add err:", err);
+    res.status(500).json({ error: "Cart add error" });
   }
 });
+
+app.post("/api/cart/remove", authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.body;
+    const r = await pool.query("SELECT cart FROM users WHERE id=$1", [req.userId]);
+    const cart = r.rows[0].cart || [];
+    const newCart = cart.filter(x => x.id !== id);
+    await pool.query("UPDATE users SET cart=$1 WHERE id=$2", [JSON.stringify(newCart), req.userId]);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error("cart.remove err:", err);
+    res.status(500).json({ error: "Cart remove error" });
+  }
+});
+
+app.post("/api/cart/checkout", authMiddleware, async (req, res) => {
+  try {
+    const r = await pool.query("SELECT cart FROM users WHERE id=$1", [req.userId]);
+    const cart = r.rows[0].cart || [];
+    if (!cart.length) return res.status(400).json({ error: "Cart empty" });
+    await pool.query("INSERT INTO orders (user_id, items) VALUES ($1,$2)", [req.userId, JSON.stringify(cart)]);
+    await pool.query("UPDATE users SET cart = '[]' WHERE id=$1", [req.userId]);
+    // optional: add bonus miles
+    await pool.query("UPDATE users SET bonus_miles = COALESCE(bonus_miles,0) + 100 WHERE id=$1", [req.userId]);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error("cart.checkout err:", err);
+    res.status(500).json({ error: "Checkout error" });
+  }
+});
+
+// --- orders ---
+app.get("/api/orders", authMiddleware, async (req, res) => {
+  try {
+    const r = await pool.query("SELECT * FROM orders WHERE user_id=$1 ORDER BY id DESC", [req.userId]);
+    res.json(r.rows);
+  } catch (err) {
+    console.error("orders err:", err);
+    res.status(500).json({ error: "Orders error" });
+  }
+});
+
+// fallback static (if you host static from same server)
+app.use(express.static("public"));
+
+app.listen(PORT, () => console.log(`✅ Server started on ${PORT}`));
