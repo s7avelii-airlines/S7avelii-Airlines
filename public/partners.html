@@ -433,33 +433,57 @@ nav li:hover .dropdown {
     nav.classList.toggle("open");
   });
 
-  // --- Авторизация ---
-  async function updateUserArea() {
-    const userArea = document.getElementById("userArea");
-    try {
-      const res = await fetch("/api/profile");
-      if (!res.ok) throw new Error("Не авторизован");
-      const data = await res.json();
-      const user = data.user;
+const API = 'https://s7avelii-airlines-1.onrender.com';
+const userArea = document.getElementById("userArea");
 
-      if (user.avatar) {
-        userArea.innerHTML = `
-          <img src="${user.avatar}" alt="avatar"
-            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;"
-            onclick="window.location.href='cabinet.html'" />
-        `;
-      } else {
-        userArea.innerHTML = `
-          <span style="cursor:pointer;color:#2196f3;font-weight:500;"
-            onclick="window.location.href='cabinet.html'">${user.fio.split(" ")[0]}</span>`;
-      }
-    } catch {
-      userArea.innerHTML = `<a href="auth.html">Вход</a>`;
-    }
+async function updateUserArea() {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    userArea.innerHTML = `<a href="auth.html" style="color:#2196f3;font-weight:600">Вход</a>`;
+    return;
   }
-  window.addEventListener("DOMContentLoaded", updateUserArea);
-</script>
 
+  try {
+    const res = await fetch(`${API}/api/profile`, {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+
+    if (!res.ok) throw new Error('Unauthorized');
+    const data = await res.json();
+    const user = data.user || data;
+
+    userArea.innerHTML = '';
+
+    if (user.avatar) {
+      const img = document.createElement('img');
+      img.src = user.avatar.startsWith('http') ? user.avatar : API + user.avatar;
+      img.alt = user.fio || user.email || "User";
+      img.style.width = '36px';
+      img.style.height = '36px';
+      img.style.borderRadius = '50%';
+      img.style.objectFit = 'cover';
+      img.style.cursor = 'pointer';
+      img.addEventListener('click', () => window.location.href='cabinet.html');
+      userArea.appendChild(img);
+    } else {
+      const span = document.createElement('span');
+      span.textContent = user.fio ? user.fio.split(' ')[0] : user.email;
+      span.style.cursor = 'pointer';
+      span.style.color = '#2196f3';
+      span.style.fontWeight = '500';
+      span.addEventListener('click', () => window.location.href='cabinet.html');
+      userArea.appendChild(span);
+    }
+  } catch (err) {
+    console.warn(err);
+    localStorage.removeItem('token');
+    userArea.innerHTML = `<a href="auth.html" style="color:#2196f3;font-weight:600">Вход</a>`;
+  }
+}
+
+window.addEventListener('DOMContentLoaded', updateUserArea);
+</script>
  <!-- Пробел между слайдером и акциями -->
   <div class="h-30"></div>
 
