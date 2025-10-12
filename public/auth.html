@@ -37,77 +37,67 @@ input, select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d
 </head>
 <body>
 <header>
-  <div class="logo">
-    <a href="index.html"><img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" /></a>
-  </div>
-  <nav class="nav">
-    <ul>
-      <li><a href="index.html">Главная</a></li>
-      <li><a href="#">S7avelii Priority</a></li>
-      <li><a href="#">Информация</a></li>
-      <li><a href="busines.html">Бизнесу</a></li>
-      <li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
-    </ul>
-  </nav>
-  <div class="right-menu" id="userArea"></div>
+<div class="logo">
+<a href="index.html">
+<img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
+</a>
+</div>
+<nav class="nav">
+<ul>
+<li><a href="index.html">Главная</a></li>
+<li><a href="#">S7avelii Priority</a></li>
+<li><a href="#">Информация</a></li>
+<li><a href="busines.html">Бизнесу</a></li>
+<li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
+</ul>
+</nav>
+<div class="right-menu" id="userArea"></div>
 </header>
 
 <main>
-  <div class="card" aria-live="polite">
-    <h2 id="title">Вход</h2>
+<div class="card" aria-live="polite">
+<h2 id="title">Вход</h2>
 
-    <!-- LOGIN FORM -->
-    <form id="loginForm" autocomplete="on" novalidate>
-      <input id="loginIdentifier" type="text" placeholder="Телефон или Email" required>
-      <input id="loginPassword" type="password" placeholder="Пароль" required>
-      <button class="btn" id="loginBtn" type="submit">Войти</button>
-      <div id="loginError" class="error" role="status" aria-live="assertive"></div>
-    </form>
+<form id="loginForm" autocomplete="on" novalidate>
+<input id="loginIdentifier" type="text" placeholder="Телефон или Email" required>
+<input id="loginPassword" type="password" placeholder="Пароль" required>
+<button class="btn" id="loginBtn" type="submit">Войти</button>
+<div id="loginError" class="error" role="status" aria-live="assertive"></div>
+</form>
 
-    <!-- REGISTER FORM -->
-    <form id="registerForm" class="hidden" autocomplete="on" novalidate>
-      <input id="regFio" type="text" placeholder="ФИО" required>
-      <input id="regEmail" type="email" placeholder="Email" required>
-      <div class="row">
-        <div class="half"><input id="regPhone" type="tel" placeholder="Телефон" required></div>
-        <div class="half"><input id="regPassword" type="password" placeholder="Пароль (мин.6 символов)" required></div>
-      </div>
-      <div class="row">
-        <div class="half"><label>Дата рождения</label><input id="regDob" type="date"></div>
-        <div class="half"><label>Пол</label><select id="regGender">
-          <option value="">Не указан</option>
-          <option value="Мужской">Мужской</option>
-          <option value="Женский">Женский</option>
-          <option value="Другое">Другое</option>
-        </select></div>
-      </div>
-      <input id="regCard" type="text" placeholder="Номер карты S7avelii Priority">
-      <div class="row">
-        <label class="card-type"><input type="radio" name="regCardType" value="VIP"> VIP <img src="images/vip_card.png" width="60"></label>
-        <label class="card-type"><input type="radio" name="regCardType" value="Classic"> Classic <img src="images/classic_card.png" width="60"></label>
-        <label class="card-type"><input type="radio" name="regCardType" value="None" checked> Нет</label>
-      </div>
-      <button class="btn" id="regBtn" type="submit">Зарегистрироваться</button>
-      <div id="regError" class="error" role="status" aria-live="assertive"></div>
-      <div id="regSuccess" class="success" role="status" aria-live="polite"></div>
-    </form>
+<form id="registerForm" class="hidden" autocomplete="on" novalidate>
+<input id="regFio" type="text" placeholder="ФИО" required>
+<input id="regEmail" type="email" placeholder="Email" required>
+<div class="row">
+<div class="half"><input id="regPhone" type="tel" placeholder="Телефон" required></div>
+<div class="half"><input id="regPassword" type="password" placeholder="Пароль (мин.6 символов)" required></div>
+</div>
+<div class="row">
+<div class="half"><label>Дата рождения</label><input id="regDob" type="date"></div>
+<div class="half"><label>Пол</label><select id="regGender">
+<option value="">Не указан</option>
+<option value="Мужской">Мужской</option>
+<option value="Женский">Женский</option>
+<option value="Другое">Другое</option>
+</select></div>
+</div>
+<input id="regCard" type="text" placeholder="Номер карты S7avelii Priority">
+<div class="row">
+<label class="card-type"><input type="radio" name="regCardType" value="VIP"> VIP <img src="images/vip_card.png" width="60"></label>
+<label class="card-type"><input type="radio" name="regCardType" value="Classic"> Classic <img src="images/classic_card.png" width="60"></label>
+<label class="card-type"><input type="radio" name="regCardType" value="None" checked> Нет</label>
+</div>
+<button class="btn" id="regBtn" type="submit">Зарегистрироваться</button>
+<div id="regError" class="error" role="status" aria-live="assertive"></div>
+<div id="regSuccess" class="success" role="status" aria-live="polite"></div>
+</form>
 
-    <div class="switch"><span id="switchText">Нет аккаунта?</span> <button id="switchBtn">Зарегистрироваться</button></div>
-  </div>
+<div class="switch"><span id="switchText">Нет аккаунта?</span> <button id="switchBtn">Зарегистрироваться</button></div>
+</div>
 </main>
 
 <script>
-/*
-  Полный рабочий auth frontend:
-  - Поддерживает login (телефон или email) и register
-  - Сохраняет JWT в localStorage
-  - Автоматически пробует валидировать токен и редиректит в cabinet.html, если user уже залогинен
-  - Позволяет UI/UX: блокировка кнопок, сообщения, простая валидация
-*/
-
-const API = 'https://s7avelii-airlines-1.onrender.com'; // <- если нужно, замени на свой сервер
-
-// Элементы
+const API = 'https://s7avelii-airlines-1.onrender.com';
 const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
 const switchBtn = document.getElementById('switchBtn');
@@ -116,8 +106,6 @@ const title = document.getElementById('title');
 const loginError = document.getElementById('loginError');
 const regError = document.getElementById('regError');
 const regSuccess = document.getElementById('regSuccess');
-const loginBtn = document.getElementById('loginBtn');
-const regBtn = document.getElementById('regBtn');
 
 function showForm(showLogin){
   if(showLogin){
@@ -133,89 +121,44 @@ function showForm(showLogin){
     switchText.textContent = 'Уже есть аккаунт?';
     switchBtn.textContent = 'Войти';
   }
-  loginError.textContent = '';
-  regError.textContent = '';
-  regSuccess.textContent = '';
+  loginError.textContent=''; regError.textContent=''; regSuccess.textContent='';
 }
 switchBtn.addEventListener('click', e=>{ e.preventDefault(); showForm(loginForm.classList.contains('hidden')); });
 
-// Если есть токен — пробуем автоматически проверить и редиректить в кабинет
-async function tryAutoLoginAndRedirect(){
+// === Автологин ===
+window.addEventListener('DOMContentLoaded', async ()=>{
   const token = localStorage.getItem('token');
-  if(!token) return;
-  try{
-    const res = await fetch(API + '/api/profile', {
-      headers: { 'Authorization': 'Bearer ' + token }
-    });
-    if(res.ok){
-      // валидный токен — переходим в кабинет
-      window.location.href = 'cabinet.html';
-    } else {
-      // токен недействителен — удаляем
-      localStorage.removeItem('token');
-    }
-  }catch(err){
-    // сеть — не делаем ничего, пользователь останется на странице
-    console.warn('Auto-login check failed', err);
+  if(token){
+    try{
+      const res = await fetch(`${API}/api/profile`, { headers:{'Authorization':'Bearer '+token} });
+      if(res.ok) window.location.href='cabinet.html';
+    }catch{}
   }
-}
-window.addEventListener('DOMContentLoaded', tryAutoLoginAndRedirect);
+});
 
-// ====== ВХОД (логин) ======
+// --- Login ---
 loginForm.addEventListener('submit', async e=>{
-  e.preventDefault();
-  loginError.textContent = '';
+  e.preventDefault(); loginError.textContent='';
   const identifier = document.getElementById('loginIdentifier').value.trim();
   const password = document.getElementById('loginPassword').value;
   if(!identifier){ loginError.textContent='Введите телефон или Email'; return; }
   if(!password){ loginError.textContent='Введите пароль'; return; }
-
-  // определяем телефон vs email
-  const isPhone = /^\+?\d[\d\s()-]{4,}$/.test(identifier);
-  const body = isPhone ? { phone: identifier, password } : { email: identifier, password };
-
-  loginBtn.disabled = true;
-  loginBtn.textContent = 'Вход...';
-
-  try {
+  try{
     const res = await fetch(`${API}/api/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({identifier,password})
     });
-
-    const data = await res.json().catch(()=>({}));
-
-    if(!res.ok){
-      loginError.textContent = data.error || 'Ошибка входа';
-      loginBtn.disabled = false;
-      loginBtn.textContent = 'Войти';
-      return;
-    }
-
-    if(!data.token){
-      loginError.textContent = 'Сервер не вернул токен';
-      loginBtn.disabled = false;
-      loginBtn.textContent = 'Войти';
-      return;
-    }
-
-    // сохраняем токен и переходим в кабинет
+    const data = await res.json();
+    if(!res.ok){ loginError.textContent = data.error || 'Ошибка входа'; return; }
     localStorage.setItem('token', data.token);
-    window.location.href = 'cabinet.html';
-
-  } catch(err) {
-    console.error('login err:', err);
-    loginError.textContent = 'Ошибка сети. Проверь сервер и CORS.';
-    loginBtn.disabled = false;
-    loginBtn.textContent = 'Войти';
-  }
+    window.location.href='cabinet.html';
+  }catch(err){ console.error(err); loginError.textContent='Ошибка сети. Проверь сервер и CORS.'; }
 });
 
-// ====== РЕГИСТРАЦИЯ ======
+// --- Register ---
 registerForm.addEventListener('submit', async e=>{
-  e.preventDefault();
-  regError.textContent=''; regSuccess.textContent='';
+  e.preventDefault(); regError.textContent=''; regSuccess.textContent='';
   const fio = document.getElementById('regFio').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const phone = document.getElementById('regPhone').value.trim();
@@ -224,49 +167,22 @@ registerForm.addEventListener('submit', async e=>{
   const gender = document.getElementById('regGender').value || null;
   const cardNumber = document.getElementById('regCard').value.trim();
   const cardType = document.querySelector('input[name="regCardType"]:checked')?.value || 'None';
-
   if(!fio){ regError.textContent='Введите ФИО'; return; }
   if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ regError.textContent='Введите корректный email'; return; }
   if(!phone){ regError.textContent='Введите телефон'; return; }
-  if(!password || password.length < 6){ regError.textContent='Пароль должен быть не менее 6 символов'; return; }
-
-  regBtn.disabled = true;
-  regBtn.textContent = 'Регистрация...';
-
-  try {
+  if(!password || password.length<6){ regError.textContent='Пароль должен быть не менее 6 символов'; return; }
+  try{
     const res = await fetch(`${API}/api/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fio, email, phone, password, dob, gender, cardNumber, cardType })
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({fio,email,phone,password,dob,gender,cardNumber,cardType})
     });
-
-    const data = await res.json().catch(()=>({}));
-
-    if(!res.ok){
-      regError.textContent = data.error || 'Ошибка регистрации';
-      regBtn.disabled = false;
-      regBtn.textContent = 'Зарегистрироваться';
-      return;
-    }
-
-    if(!data.token){
-      regError.textContent = 'Сервер не вернул токен';
-      regBtn.disabled = false;
-      regBtn.textContent = 'Зарегистрироваться';
-      return;
-    }
-
-    // Сохраняем токен и переходим в кабинет
+    const data = await res.json();
+    if(!res.ok){ regError.textContent=data.error || 'Ошибка регистрации'; return; }
     localStorage.setItem('token', data.token);
-    regSuccess.textContent = 'Регистрация успешна — перенаправляем...';
-    setTimeout(()=> window.location.href = 'cabinet.html', 700);
-
-  } catch(err) {
-    console.error('register err:', err);
-    regError.textContent = 'Ошибка сети. Проверь сервер и CORS.';
-    regBtn.disabled = false;
-    regBtn.textContent = 'Зарегистрироваться';
-  }
+    regSuccess.textContent='Регистрация успешна — перенаправляем...';
+    setTimeout(()=>window.location.href='cabinet.html',700);
+  }catch(err){ console.error(err); regError.textContent='Ошибка сети. Проверь сервер и CORS.'; }
 });
 </script>
 </body>
