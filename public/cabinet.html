@@ -4,206 +4,513 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>S7avelii | Профиль</title>
-
-<!-- Montserrat -->
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+<link rel="icon" href="images/favicon.png" type="image/png">
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
-  :root{
-    --s7-green: #B7CD00;
-    --muted: #8b97a6;
-    --card-bg: #ffffff;
-    --page-bg: #f5f7fa;
-    --panel: #f4f5f7;
-    --line: #e9eef2;
-    --text:#1f2937;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    font-family: 'Montserrat', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    background:var(--page-bg);
-    color:var(--text);
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-  }
-
-  /* Header (white bar with logo left and user right) */
-  header{
-    position:fixed;
-    top:0;left:0;right:0;
-    height:84px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:18px 28px;
-    background:#fff;
-    border-bottom:1px solid var(--line);
-    z-index:1200;
-  }
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:12px;
-  }
-  .brand .logo-circle{
-    width:44px;height:44px;border-radius:50%;
-    background:linear-gradient(135deg,var(--s7-green),#9cc42f);
-    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;
-  }
-  .brand .txt{font-size:18px;font-weight:600;color:var(--text)}
-  #userArea{display:flex;align-items:center;gap:12px;min-width:160px;justify-content:flex-end}
-  #userArea img{width:36px;height:36px;border-radius:50%;object-fit:cover;cursor:pointer;border:2px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,0.06)}
-
-  /* Page container */
-  .page{max-width:1180px;margin:120px auto;padding:0 20px 60px}
-
-  /* Top profile block */
-  .full-header{
-    background:var(--card-bg);
-    display:flex;
-    align-items:flex-start;
-    gap:24px;
-    padding:22px 26px;
-    border-radius:12px;
-    box-shadow:0 6px 20px rgba(16,24,40,0.06);
-    border:1px solid var(--line);
-    flex-wrap:wrap;
-  }
-  .avatar{width:110px;height:110px;border-radius:999px;object-fit:cover;border:4px solid #fff;cursor:pointer;box-shadow:0 8px 26px rgba(12,20,24,0.06)}
-  .profile-meta h2{margin:0;font-size:24px;font-weight:600}
-  .profile-meta .sub{color:var(--s7-green);font-weight:600;margin-top:6px;font-size:14px;display:flex;gap:8px;align-items:center}
-
-  .badges{display:flex;gap:8px;margin-top:10px;align-items:center}
-  .badge{background:#fff;border-radius:999px;padding:8px;border:1px solid #f1f3f4;display:flex;align-items:center;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
-  .badge .dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--s7-green);background:rgba(183,205,0,0.08)}
-
-  .counters{display:flex;gap:28px;margin-left:24px;align-items:center}
-  .counter{min-width:110px;text-align:center;padding:0 6px;border-left:1px solid #f1f4f6}
-  .counter:first-child{border-left:0}
-  .counter .num{font-weight:700;font-size:20px}
-  .counter .label{color:var(--muted);font-size:13px;margin-top:6px}
-
-  /* Tabs */
-  .tabs{display:flex;gap:18px;margin-top:20px;border-bottom:1px solid #eef2f4;padding-bottom:8px}
-  .tabs a{padding:10px 8px;text-decoration:none;color:#444;border-radius:6px;font-weight:400;cursor:pointer}
-  .tabs a.active{color:var(--s7-green);border-bottom:3px solid var(--s7-green);background:transparent}
-
-  /* telegram block (the one between tabs and personal data) */
-  .telegram-block {
-    background:#fff;
-    border-radius:12px;
-    display:flex;
-    gap:14px;
-    align-items:flex-start;
-    padding:18px 20px;
-    border:1px solid #eef2f6;
-    box-shadow:0 1px 2px rgba(0,0,0,0.03);
-    margin-top:20px;
-  }
-  .telegram-block .icon {
-    margin-top:4px;
-    flex-shrink:0;
-  }
-  .telegram-block .title { font-weight:600; color:#111; margin-bottom:6px; }
-  .telegram-block .text { color:#4b5563; font-size:14px; line-height:1.45; margin-bottom:10px }
-  .telegram-block .btn {
-    background:#f3f5f7;
-    border:1px solid #e0e6ea;
-    color:#111;
-    padding:8px 14px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:600;
-  }
-  .telegram-block .close {
-    position:absolute; right:16px; top:12px;
-    background:none;border:0;font-size:18px;color:#6b7280;cursor:pointer;
+:root{--accent:#9cc42f;--muted:#8b97a6}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f7fa;color:#1f2937}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:60px;border-bottom:1px solid #e6e6e6;position:fixed;top:0;left:0;width:100%;background:#fff;z-index:1000}
+.logo-img{height:45px;cursor:pointer}
+nav ul{display:flex;gap:20px;margin:0;padding:0;list-style:none}
+nav a{text-decoration:none;color:#111}
+.page{max-width:1180px;margin:90px auto;padding:0 20px}
+.full-header{background:#fff;display:flex;align-items:center;gap:24px;padding:24px;border-radius:12px;box-shadow:0 6px 20px rgba(16,24,40,0.06);flex-wrap:wrap}
+.avatar{width:110px;height:110px;border-radius:999px;object-fit:cover;border:4px solid #fff;cursor:pointer}
+.tabs{display:flex;gap:14px;margin-top:18px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,0.04);overflow-x:auto}
+.tabs a{padding:10px 14px;text-decoration:none;color:#495057;border-radius:8px;cursor:pointer}
+.tabs a.active{color:var(--accent);background:rgba(156,196,47,0.06)}
+.grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:18px}
+.card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 4px 12px rgba(16,24,40,0.04)}
+.field{display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid rgba(0,0,0,0.03)}
+.small-muted{color:var(--muted);font-size:13px}
+.btn{background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
+.btn.secondary{background:#eef2f7;color:#111}
+.btn.red{background:#e66}
+.progress-wrap{width:100%;margin-top:8px}
+.progress-bg{width:100%;height:14px;background:#eee;border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;width:0%;background:var(--accent);transition:width .6s ease}
+.cart-table{width:100%;border-collapse:collapse}
+.cart-table th,.cart-table td{padding:8px;border-bottom:1px solid #eee;text-align:left}
+.muted{color:var(--muted)}
+.input-inline{width:70%;padding:6px;border-radius:6px;border:1px solid #d6d8db}
+@media(max-width:980px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+ <!-- Подключаем Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* применяем Roboto ко всем элементам */
+    * {
+      font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+    }
+    body { overflow-x: hidden; }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 0.25rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      min-width: 160px;
+      z-index: 50;
+    }
+    .group:hover .dropdown-menu { display: block; }
+  </style>
+</head>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
   }
 
-  /* grid main */
-  .grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:18px}
-  .card{background:var(--card-bg);border-radius:12px;padding:18px;box-shadow:0 4px 12px rgba(16,24,40,0.04);border:1px solid var(--line)}
-  .field{display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid rgba(0,0,0,0.03)}
-  .small-muted{color:var(--muted);font-size:13px}
-  .btn{background:var(--s7-green);color:#fff;padding:8px 12px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
-  .btn.secondary{background:#eef2f7;color:#111}
-  .btn.red{background:#e66}
-  .progress-wrap{width:100%;margin-top:8px}
-  .progress-bg{width:100%;height:14px;background:#eee;border-radius:999px;overflow:hidden}
-  .progress-fill{height:100%;width:0%;background:var(--s7-green);transition:width .6s ease}
-  .cart-table{width:100%;border-collapse:collapse}
-  .cart-table th,.cart-table td{padding:8px;border-bottom:1px solid #eee;text-align:left}
-  .muted{color:var(--muted)}
-  .input-inline{width:70%;padding:6px;border-radius:6px;border:1px solid #d6d8db}
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    height: 60px;
+    border-bottom: 1px solid #ccc;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: #fff;
+  }
 
-  /* footer */
-  footer.footer{margin-top:26px;}
+  .logo-img {
+    height: 45px;
+    width: auto;
+    cursor: pointer;
+  }
 
-  /* responsive */
-  @media(max-width:980px){.grid{grid-template-columns:1fr}}
-  @media(max-width:680px){
-    .profile-meta h2{font-size:20px}
-    .avatar{width:90px;height:90px}
+  nav {
+    display: flex;
+  }
+
+  nav ul {
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  nav a {
+    color: #000;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .right-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+
+  /* гамбургер */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+  }
+  .hamburger span {
+    width: 22px;
+    height: 2px;
+    background: #000;
+  }
+
+  /* нижнее меню */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255,255,255,0.95);
+    border-top: 1px solid #ddd;
+    display: none; /* показываем только на мобилке */
+    justify-content: space-around;
+    padding: 6px 0;
+    z-index: 1000;
+  }
+
+  .bottom-nav a {
+    text-decoration: none;
+    color: #666;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .bottom-nav a.active {
+    color: #6cd100;
+    font-weight: bold;
+  }
+  .bottom-nav svg {
+    width: 22px;
+    height: 22px;
+    margin-bottom: 3px;
+  }
+
+  /* адаптив */
+  @media (max-width: 768px) {
+    nav { display: none; }
+    .hamburger { display: flex; }
+    .bottom-nav { display: flex; }
+    header { height: 60px; padding: 0 12px; }
+    .logo-img { height: 40px; }
   }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
-  <div class="brand" aria-hidden="true">
-    <div class="logo-circle">S7</div>
-    <div class="txt">S7 Airlines</div>
+  <div class="logo">
+    <a href="index.html">
+      <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
+    </a>
   </div>
-  <div id="userArea"><a href="auth.html">Вход</a></div>
+
+  <!-- Кнопка-бургер -->
+  <button class="burger" aria-label="Открыть меню">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- Главное меню -->
+  <nav class="nav">
+    <ul>
+      <li>
+        <a href="index.html">Покупка и управление</a>
+        <div class="dropdown">
+          <a href="bilet.html">Купить билет</a>
+          <a href="auth.html">Управление бронированием</a>
+          <a href="arrivel.html">Направления</a>
+          <a href="HOTEL.html">Отели</a>
+          <a href="class.html">Выбор класса</a>
+        </div>
+      </li>
+      <li>
+        <a href="priority.html">S7avelii Priority</a>
+        <div class="dropdown">
+          <a href="priority.html">О программе</a>
+          <a href="https://t.me/s7aveliihelper">Как копить</a>
+        </div>
+      </li>
+      <li>
+        <a href="#">Информация</a>
+        <div class="dropdown">
+          <a href="body.html">О нас</a>
+          <a href="office.html">Представительство</a>
+          <a href="plane.html">Наш флот</a>
+          <a href="eat.html">Питание</a>
+          <a href="https://t.me/s7aveliihelper">Контакты</a>
+        </div>
+      </li>
+      <li><a href="busines.html">Бизнесу</a></li>
+      <li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
+    </ul>
+  </nav>
+
+  <div class="right-menu">
+    <button aria-label="Search">
+      <svg class="icon-search" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </button>
+    <button>RUB</button>
+    <div class="flag" title="Russian flag">
+      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" />
+    </div>
+    <div id="userArea"></div>
+  </div>
 </header>
 
-<!-- PAGE -->
-<div class="page">
+<style>
+/* === БАЗОВЫЙ СТИЛЬ ДЛЯ ПК === */
+header {
+  display: flex;
+  align-items: center;
+  padding: 0 60px;
+  height: 80px;
+  border-bottom: 1px solid #ccc;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: #fff;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
 
-  <!-- TOP PROFILE -->
-  <div class="full-header" role="region" aria-label="profile header">
+.logo-img {
+  height: 70px;
+  width: auto;
+  cursor: pointer;
+}
+
+nav {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+nav ul {
+  display: flex;
+  gap: 40px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+nav li {
+  position: relative;
+}
+
+nav a {
+  color: #000;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 28px 0;
+  position: relative;
+}
+
+nav a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background-color: #b3c900;
+  transition: width 0.3s ease;
+}
+nav li:hover > a::after {
+  width: 100%;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  padding: 20px;
+  border-top: 2px solid #b3c900;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  min-width: 240px;
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+nav li:hover .dropdown {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.dropdown a {
+  display: block;
+  padding: 8px 0;
+  color: #000;
+  font-size: 14px;
+}
+.dropdown a:hover {
+  color: #b3c900;
+}
+
+.right-menu {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 16px;
+}
+.right-menu button,
+.right-menu select {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+.flag {
+  width: 20px;
+  height: 14px;
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+}
+.flag img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#userArea a {
+  padding: 8px 14px;
+  border: 1px solid #7ad30d;
+  border-radius: 6px;
+  color: #6dd808;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* === КНОПКА-БУРГЕР === */
+.burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  width: 28px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  gap: 4px;
+  z-index: 1001;
+}
+.burger span {
+  display: block;
+  height: 3px;
+  background: #000;
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+/* === МЕДИА (адаптация под мобилки) === */
+@media (max-width: 992px) {
+  header {
+    padding: 0 20px;
+  }
+
+  nav ul {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .burger {
+    display: flex;
+  }
+
+  nav {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background: white;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 30px;
+    border-top: 1px solid #eee;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-120%);
+    transition: transform 0.3s ease;
+  }
+
+  nav.open {
+    transform: translateY(0);
+  }
+
+  nav ul {
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .dropdown {
+    position: static;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    display: none;
+  }
+
+  nav li:hover .dropdown {
+    display: block;
+  }
+
+  .right-menu {
+    display: none;
+  }
+
+  /* Анимация крестика */
+  .burger.active span:nth-child(1) {
+    transform: rotate(45deg) translateY(8px);
+  }
+  .burger.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .burger.active span:nth-child(3) {
+    transform: rotate(-45deg) translateY(-8px);
+  }
+}
+</style>
+
+<script>
+  // --- Бургер-меню ---
+  const burger = document.querySelector(".burger");
+  const nav = document.querySelector("nav");
+
+  burger.addEventListener("click", () => {
+    burger.classList.toggle("active");
+    nav.classList.toggle("open");
+  });
+
+  // --- Авторизация ---
+  async function updateUserArea() {
+    const userArea = document.getElementById("userArea");
+    try {
+      const res = await fetch("/api/profile");
+      if (!res.ok) throw new Error("Не авторизован");
+      const data = await res.json();
+      const user = data.user;
+
+      if (user.avatar) {
+        userArea.innerHTML = `
+          <img src="${user.avatar}" alt="avatar"
+            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;"
+            onclick="window.location.href='cabinet.html'" />
+        `;
+      } else {
+        userArea.innerHTML = `
+          <span style="cursor:pointer;color:#2196f3;font-weight:500;"
+            onclick="window.location.href='cabinet.html'">${user.fio.split(" ")[0]}</span>`;
+      }
+    } catch {
+      userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+    }
+  }
+  window.addEventListener("DOMContentLoaded", updateUserArea);
+</script>
+
+
+<div class="page">
+  <div class="full-header">
     <div style="display:flex;align-items:center;gap:16px">
       <label for="avatarInput" title="Нажмите чтобы загрузить фото">
         <img id="avatar" class="avatar" src="https://via.placeholder.com/150" alt="avatar">
       </label>
       <input id="avatarInput" type="file" accept="image/*" style="display:none">
-      <div class="profile-meta">
-        <h2 id="fioHeader">Загрузка...</h2>
-        <div class="sub" id="phoneHeader">—</div>
-
-        <div style="display:flex;align-items:center;gap:12px;margin-top:12px">
-          <div class="badges" aria-hidden="true">
-            <div class="badge"><div class="dot">T</div><div class="small-muted">Тип</div></div>
-            <div class="badge"><div class="dot">+</div><div class="small-muted">Плюс</div></div>
-          </div>
-
-          <div class="counters" aria-hidden="true">
-            <div class="counter"><div class="num" id="bonusMiles">—</div><div class="label">бонусных миль</div></div>
-            <div class="counter"><div class="num" id="milesBonusStat">—</div><div class="label">статусная миля</div></div>
-            <div class="counter"><div class="num" id="milesStatusStat">—</div><div class="label">статусных полётов</div></div>
-          </div>
-        </div>
-
-        <div class="tabs" role="tablist" aria-label="tabs" style="margin-top:16px">
-          <a class="active" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
-          <a data-tab="milesTab" onclick="showTab(event)">Мои мили</a>
-          <a data-tab="travelTab" onclick="showTab(event)">Путешествия</a>
-          <a data-tab="plusTab" onclick="showTab(event)">Яндекс Плюс x S7</a>
-          <a data-tab="gateTab" onclick="showTab(event)">Gate 7</a>
-          <a data-tab="statsTab" onclick="showTab(event)">Статистика</a>
-          <a data-tab="bonusesTab" onclick="showTab(event)">Бонусы</a>
-          <a data-tab="shopTab" onclick="showTab(event)">S7 Shop</a>
-          <a data-tab="settingsTab" onclick="showTab(event)">Настройки</a>
-        </div>
+      <div>
+        <h1 id="fioHeader">Загрузка...</h1>
+        <div class="small-muted" id="phoneHeader">—</div>
       </div>
     </div>
 
-    <div style="margin-left:auto;min-width:240px;text-align:right">
-      <div class="small-muted">Бонусные мили</div>
-      <div style="font-weight:700;font-size:20px" id="bonusMiles">—</div>
-      <div class="progress-wrap" style="margin-top:10px">
+    <div style="margin-left:auto;min-width:260px">
+      <div class="small-muted">Бонусные мили: <strong id="bonusMiles">—</strong></div>
+      <div class="progress-wrap">
         <div class="progress-bg" aria-hidden="true"><div id="milesProgressBar" class="progress-fill" style="width:0%"></div></div>
         <div style="display:flex;justify-content:space-between;font-size:12px;color:#777;margin-top:6px">
           <div id="milesLabelLeft">0 миль</div>
@@ -213,64 +520,50 @@
     </div>
   </div>
 
-  <!-- TELEGRAM block (between tabs and personal data) -->
-  <div style="max-width:1080px;margin:18px auto 0;padding:0 10px;">
-    <div class="telegram-block" id="telegram-block" role="alert">
-      <button class="close" aria-label="закрыть" onclick="document.getElementById('telegram-block').style.display='none'">×</button>
-      <div class="icon" aria-hidden="true">
-        <!-- small paper plane like icon (keeps visual cue) -->
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="12" fill="#eef6ff"/>
-          <path d="M4 12L20 4L14 20L11 13L4 12Z" fill="#2b7de9"/>
-        </svg>
-      </div>
-      <div style="flex:1">
-        <div class="title">Уведомления в Телеграме</div>
-        <div class="text">Получайте важную информацию о полете прямо в мессенджере. Полезно, если вдруг пропустите письмо или пуш</div>
-        <div><button class="btn" style="background:#f3f5f7;color:#111;border:1px solid #e0e6ea;padding:8px 12px;border-radius:8px;font-weight:600" onclick="alert('Подписка (демо)')">Подписаться</button></div>
-      </div>
-    </div>
-  </div>
+  <nav class="tabs" role="tablist" aria-label="tabs">
+    <a class="active" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
+    <a data-tab="milesTab" onclick="showTab(event)">Мои мили</a>
+    <a data-tab="shopTab" onclick="showTab(event)">S7avelii Shop</a>
+    <a data-tab="settingsTab" onclick="showTab(event)">Настройки</a>
+  </nav>
 
-  <!-- MAIN GRID -->
   <div class="grid">
     <div>
-      <!-- Profile section -->
-      <section id="profileTab" class="card" style="display:block" aria-label="profile">
-        <h3 style="margin-top:0">Персональные данные</h3>
+      <section id="profileTab" class="card" aria-label="profile">
+        <h3>Персональные данные</h3>
 
         <div class="field">
           <div><div class="small-muted">ФИО</div><div id="fioField">—</div></div>
-          <button class="btn secondary" onclick="editInline('fio')">Изменить</button>
+          <button class="btn" onclick="editInline('fio')">Изменить</button>
         </div>
 
         <div class="field">
           <div><div class="small-muted">Дата рождения</div><div id="dobField">—</div></div>
-          <button class="btn secondary" onclick="editInline('dob')">Изменить</button>
+          <button class="btn" onclick="editInline('dob')">Изменить</button>
         </div>
 
         <div class="field">
           <div><div class="small-muted">Пол</div><div id="genderField">—</div></div>
-          <button class="btn secondary" onclick="editInline('gender')">Изменить</button>
+          <button class="btn" onclick="editInline('gender')">Изменить</button>
         </div>
 
         <h3 style="margin-top:16px">Контакты</h3>
 
         <div class="field">
           <div><div class="small-muted">E-mail</div><div id="emailField">—</div></div>
-          <button class="btn secondary" onclick="editInline('email')">Изменить</button>
+          <button class="btn" onclick="editInline('email')">Изменить</button>
         </div>
 
         <div class="field">
           <div><div class="small-muted">Телефон</div><div id="phoneField">—</div></div>
-          <button class="btn secondary" onclick="editInline('phone')">Изменить</button>
+          <button class="btn" onclick="editInline('phone')">Изменить</button>
         </div>
 
         <h3 style="margin-top:16px">Карта</h3>
 
         <div class="field">
           <div><div class="small-muted">Номер карты</div><div id="card_field">—</div></div>
-          <button class="btn secondary" onclick="editInline('card_number')">Изменить</button>
+          <button class="btn" onclick="editInline('card_number')">Изменить</button>
         </div>
 
         <div class="field">
@@ -278,7 +571,6 @@
         </div>
       </section>
 
-      <!-- Miles section (hidden by default) -->
       <section id="milesTab" class="card" style="margin-top:16px;display:none">
         <h3>Мои мили</h3>
         <div class="muted">Состояние бонусов и прогресс статуса</div>
@@ -303,21 +595,18 @@
         </div>
       </section>
 
-      <!-- Shop -->
       <section id="shopTab" class="card" style="margin-top:16px;display:none">
         <h3>S7avelii Shop</h3>
         <div class="muted">Товары, доступные к покупке</div>
         <div id="productGrid" class="product-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px"></div>
       </section>
 
-      <!-- Settings -->
       <section id="settingsTab" class="card" style="margin-top:16px;display:none">
         <h3>Настройки</h3>
         <button class="btn red" onclick="logout()">Выйти</button>
       </section>
     </div>
 
-    <!-- SIDEBAR -->
     <aside>
       <section class="card">
         <h3>Корзина</h3>
@@ -333,8 +622,9 @@
       </section>
     </aside>
   </div>
+</div>
 
-   <footer class="footer">
+<footer class="footer">
   <div class="footer-inner">
     <!-- Верхнее меню -->
     <div class="footer-menu fade-in">
@@ -705,9 +995,7 @@ document.addEventListener("DOMContentLoaded", () => {
   fadeElements.forEach(el => observer.observe(el));
 });
 </script>
-</div>
-
-<!-- ====== JS: твоя логика (оставлена без изменений) ====== -->
+  
 <script>
 /*
   Final cabinet.js integrated in this file.
@@ -971,4 +1259,3 @@ function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,
 </script>
 </body>
 </html>
-
