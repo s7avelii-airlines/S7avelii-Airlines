@@ -336,54 +336,55 @@
   </div>
 
 
- <div id="userArea"></div> <!-- место для кнопки/аватара -->
-</header>
-
 <script>
-const API = "https://your-server.com";
+const API = "https://s7avelii-airlines-1.onrender.com"; // адрес сервера (замени, если другой)
 
 async function updateUserArea() {
   const userArea = document.getElementById("userArea");
-  const token = localStorage.getItem("token");
+  if (!userArea) return;
 
+  const token = localStorage.getItem("token");
   if (!token) {
-    userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+    userArea.innerHTML = `<a href="auth.html" class="text-[#2196f3] font-semibold">Войти</a>`;
     return;
   }
 
   try {
-    const res = await fetch(API + "/api/profile", {
-      headers: { "Authorization": "Bearer " + token },
+    const res = await fetch(`${API}/api/profile`, {
+      headers: { Authorization: `Bearer ${token}` },
     });
 
-    if (!res.ok) throw new Error("unauthorized");
+    if (!res.ok) throw new Error("Unauthorized");
+    const user = await res.json();
 
-    const data = await res.json();
-    const user = data.user || data;
-
+    // если токен валидный — показываем аватар/имя
     if (user.avatar) {
       userArea.innerHTML = `
         <img src="${user.avatar}" alt="avatar"
-          style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
-          onclick="window.location.href='cabinet.html'" />
+          style="width:38px;height:38px;border-radius:50%;object-fit:cover;cursor:pointer;"
+          title="${user.fio}"
+          onclick="window.location.href='cabinet.html'"
+        />
       `;
     } else {
-      const firstName = user.fio ? user.fio.split(" ")[0] : "Профиль";
       userArea.innerHTML = `
-        <span style="cursor:pointer;color:#2196f3;font-weight:500;"
-              onclick="window.location.href='cabinet.html'">${firstName}</span>
+        <span title="${user.fio}" 
+          style="cursor:pointer;font-weight:600;color:#2e7d32;"
+          onclick="window.location.href='cabinet.html'">
+          ${user.fio.split(" ")[0]}
+        </span>
       `;
     }
-
   } catch (err) {
-    console.warn("Auth check failed:", err.message);
+    console.warn("Auth check failed:", err);
     localStorage.removeItem("token");
-    userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+    userArea.innerHTML = `<a href="auth.html" class="text-[#2196f3] font-semibold">Войти</a>`;
   }
 }
 
 window.addEventListener("DOMContentLoaded", updateUserArea);
 </script>
+
 
 <head>
 <meta charset="utf-8" />
