@@ -1,247 +1,66 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>S7avelii | Профиль</title>
-  <link rel="icon" href="images/favicon.png" type="image/png">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    :root{--accent:#9cc42f;--muted:#8b97a6}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f7fa;color:#1f2937}
-    header{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:60px;border-bottom:1px solid #e6e6e6;position:fixed;top:0;left:0;width:100%;background:#fff;z-index:1000}
-    .logo-img{height:45px;cursor:pointer}
-    nav ul{display:flex;gap:20px;margin:0;padding:0;list-style:none}
-    nav a{text-decoration:none;color:#111}
-    .page{max-width:1180px;margin:90px auto;padding:0 20px}
-    .full-header{background:#fff;display:flex;align-items:center;gap:24px;padding:24px;border-radius:12px;box-shadow:0 6px 20px rgba(16,24,40,0.06);flex-wrap:wrap}
-    .avatar{width:110px;height:110px;border-radius:999px;object-fit:cover;border:4px solid #fff;cursor:pointer}
-    .tabs{display:flex;gap:14px;margin-top:18px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,0.04);overflow-x:auto}
-    .tabs a{padding:10px 14px;text-decoration:none;color:#495057;border-radius:8px;cursor:pointer}
-    .tabs a.active{color:var(--accent);background:rgba(156,196,47,0.06)}
-    .grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:18px}
-    .card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 4px 12px rgba(16,24,40,0.04)}
-    .field{display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid rgba(0,0,0,0.03)}
-    .small-muted{color:var(--muted);font-size:13px}
-    .btn{background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
-    .btn.secondary{background:#eef2f7;color:#111}
-    .btn.red{background:#e66}
-    .progress-wrap{width:100%;margin-top:8px}
-    .progress-bg{width:100%;height:14px;background:#eee;border-radius:999px;overflow:hidden}
-    .progress-fill{height:100%;width:0%;background:var(--accent);transition:width .6s ease}
-    .cart-table{width:100%;border-collapse:collapse}
-    .cart-table th,.cart-table td{padding:8px;border-bottom:1px solid #eee;text-align:left}
-    .muted{color:var(--muted)}
-    @media(max-width:980px){.grid{grid-template-columns:1fr}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S7avelii | Профиль</title>
+<link rel="icon" href="images/favicon.png" type="image/png">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root{--accent:#9cc42f;--muted:#8b97a6}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f7fa;color:#1f2937}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:60px;border-bottom:1px solid #e6e6e6;position:fixed;top:0;left:0;width:100%;background:#fff;z-index:1000}
+.logo-img{height:45px;cursor:pointer}
+nav ul{display:flex;gap:20px;margin:0;padding:0;list-style:none}
+nav a{text-decoration:none;color:#111}
+.page{max-width:1180px;margin:90px auto;padding:0 20px}
+.full-header{background:#fff;display:flex;align-items:center;gap:24px;padding:24px;border-radius:12px;box-shadow:0 6px 20px rgba(16,24,40,0.06);flex-wrap:wrap}
+.avatar{width:110px;height:110px;border-radius:999px;object-fit:cover;border:4px solid #fff;cursor:pointer}
+.tabs{display:flex;gap:14px;margin-top:18px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,0.04);overflow-x:auto}
+.tabs a{padding:10px 14px;text-decoration:none;color:#495057;border-radius:8px;cursor:pointer}
+.tabs a.active{color:var(--accent);background:rgba(156,196,47,0.06)}
+.grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:18px}
+.card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 4px 12px rgba(16,24,40,0.04)}
+.field{display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid rgba(0,0,0,0.03)}
+.small-muted{color:var(--muted);font-size:13px}
+.btn{background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
+.btn.secondary{background:#eef2f7;color:#111}
+.btn.red{background:#e66}
+.progress-wrap{width:100%;margin-top:8px}
+.progress-bg{width:100%;height:14px;background:#eee;border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;width:0%;background:var(--accent);transition:width .6s ease}
+.cart-table{width:100%;border-collapse:collapse}
+.cart-table th,.cart-table td{padding:8px;border-bottom:1px solid #eee;text-align:left}
+.muted{color:var(--muted)}
+.input-inline{width:70%;padding:6px;border-radius:6px;border:1px solid #d6d8db}
+@media(max-width:980px){.grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-<header>
-  <div class="logo">
-    <a href="index.html">
-      <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
-    </a>
-  </div>
-  <button class="burger" aria-label="Открыть меню"><span></span><span></span><span></span></button>
-  <nav class="nav">
-    <ul>
-      <li><a href="index.html">Покупка и управление</a>
-        <div class="dropdown">
-          <a href="bilet.html">Купить билет</a>
-          <a href="auth.html">Управление бронированием</a>
-          <a href="arrivel.html">Направления</a>
-          <a href="HOTEL.html">Отели</a>
-          <a href="class.html">Выбор класса</a>
-        </div>
-      </li>
-      <li><a href="priority.html">S7avelii Priority</a>
-        <div class="dropdown">
-          <a href="priority.html">О программе</a>
-          <a href="https://t.me/s7aveliihelper">Как копить</a>
-        </div>
-      </li>
-      <li><a href="#">Информация</a>
-        <div class="dropdown">
-          <a href="body.html">О нас</a>
-          <a href="office.html">Представительство</a>
-          <a href="plane.html">Наш флот</a>
-          <a href="eat.html">Питание</a>
-          <a href="https://t.me/s7aveliihelper">Контакты</a>
-        </div>
-      </li>
-      <li><a href="busines.html">Бизнесу</a></li>
-      <li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
-    </ul>
-  </nav>
-  <div class="right-menu">
-    <button aria-label="Search"><svg class="icon-search" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
-    <button>RUB</button>
-    <div class="flag" title="Russian flag"><img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" /></div>
-    <div id="userArea"></div>
-  </div>
-</header>
-
-<div class="page">
-  <div class="full-header">
-    <div style="display:flex;align-items:center;gap:16px">
-      <label for="avatarInput" title="Нажмите чтобы загрузить фото">
-        <img id="avatar" class="avatar" src="https://via.placeholder.com/150" alt="avatar">
-      </label>
-      <input id="avatarInput" type="file" accept="image/*" style="display:none">
-      <div>
-        <h1 id="fioHeader">Загрузка...</h1>
-        <div class="small-muted" id="phoneHeader">—</div>
-      </div>
-    </div>
-
-    <div style="margin-left:auto;min-width:260px">
-      <div class="small-muted">Бонусные мили: <strong id="bonusMiles">—</strong></div>
-      <div class="progress-wrap">
-        <div class="progress-bg" aria-hidden="true"><div id="milesProgressBar" class="progress-fill" style="width:0%"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;color:#777;margin-top:6px">
-          <div id="milesLabelLeft">0 миль</div>
-          <div id="milesLabelRight">—</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <nav class="tabs" role="tablist" aria-label="tabs">
-    <a class="active" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
-    <a data-tab="milesTab" onclick="showTab(event)">Мои мили</a>
-    <a data-tab="shopTab" onclick="showTab(event)">S7avelii Shop</a>
-    <a data-tab="settingsTab" onclick="showTab(event)">Настройки</a>
-  </nav>
-
-  <div class="grid">
-    <div>
-      <section id="profileTab" class="card" aria-label="profile">
-        <h3>Персональные данные</h3>
-        <div class="field">
-          <div><div class="small-muted">ФИО</div><div id="fioField">—</div></div>
-          <button class="btn" onclick="enableEdit('fio')">Изменить</button>
-        </div>
-        <div class="field">
-          <div><div class="small-muted">Дата рождения</div><div id="dobField">—</div></div>
-          <button class="btn" onclick="enableEdit('dob')">Изменить</button>
-        </div>
-        <div class="field">
-          <div><div class="small-muted">Пол</div><div id="genderField">—</div></div>
-          <button class="btn" onclick="enableEdit('gender')">Изменить</button>
-        </div>
-
-        <h3 style="margin-top:16px">Контакты</h3>
-        <div class="field">
-          <div><div class="small-muted">E-mail</div><div id="emailField">—</div></div>
-          <button class="btn" onclick="enableEdit('email')">Изменить</button>
-        </div>
-        <div class="field">
-          <div><div class="small-muted">Телефон</div><div id="phoneField">—</div></div>
-          <button class="btn" onclick="enableEdit('phone')">Изменить</button>
-        </div>
-
-        <h3 style="margin-top:16px">Карта</h3>
-        <div class="field">
-          <div><div class="small-muted">Номер карты</div><div id="cardField">—</div></div>
-          <button class="btn" onclick="enableEdit('cardNumber')">Изменить</button>
-        </div>
-        <div class="field">
-          <div><div class="small-muted">Тип карты</div><div id="cardTypeField">—</div></div>
-        </div>
-      </section>
-
-      <section id="milesTab" class="card" style="margin-top:16px;display:none">
-        <h3>Мои мили</h3>
-        <div class="muted">Состояние бонусов и прогресс статуса</div>
-        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
-          <div class="card" style="flex:1;min-width:200px">
-            <div class="small-muted">Бонусные мили</div>
-            <div style="font-weight:700;font-size:20px" id="milesBonusStat">—</div>
-          </div>
-          <div class="card" style="flex:1;min-width:200px">
-            <div class="small-muted">Статусные мили</div>
-            <div style="font-weight:700;font-size:20px" id="milesStatusStat">—</div>
-          </div>
-        </div>
-
-        <div style="margin-top:14px">
-          <div class="small-muted">Прогресс до следующего уровня</div>
-          <div class="progress-bg" style="margin-top:8px"><div id="milesProgressBar2" class="progress-fill" style="width:0%"></div></div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:#666;margin-top:6px">
-            <div id="nextLevelLeft">0 / 0</div>
-            <div id="nextLevelRight">—</div>
-          </div>
-        </div>
-
-        <div style="margin-top:12px" id="privilegesList"></div>
-      </section>
-
-      <section id="shopTab" class="card" style="margin-top:16px;display:none">
-        <h3>S7avelii Shop</h3>
-        <div class="muted">Товары, доступные к покупке</div>
-        <div id="productGrid" class="product-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px"></div>
-      </section>
-
-      <section id="settingsTab" class="card" style="margin-top:16px;display:none">
-        <h3>Настройки</h3>
-        <button class="btn red" onclick="logout()">Выйти</button>
-      </section>
-    </div>
-
-    <aside>
-      <section class="card">
-        <h3>Корзина</h3>
-        <table class="cart-table" id="cartTable">
-          <thead><tr><th>Товар</th><th>Цена</th><th></th></tr></thead>
-          <tbody></tbody>
-        </table>
-        <div style="margin-top:12px;display:flex;justify-content:space-between;font-weight:600">
-          <span>Итого:</span>
-          <span id="cartTotal">0 ₽</span>
-        </div>
-        <button class="btn" style="width:100%;margin-top:12px" onclick="checkout()">Оформить</button>
-      </section>
-    </aside>
-  </div>
-</div>
-
-<footer class="footer" style="margin-top:30px;text-align:center;padding:16px;background:#fff;color:#555;border-top:1px solid #eee">
-  S7avelii Airlines &copy; 2025
-</footer>
-
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>S7avelii | Профиль</title>
-  <link rel="icon" href="images/favicon.png" type="image/png">
-  <script src="https://cdn.tailwindcss.com"></script>
+ <!-- Подключаем Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    :root{--accent:#9cc42f;--muted:#8b97a6}
-    body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f7fa;color:#1f2937}
-    header{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:60px;border-bottom:1px solid #e6e6e6;position:fixed;top:0;left:0;width:100%;background:#fff;z-index:1000}
-    .logo-img{height:45px;cursor:pointer}
-    nav ul{display:flex;gap:20px;margin:0;padding:0;list-style:none}
-    nav a{text-decoration:none;color:#111}
-    .page{max-width:1180px;margin:90px auto;padding:0 20px}
-    .full-header{background:#fff;display:flex;align-items:center;gap:24px;padding:24px;border-radius:12px;box-shadow:0 6px 20px rgba(16,24,40,0.06);flex-wrap:wrap}
-    .avatar{width:110px;height:110px;border-radius:999px;object-fit:cover;border:4px solid #fff;cursor:pointer}
-    .tabs{display:flex;gap:14px;margin-top:18px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,0.04);overflow-x:auto}
-    .tabs a{padding:10px 14px;text-decoration:none;color:#495057;border-radius:8px;cursor:pointer}
-    .tabs a.active{color:var(--accent);background:rgba(156,196,47,0.06)}
-    .grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:18px}
-    .card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 4px 12px rgba(16,24,40,0.04)}
-    .field{display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid rgba(0,0,0,0.03)}
-    .small-muted{color:var(--muted);font-size:13px}
-    .btn{background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
-    .btn.secondary{background:#eef2f7;color:#111}
-    .btn.red{background:#e66}
-    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+    /* применяем Roboto ко всем элементам */
+    * {
+      font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+    }
+    body { overflow-x: hidden; }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 0.25rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      min-width: 160px;
+      z-index: 50;
+    }
+    .group:hover .dropdown-menu { display: block; }
   </style>
 </head>
-<body>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
@@ -679,7 +498,7 @@ nav li:hover .dropdown {
 <div class="page">
   <div class="full-header">
     <div style="display:flex;align-items:center;gap:16px">
-      <label for="avatarInput">
+      <label for="avatarInput" title="Нажмите чтобы загрузить фото">
         <img id="avatar" class="avatar" src="https://via.placeholder.com/150" alt="avatar">
       </label>
       <input id="avatarInput" type="file" accept="image/*" style="display:none">
@@ -688,44 +507,120 @@ nav li:hover .dropdown {
         <div class="small-muted" id="phoneHeader">—</div>
       </div>
     </div>
+
+    <div style="margin-left:auto;min-width:260px">
+      <div class="small-muted">Бонусные мили: <strong id="bonusMiles">—</strong></div>
+      <div class="progress-wrap">
+        <div class="progress-bg" aria-hidden="true"><div id="milesProgressBar" class="progress-fill" style="width:0%"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#777;margin-top:6px">
+          <div id="milesLabelLeft">0 миль</div>
+          <div id="milesLabelRight">—</div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <nav class="tabs">
+  <nav class="tabs" role="tablist" aria-label="tabs">
     <a class="active" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
+    <a data-tab="milesTab" onclick="showTab(event)">Мои мили</a>
+    <a data-tab="shopTab" onclick="showTab(event)">S7avelii Shop</a>
     <a data-tab="settingsTab" onclick="showTab(event)">Настройки</a>
   </nav>
 
   <div class="grid">
     <div>
-      <section id="profileTab" class="card">
+      <section id="profileTab" class="card" aria-label="profile">
         <h3>Персональные данные</h3>
+
         <div class="field">
           <div><div class="small-muted">ФИО</div><div id="fioField">—</div></div>
-          <button class="btn" onclick="enableEdit('fio')">Изменить</button>
+          <button class="btn" onclick="editInline('fio')">Изменить</button>
         </div>
+
         <div class="field">
           <div><div class="small-muted">Дата рождения</div><div id="dobField">—</div></div>
-          <button class="btn" onclick="enableEdit('dob')">Изменить</button>
+          <button class="btn" onclick="editInline('dob')">Изменить</button>
         </div>
+
         <div class="field">
           <div><div class="small-muted">Пол</div><div id="genderField">—</div></div>
-          <button class="btn" onclick="enableEdit('gender')">Изменить</button>
+          <button class="btn" onclick="editInline('gender')">Изменить</button>
         </div>
+
+        <h3 style="margin-top:16px">Контакты</h3>
+
         <div class="field">
           <div><div class="small-muted">E-mail</div><div id="emailField">—</div></div>
-          <button class="btn" onclick="enableEdit('email')">Изменить</button>
+          <button class="btn" onclick="editInline('email')">Изменить</button>
         </div>
+
         <div class="field">
           <div><div class="small-muted">Телефон</div><div id="phoneField">—</div></div>
-          <button class="btn" onclick="enableEdit('phone')">Изменить</button>
+          <button class="btn" onclick="editInline('phone')">Изменить</button>
+        </div>
+
+        <h3 style="margin-top:16px">Карта</h3>
+
+        <div class="field">
+          <div><div class="small-muted">Номер карты</div><div id="card_field">—</div></div>
+          <button class="btn" onclick="editInline('card_number')">Изменить</button>
+        </div>
+
+        <div class="field">
+          <div><div class="small-muted">Тип карты</div><div id="cardTypeField">—</div></div>
         </div>
       </section>
 
-      <section id="settingsTab" class="card" style="display:none">
+      <section id="milesTab" class="card" style="margin-top:16px;display:none">
+        <h3>Мои мили</h3>
+        <div class="muted">Состояние бонусов и прогресс статуса</div>
+        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+          <div class="card" style="flex:1;min-width:200px">
+            <div class="small-muted">Бонусные мили</div>
+            <div style="font-weight:700;font-size:20px" id="milesBonusStat">—</div>
+          </div>
+          <div class="card" style="flex:1;min-width:200px">
+            <div class="small-muted">Статусные мили</div>
+            <div style="font-weight:700;font-size:20px" id="milesStatusStat">—</div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px">
+          <div class="small-muted">Прогресс до следующего уровня</div>
+          <div class="progress-bg" style="margin-top:8px"><div id="milesProgressBar2" class="progress-fill" style="width:0%"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:#666;margin-top:6px">
+            <div id="nextLevelLeft">0 / 0</div>
+            <div id="nextLevelRight">—</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="shopTab" class="card" style="margin-top:16px;display:none">
+        <h3>S7avelii Shop</h3>
+        <div class="muted">Товары, доступные к покупке</div>
+        <div id="productGrid" class="product-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px"></div>
+      </section>
+
+      <section id="settingsTab" class="card" style="margin-top:16px;display:none">
         <h3>Настройки</h3>
         <button class="btn red" onclick="logout()">Выйти</button>
       </section>
     </div>
+
+    <aside>
+      <section class="card">
+        <h3>Корзина</h3>
+        <table class="cart-table" id="cartTable">
+          <thead><tr><th>Товар</th><th>Цена</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div style="margin-top:12px;display:flex;justify-content:space-between;font-weight:600">
+          <span>Итого:</span>
+          <span id="cartTotal">0 ₽</span>
+        </div>
+        <button class="btn" style="width:100%;margin-top:12px" onclick="checkout()">Оформить</button>
+      </section>
+    </aside>
   </div>
 </div>
 
@@ -1100,83 +995,267 @@ document.addEventListener("DOMContentLoaded", () => {
   fadeElements.forEach(el => observer.observe(el));
 });
 </script>
-
+  
 <script>
-const API='https://s7avelii-airlines-1.onrender.com'; // 💾 твой сервер
-const token=localStorage.getItem('token');
-const el=id=>document.getElementById(id);
-let currentUser=null;
+/*
+  Final cabinet.js integrated in this file.
+  - Autologin via localStorage token
+  - Inline editing (input/select/date) with onchange -> PUT /api/profile
+  - Avatar upload -> POST /api/profile/avatar (multipart)
+  - Shop / cart and checkout
+  - userArea (avatar or name) in header
+*/
 
-// Универсальный запрос
-async function apiFetch(endpoint,options={}){
-  options.headers={'Authorization':'Bearer '+token,...(options.headers||{})};
-  const res=await fetch(API+endpoint,options);
-  if(res.status===401){logout();return;}
-  return res.json();
+const API = "https://s7avelii-airlines-1.onrender.com"; // <- заменяй, если у тебя другой бекенд
+function getToken(){ return localStorage.getItem('token'); }
+
+let currentUser = null;
+let products = [];
+let cart = [];
+
+// apiFetch reads token dynamically
+async function apiFetch(endpoint, options = {}) {
+  const token = getToken();
+  options.headers = { ...(options.headers || {}) };
+  if (token) options.headers['Authorization'] = 'Bearer ' + token;
+  // do not set Content-Type for FormData
+  if (options.body && !(options.body instanceof FormData) && typeof options.body !== 'string') {
+    options.headers['Content-Type'] = 'application/json';
+    options.body = JSON.stringify(options.body);
+  }
+  const res = await fetch(API + endpoint, options).catch(e => { console.error('fetch err', e); return null; });
+  if (!res) return null;
+  if (res.status === 401) { logout(); return null; }
+  const json = await res.json().catch(()=> ({}));
+  return json;
 }
 
-// Загрузка данных
-async function loadProfile(){
-  const data=await apiFetch('/api/profile');
-  currentUser=data.user||data;
-  renderProfile();
+// Update header user area (avatar or name)
+async function updateUserArea() {
+  const userArea = document.getElementById('userArea');
+  const token = getToken();
+  if (!token) {
+    userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+    return;
+  }
+  try {
+    const user = await apiFetch('/api/profile');
+    if (!user || !user.fio) { userArea.innerHTML = `<a href="auth.html">Вход</a>`; return; }
+    currentUser = user;
+    // avatar path from server usually like /avatars/xxx
+    if (user.avatar) {
+      const avatarUrl = (user.avatar.startsWith('http') ? user.avatar : API + user.avatar);
+      userArea.innerHTML = `<img src="${avatarUrl}" alt="avatar" style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover" onclick="window.location.href='cabinet.html'">`;
+      document.getElementById('avatar').src = avatarUrl;
+    } else {
+      const short = (user.fio && user.fio.split(' ')[0]) || user.email || 'Профиль';
+      userArea.innerHTML = `<span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">${escapeHtml(short)}</span>`;
+    }
+    loadProfile(); // render details
+  } catch (e) {
+    console.error('updateUserArea err', e);
+    userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+  }
 }
 
-// Рендеринг профиля
-function renderProfile(){
-  if(!currentUser)return;
-  el('fioHeader').textContent=currentUser.full_name;
-  el('phoneHeader').textContent=currentUser.phone||'—';
-  el('fioField').textContent=currentUser.full_name;
-  el('dobField').textContent=currentUser.birth_date||'—';
-  el('genderField').textContent=currentUser.gender||'—';
-  el('emailField').textContent=currentUser.email||'—';
-  el('phoneField').textContent=currentUser.phone||'—';
-  if(currentUser.avatar)el('avatar').src=currentUser.avatar;
+// simple escape
+function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// Tabs
+function showTab(evt){
+  const tab = evt.currentTarget.dataset.tab;
+  document.querySelectorAll('.tabs a').forEach(a=>a.classList.remove('active'));
+  evt.currentTarget.classList.add('active');
+  document.querySelectorAll('.grid section').forEach(s=>s.style.display='none');
+  document.getElementById(tab).style.display = 'block';
 }
 
-// Изменение поля
-function enableEdit(field){
-  const val=currentUser[field]||'';
-  const newVal=prompt(`Введите новое значение для "${field}"`,val);
-  if(newVal===null)return;
-  currentUser[field]=newVal;
-  updateProfile({[field]:newVal});
-  renderProfile();
+// Render profile fields
+function loadProfile(){
+  if(!currentUser) return;
+  document.getElementById('fioHeader').textContent = currentUser.fio || '—';
+  document.getElementById('phoneHeader').textContent = currentUser.phone || '—';
+  document.getElementById('fioField').textContent = currentUser.fio || '—';
+  document.getElementById('dobField').textContent = currentUser.dob || '—';
+  document.getElementById('genderField').textContent = currentUser.gender || '—';
+  document.getElementById('emailField').textContent = currentUser.email || '—';
+  document.getElementById('phoneField').textContent = currentUser.phone || '—';
+  document.getElementById('card_field').textContent = currentUser.card_number || '—';
+  document.getElementById('cardTypeField').textContent = currentUser.card_type || '—';
+
+  document.getElementById('bonusMiles').textContent = currentUser.bonus_miles || 0;
+  const perc = Math.min(100, (currentUser.bonus_miles || 0) / 1000 * 100);
+  document.getElementById('milesProgressBar').style.width = perc + '%';
+  document.getElementById('milesLabelRight').textContent = (currentUser.bonus_miles || 0) + ' миль';
+  document.getElementById('milesBonusStat').textContent = currentUser.bonus_miles || 0;
+  document.getElementById('milesStatusStat').textContent = currentUser.status_miles || 0;
+  document.getElementById('milesProgressBar2').style.width = Math.min(100, (currentUser.status_miles || 0) / 1000 * 100) + '%';
+  document.getElementById('nextLevelLeft').textContent = (currentUser.status_miles || 0) + '/1000';
 }
 
-// Сохранение изменений
-async function updateProfile(data){
-  await fetch(API+'/api/profile/update',{
-    method:'PUT',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
-    body:JSON.stringify(data)
+// Inline editing: creates input/select/date, sends PUT /api/profile on change
+async function editInline(field) {
+  if(!currentUser) return;
+  // map DOM ids and server field names
+  const domMap = {
+    fio: 'fioField',
+    dob: 'dobField',
+    gender: 'genderField',
+    email: 'emailField',
+    phone: 'phoneField',
+    card_number: 'card_field'
+  };
+  const domId = domMap[field] || field + 'Field';
+  const container = document.getElementById(domId);
+  if(!container) return;
+
+  // current value
+  const cur = (field === 'card_number' ? currentUser.card_number : currentUser[field]) || '';
+
+  // create input element depending on field
+  let input;
+  if (field === 'dob') {
+    input = document.createElement('input');
+    input.type = 'date';
+    input.value = cur;
+  } else if (field === 'gender') {
+    input = document.createElement('select');
+    ['','Мужской','Женский','Другое'].forEach(val=>{
+      const o = document.createElement('option'); o.value = val; o.textContent = val || 'Не указан';
+      if(val === cur) o.selected = true;
+      input.appendChild(o);
+    });
+  } else if (field === 'phone') {
+    input = document.createElement('input'); input.type = 'tel'; input.value = cur;
+  } else {
+    input = document.createElement('input'); input.type = 'text'; input.value = cur;
+  }
+
+  input.className = 'input-inline';
+  // Save on change or on blur
+  let saved = false;
+  input.addEventListener('change', async () => {
+    await saveField(field, input.value);
+    saved = true;
+  });
+  input.addEventListener('blur', async () => {
+    if(!saved) await saveField(field, input.value);
+  });
+
+  // replace content
+  container.innerHTML = '';
+  container.appendChild(input);
+  input.focus();
+}
+
+// Save single field to server
+async function saveField(field, value) {
+  const payload = {};
+  // server columns: fio, dob, gender, email, phone, card_number, card_type
+  payload[field] = value;
+  const res = await apiFetch('/api/profile', { method: 'PUT', body: payload });
+  if (res && res.ok) {
+    // refresh user data
+    const updated = await apiFetch('/api/profile');
+    if (updated) { currentUser = updated; loadProfile(); updateUserArea(); }
+  } else {
+    alert('Ошибка при сохранении');
+    // reload profile to original
+    const re = await apiFetch('/api/profile'); if(re){ currentUser = re; loadProfile(); }
+  }
+}
+
+// Avatar upload
+document.getElementById('avatarInput').addEventListener('change', async function(){
+  if(!this.files[0]) return;
+  const fd = new FormData();
+  fd.append('avatar', this.files[0]);
+  const token = getToken();
+  try{
+    const res = await fetch(API + '/api/profile/avatar', {
+      method: 'POST',
+      headers: token ? { 'Authorization': 'Bearer ' + token } : {},
+      body: fd
+    });
+    const data = await res.json();
+    if (data && data.avatar) {
+      const avatarUrl = data.avatar.startsWith('http') ? data.avatar : API + data.avatar;
+      document.getElementById('avatar').src = avatarUrl;
+      await updateUserArea();
+    } else {
+      alert('Ошибка загрузки аватара');
+    }
+  }catch(err){ console.error('avatar upload', err); alert('Ошибка сети при загрузке'); }
+});
+
+// Shop & cart
+async function loadShop(){
+  const data = await apiFetch('/api/shop');
+  products = (data && data.products) ? data.products : [];
+  renderProducts();
+}
+
+function renderProducts(){
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = '';
+  products.forEach(p=>{
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerHTML = `<div style="font-weight:600">${escapeHtml(p.name)}</div>
+                     <div class="small-muted">${p.price} ₽</div>
+                     <button class="btn" onclick="addToCart(${p.id})">В корзину</button>`;
+    grid.appendChild(div);
   });
 }
 
-// Вкладки
-function showTab(e){
-  document.querySelectorAll('.tabs a').forEach(a=>a.classList.remove('active'));
-  e.target.classList.add('active');
-  document.querySelectorAll('.grid section').forEach(s=>s.style.display='none');
-  el(e.target.dataset.tab).style.display='block';
+function addToCart(id){
+  const p = products.find(x=>x.id===id);
+  if(!p) return;
+  cart.push(p);
+  renderCart();
 }
 
-// Загрузка аватара
-el('avatarInput').addEventListener('change',async function(){
-  const f=this.files[0]; if(!f)return;
-  const fd=new FormData(); fd.append('avatar',f);
-  await fetch(API+'/api/profile/avatar',{method:'POST',headers:{'Authorization':'Bearer '+token},body:fd});
-  el('avatar').src=URL.createObjectURL(f);
+function removeFromCart(i){
+  cart.splice(i,1);
+  renderCart();
+}
+
+function renderCart(){
+  const tbody = document.getElementById('cartTable').querySelector('tbody');
+  tbody.innerHTML = '';
+  let total = 0;
+  cart.forEach((p,i)=>{
+    total += p.price;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${escapeHtml(p.name)}</td><td>${p.price} ₽</td><td><button class="btn secondary" onclick="removeFromCart(${i})">×</button></td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('cartTotal').textContent = total + ' ₽';
+}
+
+async function checkout(){
+  if(cart.length === 0) { alert('Корзина пуста'); return; }
+  const res = await apiFetch('/api/checkout', { method: 'POST', body: { items: cart } });
+  if(res && res.ok) { cart = []; renderCart(); alert('Заказ оформлен!'); }
+  else alert('Ошибка при оформлении заказа');
+}
+
+// Logout
+function logout(){
+  localStorage.removeItem('token');
+  window.location.href = 'auth.html';
+}
+
+// init
+window.addEventListener('DOMContentLoaded', async () => {
+  const token = getToken();
+  if(!token){ window.location.href = 'auth.html'; return; }
+  await updateUserArea();
+  await loadShop();
 });
 
-// Выход
-function logout(){localStorage.removeItem('token');window.location.href='auth.html';}
-
-window.addEventListener('DOMContentLoaded',loadProfile);
+// helper: escape HTML for text nodes
+function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 </script>
-</body>
-</html>
-
 </body>
 </html>
