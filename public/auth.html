@@ -3,12 +3,11 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Вход/Регистрация S7avelii</title>
+<title>Вход / Регистрация S7avelii</title>
 <link rel="icon" href="images/favicon.png" type="image/png">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-:root{ --green:#9cc42f; --green-dark:#8ab12a; }
-*{box-sizing:border-box}
+:root{--green:#9cc42f;--green-dark:#8ab12a;}
 body{margin:0;font-family:Inter,Arial,sans-serif;min-height:100vh;background:url("images/Blue Modern Business Proposal Presentation.avif") no-repeat center/cover;}
 header{position:fixed;top:0;left:0;width:100%;height:70px;display:flex;align-items:center;gap:20px;padding:0 20px;background:#fff;z-index:1000;border-bottom:1px solid #e5e5e5;}
 .logo-img{height:50px}
@@ -19,7 +18,7 @@ nav li:hover>a::after{width:100%}
 main{display:flex;justify-content:center;align-items:flex-start;padding:110px 20px 40px}
 .card{width:100%;max-width:420px;background:rgba(255,255,255,0.96);border-radius:12px;padding:22px;box-shadow:0 8px 24px rgba(0,0,0,0.15);}
 h2{margin:0 0 14px;font-size:20px}
-input, select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d6d8db;margin-top:10px;font-size:14px}
+input,select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d6d8db;margin-top:10px;font-size:14px}
 .btn{width:100%;padding:12px;border-radius:8px;border:0;background:var(--green);color:#fff;font-weight:600;margin-top:14px;cursor:pointer}
 .btn:hover{background:var(--green-dark)}
 .btn[disabled]{opacity:.6;cursor:not-allowed}
@@ -28,21 +27,19 @@ input, select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d
 .error{color:#d23f44;margin-top:10px;font-size:13px}
 .success{color:green;margin-top:10px;font-size:13px}
 .hidden{display:none}
-.row { display:flex; gap:10px; flex-wrap:wrap; }
-.half{flex:1; min-width:120px}
-.card-type { display:inline-flex; align-items:center; gap:8px; margin-right:8px; margin-top:8px; }
-.card-type img { display:inline-block; vertical-align:middle; border-radius:6px; }
-@media(max-width:600px){ .row{flex-direction:column} }
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.half{flex:1;min-width:120px}
+.card-type{display:inline-flex;align-items:center;gap:8px;margin-right:8px;margin-top:8px;}
+.card-type img{border-radius:6px}
+@media(max-width:600px){.row{flex-direction:column}}
 </style>
 </head>
 <body>
 <header>
 <div class="logo">
-<a href="index.html">
-<img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
-</a>
+<a href="index.html"><img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img"/></a>
 </div>
-<nav class="nav">
+<nav>
 <ul>
 <li><a href="index.html">Главная</a></li>
 <li><a href="#">S7avelii Priority</a></li>
@@ -51,21 +48,20 @@ input, select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d
 <li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
 </ul>
 </nav>
-<div class="right-menu" id="userArea"></div>
 </header>
 
 <main>
 <div class="card" aria-live="polite">
 <h2 id="title">Вход</h2>
 
-<form id="loginForm" autocomplete="on" novalidate>
+<form id="loginForm" novalidate>
 <input id="loginIdentifier" type="text" placeholder="Телефон или Email" required>
 <input id="loginPassword" type="password" placeholder="Пароль" required>
 <button class="btn" id="loginBtn" type="submit">Войти</button>
-<div id="loginError" class="error" role="status" aria-live="assertive"></div>
+<div id="loginError" class="error"></div>
 </form>
 
-<form id="registerForm" class="hidden" autocomplete="on" novalidate>
+<form id="registerForm" class="hidden" novalidate>
 <input id="regFio" type="text" placeholder="ФИО" required>
 <input id="regEmail" type="email" placeholder="Email" required>
 <div class="row">
@@ -74,7 +70,8 @@ input, select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d
 </div>
 <div class="row">
 <div class="half"><label>Дата рождения</label><input id="regDob" type="date"></div>
-<div class="half"><label>Пол</label><select id="regGender">
+<div class="half"><label>Пол</label>
+<select id="regGender">
 <option value="">Не указан</option>
 <option value="Мужской">Мужской</option>
 <option value="Женский">Женский</option>
@@ -88,88 +85,107 @@ input, select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d
 <label class="card-type"><input type="radio" name="regCardType" value="None" checked> Нет</label>
 </div>
 <button class="btn" id="regBtn" type="submit">Зарегистрироваться</button>
-<div id="regError" class="error" role="status" aria-live="assertive"></div>
-<div id="regSuccess" class="success" role="status" aria-live="polite"></div>
+<div id="regError" class="error"></div>
+<div id="regSuccess" class="success"></div>
 </form>
 
-<div class="switch"><span id="switchText">Нет аккаунта?</span> <button id="switchBtn">Зарегистрироваться</button></div>
+<div class="switch">
+<span id="switchText">Нет аккаунта?</span>
+<button id="switchBtn">Зарегистрироваться</button>
+</div>
 </div>
 </main>
 
 <script>
-const API = 'https://s7avelii-airlines-1.onrender.com';
-const loginForm = document.getElementById('loginForm');
-const registerForm = document.getElementById('registerForm');
-const switchBtn = document.getElementById('switchBtn');
-const switchText = document.getElementById('switchText');
-const title = document.getElementById('title');
-const loginError = document.getElementById('loginError');
-const regError = document.getElementById('regError');
-const regSuccess = document.getElementById('regSuccess');
+const API = "https://s7avelii-airlines-1.onrender.com";
+const loginForm=document.getElementById("loginForm");
+const registerForm=document.getElementById("registerForm");
+const switchBtn=document.getElementById("switchBtn");
+const switchText=document.getElementById("switchText");
+const title=document.getElementById("title");
+const loginError=document.getElementById("loginError");
+const regError=document.getElementById("regError");
+const regSuccess=document.getElementById("regSuccess");
 
 function showForm(showLogin){
   if(showLogin){
-    loginForm.classList.remove('hidden');
-    registerForm.classList.add('hidden');
-    title.textContent = 'Вход';
-    switchText.textContent = 'Нет аккаунта?';
-    switchBtn.textContent = 'Зарегистрироваться';
-  } else {
-    loginForm.classList.add('hidden');
-    registerForm.classList.remove('hidden');
-    title.textContent = 'Регистрация';
-    switchText.textContent = 'Уже есть аккаунт?';
-    switchBtn.textContent = 'Войти';
+    loginForm.classList.remove("hidden");
+    registerForm.classList.add("hidden");
+    title.textContent="Вход";
+    switchText.textContent="Нет аккаунта?";
+    switchBtn.textContent="Зарегистрироваться";
+  }else{
+    loginForm.classList.add("hidden");
+    registerForm.classList.remove("hidden");
+    title.textContent="Регистрация";
+    switchText.textContent="Уже есть аккаунт?";
+    switchBtn.textContent="Войти";
   }
-  loginError.textContent=''; regError.textContent=''; regSuccess.textContent='';
+  loginError.textContent="";regError.textContent="";regSuccess.textContent="";
 }
-switchBtn.addEventListener('click', e=>{ e.preventDefault(); showForm(loginForm.classList.contains('hidden')); });
-
-loginForm.addEventListener('submit', async e=>{
-  e.preventDefault(); loginError.textContent='';
-  const identifier = document.getElementById('loginIdentifier').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  if(!identifier){ loginError.textContent='Введите телефон или Email'; return; }
-  if(!password){ loginError.textContent='Введите пароль'; return; }
-  try{
-    const res = await fetch(`${API}/api/login`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({identifier,password})
-    });
-    const data = await res.json();
-    if(!res.ok){ loginError.textContent = data.error || 'Ошибка входа'; return; }
-    localStorage.setItem('token', data.token);
-    window.location.href='cabinet.html';
-  }catch(err){ console.error(err); loginError.textContent='Ошибка сети. Проверь сервер и CORS.'; }
+switchBtn.addEventListener("click",e=>{
+  e.preventDefault();
+  showForm(loginForm.classList.contains("hidden"));
 });
 
-registerForm.addEventListener('submit', async e=>{
-  e.preventDefault(); regError.textContent=''; regSuccess.textContent='';
-  const fio = document.getElementById('regFio').value.trim();
-  const email = document.getElementById('regEmail').value.trim();
-  const phone = document.getElementById('regPhone').value.trim();
-  const password = document.getElementById('regPassword').value;
-  const dob = document.getElementById('regDob').value || null;
-  const gender = document.getElementById('regGender').value || null;
-  const cardNumber = document.getElementById('regCard').value.trim();
-  const cardType = document.querySelector('input[name="regCardType"]:checked')?.value || 'None';
-  if(!fio){ regError.textContent='Введите ФИО'; return; }
-  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ regError.textContent='Введите корректный email'; return; }
-  if(!phone){ regError.textContent='Введите телефон'; return; }
-  if(!password || password.length<6){ regError.textContent='Пароль должен быть не менее 6 символов'; return; }
+// ====== ВХОД ======
+loginForm.addEventListener("submit",async e=>{
+  e.preventDefault();loginError.textContent="";
+  const identifier=document.getElementById("loginIdentifier").value.trim();
+  const password=document.getElementById("loginPassword").value;
+  if(!identifier){loginError.textContent="Введите телефон или Email";return;}
+  if(!password){loginError.textContent="Введите пароль";return;}
   try{
-    const res = await fetch(`${API}/api/register`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
+    const isPhone=/^\+?\d/.test(identifier);
+    const body=isPhone?{phone:identifier,password}:{email:identifier,password};
+    const res=await fetch(`${API}/api/login`,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(body)
+    });
+    const data=await res.json();
+    if(!res.ok){loginError.textContent=data.error||"Ошибка входа";return;}
+    localStorage.setItem("token",data.token);
+    // сразу переходим в кабинет
+    window.location.href="cabinet.html";
+  }catch(err){
+    console.error(err);
+    loginError.textContent="Ошибка сети. Проверь сервер и CORS.";
+  }
+});
+
+// ====== РЕГИСТРАЦИЯ ======
+registerForm.addEventListener("submit",async e=>{
+  e.preventDefault();regError.textContent="";regSuccess.textContent="";
+  const fio=document.getElementById("regFio").value.trim();
+  const email=document.getElementById("regEmail").value.trim();
+  const phone=document.getElementById("regPhone").value.trim();
+  const password=document.getElementById("regPassword").value;
+  const dob=document.getElementById("regDob").value||null;
+  const gender=document.getElementById("regGender").value||null;
+  const cardNumber=document.getElementById("regCard").value.trim();
+  const cardType=document.querySelector('input[name="regCardType"]:checked')?.value||"None";
+
+  if(!fio){regError.textContent="Введите ФИО";return;}
+  if(!email||!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){regError.textContent="Введите корректный email";return;}
+  if(!phone){regError.textContent="Введите телефон";return;}
+  if(!password||password.length<6){regError.textContent="Пароль должен быть не менее 6 символов";return;}
+
+  try{
+    const res=await fetch(`${API}/api/register`,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
       body:JSON.stringify({fio,email,phone,password,dob,gender,cardNumber,cardType})
     });
-    const data = await res.json();
-    if(!res.ok){ regError.textContent=data.error || 'Ошибка регистрации'; return; }
-    localStorage.setItem('token', data.token);
-    regSuccess.textContent='Регистрация успешна — перенаправляем...';
-    setTimeout(()=>window.location.href='cabinet.html',700);
-  }catch(err){ console.error(err); regError.textContent='Ошибка сети. Проверь сервер и CORS.'; }
+    const data=await res.json();
+    if(!res.ok){regError.textContent=data.error||"Ошибка регистрации";return;}
+    localStorage.setItem("token",data.token);
+    regSuccess.textContent="Регистрация успешна! Перенаправляем...";
+    setTimeout(()=>window.location.href="cabinet.html",800);
+  }catch(err){
+    console.error(err);
+    regError.textContent="Ошибка сети. Проверь сервер и CORS.";
+  }
 });
 </script>
 </body>
