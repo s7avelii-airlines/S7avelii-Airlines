@@ -336,42 +336,212 @@
   </div>
   
 <div id="userArea"></div> <!-- сюда будет аватар или имя -->
-
 <script>
-const API = 'https://твоя_доменная_ссылка_на_сервер.com'; // замени на реальный
-const userArea = document.getElementById("userArea");
+(() => {
+  // --- Настройка: укажи URL своего сервера ---
+  const API_URL = "https://s7avelii-airlines-1.onrender.com"; // <- ЗАМЕНИ НА СВОЙ URL
 
-async function updateUserArea() {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    userArea.innerHTML = `<a href="auth.html">Вход</a>`;
-    return;
+  // --- Утилиты ---
+  function safeGetToken() {
+    try { return localStorage.getItem("token"); } catch { return null; }
+  }
+  function safeSet(key, val) {
+    try { if (val === null || val === undefined) localStorage.removeItem(key); else localStorage.setItem(key, val); } catch {}
+  }
+  function resolveAvatarUrl(avatar) {
+    if (!avatar) return null;
+    if (avatar.startsWith("http://") || avatar.startsWith("https://")) return avatar;
+    // относительный путь из сервера вида "/avatars/..." или "/uploads/..."
+    return API_URL.replace(/\/+$/,'') + avatar;
   }
 
-  try {
-    const res = await fetch(`${API}/api/profile`, {
-      headers: { Authorization: "Bearer " + token }
-    });
-    if (!res.ok) throw new Error("Не авторизован");
+  // --- Рендер helpers (не ломают остальной DOM) ---
+  function renderLoginLink(container) {
+    container.innerHTML = "";
+    const a = document.createElement("a");
+    a.href = "auth.html";
+    a.textContent = "Вход";
+    a.style.color = "#2196f3";
+    a.style.fontWeight = "600";
+    a.style.textDecoration = "none";
+    container.appendChild(a);
+  }
 
-    const user = await res.json();
+  function renderUser(container, user) {
+    container.innerHTML = "";
+    const wrap = document.createElement("div");
+    wrap.style.display = "flex";
+    wrap.style.alignItems = "center";
+    wrap.style.gap = "8px";
 
-    if (user.avatar) {
-      userArea.innerHTML = `<img src="${user.avatar}" alt="avatar"
-        style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
-        onclick="window.location.href='cabinet.html'" />`;
+    const avatarUrl = resolveAvatarUrl(user.avatar);
+    if (avatarUrl) {
+      const img = document.createElement("img");
+      img.src = avatarUrl;
+      img.alt = user.fio || user.email || "User";
+      img.style.width = "36px";
+      img.style.height = "36px";
+      img.style.borderRadius = "50%";
+      img.style.objectFit = "cover";
+      img.style.cursor = "pointer";
+      img.addEventListener("click", () => window.location.href = "cabinet.html");
+      wrap.appendChild(img);
     } else {
-      userArea.innerHTML = `<span style="cursor:pointer;color:#2196f3;font-weight:500;"
-        onclick="window.location.href='cabinet.html'">${user.fio.split(" ")[0]}</span>`;
+      const nameSpan = document.createElement("span");
+      const first = (user.fio && user.fio.split && user.fio.split(" ")[0]) || user.email || "Профиль";
+      nameSpan.textContent = first;
+      nameSpan.style.cursor = "pointer";
+      nameSpan.style.color = "#2196f3";
+      nameSpan.style.fontWeight = "600";
+      nameSpan.addEventListener("click", () => window.location.href = "cabinet.html");
+      wrap.appendChild(nameSpan);
     }
-  } catch (err) {
-    console.error(err);
-    localStorage.removeItem("token");
-    userArea.innerHTML = `<a href="auth.html">Вход</a>`;
-  }
-}
 
-window.addEventListener("DOMContentLoaded", updateUserArea);
+    // маленькая кнопка выйтти (иконка)
+    const logoutBtn = document.createElement("button");
+    logoutBtn.title = "Выйти";
+    logoutBtn.type = "button";
+    logoutBtn.style.border = "none";
+    logoutBtn.style.background = "transparent";
+    logoutBtn.style.cursor = "pointer";
+    logoutBtn.style.color = "#777";
+    logoutBtn.style.fontSize = "14px";
+    logoutBtn.textContent = "⎋";
+    logoutBtn.addEventListener("click", () => {
+      // очистка и переход на страницу входа
+      safeSet("token", null);
+      safeSet("fio", null);
+      safeSet("avatar", null);
+      safeSet("phone", null);
+      window.location.href = "auth.html";
+    });
+    wrap.appendChild(logoutBtn);
+
+    container.appendChild(wrap);
+  }
+
+  // --- Сохранить профиль локально (вызывай после успешного login/register) ---
+  function saveProfileLocally(user, token) {
+    if (!user || !token) return;
+    safeSet("token", token);
+    safeSet("fio", user.fio || "");
+    safeSet("avatar", user.avatar || "");
+    safeSet("phone", user.phone || "");
+    safeSet("username", (user.fio && user.fio.split && user.fio.split(" ")[0]) || "");
+    // уведомляем другие вкладки
+    try { window.dispatchEvent(new Event("storage")); } catch {}
+  }
+
+  // --- Попытка получить профиль с сервера по токену ---
+  async function fetchProfileByToken(token) {
+    try {
+      const res = await fetch(API_URL.replace(/\/+$/,'') + "/api/profile", {
+        headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+        cache: "no-store",
+      });
+      if (res.status === 401) {
+        // токен просрочен/невалиден
+        return { ok: false, status: 401 };
+      }
+      if (!res.ok) return { ok: false, status: res.status };
+      const body = await res.json();
+      // сервер может возвращать { user: { ... } } или сам объект — поддержим оба формата
+      const user = body.user || body;
+      return { ok: true, user };
+    } catch (err) {
+      // сеть или CORS — возвращаем ошибку
+      return { ok: false, status: 0, error: err };
+    }
+  }
+
+  // --- Обновление UI в шапке ---
+  async function updateUserArea() {
+    const container = document.getElementById("userArea");
+    if (!container) return; // если нет элемента — ничего не делаем
+
+    const token = safeGetToken();
+
+    // 1) если нет токена, но есть локальные данные — показываем локальные (быстро)
+    if (!token) {
+      const fio = localStorage.getItem("fio");
+      const avatar = localStorage.getItem("avatar");
+      const phone = localStorage.getItem("phone");
+      const username = localStorage.getItem("username");
+      if (fio && phone) {
+        // показываем локально сохранённого юзера
+        renderUser(container, { fio, avatar, phone, username });
+        return;
+      }
+      // иначе — показать ссылку вход
+      renderLoginLink(container);
+      return;
+    }
+
+    // 2) есть токен — пробуем получить профиль с сервера
+    const result = await fetchProfileByToken(token);
+
+    if (result.ok && result.user) {
+      // успешно получили профиль — рендерим и обновляем локал сторедж
+      const user = result.user;
+      saveProfileLocally(user, token);
+      renderUser(container, user);
+      return;
+    }
+
+    // 3) если сервер ответил 401 — удаляем токен и пробуем локальные данные
+    if (result.status === 401) {
+      safeSet("token", null);
+      const fio = localStorage.getItem("fio");
+      const avatar = localStorage.getItem("avatar");
+      const phone = localStorage.getItem("phone");
+      if (fio && phone) {
+        renderUser(container, { fio, avatar, phone });
+        return;
+      }
+      renderLoginLink(container);
+      return;
+    }
+
+    // 4) сеть/сбой — fallback: используем локальные данные (если есть), иначе вход
+    const fio = localStorage.getItem("fio");
+    const avatar = localStorage.getItem("avatar");
+    const phone = localStorage.getItem("phone");
+    if (fio && phone) {
+      renderUser(container, { fio, avatar, phone });
+    } else {
+      renderLoginLink(container);
+    }
+  }
+
+  // --- Обработчик успешного логина/регистрации (вставь в код auth.html) ---
+  // пример использования: после получения ответа от сервера вызови handleAuthSuccess(resp.user, resp.token)
+  window.handleAuthSuccess = function(user, token) {
+    // user — объект профиля от сервера, token — строка JWT
+    saveProfileLocally(user, token);
+    // обновляем шапку
+    updateUserArea();
+  };
+
+  // --- Обработчик storage (если пользователь залогинился в другой вкладке) ---
+  window.addEventListener("storage", (e) => {
+    if (e.key === "token" || e.key === "fio" || e.key === "avatar") {
+      // небольшая задержка чтобы другие вкладки успели записать
+      setTimeout(updateUserArea, 50);
+    }
+  });
+
+  // --- Запуск при загрузке страницы (безопасно) ---
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", updateUserArea, { once: true });
+  } else {
+    updateUserArea();
+  }
+
+  // --- Экспорт функций (опционально) ---
+  window.__S7_UPDATE_USER_AREA = updateUserArea;
+  window.__S7_SAVE_PROFILE = saveProfileLocally;
+
+})();
 </script>
 
 
