@@ -335,15 +335,14 @@
     <div id="userArea"></div>
   </div>
   
-<div id="userArea"></div> <!-- сюда только кнопка/аватар -->
+<div id="userArea"></div> <!-- сюда будет аватар или имя -->
 
 <script>
-const API = "https://your-render-service.com"; // замени на свой URL сервера
-const token = localStorage.getItem("token");
+const API = 'https://твоя_доменная_ссылка_на_сервер.com'; // замени на реальный
+const userArea = document.getElementById("userArea");
 
 async function updateUserArea() {
-  const userArea = document.getElementById("userArea");
-
+  const token = localStorage.getItem("token");
   if (!token) {
     userArea.innerHTML = `<a href="auth.html">Вход</a>`;
     return;
@@ -351,30 +350,23 @@ async function updateUserArea() {
 
   try {
     const res = await fetch(`${API}/api/profile`, {
-      headers: { "Authorization": "Bearer " + token }
+      headers: { Authorization: "Bearer " + token }
     });
     if (!res.ok) throw new Error("Не авторизован");
-    const data = await res.json();
-    const user = data.user;
+
+    const user = await res.json();
 
     if (user.avatar) {
-      userArea.innerHTML = `
-        <img src="${API}${user.avatar}" alt="avatar"
-          style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
-          onclick="window.location.href='cabinet.html'"
-        />
-      `;
+      userArea.innerHTML = `<img src="${user.avatar}" alt="avatar"
+        style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
+        onclick="window.location.href='cabinet.html'" />`;
     } else {
-      userArea.innerHTML = `
-        <span style="cursor:pointer;color:#2196f3;font-weight:500;"
-          onclick="window.location.href='cabinet.html'">
-          ${user.fio.split(" ")[0]}
-        </span>
-      `;
+      userArea.innerHTML = `<span style="cursor:pointer;color:#2196f3;font-weight:500;"
+        onclick="window.location.href='cabinet.html'">${user.fio.split(" ")[0]}</span>`;
     }
   } catch (err) {
-    console.log(err);
-    localStorage.removeItem("token"); // токен битый — сброс
+    console.error(err);
+    localStorage.removeItem("token");
     userArea.innerHTML = `<a href="auth.html">Вход</a>`;
   }
 }
