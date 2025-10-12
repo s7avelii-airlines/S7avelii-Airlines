@@ -1,312 +1,355 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>S7avelii | Профиль</title>
-<link rel="icon" href="images/favicon.png" type="image/png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Личный кабинет — S7 Airlines Style</title>
 
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Шрифт Montserrat -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 
-<style>
-  :root{
-    --accent:#9cc42f; /* main green like on screenshot */
-    --accent-2:#b6ce00;
-    --muted:#8b97a6;
-    --bg:#f5f7fa;
-    --card:#ffffff;
-    --radius:12px;
-    --line: #e6e6e6;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    font-family:Inter, "Segoe UI", Roboto, Arial, sans-serif;
-    background:var(--bg);
-    color:#1f2937;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-  }
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
 
-  /* Header */
-  header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 28px;
-    height:80px;
-    border-bottom:1px solid var(--line);
-    position:fixed;top:0;left:0;width:100%;background:var(--card);z-index:1200;
-    box-sizing:border-box;
-  }
-  .brand{display:flex;align-items:center;gap:14px}
-  .logo-circle{
-    width:46px;height:46px;border-radius:50%;
-    background:linear-gradient(135deg,var(--accent-2),#9cc42f);
-    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;
-  }
-  .brand h1{font-size:18px;margin:0}
-  #userArea{min-width:160px;display:flex;align-items:center;justify-content:flex-end;gap:12px}
-  #userArea img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,0.08)}
+    body {
+      margin: 0;
+      background-color: #fff;
+      color: #222;
+    }
 
-  /* Page container */
-  .container{max-width:1180px;margin:120px auto;padding:0 20px}
+    /* === Telegram баннер === */
+    .telegram-banner {
+      background: linear-gradient(90deg, #37aee2 0%, #1e96c8 100%);
+      color: #fff;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
 
-  /* Top profile block */
-  .profile-top{
-    display:flex;gap:26px;align-items:flex-start;background:var(--card);
-    padding:26px;border-radius:var(--radius);box-shadow:0 10px 30px rgba(16,24,40,0.06);border:1px solid var(--line);flex-wrap:wrap;
-  }
-  .avatar-wrap{position:relative;flex-shrink:0}
-  #avatar{width:118px;height:118px;border-radius:50%;object-fit:cover;border:6px solid #fff;box-shadow:0 8px 26px rgba(12,20,24,0.06);cursor:pointer}
-  .avatar-edit{position:absolute;right:2px;bottom:2px;background:#fff;border-radius:50%;padding:6px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-  .profile-info{flex:1}
-  .profile-info h2{margin:0;font-size:22px;font-weight:700}
-  .profile-sub{color:var(--accent-2);font-weight:600;margin-top:6px;font-size:14px;display:flex;align-items:center;gap:8px}
+    .telegram-banner img {
+      width: 20px;
+      height: 20px;
+    }
 
-  .badges{display:flex;align-items:center;gap:8px;margin-top:12px}
-  .badge{display:flex;align-items:center;gap:8px;padding:8px;border-radius:20px;background:#fff;border:1px solid #f1f3f4;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
-  .badge .dot{width:28px;height:28px;border-radius:50%;background:var(--accent-weak, rgba(180,211,51,0.08));display:flex;align-items:center;justify-content:center;color:var(--accent-2);font-weight:700}
+    /* === Верхнее меню === */
+    header {
+      background: #f5f5f5;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e0e0e0;
+    }
 
-  .counters{display:flex;gap:28px;margin-left:24px;align-items:center}
-  .counter{min-width:100px;text-align:center;padding:10px 0;border-left:1px solid #f1f4f6}
-  .counter:first-child{border-left:0}
-  .counter .num{font-weight:700;font-size:20px}
-  .counter .label{color:var(--muted);font-size:13px;margin-top:6px}
+    header .logo {
+      font-weight: 600;
+      color: #222;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-  /* Tabs */
-  .tabs-wrap{margin-top:18px;border-top:0;padding-top:18px}
-  .tabs{display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-bottom:1px solid #eef2f4;padding-bottom:6px}
-  .tabs a{padding:10px 14px;text-decoration:none;color:#495057;border-radius:8px;cursor:pointer;font-weight:600}
-  .tabs a.active{color:var(--accent-2);background:rgba(156,196,47,0.06);box-shadow: inset 0 -2px 0 rgba(0,0,0,0.00)}
+    .user-area img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+    }
 
-  /* Telegram notification block — made to match screenshot */
-  .telegram-block {
-    position:relative;
-    background:var(--card);
-    border-radius:12px;
-    box-shadow:0 6px 18px rgba(16,24,40,0.03);
-    display:flex;
-    align-items:flex-start;
-    gap:14px;
-    padding:16px 18px;
-    width:100%;
-    margin-top:16px;
-    border:1px solid #eef2f4;
-  }
-  .telegram-icon{flex-shrink:0;margin-top:4px}
-  .telegram-content{flex:1}
-  .telegram-title{font-weight:700;font-size:15px;color:#111;margin-bottom:6px}
-  .telegram-text{color:#445;line-height:1.4;font-size:14px}
-  .telegram-button{margin-top:10px;background:#f6f8fa;border:1px solid #dfe6eb;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600}
-  .telegram-close{position:absolute;right:12px;top:10px;background:none;border:0;font-size:18px;color:#6b7280;cursor:pointer}
+    .user-area span {
+      cursor: pointer;
+      color: #2196f3;
+      font-weight: 500;
+    }
 
-  /* Grid with sidebar */
-  .grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:18px}
-  .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(16,24,40,0.02);border:1px solid var(--line)}
-  .field{display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid rgba(0,0,0,0.03)}
-  .small-muted{color:var(--muted);font-size:13px}
-  .btn{background:var(--accent-2);color:#fff;padding:8px 12px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
-  .btn.secondary{background:#eef2f7;color:#111}
-  .btn.red{background:#e66}
-  .progress-wrap{width:100%;margin-top:8px}
-  .progress-bg{width:100%;height:14px;background:#eee;border-radius:999px;overflow:hidden}
-  .progress-fill{height:100%;width:0%;background:var(--accent-2);transition:width .6s ease}
-  .cart-table{width:100%;border-collapse:collapse}
-  .cart-table th,.cart-table td{padding:8px;border-bottom:1px solid #eee;text-align:left}
-  .muted{color:var(--muted)}
-  .input-inline{width:70%;padding:6px;border-radius:6px;border:1px solid #d6d8db}
+    /* === Контент === */
+    main {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
 
-  /* product grid small adapt */
-  .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+    .tabs {
+      display: flex;
+      gap: 16px;
+      border-bottom: 2px solid #eee;
+      margin-bottom: 24px;
+    }
 
-  /* footer */
-  footer.footer{margin-top:26px;}
+    .tabs a {
+      padding: 8px 0;
+      text-decoration: none;
+      color: #555;
+      font-weight: 400;
+      border-bottom: 2px solid transparent;
+    }
 
-  /* responsive */
-  @media(max-width:980px){.grid{grid-template-columns:1fr}.counters{margin-left:0;margin-top:12px;flex-wrap:wrap}}
-  @media(max-width:680px){
-    .profile-top{padding:18px}
-    #avatar{width:90px;height:90px}
-    .profile-info h2{font-size:18px}
-    .tabs{overflow:auto}
-  }
-</style>
+    .tabs a.active {
+      color: #2196f3;
+      border-color: #2196f3;
+    }
+
+    .grid section {
+      display: none;
+    }
+
+    .grid section.active {
+      display: block;
+    }
+
+    /* === Профиль === */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .profile-header img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #f0f0f0;
+    }
+
+    .profile-header h2 {
+      margin: 0;
+      font-weight: 500;
+      font-size: 20px;
+    }
+
+    .profile-details {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      row-gap: 12px;
+      column-gap: 12px;
+      font-size: 15px;
+    }
+
+    .profile-details div.label {
+      color: #777;
+      font-weight: 400;
+    }
+
+    .input-inline {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    /* === Магазин === */
+    #productGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+      transition: 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    }
+
+    .card .btn {
+      background: #2196f3;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .btn.secondary {
+      background: #eee;
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+
+    td, th {
+      padding: 8px;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    .btn {
+      cursor: pointer;
+    }
+
+    .progress-bar {
+      background: #eee;
+      border-radius: 6px;
+      overflow: hidden;
+      height: 10px;
+      margin-top: 6px;
+    }
+
+    .progress-bar span {
+      display: block;
+      height: 100%;
+      background: #2196f3;
+    }
+
+    .stats {
+      display: flex;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .stat {
+      flex: 1;
+      background: #fafafa;
+      padding: 16px;
+      border-radius: 10px;
+      text-align: center;
+      border: 1px solid #f0f0f0;
+    }
+  </style>
 </head>
 <body>
-
-<!-- HEADER -->
-<header role="banner">
-  <div class="brand" style="align-items:center">
-    <div class="logo-circle">S7</div>
-    <div>
-      <h1 style="margin:0;font-size:16px">S7avelii</h1>
-      <div style="font-size:12px;color:var(--muted)">Личный кабинет</div>
-    </div>
+  <!-- === Telegram баннер === -->
+  <div class="telegram-banner">
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram">
+    <span>Подключайся к нашему Telegram, чтобы узнавать об акциях первым!</span>
   </div>
 
-  <div id="userArea"><a href="auth.html">Вход</a></div>
-</header>
+  <!-- === Шапка === -->
+  <header>
+    <div class="logo">S7 Airlines</div>
+    <div id="userArea" class="user-area"></div>
+  </header>
 
-<!-- PAGE -->
-<main class="container" role="main">
+  <!-- === Основной контент === -->
+  <main>
+    <div class="tabs">
+      <a href="#" class="active" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
+      <a href="#" data-tab="shopTab" onclick="showTab(event)">Магазин</a>
+      <a href="#" data-tab="cartTab" onclick="showTab(event)">Корзина</a>
+    </div>
 
-  <!-- PROFILE TOP -->
-  <div class="profile-top" role="region" aria-label="Профиль верх">
-    <div style="display:flex;align-items:center;gap:16px">
-      <label for="avatarInput" title="Нажмите чтобы загрузить фото">
-        <img id="avatar" class="avatar" src="https://via.placeholder.com/150" alt="avatar">
-      </label>
-      <input id="avatarInput" type="file" accept="image/*" style="display:none">
-      <div class="profile-info">
-        <h2 id="fioHeader">Загрузка...</h2>
-        <div class="profile-sub" id="phoneHeader">—</div>
-
-        <div style="display:flex;align-items:center;gap:18px;margin-top:12px">
-          <div class="badges" aria-hidden="true">
-            <div class="badge"><div class="dot" style="background:rgba(156,196,47,0.12);color:var(--accent-2)">T</div><div class="small-muted">Тип</div></div>
-            <div class="badge"><div class="dot" style="background:rgba(156,196,47,0.12);color:var(--accent-2)">+</div><div class="small-muted">Плюс</div></div>
-          </div>
-
-          <div class="counters" aria-hidden="true">
-            <div class="counter"><div class="num" id="bonusMiles">—</div><div class="label">бонусных миль</div></div>
-            <div class="counter"><div class="num" id="milesBonusStat">—</div><div class="label">статусная миля</div></div>
-            <div class="counter"><div class="num" id="milesStatusStat">—</div><div class="label">статусных полётов</div></div>
+    <div class="grid">
+      <section id="profileTab" class="active">
+        <div class="profile-header">
+          <img id="avatar" src="https://via.placeholder.com/100" alt="Аватар">
+          <div>
+            <h2 id="fioHeader">—</h2>
+            <p id="phoneHeader" style="color:#777;margin:4px 0 0 0;">—</p>
+            <input type="file" id="avatarInput" accept="image/*" style="margin-top:8px;">
           </div>
         </div>
+        <!-- === Профиль: персональные данные === -->
+        <div class="card" style="margin-bottom:18px">
+          <h3 style="margin:0 0 12px 0">Персональные данные</h3>
 
-        <div class="tabs-wrap">
-          <div class="tabs" role="tablist" aria-label="Вкладки">
-            <a class="active" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
-            <a data-tab="milesTab" onclick="showTab(event)">Мои мили</a>
-            <a data-tab="shopTab" onclick="showTab(event)">S7avelii Shop</a>
-            <a data-tab="settingsTab" onclick="showTab(event)">Настройки</a>
+          <div class="profile-details" style="margin-bottom:8px">
+            <div class="label">ФИО</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+              <div id="fioField">—</div>
+              <button class="btn secondary" onclick="editInline('fio')">Изменить</button>
+            </div>
+
+            <div class="label">Дата рождения</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+              <div id="dobField">—</div>
+              <button class="btn secondary" onclick="editInline('dob')">Изменить</button>
+            </div>
+
+            <div class="label">Пол</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+              <div id="genderField">—</div>
+              <button class="btn secondary" onclick="editInline('gender')">Изменить</button>
+            </div>
+
+            <div class="label">E-mail</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+              <div id="emailField">—</div>
+              <button class="btn secondary" onclick="editInline('email')">Изменить</button>
+            </div>
+
+            <div class="label">Телефон</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+              <div id="phoneField">—</div>
+              <button class="btn secondary" onclick="editInline('phone')">Изменить</button>
+            </div>
+
+            <div class="label">Номер карты</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+              <div id="card_field">—</div>
+              <button class="btn secondary" onclick="editInline('card_number')">Изменить</button>
+            </div>
+
+            <div class="label">Тип карты</div>
+            <div id="cardTypeField">—</div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div style="margin-left:auto;min-width:200px;text-align:right">
-      <div class="small-muted">Бонусные мили</div>
-      <div style="font-weight:700;font-size:20px" id="bonusMiles">—</div>
-      <div class="progress-wrap" style="margin-top:10px">
-        <div class="progress-bg" aria-hidden="true"><div id="milesProgressBar" class="progress-fill" style="width:0%"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;color:#777;margin-top:6px">
-          <div id="milesLabelLeft">0 миль</div>
-          <div id="milesLabelRight">—</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- TELEGRAM BLOCK (exact like on screenshot) -->
-  <div class="telegram-block" role="region" aria-label="Telegram уведомление">
-    <div class="telegram-icon" aria-hidden="true">
-      <!-- Telegram-like paper plane inside circle (visual only) -->
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="12" r="12" fill="#eaf3ff"/>
-        <path d="M4 12L20 4L14 20L11 13L4 12Z" fill="#2b7de9"/>
-      </svg>
-    </div>
-    <div class="telegram-content">
-      <div class="telegram-title">Уведомления в Телеграме</div>
-      <div class="telegram-text">Получайте важную информацию о полёте прямо в мессенджере. Полезно, если вдруг пропустите письмо или пуш.</div>
-      <div><button class="telegram-button" onclick="alert('Подписка (демо)')">Подписаться</button></div>
-    </div>
-    <button class="telegram-close" aria-label="Закрыть уведомление" onclick="this.parentElement.style.display='none'">×</button>
-  </div>
-
-  <!-- MAIN GRID -->
-  <div class="grid">
-    <div>
-      <!-- PROFILE TAB -->
-      <section id="profileTab" class="card" aria-label="profile" style="display:block">
-        <h3>Персональные данные</h3>
-
-        <div class="field">
-          <div><div class="small-muted">ФИО</div><div id="fioField">—</div></div>
-          <button class="btn" onclick="editInline('fio')">Изменить</button>
-        </div>
-
-        <div class="field">
-          <div><div class="small-muted">Дата рождения</div><div id="dobField">—</div></div>
-          <button class="btn" onclick="editInline('dob')">Изменить</button>
-        </div>
-
-        <div class="field">
-          <div><div class="small-muted">Пол</div><div id="genderField">—</div></div>
-          <button class="btn" onclick="editInline('gender')">Изменить</button>
-        </div>
-
-        <h3 style="margin-top:16px">Контакты</h3>
-
-        <div class="field">
-          <div><div class="small-muted">E-mail</div><div id="emailField">—</div></div>
-          <button class="btn" onclick="editInline('email')">Изменить</button>
-        </div>
-
-        <div class="field">
-          <div><div class="small-muted">Телефон</div><div id="phoneField">—</div></div>
-          <button class="btn" onclick="editInline('phone')">Изменить</button>
-        </div>
-
-        <h3 style="margin-top:16px">Карта</h3>
-
-        <div class="field">
-          <div><div class="small-muted">Номер карты</div><div id="card_field">—</div></div>
-          <button class="btn" onclick="editInline('card_number')">Изменить</button>
-        </div>
-
-        <div class="field">
-          <div><div class="small-muted">Тип карты</div><div id="cardTypeField">—</div></div>
-        </div>
-      </section>
-
-      <!-- MILES TAB -->
-      <section id="milesTab" class="card" style="margin-top:16px;display:none">
-        <h3>Мои мили</h3>
-        <div class="muted">Состояние бонусов и прогресс статуса</div>
-        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
-          <div class="card" style="flex:1;min-width:200px">
+        <!-- === Мили и статистика === -->
+        <div class="stats" style="margin-bottom:18px">
+          <div class="stat">
             <div class="small-muted">Бонусные мили</div>
-            <div style="font-weight:700;font-size:20px" id="milesBonusStat">—</div>
+            <div style="font-size:22px;font-weight:600" id="milesBonusStat">—</div>
           </div>
-          <div class="card" style="flex:1;min-width:200px">
+          <div class="stat">
             <div class="small-muted">Статусные мили</div>
-            <div style="font-weight:700;font-size:20px" id="milesStatusStat">—</div>
+            <div style="font-size:22px;font-weight:600" id="milesStatusStat">—</div>
+          </div>
+          <div class="stat">
+            <div class="small-muted">Прогресс до следующего уровня</div>
+            <div class="progress-bar" aria-hidden="true" style="margin-top:8px"><span id="milesProgressBar2" style="width:0%"></span></div>
+            <div style="margin-top:8px;color:#666;font-size:13px;display:flex;justify-content:space-between">
+              <div id="nextLevelLeft">0 / 0</div>
+              <div id="nextLevelRight">—</div>
+            </div>
           </div>
         </div>
 
-        <div style="margin-top:14px">
-          <div class="small-muted">Прогресс до следующего уровня</div>
-          <div class="progress-bg" style="margin-top:8px"><div id="milesProgressBar2" class="progress-fill" style="width:0%"></div></div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:#666;margin-top:6px">
-            <div id="nextLevelLeft">0 / 0</div>
-            <div id="nextLevelRight">—</div>
-          </div>
+        <!-- === Магазин === -->
+        <div class="card" style="margin-bottom:18px">
+          <h3 style="margin:0 0 12px 0">S7avelii Shop</h3>
+          <div class="small-muted">Товары, доступные к покупке</div>
+          <div id="productGrid" class="product-grid" style="margin-top:12px"></div>
+        </div>
+
+        <!-- === Настройки (пример) === -->
+        <div class="card" style="margin-bottom:18px;display:none" id="settingsExample">
+          <h3 style="margin:0 0 12px 0">Настройки</h3>
+          <p class="small-muted">Здесь будут настройки пользователя.</p>
         </div>
       </section>
 
-      <!-- SHOP TAB -->
-      <section id="shopTab" class="card" style="margin-top:16px;display:none">
-        <h3>S7avelii Shop</h3>
-        <div class="muted">Товары, доступные к покупке</div>
-        <div id="productGrid" class="product-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px"></div>
-      </section>
-
-      <!-- SETTINGS -->
-      <section id="settingsTab" class="card" style="margin-top:16px;display:none">
-        <h3>Настройки</h3>
-        <button class="btn red" onclick="logout()">Выйти</button>
-      </section>
+      <!-- === Дополнительные вкладки (корзина/магазин вынесены в сайдбар) === -->
+      <section id="shopTab" class="grid-section" style="display:none"></section>
+      <section id="cartTab" class="grid-section" style="display:none"></section>
     </div>
 
-    <!-- SIDEBAR -->
-    <aside>
-      <section class="card">
-        <h3>Корзина</h3>
+    <!-- === Сайдбар: корзина и быстрые действия === -->
+    <aside style="display:flex;flex-direction:column;gap:18px">
+      <div class="card">
+        <h3 style="margin:0 0 12px 0">Корзина</h3>
         <table class="cart-table" id="cartTable" aria-label="Корзина">
           <thead><tr><th>Товар</th><th>Цена</th><th></th></tr></thead>
           <tbody></tbody>
@@ -316,40 +359,405 @@
           <span id="cartTotal">0 ₽</span>
         </div>
         <button class="btn" style="width:100%;margin-top:12px" onclick="checkout()">Оформить</button>
-      </section>
+      </div>
+
+      <div class="card">
+        <h4 style="margin:0 0 8px 0">Быстрые действия</h4>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn secondary" onclick="window.location.href='bilet.html'">Купить билет</button>
+          <button class="btn secondary" onclick="window.location.href='priority.html'">S7avelii Priority</button>
+          <button class="btn secondary" onclick="logout()">Выйти</button>
+        </div>
+      </div>
     </aside>
   </div>
 
-  <footer class="footer" style="margin-top:24px">
-    <div style="text-align:center;color:var(--muted);padding:24px 0">© 2025 S7avelii — Все права защищены</div>
-  </footer>
+  <!-- === Footer (минимальный) === -->
+   <footer class="footer">
+  <div class="footer-inner">
+    <!-- Верхнее меню -->
+    <div class="footer-menu fade-in">
+      <div class="footer-column">
+        <h3>S7avelii Airlines</h3>
+        <ul>
+          <li><a href="body.html">О компании</a></li>
+          <li><a href="https://t.me/s7aveliihelper">Партнеры</a></li>
+          <li><a href="https://t.me/s7aveliihelper">Контакты</a></li>
+          <li><a href="#">Вакансии</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <ul>
+          <li><a href="office.html">Офисы продаж и представительства</a></li>
+          <li><a href="https://t.me/S7saveliiairlines">Новости</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Информация</h3>
+        <ul>
+          <li><a href="arrivel.html">Направления</a></li>
+          <li><a href="bilet.html">Рейсы</a></li>
+          <li><a href="https://t.me/s7aveliihelper">Справочный центр</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <ul>
+          <li><a href="https://t.me/s7aveliihelper">Перевозка грузов</a></li>
+          <li><a href="plane.html">Наш флот</a></li>
+          <li><a href="mailto:s7avelii_airlines@mail.ru">Подать заявление на партнёрство</a></li>
+        </ul>
+      </div>
+    </div>
 
-</main>
+    <hr>
 
-<!-- ====== SCRIPTS (твоя логика — не трогал) ====== -->
+    <!-- Верх футера -->
+    <div class="footer-top fade-in">
+      <div class="footer-actions">
+        <a href="https://t.me/s7aveliihelper" class="action"><img src="icons/chat.svg" alt=""> Чат</a>
+      </div>
+      <div class="footer-phone">
+        <div class="label">тел: Бесплатно по России</div>
+        <div class="number">8 962 629–81–05</div>
+      </div>
+    </div>
+
+    <!-- Подписка -->
+    <div class="footer-subscribe fade-in">
+      <h3>Подпишитесь на рассылку S7avelii</h3>
+      <p>Будьте в курсе акций, открывайте новые маршруты</p>
+      <form class="subscribe-form">
+        <input type="email" placeholder="Ваша почта" required>
+        <button type="submit">→</button>
+      </form>
+      <label class="checkbox">
+        <input type="checkbox" required>
+        Хочу узнавать про скидки и идеи путешествий по почте и соглашаюсь на 
+        <a href="#">обработку персональных данных</a>
+      </label>
+    </div>
+
+    <!-- Низ футера -->
+    <div class="footer-bottom fade-in">
+      <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
+      <div class="socials">
+        <a href="https://vk.com/s7avelii"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
+        <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1"><img src="images/icons8-tiktok-logo-50 (1).avif" alt="TikTok"></a>
+        <a href="https://youtu.be/Dy31uUCFaWw?si=2gyqNYaT3ZVO8WJa"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
+        <a href="https://t.me/S7saveliiairlines"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+/* === Убираем горизонтальный скролл и белые полосы === */
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* ==== FOOTER ==== */
+.footer {
+  width: 100%;
+  background: #f1f5f9;
+  padding: 40px 60px;
+  font-family: "Inter", sans-serif;
+  color: #111;
+  box-sizing: border-box;
+}
+
+/* Верхнее меню */
+.footer-menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.footer-column h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+  color: #111;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.footer-column ul li a:hover {
+  text-decoration: underline;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 30px 0;
+  width: 100%;
+}
+
+/* Верх футера */
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 30px;
+}
+
+.footer-actions .action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  color: #111;
+}
+
+.footer-actions img {
+  width: 20px;
+}
+
+.footer-phone {
+  text-align: right;
+}
+
+.footer-phone .label {
+  font-size: 14px;
+  color: #555;
+}
+
+.footer-phone .number {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Подписка */
+.footer-subscribe {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+  border: 1px solid #d1d5db;
+}
+
+.footer-subscribe h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.footer-subscribe p {
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.subscribe-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.subscribe-form input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.subscribe-form button {
+  background: #9ac208;
+  border: none;
+  border-radius: 8px;
+  padding: 0 20px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.subscribe-form button:hover {
+  background: #8db807;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #333;
+}
+
+.checkbox a {
+  color: #abc70f;
+  text-decoration: underline;
+}
+
+/* Низ футера */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: #555;
+}
+
+.socials {
+  display: flex;
+  gap: 12px;
+}
+
+.socials a img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  padding: 6px;
+  transition: transform 0.2s ease;
+}
+
+.socials a img:hover {
+  transform: scale(1.1);
+}
+
+/* === АНИМАЦИЯ ПОЯВЛЕНИЯ === */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === АДАПТАЦИЯ === */
+@media (max-width: 1024px) {
+  .footer {
+    padding: 30px 40px;
+  }
+  .footer-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .footer-phone {
+    text-align: left;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 30px 20px;
+  }
+  .footer-menu {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .footer-column h3 {
+    font-size: 16px;
+  }
+  .footer-column ul li a {
+    font-size: 13px;
+  }
+  .footer-subscribe {
+    padding: 16px;
+  }
+  .subscribe-form {
+    flex-direction: column;
+  }
+  .subscribe-form button {
+    width: 100%;
+    padding: 10px;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .socials {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-menu {
+    grid-template-columns: 1fr;
+  }
+  .footer-subscribe h3 {
+    font-size: 16px;
+  }
+  .footer-subscribe p {
+    font-size: 13px;
+  }
+  .footer-phone .number {
+    font-size: 16px;
+  }
+  .footer-phone .label {
+    font-size: 12px;
+  }
+  .footer-actions .action {
+    font-size: 14px;
+  }
+  .socials a img {
+    width: 28px;
+    height: 28px;
+  }
+}
+</style>
+
 <script>
-/*
-  Final cabinet.js integrated in this file.
-  - Autologin via localStorage token
-  - Inline editing (input/select/date) with onchange -> PUT /api/profile
-  - Avatar upload -> POST /api/profile/avatar (multipart)
-  - Shop / cart and checkout
-  - userArea (avatar or name) in header
-*/
+/* === Плавное появление футера при прокрутке === */
+document.addEventListener("DOMContentLoaded", () => {
+  const fadeElements = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  fadeElements.forEach(el => observer.observe(el));
+});
+</script>
+</main>
+<script>
+const API = "https://s7avelii-airlines-1.onrender.com";
 
-const API = "https://s7avelii-airlines-1.onrender.com"; // <- заменяй, если у тебя другой бекенд
 function getToken(){ return localStorage.getItem('token'); }
-
 let currentUser = null;
 let products = [];
 let cart = [];
 
-// apiFetch reads token dynamically
+// Универсальный запрос
 async function apiFetch(endpoint, options = {}) {
   const token = getToken();
   options.headers = { ...(options.headers || {}) };
   if (token) options.headers['Authorization'] = 'Bearer ' + token;
-  // do not set Content-Type for FormData
   if (options.body && !(options.body instanceof FormData) && typeof options.body !== 'string') {
     options.headers['Content-Type'] = 'application/json';
     options.body = JSON.stringify(options.body);
@@ -361,7 +769,7 @@ async function apiFetch(endpoint, options = {}) {
   return json;
 }
 
-// Update header user area (avatar or name)
+// Обновление шапки пользователя
 async function updateUserArea() {
   const userArea = document.getElementById('userArea');
   const token = getToken();
@@ -371,37 +779,27 @@ async function updateUserArea() {
   }
   try {
     const user = await apiFetch('/api/profile');
-    if (!user || !user.fio) { userArea.innerHTML = `<a href="auth.html">Вход</a>`; return; }
+    if (!user || !user.fio) {
+      userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+      return;
+    }
     currentUser = user;
-    // avatar path from server usually like /avatars/xxx
     if (user.avatar) {
       const avatarUrl = (user.avatar.startsWith('http') ? user.avatar : API + user.avatar);
-      userArea.innerHTML = `<img src="${avatarUrl}" alt="avatar" style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover" onclick="window.location.href='cabinet.html'">`;
+      userArea.innerHTML = `<img src="${avatarUrl}" alt="avatar" onclick="window.location.href='cabinet.html'">`;
       document.getElementById('avatar').src = avatarUrl;
     } else {
       const short = (user.fio && user.fio.split(' ')[0]) || user.email || 'Профиль';
-      userArea.innerHTML = `<span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">${escapeHtml(short)}</span>`;
+      userArea.innerHTML = `<span onclick="window.location.href='cabinet.html'">${escapeHtml(short)}</span>`;
     }
-    loadProfile(); // render details
+    loadProfile();
   } catch (e) {
     console.error('updateUserArea err', e);
     userArea.innerHTML = `<a href="auth.html">Вход</a>`;
   }
 }
 
-// simple escape
-function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-// Tabs
-function showTab(evt){
-  const tab = evt.currentTarget.dataset.tab;
-  document.querySelectorAll('.tabs a').forEach(a=>a.classList.remove('active'));
-  evt.currentTarget.classList.add('active');
-  document.querySelectorAll('.grid section').forEach(s=>s.style.display='none');
-  document.getElementById(tab).style.display = 'block';
-}
-
-// Render profile fields
+// Рендер данных профиля
 function loadProfile(){
   if(!currentUser) return;
   document.getElementById('fioHeader').textContent = currentUser.fio || '—';
@@ -414,20 +812,17 @@ function loadProfile(){
   document.getElementById('card_field').textContent = currentUser.card_number || '—';
   document.getElementById('cardTypeField').textContent = currentUser.card_type || '—';
 
-  document.getElementById('bonusMiles').textContent = currentUser.bonus_miles || 0;
-  const perc = Math.min(100, (currentUser.bonus_miles || 0) / 1000 * 100);
-  document.getElementById('milesProgressBar').style.width = perc + '%';
-  document.getElementById('milesLabelRight').textContent = (currentUser.bonus_miles || 0) + ' миль';
   document.getElementById('milesBonusStat').textContent = currentUser.bonus_miles || 0;
   document.getElementById('milesStatusStat').textContent = currentUser.status_miles || 0;
-  document.getElementById('milesProgressBar2').style.width = Math.min(100, (currentUser.status_miles || 0) / 1000 * 100) + '%';
+
+  const perc = Math.min(100, (currentUser.status_miles || 0) / 1000 * 100);
+  document.getElementById('milesProgressBar2').style.width = perc + '%';
   document.getElementById('nextLevelLeft').textContent = (currentUser.status_miles || 0) + '/1000';
 }
 
-// Inline editing: creates input/select/date, sends PUT /api/profile on change
+// Inline редактирование
 async function editInline(field) {
   if(!currentUser) return;
-  // map DOM ids and server field names
   const domMap = {
     fio: 'fioField',
     dob: 'dobField',
@@ -439,16 +834,10 @@ async function editInline(field) {
   const domId = domMap[field] || field + 'Field';
   const container = document.getElementById(domId);
   if(!container) return;
-
-  // current value
   const cur = (field === 'card_number' ? currentUser.card_number : currentUser[field]) || '';
-
-  // create input element depending on field
   let input;
   if (field === 'dob') {
-    input = document.createElement('input');
-    input.type = 'date';
-    input.value = cur;
+    input = document.createElement('input'); input.type = 'date'; input.value = cur;
   } else if (field === 'gender') {
     input = document.createElement('select');
     ['','Мужской','Женский','Другое'].forEach(val=>{
@@ -456,47 +845,28 @@ async function editInline(field) {
       if(val === cur) o.selected = true;
       input.appendChild(o);
     });
-  } else if (field === 'phone') {
-    input = document.createElement('input'); input.type = 'tel'; input.value = cur;
   } else {
     input = document.createElement('input'); input.type = 'text'; input.value = cur;
   }
-
   input.className = 'input-inline';
-  // Save on change or on blur
   let saved = false;
-  input.addEventListener('change', async () => {
-    await saveField(field, input.value);
-    saved = true;
-  });
-  input.addEventListener('blur', async () => {
-    if(!saved) await saveField(field, input.value);
-  });
-
-  // replace content
-  container.innerHTML = '';
-  container.appendChild(input);
-  input.focus();
+  input.addEventListener('change', async () => { await saveField(field, input.value); saved = true; });
+  input.addEventListener('blur', async () => { if(!saved) await saveField(field, input.value); });
+  container.innerHTML = ''; container.appendChild(input); input.focus();
 }
 
-// Save single field to server
 async function saveField(field, value) {
-  const payload = {};
-  // server columns: fio, dob, gender, email, phone, card_number, card_type
-  payload[field] = value;
+  const payload = {}; payload[field] = value;
   const res = await apiFetch('/api/profile', { method: 'PUT', body: payload });
-  if (res && res.ok) {
-    // refresh user data
+  if (res && res.ok !== false) {
     const updated = await apiFetch('/api/profile');
     if (updated) { currentUser = updated; loadProfile(); updateUserArea(); }
   } else {
     alert('Ошибка при сохранении');
-    // reload profile to original
-    const re = await apiFetch('/api/profile'); if(re){ currentUser = re; loadProfile(); }
   }
 }
 
-// Avatar upload
+// Аватар загрузка
 document.getElementById('avatarInput').addEventListener('change', async function(){
   if(!this.files[0]) return;
   const fd = new FormData();
@@ -519,7 +889,7 @@ document.getElementById('avatarInput').addEventListener('change', async function
   }catch(err){ console.error('avatar upload', err); alert('Ошибка сети при загрузке'); }
 });
 
-// Shop & cart
+// Магазин
 async function loadShop(){
   const data = await apiFetch('/api/shop');
   products = (data && data.products) ? data.products : [];
@@ -571,23 +941,33 @@ async function checkout(){
   else alert('Ошибка при оформлении заказа');
 }
 
+// Вкладки
+function showTab(evt){
+  evt.preventDefault();
+  const tab = evt.currentTarget.dataset.tab;
+  document.querySelectorAll('.tabs a').forEach(a=>a.classList.remove('active'));
+  evt.currentTarget.classList.add('active');
+  document.querySelectorAll('.grid section').forEach(s=>s.style.display='none');
+  document.getElementById(tab).style.display = 'block';
+}
+
 // Logout
 function logout(){
   localStorage.removeItem('token');
   window.location.href = 'auth.html';
 }
 
-// init
+// Escape HTML
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// Инициализация
 window.addEventListener('DOMContentLoaded', async () => {
   const token = getToken();
   if(!token){ window.location.href = 'auth.html'; return; }
   await updateUserArea();
   await loadShop();
 });
-
-// helper: escape HTML for text nodes
-function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 </script>
-
 </body>
 </html>
+
