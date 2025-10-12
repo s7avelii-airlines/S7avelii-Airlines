@@ -47,29 +47,79 @@ document.addEventListener("DOMContentLoaded", () => {
     <img src="images/photo_5276207082657412564_y.avif" alt="S7" class="w-10 h-10">
 
     <!-- Кнопки -->
-    <div class="flex gap-2">
-      <!-- Войти -->
-       <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
-        Войти
-        <!-- Иконка пользователя -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
-        </svg>
-      </a>
-
-      <!-- Выбор языка -->
-      <a href="inform.html" class="flex items-center justify-center w-10 h-10 rounded-xl border text-sm font-semibold">
-        RU
-      </a>
-
-      <!-- Чат -->
-      <button class="flex items-center justify-center w-10 h-10 rounded-xl border">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h6m-6 4h4m-5 4h10a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14l3-2z"/>
-        </svg>
-      </button>
+    <div class="flex gap-2" id="userArea">
+      <!-- Вход / аватар будет подставляться сюда через скрипт -->
     </div>
   </header>
+
+  <script>
+    // URL твоего API
+    const API = 'https://s7avelii-airlines-1.onrender.com';
+
+    async function updateUserArea() {
+      const userArea = document.getElementById('userArea');
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        // не залогинен — показать кнопку входа
+        userArea.innerHTML = `
+          <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
+            Войти
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
+            </svg>
+          </a>
+        `;
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API}/api/profile`, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        if (!res.ok) throw new Error('Не авторизован');
+
+        const data = await res.json();
+        const user = data.user || data;
+        const avatar = user.avatar ? (user.avatar.startsWith('http') ? user.avatar : API + user.avatar) : null;
+        const username = user.fio ? user.fio.split(' ')[0] : 'Профиль';
+
+        if (avatar) {
+          userArea.innerHTML = `
+            <img src="${avatar}" alt="avatar" 
+              class="w-10 h-10 rounded-full cursor-pointer object-cover"
+              onclick="window.location.href='cabinet.html'" 
+            />
+          `;
+        } else {
+          userArea.innerHTML = `
+            <span class="cursor-pointer text-sm font-semibold text-blue-600"
+              onclick="window.location.href='cabinet.html'">
+              ${username}
+            </span>
+          `;
+        }
+      } catch (err) {
+        console.warn(err);
+        // если токен невалидный — показываем кнопку входа
+        localStorage.removeItem('token');
+        userArea.innerHTML = `
+          <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
+            Войти
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
+            </svg>
+          </a>
+        `;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', updateUserArea);
+    // можно вызвать и позже, если обновишь профиль
+    window.__S7_UPDATE_USER_AREA = updateUserArea;
+  </script>
+
 <!-- Пробел между слайдером и акциями -->
     <div class="h-20"></div>
 <!-- Слайд-шоу -->
