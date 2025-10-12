@@ -1,200 +1,197 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
-import pkg from "pg";
-import bcrypt from "bcryptjs";
+import bodyParser from "body-parser";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import multer from "multer";
+import pg from "pg";
+import path from "path";
+import { fileURLToPath } from "url";
 
-dotenv.config();
-const { Pool } = pkg;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const PORT = process.env.PORT || 10000;
-const JWT_SECRET = process.env.JWT_SECRET || "super_secret_change_me";
-const STATIC_ORIGIN = process.env.STATIC_ORIGIN || "*";
+const app = express();
+const port = process.env.PORT || 10000;
+const JWT_SECRET = process.env.JWT_SECRET || "super_secret_key";
 
-const pool = new Pool({
+// ====== PostgreSQL ======
+const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
 });
 
-const app = express();
-app.use(express.json());
-app.use(
-  cors({
-    origin: STATIC_ORIGIN,
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+// ====== Middleware ======
+app.use(cors());
+app.use(bodyParser.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// --- DB init ---
-async function initDB() {
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS users (
-      id SERIAL PRIMARY KEY,
-      fio TEXT NOT NULL,
-      full_name TEXT NOT NULL,
-      email TEXT UNIQUE NOT NULL,
-      phone TEXT UNIQUE,
-      password TEXT NOT NULL,
-      avatar TEXT,
-      dob DATE,
-      gender TEXT,
-      vk TEXT,
-      telegram TEXT,
-      card_number TEXT,
-      card_type TEXT,
-      bonus_miles INTEGER DEFAULT 0,
-      status_miles INTEGER DEFAULT 0,
-      cart JSONB DEFAULT '[]'
-    );
-  `);
+// ====== Хранилище для multer ======
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, "uploads/"),
+  filename: (req, file, cb) =>
+    cb(null, Date.now() + "-" + Math.round(Math.random() * 1e9) + path.extname(file.originalname)),
+});
+const upload = multer({ storage });
 
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS products (
-      id SERIAL PRIMARY KEY,
-      name TEXT NOT NULL,
-      price INTEGER NOT NULL
-    );
-  `);
-
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS orders (
-      id SERIAL PRIMARY KEY,
-      user_id INTEGER REFERENCES users(id),
-      items JSONB,
-      created_at TIMESTAMP DEFAULT NOW()
-    );
-  `);
-
-  const r = await pool.query("SELECT COUNT(*) FROM products");
-  if (Number(r.rows[0].count) === 0) {
-    await pool.query(`
-      INSERT INTO products (name, price) VALUES
-      ('Брелок S7avelii', 500),
-      ('Футболка S7avelii', 1200),
-      ('Кружка S7avelii', 800),
-      ('Модель самолёта', 2500)
-    `);
-  }
-
-  console.log("✅ DB ready");
-}
-initDB();
-
-// --- JWT helper ---
-function signToken(userId) {
-  return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: "14d" });
-}
-
-// --- Middleware ---
+// ====== JWT Middleware ======
 function authMiddleware(req, res, next) {
   const header = req.headers.authorization;
-  if (!header) return res.status(401).json({ error: "No token" });
+  if (!header) return res.status(401).json({ error: "Нет токена" });
   const token = header.split(" ")[1];
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     req.userId = decoded.id;
     next();
   } catch {
-    res.status(401).json({ error: "Invalid token" });
+    res.status(401).json({ error: "Неверный токен" });
   }
 }
 
-// --- Routes ---
+// ====== Инициализация таблицы ======
+async function initDB() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      fio TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      phone TEXT,
+      password TEXT NOT NULL,
+      dob DATE,
+      gender TEXT,
+      card_number TEXT,
+      card_type TEXT,
+      avatar TEXT,
+      bonus_miles INTEGER DEFAULT 0,
+      status_miles INTEGER DEFAULT 0,
+      created_at TIMESTAMP DEFAULT NOW()
+    );
+  `);
+  console.log("✅ Таблица users готова");
+}
+initDB();
 
-// Health check
-app.get("/api/health", (_, res) => res.json({ ok: true }));
-
-// Register
+// ====== Регистрация ======
 app.post("/api/register", async (req, res) => {
   try {
     const { fio, email, phone, password, dob, gender, cardNumber, cardType } = req.body;
     if (!fio || !email || !password)
-      return res.status(400).json({ error: "fio, email, password required" });
-
-    const exists = await pool.query(
-      "SELECT id FROM users WHERE email=$1 OR phone=$2",
-      [email, phone]
-    );
-    if (exists.rows.length) return res.status(400).json({ error: "User exists" });
+      return res.status(400).json({ error: "Заполните все обязательные поля" });
 
     const hash = await bcrypt.hash(password, 10);
-    const ins = await pool.query(
-      `INSERT INTO users (fio, full_name, email, phone, password, dob, gender, card_number, card_type)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id`,
-      [fio, fio, email, phone, hash, dob || null, gender || null, cardNumber || null, cardType || null]
+    const result = await pool.query(
+      `INSERT INTO users (fio, email, phone, password, dob, gender, card_number, card_type)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
+      [fio, email, phone, hash, dob, gender, cardNumber, cardType]
     );
 
-    const token = signToken(ins.rows[0].id);
-    res.json({ token });
-  } catch (e) {
-    console.error("Register error:", e);
-    res.status(500).json({ error: "Registration failed" });
+    const user = result.rows[0];
+    const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "30d" });
+    delete user.password;
+    res.json({ token, user });
+  } catch (err) {
+    console.error("Ошибка регистрации:", err);
+    res.status(500).json({ error: "Ошибка регистрации" });
   }
 });
 
-// Login
+// ====== Вход ======
 app.post("/api/login", async (req, res) => {
   try {
     const { identifier, password } = req.body;
-    if (!identifier || !password) return res.status(400).json({ error: "Missing fields" });
+    const query =
+      "SELECT * FROM users WHERE email=$1 OR phone=$1 LIMIT 1";
+    const { rows } = await pool.query(query, [identifier]);
+    const user = rows[0];
+    if (!user) return res.status(400).json({ error: "Пользователь не найден" });
 
-    const userRes = await pool.query(
-      "SELECT * FROM users WHERE email=$1 OR phone=$1",
-      [identifier]
-    );
-    const user = userRes.rows[0];
-    if (!user) return res.status(400).json({ error: "User not found" });
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) return res.status(400).json({ error: "Неверный пароль" });
 
-    const ok = await bcrypt.compare(password, user.password);
-    if (!ok) return res.status(400).json({ error: "Wrong password" });
-
-    const token = signToken(user.id);
-    res.json({ token });
-  } catch (e) {
-    console.error("Login error:", e);
-    res.status(500).json({ error: "Login failed" });
+    const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "30d" });
+    delete user.password;
+    res.json({ token, user });
+  } catch (err) {
+    console.error("Ошибка входа:", err);
+    res.status(500).json({ error: "Ошибка входа" });
   }
 });
 
-// Profile
+// ====== Получение профиля ======
 app.get("/api/profile", authMiddleware, async (req, res) => {
   try {
-    const user = await pool.query("SELECT * FROM users WHERE id=$1", [req.userId]);
-    const u = user.rows[0];
-    if (!u) return res.status(404).json({ error: "Not found" });
-    delete u.password;
-    res.json(u);
-  } catch (e) {
-    console.error("Profile error:", e);
-    res.status(500).json({ error: "Profile failed" });
+    const { rows } = await pool.query("SELECT * FROM users WHERE id=$1", [req.userId]);
+    const user = rows[0];
+    if (!user) return res.status(404).json({ error: "Пользователь не найден" });
+    delete user.password;
+    res.json({ user });
+  } catch (err) {
+    console.error("Ошибка профиля:", err);
+    res.status(500).json({ error: "Ошибка получения профиля" });
   }
 });
 
-// Update profile
+// ====== Обновление профиля ======
 app.put("/api/profile", authMiddleware, async (req, res) => {
   try {
-    const { fio, email, phone, avatar, dob, gender, vk, telegram } = req.body;
-    await pool.query(
-      `UPDATE users SET fio=$1, email=$2, phone=$3, avatar=$4, dob=$5, gender=$6, vk=$7, telegram=$8 WHERE id=$9`,
-      [fio, email, phone, avatar, dob, gender, vk, telegram, req.userId]
-    );
-    res.json({ ok: true });
-  } catch (e) {
-    console.error("Update profile:", e);
-    res.status(500).json({ error: "Update failed" });
+    const userId = req.userId;
+    const allowed = ["fio", "email", "phone", "dob", "gender", "card_number", "card_type"];
+    const updates = [];
+    const values = [];
+    let idx = 1;
+
+    for (const field of allowed) {
+      if (req.body[field] !== undefined) {
+        updates.push(`${field} = $${idx++}`);
+        values.push(req.body[field]);
+      }
+    }
+
+    if (updates.length === 0)
+      return res.status(400).json({ error: "Нет данных для обновления" });
+
+    values.push(userId);
+    const query = `UPDATE users SET ${updates.join(", ")} WHERE id = $${idx} RETURNING *`;
+    const { rows } = await pool.query(query, values);
+    const user = rows[0];
+    delete user.password;
+    res.json({ user });
+  } catch (err) {
+    console.error("Ошибка изменения профиля:", err);
+    res.status(500).json({ error: "Ошибка изменения профиля" });
   }
 });
 
-// Products
-app.get("/api/products", async (_, res) => {
-  const r = await pool.query("SELECT * FROM products ORDER BY id");
-  res.json(r.rows);
+// ====== Загрузка аватара ======
+app.post("/api/profile/avatar", authMiddleware, upload.single("avatar"), async (req, res) => {
+  try {
+    const filePath = `/uploads/${req.file.filename}`;
+    await pool.query("UPDATE users SET avatar=$1 WHERE id=$2", [filePath, req.userId]);
+    res.json({ avatar: filePath });
+  } catch (err) {
+    console.error("Ошибка загрузки аватара:", err);
+    res.status(500).json({ error: "Ошибка загрузки аватара" });
+  }
 });
 
-// --- Serve static frontend ---
-app.use(express.static("public"));
+// ====== Проверка токена при автологине ======
+app.get("/api/auto-login", authMiddleware, async (req, res) => {
+  try {
+    const { rows } = await pool.query("SELECT * FROM users WHERE id=$1", [req.userId]);
+    const user = rows[0];
+    if (!user) return res.status(404).json({ error: "Пользователь не найден" });
+    delete user.password;
+    res.json({ user });
+  } catch (err) {
+    console.error("Ошибка авто-входа:", err);
+    res.status(500).json({ error: "Ошибка авто-входа" });
+  }
+});
 
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+// ====== Маршрут по умолчанию ======
+app.get("/", (req, res) => {
+  res.send("✅ S7avelii Airlines server is running.");
+});
+
+// ====== Запуск ======
+app.listen(port, () => console.log(`🚀 Server running on port ${port}`));
