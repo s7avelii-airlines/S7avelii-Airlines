@@ -571,29 +571,59 @@ nav li:hover .dropdown {
         </div>
       </section>
 
-      <section id="milesTab" class="card" style="margin-top:16px;display:none">
-        <h3>Мои мили</h3>
-        <div class="muted">Состояние бонусов и прогресс статуса</div>
-        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
-          <div class="card" style="flex:1;min-width:200px">
-            <div class="small-muted">Бонусные мили</div>
-            <div style="font-weight:700;font-size:20px" id="milesBonusStat">—</div>
-          </div>
-          <div class="card" style="flex:1;min-width:200px">
-            <div class="small-muted">Статусные мили</div>
-            <div style="font-weight:700;font-size:20px" id="milesStatusStat">—</div>
-          </div>
-        </div>
+     <section id="milesTab" class="card" style="margin-top:16px;display:none">
+  <h3>Мои мили</h3>
+  <div class="muted">Состояние бонусов и прогресс статуса</div>
 
-        <div style="margin-top:14px">
-          <div class="small-muted">Прогресс до следующего уровня</div>
-          <div class="progress-bg" style="margin-top:8px"><div id="milesProgressBar2" class="progress-fill" style="width:0%"></div></div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:#666;margin-top:6px">
-            <div id="nextLevelLeft">0 / 0</div>
-            <div id="nextLevelRight">—</div>
-          </div>
-        </div>
-      </section>
+  <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+    <div class="card" style="flex:1;min-width:200px">
+      <div class="small-muted">Бонусные мили</div>
+      <div style="font-weight:700;font-size:20px" id="milesBonusStat">0</div>
+    </div>
+    <div class="card" style="flex:1;min-width:200px">
+      <div class="small-muted">Статусные мили</div>
+      <div style="font-weight:700;font-size:20px" id="milesStatusStat">0</div>
+    </div>
+  </div>
+
+  <div style="margin-top:14px">
+    <div class="small-muted">Прогресс до следующего уровня</div>
+    <div class="progress-bg" style="margin-top:8px">
+      <div id="milesProgressBar2" class="progress-fill" style="width:0%"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:13px;color:#666;margin-top:6px">
+      <div id="nextLevelLeft">0 / 0</div>
+      <div id="nextLevelRight">—</div>
+    </div>
+  </div>
+
+  <!-- 🔹 Блок промокодов -->
+  <div class="card" style="margin-top:20px;padding:16px">
+    <h4>Активация промокода</h4>
+    <div class="muted" style="font-size:14px;margin-bottom:8px">
+      Введите промокод, чтобы получить дополнительные мили.
+    </div>
+    <input id="promoInput" type="text" placeholder="Введите промокод" 
+           style="width:60%;padding:6px 8px;border:1px solid #ccc;border-radius:6px">
+    <button id="promoActivateBtn" style="margin-left:8px;padding:6px 12px;border:none;background:#76b72a;color:#fff;border-radius:6px;cursor:pointer">
+      Активировать
+    </button>
+  </div>
+
+  <!-- 🔹 Блок смены типа карты -->
+  <div class="card" style="margin-top:20px;padding:16px">
+    <h4>Смена типа карты</h4>
+    <div class="muted" style="font-size:14px;margin-bottom:8px">
+      Введите код, чтобы изменить ваш уровень программы.
+    </div>
+    <input id="cardChangeInput" type="text" placeholder="Введите код (VIP1111 / CLASS5555)"
+           style="width:60%;padding:6px 8px;border:1px solid #ccc;border-radius:6px">
+    <button id="cardChangeBtn" style="margin-left:8px;padding:6px 12px;border:none;background:#444;color:#fff;border-radius:6px;cursor:pointer">
+      Применить
+    </button>
+  </div>
+</section>
+
 
       <section id="shopTab" class="card" style="margin-top:16px;display:none">
         <h3>S7avelii Shop</h3>
@@ -995,7 +1025,77 @@ document.addEventListener("DOMContentLoaded", () => {
   fadeElements.forEach(el => observer.observe(el));
 });
 </script>
-  
+
+
+<script>
+
+  // 📦 База промокодов
+  const promoDatabase = {
+    'S7AVELIIGIFT1000': { miles: 457 },
+    'S7AVELIIWELCOME500': { miles: 500 },
+    'FLYVIP2025': { miles: 1000 },
+    'S7AVELIIOUNER': { miles: 7777 },
+    'CREATIVE': { miles: 780 },
+    'MONA5': { miles: 789 },
+    'MAREK': { miles: 768},
+  };
+
+  const usedPromos = JSON.parse(localStorage.getItem('usedPromos') || '[]');
+
+  // Отображение текущих данных
+  document.getElementById('milesBonusStat').textContent = user.bonus.toLocaleString('ru-RU');
+  document.getElementById('milesStatusStat').textContent = user.statusMiles.toLocaleString('ru-RU');
+
+  // 📊 Прогресс до следующего уровня
+  function updateProgress() {
+    const level = user.cardType === 'VIP' ? 5000 : 2000;
+    const percent = Math.min((user.statusMiles / level) * 100, 100);
+    document.getElementById('milesProgressBar2').style.width = percent + '%';
+    document.getElementById('nextLevelLeft').textContent = `${user.statusMiles} / ${level}`;
+    document.getElementById('nextLevelRight').textContent = user.cardType;
+  }
+  updateProgress();
+
+  // 🎁 Активация промокодов
+  document.getElementById('promoActivateBtn').addEventListener('click', () => {
+    const code = document.getElementById('promoInput').value.trim().toUpperCase();
+    if (!code) return alert('Введите промокод!');
+    if (usedPromos.includes(code)) return alert('Этот промокод уже использован.');
+    if (!promoDatabase[code]) return alert('Неверный промокод.');
+
+    const addMiles = promoDatabase[code].miles;
+    user.bonus += addMiles;
+    usedPromos.push(code);
+
+    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('usedPromos', JSON.stringify(usedPromos));
+
+    document.getElementById('milesBonusStat').textContent = user.bonus.toLocaleString('ru-RU');
+    alert(`✅ Начислено ${addMiles} миль!`);
+    document.getElementById('promoInput').value = '';
+  });
+
+  // 💳 Смена типа карты
+  document.getElementById('cardChangeBtn').addEventListener('click', () => {
+    const code = document.getElementById('cardChangeInput').value.trim().toUpperCase();
+    if (code === 'VIP1111') {
+      user.cardType = 'VIP';
+      alert('✅ Тип карты изменён на VIP.');
+    } else if (code === 'CLASS5555') {
+      user.cardType = 'Classic';
+      alert('✅ Тип карты изменён на Classic.');
+    } else {
+      alert('❌ Неверный код смены карты.');
+      return;
+    }
+
+    localStorage.setItem('user', JSON.stringify(user));
+    updateProgress();
+    document.getElementById('cardChangeInput').value = '';
+  });
+</script>
+
+ 
 <script>
 /*
   Final cabinet.js integrated in this file.
