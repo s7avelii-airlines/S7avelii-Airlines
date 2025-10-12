@@ -335,10 +335,10 @@
     <div id="userArea"></div>
   </div>
 
-
 <script>
-const API = "https://s7avelii-airlines-1.onrender.com"; // адрес сервера (замени, если другой)
+const API = "https://s7avelii-airlines-1.onrender.com"; // твой сервер Render
 
+// === Проверка токена и отображение пользователя ===
 async function updateUserArea() {
   const userArea = document.getElementById("userArea");
   if (!userArea) return;
@@ -357,24 +357,35 @@ async function updateUserArea() {
     if (!res.ok) throw new Error("Unauthorized");
     const user = await res.json();
 
-    // если токен валидный — показываем аватар/имя
     if (user.avatar) {
       userArea.innerHTML = `
-        <img src="${user.avatar}" alt="avatar"
-          style="width:38px;height:38px;border-radius:50%;object-fit:cover;cursor:pointer;"
-          title="${user.fio}"
-          onclick="window.location.href='cabinet.html'"
-        />
+        <div style="display:flex;align-items:center;gap:8px">
+          <img src="${user.avatar}" alt="avatar"
+            style="width:38px;height:38px;border-radius:50%;object-fit:cover;cursor:pointer;"
+            title="${user.fio}"
+            onclick="window.location.href='cabinet.html'"
+          />
+          <button onclick="logout()" title="Выйти" style="background:none;border:none;color:#777;font-size:14px;cursor:pointer;">⎋</button>
+        </div>
       `;
     } else {
       userArea.innerHTML = `
-        <span title="${user.fio}" 
-          style="cursor:pointer;font-weight:600;color:#2e7d32;"
-          onclick="window.location.href='cabinet.html'">
-          ${user.fio.split(" ")[0]}
-        </span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span title="${user.fio}" 
+            style="cursor:pointer;font-weight:600;color:#2e7d32;"
+            onclick="window.location.href='cabinet.html'">
+            ${user.fio.split(" ")[0]}
+          </span>
+          <button onclick="logout()" title="Выйти" style="background:none;border:none;color:#777;font-size:14px;cursor:pointer;">⎋</button>
+        </div>
       `;
     }
+
+    // Если мы в кабинете — сразу подгружаем профиль
+    if (window.location.pathname.includes("cabinet.html")) {
+      fillProfile(user);
+    }
+
   } catch (err) {
     console.warn("Auth check failed:", err);
     localStorage.removeItem("token");
@@ -382,8 +393,63 @@ async function updateUserArea() {
   }
 }
 
+// === Заполнение профиля в кабинете ===
+function fillProfile(user) {
+  const map = {
+    fioHeader: user.fio,
+    phoneHeader: user.phone,
+    fioField: user.fio,
+    dobField: user.dob || "—",
+    genderField: user.gender || "—",
+    emailField: user.email || "—",
+    phoneField: user.phone || "—",
+    cardField: user.card_number || "—",
+    cardTypeField: user.card_type || "—",
+    bonusMiles: user.bonus_miles || 0
+  };
+  for (const id in map) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = map[id];
+  }
+
+  const progress = Math.min(100, (user.bonus_miles || 0) / 1000 * 100);
+  const bar = document.getElementById("milesProgressBar");
+  if (bar) bar.style.width = progress + "%";
+}
+
+// === Обновление данных профиля ===
+async function saveProfileField(field, value) {
+  const token = localStorage.getItem("token");
+  if (!token) return alert("Не авторизован!");
+
+  try {
+    const res = await fetch(`${API}/api/profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ [field]: value })
+    });
+    if (!res.ok) throw new Error("Ошибка сохранения");
+    const updated = await res.json();
+    fillProfile(updated);
+    alert("Изменения сохранены");
+  } catch (err) {
+    console.error(err);
+    alert("Не удалось сохранить изменения");
+  }
+}
+
+// === Выход ===
+function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "auth.html";
+}
+
 window.addEventListener("DOMContentLoaded", updateUserArea);
 </script>
+
 
 
 <head>
