@@ -571,9 +571,8 @@ nav li:hover .dropdown {
         </div>
       </section>
 
-     <!-- === miles section (S7avelii Priority) === -->
-<section id="milesTab" class="card" style="margin-top:16px;display:none">
-  <h3>Мои мили</h3>
+  <section id="milesTab" class="card" style="margin-top:16px;display:none">
+  <h3>S7avelii Priority</h3>
   <div class="muted">Состояние бонусов и прогресс статуса</div>
 
   <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
@@ -589,16 +588,16 @@ nav li:hover .dropdown {
 
   <div style="margin-top:14px">
     <div class="small-muted">Прогресс до следующего уровня</div>
-    <div class="progress-bg" style="margin-top:8px">
-      <div id="milesProgressBar2" class="progress-fill" style="width:0%"></div>
+    <div class="progress-bg" style="margin-top:8px;height:10px;border-radius:10px;background:#eee;overflow:hidden;">
+      <div id="milesProgressBar2" class="progress-fill" style="width:0%;background:linear-gradient(90deg,#4CAF50,#2196f3);height:100%;transition:width .4s ease"></div>
     </div>
     <div style="display:flex;justify-content:space-between;font-size:13px;color:#666;margin-top:6px">
-      <div id="nextLevelLeft">0 / 0</div>
-      <div id="nextLevelRight">—</div>
+      <div id="nextLevelLeft">0 / 1000</div>
+      <div id="nextLevelRight">Classic</div>
     </div>
   </div>
 
-  <!-- 🔹 Промокод -->
+  <!-- Промокоды -->
   <div class="card" style="margin-top:20px;padding:16px">
     <h4>Активация промокода</h4>
     <input id="promoInput" type="text" placeholder="Введите промокод"
@@ -606,7 +605,7 @@ nav li:hover .dropdown {
     <button id="promoActivateBtn" class="btn" style="margin-left:8px;background:#76b72a">Активировать</button>
   </div>
 
-  <!-- 🔹 Смена карты -->
+  <!-- Смена типа карты -->
   <div class="card" style="margin-top:20px;padding:16px">
     <h4>Смена типа карты</h4>
     <input id="cardChangeInput" type="text" placeholder="Введите код (VIP1111 / CLASS5555)"
@@ -616,25 +615,70 @@ nav li:hover .dropdown {
 </section>
 
 <script>
-// === ПРОМОКОДЫ ===
+// === Конфиг уровней ===
+const LEVELS = [
+  { name: 'Classic', min: 0, max: 1000 },
+  { name: 'Master', min: 1000, max: 5000 },
+  { name: 'Pro', min: 5000, max: 100000 }
+];
+
+// === Промокоды ===
 const PROMOS = {
-  'S7GIFT1000': 1000,
-  'WELCOME500': 500,
-  'VIP2025': 2000
+  'S7aveliiGIFT1000': 500,
+  'WELCOME500': 520,
+  'VIP2025': 2000,
+ 'S7AVELIIOUNER': 5220,
+ 'CREATIV': 1500,
+ 'MON': 1000,
+ 'MARKET': 2000,
+ 'VIDEO2025': 400,
 };
 
+// === Определить уровень по количеству миль ===
+function getLevelByMiles(miles) {
+  for (let i = LEVELS.length - 1; i >= 0; i--) {
+    if (miles >= LEVELS[i].min) return LEVELS[i];
+  }
+  return LEVELS[0];
+}
+
+// === Обновление прогресса ===
+function updateMilesProgress() {
+  const miles = currentUser.status_miles || 0;
+  const level = getLevelByMiles(miles);
+
+  // след. уровень
+  let nextLevel = LEVELS.find(l => l.min > level.min);
+  let max = nextLevel ? nextLevel.min : level.max;
+  let progress = nextLevel ? ((miles - level.min) / (max - level.min)) * 100 : 100;
+
+  document.getElementById('milesStatusStat').textContent = miles;
+  document.getElementById('milesBonusStat').textContent = currentUser.bonus_miles || 0;
+  document.getElementById('milesProgressBar2').style.width = Math.min(progress, 100) + '%';
+  document.getElementById('nextLevelLeft').textContent = `${miles} / ${max}`;
+  document.getElementById('nextLevelRight').textContent = level.name;
+
+  // обновляем тип карты если надо
+  if (currentUser.card_type !== level.name) {
+    apiFetch('/api/profile', { method: 'PUT', body: { card_type: level.name } });
+    currentUser.card_type = level.name;
+    document.getElementById('cardTypeField').textContent = level.name;
+  }
+}
+
+// === Промокоды ===
 async function activatePromo() {
   const code = document.getElementById('promoInput').value.trim().toUpperCase();
   if (!code) return alert('Введите промокод!');
   if (!PROMOS[code]) return alert('Неверный промокод.');
 
-  // Проверяем, не был ли использован
   const used = currentUser.used_promos || [];
   if (used.includes(code)) return alert('Этот промокод уже использован.');
 
   const addMiles = PROMOS[code];
   const payload = {
     bonus_miles: (currentUser.bonus_miles || 0) + addMiles,
+    status_miles: (currentUser.status_miles || 0) + addMiles,
     used_promos: [...used, code]
   };
 
@@ -645,6 +689,7 @@ async function activatePromo() {
     if (updated) {
       currentUser = updated;
       loadProfile();
+      updateMilesProgress();
     }
   } else {
     alert('Ошибка при сохранении.');
@@ -654,7 +699,7 @@ async function activatePromo() {
 
 document.getElementById('promoActivateBtn').addEventListener('click', activatePromo);
 
-// === СМЕНА ТИПА КАРТЫ ===
+// === Смена типа карты ===
 async function changeCardType() {
   const code = document.getElementById('cardChangeInput').value.trim().toUpperCase();
   let newType = null;
@@ -669,6 +714,7 @@ async function changeCardType() {
     if (updated) {
       currentUser = updated;
       loadProfile();
+      updateMilesProgress();
     }
   } else {
     alert('Ошибка при смене типа карты.');
@@ -677,6 +723,13 @@ async function changeCardType() {
 }
 
 document.getElementById('cardChangeBtn').addEventListener('click', changeCardType);
+
+// === Обновлять шкалу при загрузке профиля ===
+const oldLoadProfile = loadProfile;
+loadProfile = function() {
+  oldLoadProfile();
+  updateMilesProgress();
+};
 </script>
 
 
