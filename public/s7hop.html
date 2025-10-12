@@ -370,56 +370,61 @@ window.addEventListener('DOMContentLoaded', updateUserArea);
 <div class="grid" id="productGrid"></div>
 
 <script>
+// === СПИСОК ТОВАРОВ ===
 const products = [
-  { id: '1', title:'Блокнот S7avelii Airlnes', price:'550 ₽', image:'images/photo_5330078908990750485_y.avif', buyLink:'https://t.me/s7aveliishop' },
-  { id: '2', title:'Комбо Блокнот + Футболка', price:'2 350 ₽', image:'images/photo_5330078908990750484_y.avif', buyLink:'https://t.me/s7aveliishop' },
-  { id: '3', title:'Фирменная футболка S7avelii Airlines', price:'1 900 ₽', image:'images/photo_5332515869139530693_y.avif', buyLink:'https://t.me/s7aveliishop' },
-  { id: '4', title:'Комбо Путешественник', price:'4 500 ₽', image:'images/photo_5330078908990750483_y.avif', buyLink:'https://t.me/s7aveliishop' }
+  { id: '1', title:'Блокнот S7avelii Airlines', price: 550, image:'images/photo_5330078908990750485_y.avif', buyLink:'https://t.me/s7aveliishop' },
+  { id: '2', title:'Комбо Блокнот + Футболка', price: 2350, image:'images/photo_5330078908990750484_y.avif', buyLink:'https://t.me/s7aveliishop' },
+  { id: '3', title:'Фирменная футболка S7avelii Airlines', price: 1900, image:'images/photo_5332515869139530693_y.avif', buyLink:'https://t.me/s7aveliishop' },
+  { id: '4', title:'Комбо Путешественник', price: 4500, image:'images/photo_5330078908990750483_y.avif', buyLink:'https://t.me/s7aveliishop' }
 ];
 
 const grid = document.getElementById('productGrid');
 
-products.forEach(p=>{
+// === ГЕНЕРАЦИЯ ТОВАРОВ ===
+products.forEach(p => {
   const card = document.createElement('div');
   card.className = 'card';
   card.innerHTML = `
     <div class="thumb"><img src="${p.image}" alt="${p.title}"></div>
     <div class="title">${p.title}</div>
-    <div class="price">${p.price}</div>
+    <div class="price">${p.price.toLocaleString('ru-RU')} ₽</div>
     <button class="btn btn-buy" onclick="buyProduct('${p.buyLink}')">Купить</button>
-    <button class="btn btn-cart" onclick="addToCart('${p.id}','${p.title}','${p.price}','${p.image}')">В корзину</button>
+    <button class="btn btn-cart" onclick="addToCart('${p.id}','${p.title}',${p.price},'${p.image}')">В корзину</button>
   `;
   grid.appendChild(card);
 });
 
-// Купить → ссылка
+// === ФУНКЦИЯ "КУПИТЬ" ===
 function buyProduct(link){
   window.open(link,'_blank');
 }
 
-// В корзину
-async function addToCart(id,title,price,image){
-  try {
-    const res = await fetch('/api/cart/add',{
-      method:'POST',
-      headers:{ 'Content-Type':'application/json' },
-      credentials:'include',
-      body: JSON.stringify({ id, title, price, image, qty:1 })
-    });
-    if(res.ok){
-      alert('Товар добавлен в корзину!');
-    } else {
-      const data = await res.json();
-      if(res.status===401){
-        alert('Сначала нужно войти или зарегистрироваться');
-        window.location.href='/auth.html';
-      } else alert(data.error || 'Ошибка добавления в корзину');
-    }
-  } catch(e){
-    alert('Ошибка сети');
-  }
+// === КОРЗИНА ===
+function getCart() {
+  return JSON.parse(localStorage.getItem('cart') || '[]');
 }
+
+function saveCart(cart) {
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+// === ДОБАВИТЬ В КОРЗИНУ ===
+function addToCart(id, title, price, image) {
+  let cart = getCart();
+  const existing = cart.find(item => item.id === id);
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({ id, title, price, image, qty: 1 });
+  }
+  saveCart(cart);
+  alert('✅ Товар добавлен в корзину!');
+}
+
+// === ПРОВЕРКА КОРЗИНЫ ===
+console.log('Cart loaded:', getCart());
 </script>
+
 
 <footer class="footer">
   <div class="footer-inner">
