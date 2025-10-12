@@ -1,9 +1,11 @@
 {
   "name": "s7avelii-server",
   "version": "1.0.0",
+  "type": "module",
   "main": "server.js",
-  "type": "commonjs",
-  "scripts": { "start": "node server.js" },
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
