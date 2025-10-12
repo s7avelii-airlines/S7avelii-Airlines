@@ -336,56 +336,46 @@
   </div>
 
 
- <div id="userArea"></div> <!-- сюда выводится кнопка, аватар или имя -->
+ <div id="userArea"></div> <!-- место для кнопки/аватара -->
 </header>
 
 <script>
-const API = "https://your-server.com"; // замени на свой backend
+const API = "https://your-server.com";
 
 async function updateUserArea() {
   const userArea = document.getElementById("userArea");
   const token = localStorage.getItem("token");
 
-  // Если токена нет — показываем кнопку "Вход"
   if (!token) {
     userArea.innerHTML = `<a href="auth.html">Вход</a>`;
     return;
   }
 
   try {
-    // Проверяем токен и получаем профиль
     const res = await fetch(API + "/api/profile", {
-      headers: {
-        "Authorization": "Bearer " + token,
-      },
+      headers: { "Authorization": "Bearer " + token },
     });
 
-    // Если токен недействителен — сбрасываем
     if (!res.ok) throw new Error("unauthorized");
 
     const data = await res.json();
     const user = data.user || data;
 
-    // Отображаем аватар или имя
     if (user.avatar) {
       userArea.innerHTML = `
         <img src="${user.avatar}" alt="avatar"
           style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
-          onclick="window.location.href='cabinet.html'"
-        />
+          onclick="window.location.href='cabinet.html'" />
       `;
     } else {
       const firstName = user.fio ? user.fio.split(" ")[0] : "Профиль";
       userArea.innerHTML = `
         <span style="cursor:pointer;color:#2196f3;font-weight:500;"
-              onclick="window.location.href='cabinet.html'">
-          ${firstName}
-        </span>
+              onclick="window.location.href='cabinet.html'">${firstName}</span>
       `;
     }
 
   } catch (err) {
-    // Ошибка или неавторизован
     console.warn("Auth check failed:", err.message);
     localStorage.removeItem("token");
     userArea.innerHTML = `<a href="auth.html">Вход</a>`;
@@ -394,7 +384,6 @@ async function updateUserArea() {
 
 window.addEventListener("DOMContentLoaded", updateUserArea);
 </script>
-
 
 <head>
 <meta charset="utf-8" />
