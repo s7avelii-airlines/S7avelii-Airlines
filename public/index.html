@@ -334,131 +334,57 @@
     </div>
     <div id="userArea"></div>
   </div>
-
+  
+<div id="userArea"></div> <!-- сюда кнопка/аватар -->
 <script>
-(() => {
-  const API = "https://s7avelii-airlines-1.onrender.com"; // поменяй если нужно
+const API = 'https://s7avelii-airlines-1.onrender.com'; // твой сервер
+const token = localStorage.getItem('token');
 
-  // безопасно получить токен
-  function getToken() {
-    try { return localStorage.getItem('token'); }
-    catch { return null; }
+async function updateUserArea() {
+  const userArea = document.getElementById("userArea");
+
+  if (!token) {
+    userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+    return;
   }
 
-  // простая безопасная функция для вставки (не трогает остальную верстку)
-  function renderLoginLink(container) {
-    container.innerHTML = `<a href="auth.html" style="color:#2196f3;font-weight:600;text-decoration:none">Войти</a>`;
-  }
-
-  function renderUser(container, user) {
-    // user.avatar может быть относительным (/uploads/...) или абсолютным
-    const avatarUrl = user.avatar && (user.avatar.startsWith("http") ? user.avatar : (API + user.avatar));
-    const name = (user.fio && user.fio.split(" ")[0]) || user.email || "Профиль";
-
-    // минимальный, безопасный DOM — избегаем вставки больших фрагментов HTML
-    container.innerHTML = "";
-    const wrap = document.createElement("div");
-    wrap.style.display = "flex";
-    wrap.style.alignItems = "center";
-    wrap.style.gap = "8px";
-
-    const btnLogout = document.createElement("button");
-    btnLogout.type = "button";
-    btnLogout.title = "Выйти";
-    btnLogout.style.background = "none";
-    btnLogout.style.border = "none";
-    btnLogout.style.cursor = "pointer";
-    btnLogout.style.color = "#777";
-    btnLogout.style.fontSize = "14px";
-    btnLogout.textContent = "⎋";
-    btnLogout.addEventListener("click", () => {
-      try { localStorage.removeItem("token"); } catch {}
-      window.location.href = "auth.html";
+  try {
+    const res = await fetch(`${API}/api/profile`, {
+      headers: { 
+        'Authorization': 'Bearer ' + token 
+      }
     });
 
-    if (avatarUrl) {
-      const img = document.createElement("img");
-      img.src = avatarUrl;
-      img.alt = name;
-      img.style.width = "38px";
-      img.style.height = "38px";
-      img.style.borderRadius = "50%";
-      img.style.objectFit = "cover";
-      img.style.cursor = "pointer";
-      img.addEventListener("click", () => window.location.href = "cabinet.html");
-      wrap.appendChild(img);
-      wrap.appendChild(btnLogout);
+    if (!res.ok) throw new Error("Не авторизован");
+
+    const user = await res.json();
+    // Если аватар есть — показываем аватар
+    if (user.avatar) {
+      userArea.innerHTML = `
+        <img src="${user.avatar}" alt="avatar"
+          style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;"
+          onclick="window.location.href='cabinet.html'" 
+        />
+      `;
     } else {
-      const span = document.createElement("span");
-      span.textContent = name;
-      span.style.cursor = "pointer";
-      span.style.fontWeight = "600";
-      span.style.color = "#2e7d32";
-      span.addEventListener("click", () => window.location.href = "cabinet.html");
-      wrap.appendChild(span);
-      wrap.appendChild(btnLogout);
+      // Иначе показываем имя
+      userArea.innerHTML = `
+        <span style="cursor:pointer;color:#2196f3;font-weight:500;" 
+          onclick="window.location.href='cabinet.html'">
+          ${user.fio.split(" ")[0]}
+        </span>
+      `;
     }
-
-    container.appendChild(wrap);
+  } catch (err) {
+    console.error(err);
+    // Если токен невалидный — удаляем и показываем кнопку входа
+    localStorage.removeItem('token');
+    userArea.innerHTML = `<a href="auth.html">Вход</a>`;
   }
+}
 
-  async function updateUserArea() {
-    const container = document.getElementById("userArea");
-    if (!container) return; // ничего не делаем, если элемента нет
-
-    const token = getToken();
-    if (!token) { renderLoginLink(container); return; }
-
-    try {
-      const res = await fetch(API + "/api/profile", {
-        headers: { "Authorization": "Bearer " + token },
-        cache: "no-store"
-      });
-
-      if (res.status === 401) {
-        // токен неверный/протух
-        try { localStorage.removeItem("token"); } catch {}
-        renderLoginLink(container);
-        return;
-      }
-
-      if (!res.ok) {
-        // сервер вернул ошибку — показываем ссылку на вход, но не ломаем страницу
-        console.warn("Profile fetch failed:", res.status);
-        renderLoginLink(container);
-        return;
-      }
-
-      const data = await res.json().catch(()=>null);
-      const user = (data && (data.user || data)) || null;
-      if (!user || (!user.fio && !user.email && !user.phone)) {
-        renderLoginLink(container);
-        return;
-      }
-
-      renderUser(container, user);
-    } catch (err) {
-      console.error("updateUserArea error:", err);
-      // сетевые/прочие ошибки — показываем ссылку на вход, не грешим на верстку
-      renderLoginLink(container);
-    }
-  }
-
-  // запуск после загрузки DOM
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", updateUserArea, { once: true });
-  } else {
-    // уже загружено
-    updateUserArea();
-  }
-
-  // если токен изменился в другом табе — обновим UI
-  window.addEventListener("storage", (e) => {
-    if (e.key === "token") updateUserArea();
-  });
-})();
+window.addEventListener("DOMContentLoaded", updateUserArea);
 </script>
-
 
 <head>
 <meta charset="utf-8" />
