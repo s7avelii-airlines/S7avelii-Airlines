@@ -1026,76 +1026,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-
-<script>
-
-  // 📦 База промокодов
-  const promoDatabase = {
-    'S7AVELIIGIFT1000': { miles: 457 },
-    'S7AVELIIWELCOME500': { miles: 500 },
-    'FLYVIP2025': { miles: 1000 },
-    'S7AVELIIOUNER': { miles: 7777 },
-    'CREATIVE': { miles: 780 },
-    'MONA5': { miles: 789 },
-    'MAREK': { miles: 768},
-  };
-
-  const usedPromos = JSON.parse(localStorage.getItem('usedPromos') || '[]');
-
-  // Отображение текущих данных
-  document.getElementById('milesBonusStat').textContent = user.bonus.toLocaleString('ru-RU');
-  document.getElementById('milesStatusStat').textContent = user.statusMiles.toLocaleString('ru-RU');
-
-  // 📊 Прогресс до следующего уровня
-  function updateProgress() {
-    const level = user.cardType === 'VIP' ? 5000 : 2000;
-    const percent = Math.min((user.statusMiles / level) * 100, 100);
-    document.getElementById('milesProgressBar2').style.width = percent + '%';
-    document.getElementById('nextLevelLeft').textContent = `${user.statusMiles} / ${level}`;
-    document.getElementById('nextLevelRight').textContent = user.cardType;
-  }
-  updateProgress();
-
-  // 🎁 Активация промокодов
-  document.getElementById('promoActivateBtn').addEventListener('click', () => {
-    const code = document.getElementById('promoInput').value.trim().toUpperCase();
-    if (!code) return alert('Введите промокод!');
-    if (usedPromos.includes(code)) return alert('Этот промокод уже использован.');
-    if (!promoDatabase[code]) return alert('Неверный промокод.');
-
-    const addMiles = promoDatabase[code].miles;
-    user.bonus += addMiles;
-    usedPromos.push(code);
-
-    localStorage.setItem('user', JSON.stringify(user));
-    localStorage.setItem('usedPromos', JSON.stringify(usedPromos));
-
-    document.getElementById('milesBonusStat').textContent = user.bonus.toLocaleString('ru-RU');
-    alert(`✅ Начислено ${addMiles} миль!`);
-    document.getElementById('promoInput').value = '';
-  });
-
-  // 💳 Смена типа карты
-  document.getElementById('cardChangeBtn').addEventListener('click', () => {
-    const code = document.getElementById('cardChangeInput').value.trim().toUpperCase();
-    if (code === 'VIP1111') {
-      user.cardType = 'VIP';
-      alert('✅ Тип карты изменён на VIP.');
-    } else if (code === 'CLASS5555') {
-      user.cardType = 'Classic';
-      alert('✅ Тип карты изменён на Classic.');
-    } else {
-      alert('❌ Неверный код смены карты.');
-      return;
-    }
-
-    localStorage.setItem('user', JSON.stringify(user));
-    updateProgress();
-    document.getElementById('cardChangeInput').value = '';
-  });
-</script>
-
- 
 <script>
 /*
   Final cabinet.js integrated in this file.
@@ -1356,6 +1286,192 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 // helper: escape HTML for text nodes
 function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>
+
+<!-- ==== Интегрированный модуль промокодов и смены карты (использует currentUser / apiFetch) ==== -->
+<script>
+(function(){
+  // Тестовая локальная "база" промокодов (замени на серверную валидацию при необходимости)
+  const promoDatabase = {
+      'S7AVELIIGIFT1000': { miles: 457 },
+    'S7AVELIIWELCOME500': { miles: 500 },
+    'FLYVIP2025': { miles: 1000 },
+    'S7AVELIIOUNER': { miles: 7777 },
+    'CREATIVE': { miles: 780 },
+    'MONA5': { miles: 789 },
+    'MAREK': { miles: 768},
+   };
+
+  function getUsedPromos(){ return JSON.parse(localStorage.getItem('usedPromos')||'[]'); }
+  function setUsedPromos(arr){ localStorage.setItem('usedPromos', JSON.stringify(arr)); }
+
+  // helper для безопасного получения currentUser или локального
+  function loadUserView(){
+    const localUser = JSON.parse(localStorage.getItem('user') || 'null');
+    const u = { card_type: 'Classic', bonus_miles: 0, status_miles: 0 };
+    if (window.currentUser && typeof window.currentUser === 'object' && window.currentUser.fio) {
+      u.card_type = window.currentUser.card_type || window.currentUser.cardType || u.card_type;
+      u.bonus_miles = Number(window.currentUser.bonus_miles || window.currentUser.bonus || 0);
+      u.status_miles = Number(window.currentUser.status_miles || window.currentUser.statusMiles || 0);
+      return { source:'server', user: u };
+    } else if (localUser) {
+      u.card_type = localUser.cardType || localUser.card_type || u.card_type;
+      u.bonus_miles = Number(localUser.bonus || localUser.bonus_miles || 0);
+      u.status_miles = Number(localUser.status_miles || localUser.statusMiles || 0);
+      return { source:'local', user: u };
+    } else {
+      // demo default
+      u.card_type = 'Classic';
+      u.bonus_miles = 1158;
+      u.status_miles = 1151;
+      return { source:'demo', user: u };
+    }
+  }
+
+  // обновление UI полей в разделе мили
+  function renderMiles(userObj){
+    document.getElementById('statusLevel') && (document.getElementById('statusLevel').textContent = (userObj.card_type || '—'));
+    document.getElementById('milesBonusStat') && (document.getElementById('milesBonusStat').textContent = (userObj.bonus_miles || 0).toLocaleString('ru-RU'));
+    if (document.getElementById('milesStatusStat')) document.getElementById('milesStatusStat').textContent = (userObj.status_miles || 0).toLocaleString('ru-RU');
+
+    const required = (userObj.card_type === 'VIP') ? 5000 : 5000; // изменяй по правилам
+    const percent = Math.min(100, ((userObj.status_miles||0) / required) * 100);
+    const bar = document.getElementById('milesProgressBar2');
+    if (bar) bar.style.width = percent + '%';
+    const left = document.getElementById('nextLevelLeft');
+    const right = document.getElementById('nextLevelRight');
+    if (left) left.textContent = `${(userObj.status_miles||0).toLocaleString('ru-RU')} / ${required.toLocaleString('ru-RU')}`;
+    if (right) right.textContent = (userObj.card_type || '—') + (userObj.card_type === 'VIP' ? ' Master' : ' Master');
+  }
+
+  // Попытка сохранить изменения: сначала локально, потом на сервер (через apiFetch)
+  async function persistUserChanges(newFields){
+    // обновляем localStorage.user
+    let localUser = JSON.parse(localStorage.getItem('user') || 'null') || {};
+    // применим изменения из newFields на localUser
+    Object.assign(localUser, newFields);
+    localStorage.setItem('user', JSON.stringify(localUser));
+
+    // пытаемся сохранить на сервер, если есть apiFetch
+    if (typeof apiFetch === 'function') {
+      try {
+        // подготовим payload: преобразуем ключи в server naming
+        const payload = {};
+        if ('bonus_miles' in newFields) payload.bonus_miles = newFields.bonus_miles;
+        if ('card_type' in newFields) payload.card_type = newFields.card_type;
+        if ('status_miles' in newFields) payload.status_miles = newFields.status_miles;
+        // вызываем api
+        await apiFetch('/api/profile', { method: 'PUT', body: payload });
+        // после PUT попробуем обновить currentUser из сервера
+        const refreshed = await apiFetch('/api/profile');
+        if (refreshed && refreshed.fio) {
+          currentUser = refreshed;
+          loadProfile();
+          if (typeof updateUserArea === 'function') updateUserArea();
+        }
+      } catch (e) {
+        console.warn('persistUserChanges: server save failed', e);
+      }
+    }
+  }
+
+  // обработчик промокода
+  async function handlePromoActivate(){
+    const input = document.getElementById('promoInput');
+    const msg = document.getElementById('promoMsg');
+    const code = (input.value || '').trim().toUpperCase();
+    msg.style.color = '#444';
+    if (!code) { msg.textContent = 'Введите промокод.'; return; }
+
+    const used = getUsedPromos();
+    if (used.includes(code)) { msg.style.color = '#c0392b'; msg.textContent = 'Этот промокод уже использован.'; return; }
+    if (!promoDatabase[code]) { msg.style.color = '#c0392b'; msg.textContent = 'Неверный промокод.'; return; }
+
+    // начисляем мили
+    const add = promoDatabase[code].miles || 0;
+    // получаем текущие данные
+    const view = loadUserView();
+    view.user.bonus_miles = Number(view.user.bonus_miles || 0) + add;
+
+    // пометка как использованный
+    used.push(code);
+    setUsedPromos(used);
+
+    // обновляем UI
+    renderMiles(view.user);
+    msg.style.color = '#1a7f00';
+    msg.textContent = `Промокод активирован: +${add.toLocaleString('ru-RU')} миль`;
+
+    input.value = '';
+
+    // сохраняем изменения (локально и на сервер)
+    await persistUserChanges({ bonus_miles: view.user.bonus_miles });
+  }
+
+  // обработчик смены карты
+  async function handleCardChange(){
+    const input = document.getElementById('cardChangeInput');
+    const msg = document.getElementById('cardMsg');
+    const code = (input.value || '').trim().toUpperCase();
+    msg.style.color = '#444';
+    if (!code) { msg.textContent = 'Введите код смены карты.'; return; }
+
+    const view = loadUserView();
+    if (code === 'VIP1111') {
+      view.user.card_type = 'VIP';
+      msg.style.color = '#1a7f00';
+      msg.textContent = 'Тип карты изменён на VIP.';
+    } else if (code === 'CLASS5555') {
+      view.user.card_type = 'Classic';
+      msg.style.color = '#1a7f00';
+      msg.textContent = 'Тип карты изменён на Classic.';
+    } else {
+      msg.style.color = '#c0392b';
+      msg.textContent = 'Неверный код смены карты.';
+      return;
+    }
+
+    // обновляем UI и сохраняем
+    renderMiles(view.user);
+    input.value = '';
+    await persistUserChanges({ card_type: view.user.card_type });
+  }
+
+  function attachHandlers(){
+    const promoBtn = document.getElementById('promoActivateBtn');
+    if (promoBtn) promoBtn.addEventListener('click', handlePromoActivate);
+    const cardBtn = document.getElementById('cardChangeBtn');
+    if (cardBtn) cardBtn.addEventListener('click', handleCardChange);
+
+    const promoInput = document.getElementById('promoInput');
+    if (promoInput) promoInput.addEventListener('keydown', (e)=>{ if (e.key === 'Enter') handlePromoActivate(); });
+    const cardInput = document.getElementById('cardChangeInput');
+    if (cardInput) cardInput.addEventListener('keydown', (e)=>{ if (e.key === 'Enter') handleCardChange(); });
+  }
+
+  // инициализация модуля: пытаемся загрузить currentUser (если уже есть), иначе локальные значения
+  async function initMilesModule(){
+    const view = loadUserView();
+    renderMiles(view.user);
+    attachHandlers();
+
+    // если currentUser придёт позже (updateUserArea), хотим обновить UI автоматически
+    let tries = 0;
+    const poll = setInterval(()=>{
+      tries++;
+      if (tries > 12) return clearInterval(poll);
+      if (window.currentUser && window.currentUser.fio) {
+        const v = loadUserView();
+        renderMiles(v.user);
+        clearInterval(poll);
+      }
+    }, 700);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMilesModule);
+  else initMilesModule();
+
+})();
 </script>
 </body>
 </html>
