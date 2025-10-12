@@ -1,79 +1,108 @@
-const express = require("express");
-const cors = require("cors");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv");
-const multer = require("multer");
-const fs = require("fs");
-const path = require("path");
-const { Pool } = require("pg");
+// server.js
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import pkg from "pg";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import multer from "multer";
+import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs";
 
 dotenv.config();
-const app = express();
-app.use(cors());
-app.use(express.json());
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+const { Pool } = pkg;
+const PORT = process.env.PORT || 10000;
+const JWT_SECRET = process.env.JWT_SECRET || "change_this_secret";
 
-// =======================
-// PostgreSQL connection
-// =======================
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// --- База ---
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
 
-// =======================
-// Upload config
-// =======================
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dir = path.join(__dirname, "uploads");
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
-    cb(null, dir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-const upload = multer({ storage });
+pool.connect()
+  .then(c => { console.log("✅ DB connected"); c.release(); })
+  .catch(err => console.error("❌ DB connection error:", err));
 
-// =======================
-// Middleware to verify JWT
-// =======================
-function auth(req, res, next) {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) return res.status(401).json({ error: "Нет токена" });
+// --- Инициализация БД ---
+async function initDB() {
   try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET || "secretkey");
+    await pool.query(`CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      fio TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      phone TEXT UNIQUE,
+      password TEXT NOT NULL,
+      dob DATE,
+      gender TEXT,
+      card_number TEXT,
+      card_type TEXT,
+      avatar TEXT,
+      bonus_miles INTEGER DEFAULT 0,
+      status_miles INTEGER DEFAULT 0
+    )`);
+    console.log("✅ DB initialized");
+  } catch (err) {
+    console.error("DB init failed:", err);
+    throw err;
+  }
+}
+initDB().catch(() => {});
+
+// --- JWT helper ---
+function signToken(userId) {
+  return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: "7d" });
+}
+
+// --- Auth middleware ---
+function authMiddleware(req, res, next) {
+  const h = req.headers.authorization;
+  if (!h) return res.status(401).json({ error: "No token" });
+  const token = h.split(" ")[1];
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    req.userId = payload.id;
     next();
-  } catch {
-    res.status(401).json({ error: "Неверный токен" });
+  } catch (e) {
+    return res.status(401).json({ error: "Invalid token" });
   }
 }
 
-// =======================
-// Routes
-// =======================
+// --- Express ---
+const app = express();
+app.use(cors({ origin: true, credentials: true }));
+app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// --- Multer для аватарки ---
+const upload = multer({ dest: path.join(__dirname, "uploads/") });
+
+// --- Роуты ---
 
 // Регистрация
 app.post("/api/register", async (req, res) => {
   try {
-    const { fio, email, phone, password } = req.body;
-    if (!fio || !email || !phone || !password)
-      return res.status(400).json({ error: "Заполните все поля" });
+    const { fio, email, phone, password, dob, gender, cardNumber, cardType } = req.body;
+    if (!fio || !email || !password) return res.status(400).json({ error: "fio,email,password required" });
 
-    const hashed = await bcrypt.hash(password, 10);
-    const result = await pool.query(
-      "INSERT INTO users (fio, email, phone, password) VALUES ($1, $2, $3, $4) RETURNING id, fio, email, phone",
-      [fio, email, phone, hashed]
+    const exists = await pool.query("SELECT id FROM users WHERE email=$1 OR phone=$2", [email, phone]);
+    if (exists.rows.length) return res.status(400).json({ error: "User exists" });
+
+    const hash = await bcrypt.hash(password, 10);
+    const r = await pool.query(
+      `INSERT INTO users (fio,email,phone,password,dob,gender,card_number,card_type) 
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,
+      [fio, email, phone, hash, dob || null, gender || null, cardNumber || null, cardType || null]
     );
-
-    const user = result.rows[0];
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || "secretkey", { expiresIn: "7d" });
-    res.json({ user, token });
+    const token = signToken(r.rows[0].id);
+    res.json({ token });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Ошибка регистрации" });
+    res.status(500).json({ error: "Registration failed" });
   }
 });
 
@@ -81,82 +110,66 @@ app.post("/api/register", async (req, res) => {
 app.post("/api/login", async (req, res) => {
   try {
     const { identifier, password } = req.body;
-    const result = await pool.query(
+    if (!identifier || !password) return res.status(400).json({ error: "identifier,password required" });
+
+    const r = await pool.query(
       "SELECT * FROM users WHERE email=$1 OR phone=$1",
       [identifier]
     );
-    const user = result.rows[0];
-    if (!user) return res.status(400).json({ error: "Пользователь не найден" });
+    const user = r.rows[0];
+    if (!user) return res.status(400).json({ error: "User not found" });
 
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(400).json({ error: "Неверный пароль" });
+    const ok = await bcrypt.compare(password, user.password);
+    if (!ok) return res.status(400).json({ error: "Wrong password" });
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || "secretkey", { expiresIn: "7d" });
-    res.json({ user, token });
+    const token = signToken(user.id);
+    res.json({ token });
   } catch (err) {
-    res.status(500).json({ error: "Ошибка входа" });
+    console.error(err);
+    res.status(500).json({ error: "Login failed" });
   }
 });
 
 // Получить профиль
-app.get("/api/profile", auth, async (req, res) => {
+app.get("/api/profile", authMiddleware, async (req, res) => {
   try {
-    const result = await pool.query(
-      "SELECT id, fio, email, phone, avatar FROM users WHERE id=$1",
-      [req.user.id]
-    );
-    res.json({ user: result.rows[0] });
-  } catch (err) {
-    res.status(500).json({ error: "Ошибка профиля" });
-  }
-});
-
-// Обновить профиль
-app.put("/api/profile", auth, upload.single("avatar"), async (req, res) => {
-  try {
-    const { fio, email, phone } = req.body;
-    let avatar = null;
-
-    if (req.file) {
-      avatar = `/uploads/${req.file.filename}`;
-      await pool.query("UPDATE users SET avatar=$1 WHERE id=$2", [avatar, req.user.id]);
-    }
-
-    await pool.query(
-      "UPDATE users SET fio=$1, email=$2, phone=$3 WHERE id=$4",
-      [fio, email, phone, req.user.id]
-    );
-
-    const result = await pool.query(
-      "SELECT id, fio, email, phone, avatar FROM users WHERE id=$1",
-      [req.user.id]
-    );
-    res.json({ user: result.rows[0] });
+    const r = await pool.query("SELECT * FROM users WHERE id=$1", [req.userId]);
+    const user = r.rows[0];
+    if (!user) return res.status(404).json({ error: "Not found" });
+    delete user.password;
+    res.json(user);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Ошибка обновления" });
+    res.status(500).json({ error: "Profile error" });
   }
 });
 
-// =======================
-// DB initialization (Render creates table automatically if missing)
-// =======================
-(async () => {
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS users (
-      id SERIAL PRIMARY KEY,
-      fio TEXT,
-      email TEXT UNIQUE,
-      phone TEXT UNIQUE,
-      password TEXT,
-      avatar TEXT
+// Обновление профиля
+app.put("/api/profile", authMiddleware, async (req, res) => {
+  try {
+    const { fio, dob, gender, email, phone, cardNumber, cardType } = req.body;
+    await pool.query(
+      `UPDATE users SET fio=$1,dob=$2,gender=$3,email=$4,phone=$5,card_number=$6,card_type=$7 WHERE id=$8`,
+      [fio, dob, gender, email, phone, cardNumber, cardType, req.userId]
     );
-  `);
-  console.log("✅ База готова");
-})();
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Update failed" });
+  }
+});
 
-// =======================
-// Start server
-// =======================
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Сервер запущен на порту ${PORT}`));
+// Загрузка аватарки
+app.post("/api/profile/avatar", authMiddleware, upload.single("avatar"), async (req, res) => {
+  try {
+    const filePath = "/uploads/" + req.file.filename;
+    await pool.query("UPDATE users SET avatar=$1 WHERE id=$2", [filePath, req.userId]);
+    res.json({ avatar: filePath });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Avatar upload failed" });
+  }
+});
+
+// --- Запуск сервера ---
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
