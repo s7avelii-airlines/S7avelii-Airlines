@@ -335,10 +335,11 @@
     <div id="userArea"></div>
   </div>
   
-<div id="userArea"></div> <!-- сюда кнопка/аватар -->
+<div id="userArea"></div> <!-- сюда только кнопка/аватар -->
+
 <script>
-const API = 'https://s7avelii-airlines-1.onrender.com'; // твой сервер
-const token = localStorage.getItem('token');
+const API = "https://your-render-service.com"; // замени на свой URL сервера
+const token = localStorage.getItem("token");
 
 async function updateUserArea() {
   const userArea = document.getElementById("userArea");
@@ -350,41 +351,37 @@ async function updateUserArea() {
 
   try {
     const res = await fetch(`${API}/api/profile`, {
-      headers: { 
-        'Authorization': 'Bearer ' + token 
-      }
+      headers: { "Authorization": "Bearer " + token }
     });
-
     if (!res.ok) throw new Error("Не авторизован");
+    const data = await res.json();
+    const user = data.user;
 
-    const user = await res.json();
-    // Если аватар есть — показываем аватар
     if (user.avatar) {
       userArea.innerHTML = `
-        <img src="${user.avatar}" alt="avatar"
-          style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;"
-          onclick="window.location.href='cabinet.html'" 
+        <img src="${API}${user.avatar}" alt="avatar"
+          style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
+          onclick="window.location.href='cabinet.html'"
         />
       `;
     } else {
-      // Иначе показываем имя
       userArea.innerHTML = `
-        <span style="cursor:pointer;color:#2196f3;font-weight:500;" 
+        <span style="cursor:pointer;color:#2196f3;font-weight:500;"
           onclick="window.location.href='cabinet.html'">
           ${user.fio.split(" ")[0]}
         </span>
       `;
     }
   } catch (err) {
-    console.error(err);
-    // Если токен невалидный — удаляем и показываем кнопку входа
-    localStorage.removeItem('token');
+    console.log(err);
+    localStorage.removeItem("token"); // токен битый — сброс
     userArea.innerHTML = `<a href="auth.html">Вход</a>`;
   }
 }
 
 window.addEventListener("DOMContentLoaded", updateUserArea);
 </script>
+
 
 <head>
 <meta charset="utf-8" />
