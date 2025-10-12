@@ -530,6 +530,100 @@ nav li:hover .dropdown {
   <div class="grid">
     <div>
       <section id="profileTab" class="card" aria-label="profile">
+
+<!-- Блок уведомления в Телеграме -->
+<div class="telegram-block">
+  <div class="telegram-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#0062ff" viewBox="0 0 24 24">
+      <path d="M12 0C5.373 0 0 5.372 0 12s5.373 12 12 12 12-5.372 12-12S18.627 0 12 0zM9.52 17.52l-.02-.02v.02l-.02-.02-1.06-4.07 8.61-5.38c.39-.25.79.09.63.5l-1.45 5.08c-.09.32-.35.4-.64.24l-2.23-1.42-1.08 1.03c-.12.12-.23.23-.47.23h-.02l-1.69-.16zm0 0" />
+    </svg>
+  </div>
+  <div class="telegram-content">
+    <div class="telegram-title">Уведомления в Телеграме</div>
+    <div class="telegram-text">
+      Получайте важную информацию о полете прямо в мессенджере.
+      Полезно, если вдруг пропустите письмо или пуш
+    </div>
+    <button class="telegram-button">Подписаться</button>
+  </div>
+  <button class="telegram-close">×</button>
+</div>
+
+<style>
+.telegram-block {
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 20px 24px;
+  max-width: 850px;
+  margin: 30px auto;
+  font-family: "Inter", "S7 Sans", Arial, sans-serif;
+}
+
+.telegram-icon {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.telegram-content {
+  flex-grow: 1;
+}
+
+.telegram-title {
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+  font-size: 16px;
+}
+
+.telegram-text {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.telegram-button {
+  background: #f0f3f7;
+  border: 1px solid #d3d8de;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.telegram-button:hover {
+  background: #e5e9ef;
+}
+
+.telegram-close {
+  position: absolute;
+  right: 16px;
+  top: 14px;
+  font-size: 18px;
+  color: #666;
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.telegram-close:hover {
+  color: #000;
+}
+
+body {
+  background: #f5f7fa;
+}
+</style>
+
+       
         <h3>Персональные данные</h3>
 
         <div class="field">
