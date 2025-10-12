@@ -336,40 +336,65 @@
   </div>
 
 
-  <div id="userArea"></div> <!-- сюда только кнопка/аватар -->
+ <div id="userArea"></div> <!-- сюда выводится кнопка, аватар или имя -->
 </header>
+
 <script>
-  async function updateUserArea() {
-    const userArea = document.getElementById("userArea");
+const API = "https://your-server.com"; // замени на свой backend
 
-    try {
-      const res = await fetch("/api/profile");
-      if (!res.ok) throw new Error("Не авторизован");
-      const data = await res.json();
-      const user = data.user;
+async function updateUserArea() {
+  const userArea = document.getElementById("userArea");
+  const token = localStorage.getItem("token");
 
-      if (user.avatar) {
-        userArea.innerHTML = `
-          <img src="${user.avatar}" alt="avatar"
-            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
-            onclick="window.location.href='cabinet.html'" 
-          />
-        `;
-      } else {
-        userArea.innerHTML = `
-          <span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">
-            ${user.fio.split(" ")[0]}
-          </span>
-        `;
-      }
-    } catch (err) {
-      // если не залогинен
-      userArea.innerHTML = `<a href="auth.html">Вход</a>`;
-    }
+  // Если токена нет — показываем кнопку "Вход"
+  if (!token) {
+    userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+    return;
   }
 
-  window.addEventListener("DOMContentLoaded", updateUserArea);
+  try {
+    // Проверяем токен и получаем профиль
+    const res = await fetch(API + "/api/profile", {
+      headers: {
+        "Authorization": "Bearer " + token,
+      },
+    });
+
+    // Если токен недействителен — сбрасываем
+    if (!res.ok) throw new Error("unauthorized");
+
+    const data = await res.json();
+    const user = data.user || data;
+
+    // Отображаем аватар или имя
+    if (user.avatar) {
+      userArea.innerHTML = `
+        <img src="${user.avatar}" alt="avatar"
+          style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;vertical-align:middle;"
+          onclick="window.location.href='cabinet.html'"
+        />
+      `;
+    } else {
+      const firstName = user.fio ? user.fio.split(" ")[0] : "Профиль";
+      userArea.innerHTML = `
+        <span style="cursor:pointer;color:#2196f3;font-weight:500;"
+              onclick="window.location.href='cabinet.html'">
+          ${firstName}
+        </span>
+      `;
+    }
+
+  } catch (err) {
+    // Ошибка или неавторизован
+    console.warn("Auth check failed:", err.message);
+    localStorage.removeItem("token");
+    userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+  }
+}
+
+window.addEventListener("DOMContentLoaded", updateUserArea);
 </script>
+
 
 <head>
 <meta charset="utf-8" />
@@ -542,9 +567,9 @@
   <!-- Слайдер -->
   <div class="relative w-full h-[372px] overflow-hidden">
     <div id="slider" class="absolute w-full h-full">
-      <img src="images/Beige Black Minimalist Event Music Festival Concert Ticket (4).avif" class="w-full h-full object-cover absolute" style="opacity: 1; transition: opacity 1s;">
+      <img src="images/Beige Black Minimalist Event Music Festival Concert Ticket (7).avif" class="w-full h-full object-cover absolute" style="opacity: 1; transition: opacity 1s;">
       <img src="images/Beige Black Minimalist Event Music Festival Concert Ticket (4) (1).avif" class="w-full h-full object-cover absolute" style="opacity: 0; transition: opacity 1s;">
-      <img src="images/Beige Black Minimalist Event Music Festival Concert Ticket (2).avif" class="w-full h-full object-cover absolute" style="opacity: 0; transition: opacity 1s;">
+      <img src="images/2025-10-11_13-39-34.avif" class="w-full h-full object-cover absolute" style="opacity: 0; transition: opacity 1s;">
       <img src="images/Beige Black Minimalist Event Music Festival Concert Ticket (1).avif" class="w-full h-full object-cover absolute" style="opacity: 0; transition: opacity 1s;">
     </div>
 
