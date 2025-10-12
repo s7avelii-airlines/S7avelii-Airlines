@@ -98,16 +98,18 @@ input, select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d
 
 <script>
 const API = 'https://s7avelii-airlines-1.onrender.com';
-const loginForm = document.getElementById('loginForm');
-const registerForm = document.getElementById('registerForm');
-const switchBtn = document.getElementById('switchBtn');
-const switchText = document.getElementById('switchText');
-const title = document.getElementById('title');
-const loginError = document.getElementById('loginError');
-const regError = document.getElementById('regError');
-const regSuccess = document.getElementById('regSuccess');
 
+// --- Показ форм ---
 function showForm(showLogin){
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
+  const title = document.getElementById('title');
+  const switchText = document.getElementById('switchText');
+  const switchBtn = document.getElementById('switchBtn');
+  const loginError = document.getElementById('loginError');
+  const regError = document.getElementById('regError');
+  const regSuccess = document.getElementById('regSuccess');
+  
   if(showLogin){
     loginForm.classList.remove('hidden');
     registerForm.classList.add('hidden');
@@ -123,22 +125,64 @@ function showForm(showLogin){
   }
   loginError.textContent=''; regError.textContent=''; regSuccess.textContent='';
 }
-switchBtn.addEventListener('click', e=>{ e.preventDefault(); showForm(loginForm.classList.contains('hidden')); });
-
-// === Автологин ===
-window.addEventListener('DOMContentLoaded', async ()=>{
-  const token = localStorage.getItem('token');
-  if(token){
-    try{
-      const res = await fetch(`${API}/api/profile`, { headers:{'Authorization':'Bearer '+token} });
-      if(res.ok) window.location.href='cabinet.html';
-    }catch{}
-  }
+document.getElementById('switchBtn').addEventListener('click', e=>{
+  e.preventDefault(); 
+  showForm(document.getElementById('loginForm').classList.contains('hidden'));
 });
 
+// --- Автологин / пользователь в шапке ---
+async function updateUserArea() {
+  const userArea = document.getElementById('userArea');
+  const token = localStorage.getItem('token');
+  if(!token){
+    userArea.innerHTML = `<a href="auth.html" style="color:#2196f3;font-weight:600">Вход</a>`;
+    return;
+  }
+  try{
+    const res = await fetch(`${API}/api/profile`, { headers:{'Authorization':'Bearer '+token} });
+    if(!res.ok) throw new Error('Unauthorized');
+    const data = await res.json();
+    const user = data.user || data;
+
+    userArea.innerHTML = '';
+    const wrap = document.createElement('div');
+    wrap.style.display='flex';
+    wrap.style.alignItems='center';
+    wrap.style.gap='8px';
+
+    if(user.avatar){
+      const img = document.createElement('img');
+      img.src = user.avatar.startsWith('http') ? user.avatar : API+user.avatar;
+      img.alt = user.fio || user.email || "User";
+      img.style.width = '36px';
+      img.style.height = '36px';
+      img.style.borderRadius = '50%';
+      img.style.objectFit = 'cover';
+      img.style.cursor = 'pointer';
+      img.addEventListener('click', ()=>window.location.href='cabinet.html');
+      wrap.appendChild(img);
+    } else {
+      const span = document.createElement('span');
+      span.textContent = user.fio ? user.fio.split(' ')[0] : user.email;
+      span.style.cursor='pointer';
+      span.style.color='#2196f3';
+      span.style.fontWeight='600';
+      span.addEventListener('click', ()=>window.location.href='cabinet.html');
+      wrap.appendChild(span);
+    }
+
+    userArea.appendChild(wrap);
+  }catch{
+    localStorage.removeItem('token');
+    userArea.innerHTML = `<a href="auth.html" style="color:#2196f3;font-weight:600">Вход</a>`;
+  }
+}
+
 // --- Login ---
-loginForm.addEventListener('submit', async e=>{
-  e.preventDefault(); loginError.textContent='';
+document.getElementById('loginForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const loginError = document.getElementById('loginError');
+  loginError.textContent='';
   const identifier = document.getElementById('loginIdentifier').value.trim();
   const password = document.getElementById('loginPassword').value;
   if(!identifier){ loginError.textContent='Введите телефон или Email'; return; }
@@ -152,13 +196,18 @@ loginForm.addEventListener('submit', async e=>{
     const data = await res.json();
     if(!res.ok){ loginError.textContent = data.error || 'Ошибка входа'; return; }
     localStorage.setItem('token', data.token);
+    updateUserArea(); // сразу показываем аватар
     window.location.href='cabinet.html';
-  }catch(err){ console.error(err); loginError.textContent='Ошибка сети. Проверь сервер и CORS.'; }
+  }catch(err){ console.error(err); loginError.textContent='Ошибка сети'; }
 });
 
 // --- Register ---
-registerForm.addEventListener('submit', async e=>{
-  e.preventDefault(); regError.textContent=''; regSuccess.textContent='';
+document.getElementById('registerForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const regError = document.getElementById('regError');
+  const regSuccess = document.getElementById('regSuccess');
+  regError.textContent=''; regSuccess.textContent='';
+
   const fio = document.getElementById('regFio').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const phone = document.getElementById('regPhone').value.trim();
@@ -167,10 +216,12 @@ registerForm.addEventListener('submit', async e=>{
   const gender = document.getElementById('regGender').value || null;
   const cardNumber = document.getElementById('regCard').value.trim();
   const cardType = document.querySelector('input[name="regCardType"]:checked')?.value || 'None';
+
   if(!fio){ regError.textContent='Введите ФИО'; return; }
   if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ regError.textContent='Введите корректный email'; return; }
   if(!phone){ regError.textContent='Введите телефон'; return; }
   if(!password || password.length<6){ regError.textContent='Пароль должен быть не менее 6 символов'; return; }
+
   try{
     const res = await fetch(`${API}/api/register`, {
       method:'POST',
@@ -181,9 +232,14 @@ registerForm.addEventListener('submit', async e=>{
     if(!res.ok){ regError.textContent=data.error || 'Ошибка регистрации'; return; }
     localStorage.setItem('token', data.token);
     regSuccess.textContent='Регистрация успешна — перенаправляем...';
+    updateUserArea();
     setTimeout(()=>window.location.href='cabinet.html',700);
-  }catch(err){ console.error(err); regError.textContent='Ошибка сети. Проверь сервер и CORS.'; }
+  }catch(err){ console.error(err); regError.textContent='Ошибка сети'; }
 });
+
+// --- Инициализация ---
+window.addEventListener('DOMContentLoaded', updateUserArea);
 </script>
+
 </body>
 </html>
