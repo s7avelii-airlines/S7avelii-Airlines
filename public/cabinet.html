@@ -173,6 +173,102 @@
     .profile-avatar{width:80px;height:80px}
     .page{margin-top:140px}
   }
+
+.miles-card {
+  background: #f8fafd;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  max-width: 600px;
+  margin-top: 20px;
+}
+.miles-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.miles-level {
+  font-size: 28px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.miles-sub {
+  color: #6c757d;
+  font-size: 14px;
+}
+.miles-level.classic { color: #555; }
+.miles-level.master { color: #55aa33; }
+.miles-level.pro {
+  background: linear-gradient(90deg,#c9a94b,#f7d97b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.miles-bonus span:first-child {
+  font-size: 26px;
+  font-weight: 700;
+  color: #2d7a2d;
+}
+.miles-bonus .label {
+  font-size: 13px;
+  color: #6c757d;
+  display: block;
+}
+
+.progress-container { margin-top: 20px; }
+.progress-bar {
+  height: 14px;
+  border-radius: 8px;
+  background: #e6ebf1;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  transition: width 0.8s ease;
+  border-radius: 8px;
+}
+.progress-fill.classic { background: linear-gradient(90deg,#a0a0a0,#d0d0d0); }
+.progress-fill.master { background: linear-gradient(90deg,#6fd13d,#4da72a); }
+.progress-fill.pro { background: linear-gradient(90deg,#c9a94b,#f1d37a); }
+
+.progress-label {
+  text-align: right;
+  font-size: 13px;
+  color: #6c757d;
+  margin-top: 4px;
+}
+
+.miles-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  color: #444;
+}
+
+.promo {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+}
+.promo input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+.promo .btn {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.promo .btn:hover { background: #0069d9; }
+
 </style>
 </head>
 <body>
@@ -317,55 +413,40 @@
         </div>
       </div>
 
-      <!-- bonus area -->
-      <div style="margin-top:18px;display:grid;grid-template-columns:2fr 1fr;gap:12px">
-        <div style="background:#fff;border-radius:10px;padding:12px;box-shadow:0 6px 20px rgba(16,24,40,0.06)">
-          <div class="small-muted">Бонусные мили</div>
-          <div id="milesBonusStat" style="font-size:20px;font-weight:700;margin-top:6px">0</div>
-        </div>
-        <div style="background:#fff;border-radius:10px;padding:12px;box-shadow:0 6px 20px rgba(16,24,40,0.06)">
-          <div class="small-muted">Статус миль</div>
-          <div id="milesStatusStat" style="font-size:20px;font-weight:700;margin-top:6px">0</div>
-          <div class="small-muted" style="margin-top:8px">Уровень: <span id="statusLevel">—</span></div>
-        </div>
+      <section id="myMiles" style="display:none">
+  <h2>Мои мили</h2>
+
+  <div class="miles-card">
+    <div class="miles-header">
+      <div>
+        <div class="miles-level" id="milesLevel">Classic</div>
+        <div class="miles-sub">Ваш статус</div>
       </div>
-    </section>
-
-    <!-- Promo & shop / preserved original layout -->
-    <section class="card p-6">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
-        <div>
-          <h3 style="margin:0 0 8px 0;font-weight:600">Активировать промокод</h3>
-          <div style="margin-top:8px;display:flex;gap:8px">
-            <input id="promoInput" class="input-inline" style="flex:1;padding:8px;border-radius:8px;border:1px solid #e6e6e6" placeholder="Введите код промокода">
-            <button id="promoActivateBtn" class="btn" style="background:rgba(139,197,64,0.08);color:#0f1724;border:1px solid transparent">Активировать</button>
-          </div>
-          <div id="promoMsg" class="small-muted" style="margin-top:8px">&nbsp;</div>
-
-          <div style="margin-top:16px">
-            <h3 style="margin:0 0 8px 0;font-weight:600">Смена карты</h3>
-            <div style="display:flex;gap:8px">
-              <input id="cardChangeInput" class="input-inline" style="flex:1;padding:8px;border-radius:8px;border:1px solid #e6e6e6" placeholder="Код смены карты">
-              <button id="cardChangeBtn" class="btn" style="background:rgba(139,197,64,0.08);color:#0f1724;border:0">Применить</button>
-            </div>
-            <div id="cardMsg" class="small-muted" style="margin-top:8px">&nbsp;</div>
-          </div>
-        </div>
-
-        <div>
-          <h3 style="margin:0 0 8px 0;font-weight:600">Магазин / Корзина</h3>
-          <div id="productGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px"></div>
-          <div style="margin-top:12px;overflow:auto">
-            <table id="cartTable" style="width:100%;border-collapse:collapse;font-size:14px">
-              <thead style="color:#6b7280"><tr><th style="text-align:left;padding:8px;border-bottom:1px solid #eee">Товар</th><th style="padding:8px;border-bottom:1px solid #eee">Цена</th><th style="padding:8px;border-bottom:1px solid #eee">Кол-во</th><th style="padding:8px;border-bottom:1px solid #eee">Итог</th><th style="padding:8px;border-bottom:1px solid #eee"></th></tr></thead>
-              <tbody></tbody>
-            </table>
-            <div style="margin-top:8px;text-align:right;font-weight:700">Итого: <span id="cartTotal">0 ₽</span></div>
-            <div style="margin-top:8px;text-align:right"><button class="btn" style="background:#0f62d1">Оформить заказ</button></div>
-          </div>
-        </div>
+      <div class="miles-bonus">
+        <span id="milesBonus">0</span>
+        <span class="label">бонусных миль</span>
       </div>
-    </section>
+    </div>
+
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div id="milesProgressFill" class="progress-fill"></div>
+      </div>
+      <div id="milesProgressLabel" class="progress-label">0 / 1 000</div>
+    </div>
+
+    <div class="miles-details">
+      <div>Статусных миль: <b id="milesStatus">0</b></div>
+      <div>Полётов: <b id="milesFlights">0</b></div>
+    </div>
+
+    <div class="promo">
+      <input type="text" id="promoInput" placeholder="Введите промокод">
+      <button class="btn" onclick="applyPromo()">Активировать</button>
+    </div>
+  </div>
+</section>
+
 
   </main>
 
@@ -619,7 +700,68 @@
     window.changeQty = changeQty;
     window.checkout = checkout;
     window.logout = logout;
-  </script>
+ 
+  // === МОИ МИЛИ ===
+function calcLevel(miles) {
+  if (miles < 1000) return 'Classic';
+  if (miles < 7000) return 'Master';
+  return 'Pro';
+}
+function levelTarget(level) {
+  if (level === 'Classic') return 1000;
+  if (level === 'Master') return 7000;
+  return 100000;
+}
+
+async function loadMiles() {
+  if (!currentUser) return;
+
+  const bonus = currentUser.bonus_miles || 0;
+  const status = currentUser.status_miles || 0;
+  const flights = currentUser.flights || 0;
+
+  const level = calcLevel(status);
+  const fill = document.getElementById('milesProgressFill');
+  const lvl = document.getElementById('milesLevel');
+
+  document.getElementById('milesBonus').textContent = bonus.toLocaleString();
+  document.getElementById('milesStatus').textContent = status.toLocaleString();
+  document.getElementById('milesFlights').textContent = flights;
+  lvl.textContent = level;
+
+  lvl.className = 'miles-level ' + level.toLowerCase();
+  fill.className = 'progress-fill ' + level.toLowerCase();
+
+  const target = levelTarget(level);
+  const progress = Math.min(100, (status / target) * 100);
+  fill.style.width = progress + '%';
+  document.getElementById('milesProgressLabel').textContent =
+    `${status.toLocaleString()} / ${target.toLocaleString()}`;
+}
+
+async function applyPromo() {
+  const code = document.getElementById('promoInput').value.trim();
+  if (!code) return alert('Введите промокод');
+
+  const res = await apiFetch('/api/promo', { method: 'POST', body: { code } });
+  if (res && res.added) {
+    alert(`Промокод активирован! +${res.added} миль`);
+    const updated = await apiFetch('/api/profile');
+    if (updated) {
+      currentUser = updated;
+      loadProfile();
+      loadMiles();
+    }
+  } else {
+    alert(res?.error || 'Неверный или уже использованный промокод');
+  }
+}
+
+// Автоматическая загрузка милей
+window.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('myMiles')) loadMiles();
+});
+ </script>
 </div> <!-- /page -->
 </body>
 </html>
