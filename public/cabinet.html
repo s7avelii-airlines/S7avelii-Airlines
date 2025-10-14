@@ -1,4 +1,246 @@
-  <!-- === Остальной контент страницы (сохранён и слегка отформатирован) === -->
+
+
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S7avelii | Профиль</title>
+<link rel="icon" href="images/favicon.png" type="image/png">
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+  :root{
+    --s7-green: #8bc540;
+    --muted: #7b8794;
+    --bg: #f3f6f8;
+  }
+  /* Reset & base */
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: 'Roboto', Inter, Arial, sans-serif;
+    background: var(--bg);
+    color: #1f2937;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  /* Site header (top nav) - preserved minimal */
+  .site-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 24px;
+    background:#fff;
+    border-bottom:1px solid #e6e6e6;
+    position:fixed;
+    top:0;left:0;right:0;
+    z-index:1000;
+  }
+  .site-header .logo-img{height:46px}
+
+  /* Page container */
+  .page {
+    max-width:1180px;
+    margin:120px auto 40px; /* leave space for fixed header */
+    padding:0 20px;
+  }
+
+  /* === NEW: Profile header (1:1 from screenshot) === */
+  .full-header{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    background:#fff;
+    border-radius:12px;
+    padding:18px 20px;
+    box-shadow:0 8px 30px rgba(16,24,40,0.06);
+    position:relative;
+    overflow:hidden;
+  }
+
+  /* left: avatar */
+  .profile-left{
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .profile-avatar {
+    width:96px;
+    height:96px;
+    border-radius:999px;
+    overflow:hidden;
+    flex-shrink:0;
+    border:4px solid #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    background:linear-gradient(180deg, #f7f7f7, #eee);
+    cursor:pointer;
+  }
+  .profile-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+
+  .profile-identity {
+    display:flex;
+    flex-direction:column;
+  }
+  .profile-identity .name-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .fio-title {
+    font-size:20px;
+    font-weight:600;
+    color:#0f1724;
+    margin:0;
+  }
+  .member-number {
+    font-size:13px;
+    color:var(--muted);
+    margin-top:2px;
+  }
+
+  /* level badge */
+  .level-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:6px 10px;
+    border-radius:999px;
+    background:rgba(139,197,64,0.09);
+    color:var(--s7-green);
+    font-weight:600;
+    font-size:13px;
+    border:1px solid rgba(139,197,64,0.12);
+  }
+
+  /* right: stats */
+  .profile-stats {
+    margin-left:auto;
+    display:flex;
+    gap:18px;
+    align-items:center;
+    min-width:260px;
+    justify-content:flex-end;
+  }
+  .stat {
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    min-width:90px;
+  }
+  .stat .label { font-size:12px;color:var(--muted) }
+  .stat .value { font-size:18px;font-weight:700;color:#0f1724;margin-top:6px }
+
+  /* compact progress bar under stats */
+  .stat-progress {
+    width:100%;
+    margin-top:8px;
+  }
+  .progress-bg{width:100%;height:10px;background:#f0f2f4;border-radius:999px;overflow:hidden}
+  .progress-fill{height:100%;width:0;background:var(--s7-green);transition:width .6s ease}
+
+  /* tabs (right under header) */
+  .tabs{
+    margin-top:16px;
+    display:flex;
+    gap:12px;
+    padding:12px 6px;
+    border-bottom:1px solid rgba(0,0,0,0.04);
+    overflow-x:auto;
+  }
+  .tabs a{
+    padding:10px 14px;
+    border-radius:8px;
+    text-decoration:none;
+    color:#495057;
+    font-weight:500;
+  }
+  .tabs a.active{
+    color:var(--s7-green);
+    background: rgba(139,197,64,0.06);
+  }
+
+  /* small helpers */
+  .small-muted{ color:var(--muted); font-size:13px }
+  .btn { background:var(--s7-green); color:#fff; padding:8px 12px;border-radius:8px;border:0;cursor:pointer }
+
+  /* responsive */
+  @media (max-width:980px){
+    .full-header{flex-direction:column;align-items:flex-start;gap:12px;padding:16px}
+    .profile-stats{width:100%;justify-content:space-between;margin-left:0}
+    .profile-avatar{width:80px;height:80px}
+    .page{margin-top:140px}
+  }
+</style>
+</head>
+<body>
+
+<!-- preserved top site header (minimal, keeps your nav) -->
+<div class="site-header">
+  <div style="display:flex;align-items:center;gap:16px">
+    <a href="index.html"><img class="logo-img" src="images/1757683264306.avif" alt="S7avelii"></a>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <!-- keep existing user area placeholder -->
+    <div id="userArea"></div>
+  </div>
+</div>
+
+<div class="page">
+  <!-- ===== REPLACED: New full-header (profile top) - fills data from JS IDs ===== -->
+  <div class="full-header" id="profileHeaderNew">
+    <div class="profile-left">
+      <label for="avatarInput" title="Нажмите чтобы загрузить фото" class="profile-avatar" id="avatarLabel">
+        <img id="avatar" src="https://via.placeholder.com/150" alt="avatar">
+      </label>
+      <input id="avatarInput" type="file" accept="image/*" style="display:none">
+
+      <div class="profile-identity">
+        <div class="name-row">
+          <h1 id="fioHeader" class="fio-title">Загрузка...</h1>
+          <div id="levelBadgeWrap" style="display:flex;align-items:center">
+            <span id="levelBadge" class="level-badge" style="display:none">Classic</span>
+          </div>
+        </div>
+        <div class="member-number" id="memberNumber">—</div>
+      </div>
+    </div>
+
+    <div class="profile-stats" aria-hidden="false">
+      <div class="stat">
+        <div class="label">Бонусные мили</div>
+        <div id="bonusMiles" class="value">—</div>
+      </div>
+
+      <div class="stat">
+        <div class="label">Статусные мили</div>
+        <div id="statusMiles" class="value">—</div>
+      </div>
+
+      <div class="stat" style="text-align:right">
+        <div class="label">Полёты</div>
+        <div id="flightsCount" class="value">—</div>
+        <div class="stat-progress" style="width:140px">
+          <div class="progress-bg" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+            <div id="milesProgressBar" class="progress-fill" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs: kept same style but under new header -->
+  <nav class="tabs" role="tablist" aria-label="tabs">
+    <a class="active" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
+    <a data-tab="milesTab" onclick="showTab(event)">Мои мили</a>
+    <a data-tab="shopTab" onclick="showTab(event)">S7avelii Shop</a>
+    <a data-tab="settingsTab" onclick="showTab(event)">Настройки</a>
+  </nav>
+
   <main class="max-w-6xl mx-auto px-0 mt-6 grid grid-cols-1 gap-6">
     <!-- Telegram notice -->
     <div class="card p-5" style="display:flex;align-items:center;justify-content:space-between">
