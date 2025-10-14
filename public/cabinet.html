@@ -571,29 +571,31 @@ nav li:hover .dropdown {
         </div>
       </section>
 
-      <section id="milesTab" class="card" style="margin-top:16px;display:none">
-        <h3>Мои мили</h3>
-        <div class="muted">Состояние бонусов и прогресс статуса</div>
-        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
-          <div class="card" style="flex:1;min-width:200px">
-            <div class="small-muted">Бонусные мили</div>
-            <div style="font-weight:700;font-size:20px" id="milesBonusStat">—</div>
-          </div>
-          <div class="card" style="flex:1;min-width:200px">
-            <div class="small-muted">Статусные мили</div>
-            <div style="font-weight:700;font-size:20px" id="milesStatusStat">—</div>
-          </div>
-        </div>
+     <section id="miles">
+  <div class="miles-card">
+    <div class="miles-header">
+      <div id="userLevel" class="level-badge">Мои мили</div>
+    </div>
 
-        <div style="margin-top:14px">
-          <div class="small-muted">Прогресс до следующего уровня</div>
-          <div class="progress-bg" style="margin-top:8px"><div id="milesProgressBar2" class="progress-fill" style="width:0%"></div></div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:#666;margin-top:6px">
-            <div id="nextLevelLeft">0 / 0</div>
-            <div id="nextLevelRight">—</div>
-          </div>
+    <div class="miles-body">
+      <div class="miles-value" id="bonusMilesDisplay">0</div>
+      <div class="miles-label">Бонусные мили</div>
+
+      <div class="progress-container">
+        <div class="progress-bg">
+          <div id="milesProgressFill" class="progress-fill"></div>
         </div>
-      </section>
+        <div class="progress-text" id="progressText">0 / 1000 до Master</div>
+      </div>
+
+      <div class="promo-block">
+        <input type="text" id="promoInput" placeholder="Введите промокод">
+        <button class="btn" id="promoBtn">Активировать</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       <section id="shopTab" class="card" style="margin-top:16px;display:none">
         <h3>S7avelii Shop</h3>
@@ -1256,6 +1258,61 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 // helper: escape HTML for text nodes
 function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+ function updateMilesSection() {
+  if (!currentUser) return;
+
+  const miles = currentUser.bonus_miles || 0;
+  const levelBadge = document.getElementById("userLevel");
+  const milesFill = document.getElementById("milesProgressFill");
+  const milesDisplay = document.getElementById("bonusMilesDisplay");
+  const progressText = document.getElementById("progressText");
+
+  milesDisplay.textContent = miles.toLocaleString();
+
+  let level = "Base";
+  let next = 1000;
+  let colorClass = "level-base";
+  let progress = miles / 1000 * 100;
+
+  if (miles >= 1000 && miles < 7000) {
+    level = "Master";
+    next = 7000;
+    colorClass = "level-master";
+    progress = ((miles - 1000) / (7000 - 1000)) * 100;
+  } else if (miles >= 7000) {
+    level = "Pro";
+    next = 100000;
+    colorClass = "level-pro";
+    progress = Math.min(100, ((miles - 7000) / (100000 - 7000)) * 100);
+  }
+
+  levelBadge.textContent = level;
+  levelBadge.className = `level-badge ${colorClass}`;
+  milesFill.style.width = `${progress}%`;
+
+  const nextLevelName = level === "Base" ? "Master" :
+                        level === "Master" ? "Pro" : "MAX";
+  progressText.textContent = `${miles.toLocaleString()} / ${next.toLocaleString()} до ${nextLevelName}`;
+}
+
+// Промокод
+document.getElementById('promoBtn').addEventListener('click', async () => {
+  const code = document.getElementById('promoInput').value.trim();
+  if (!code) return alert('Введите промокод');
+  const res = await apiFetch('/api/promo', { method: 'POST', body: { code } });
+  if (res && res.success) {
+    alert('Промокод успешно активирован! + ' + res.bonus + ' миль');
+    currentUser.bonus_miles = (currentUser.bonus_miles || 0) + res.bonus;
+    updateMilesSection();
+  } else alert(res?.error || 'Неверный промокод');
+});
+
+// вызывать после загрузки профиля
+window.addEventListener('DOMContentLoaded', () => {
+  if (currentUser) updateMilesSection();
+});
+
 </script>
 </body>
 </html>
