@@ -571,30 +571,53 @@ nav li:hover .dropdown {
         </div>
       </section>
 
-     <section id="miles">
-  <div class="miles-card">
-    <div class="miles-header">
-      <div id="userLevel" class="level-badge">Мои мили</div>
-    </div>
+    <section id="milesTab" class="card" style="margin-top:16px;display:none">
+        <h3>Мои мили</h3>
+        <div class="muted">Состояние бонусов и прогресс статуса</div>
 
-    <div class="miles-body">
-      <div class="miles-value" id="bonusMilesDisplay">0</div>
-      <div class="miles-label">Бонусные мили</div>
-
-      <div class="progress-container">
-        <div class="progress-bg">
-          <div id="milesProgressFill" class="progress-fill"></div>
+        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+          <div class="card" style="flex:1;min-width:200px">
+            <div class="small-muted">Бонусные мили</div>
+            <div style="font-weight:700;font-size:20px" id="milesBonusStat">—</div>
+          </div>
+          <div class="card" style="flex:1;min-width:200px">
+            <div class="small-muted">Статусные мили</div>
+            <div style="font-weight:700;font-size:20px" id="milesStatusStat">—</div>
+          </div>
         </div>
-        <div class="progress-text" id="progressText">0 / 1000 до Master</div>
-      </div>
 
-      <div class="promo-block">
-        <input type="text" id="promoInput" placeholder="Введите промокод">
-        <button class="btn" id="promoBtn">Активировать</button>
-      </div>
-    </div>
-  </div>
-</section>
+        <div style="margin-top:14px">
+          <div class="small-muted">Прогресс до следующего уровня</div>
+          <div class="progress-bg" style="margin-top:8px;height:12px;border-radius:10px">
+            <div id="milesProgressBar2" class="progress-fill" style="width:0%;height:100%;background:linear-gradient(90deg,#9cc42f,#6dbf2a)"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:#666;margin-top:6px">
+            <div id="nextLevelLeft">0 / 1000</div>
+            <div id="nextLevelRight">Classic</div>
+          </div>
+        </div>
+
+        <!-- Промокод -->
+        <div class="card" style="margin-top:20px;padding:14px">
+          <h4 style="margin:0 0 8px 0">Активация промокода</h4>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="promoInput" type="text" placeholder="Введите промокод" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:8px">
+            <button id="promoActivateBtn" class="btn" style="white-space:nowrap">Активировать</button>
+          </div>
+          <div class="small-muted" style="margin-top:8px;font-size:13px">Промокод можно использовать один раз.</div>
+        </div>
+
+        <!-- Смена типа карты -->
+        <div class="card" style="margin-top:20px;padding:14px">
+          <h4 style="margin:0 0 8px 0">Смена типа карты</h4>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="cardChangeInput" type="text" placeholder="Введите код (VIP1111 / CLASS5555)" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:8px">
+            <button id="cardChangeBtn" class="btn secondary" style="white-space:nowrap">Применить</button>
+          </div>
+          <div class="small-muted" style="margin-top:8px;font-size:13px">Коды: <strong>VIP1111</strong> → VIP, <strong>CLASS5555</strong> → Classic</div>
+        </div>
+      </section>
+
 
 
       <section id="shopTab" class="card" style="margin-top:16px;display:none">
@@ -609,22 +632,31 @@ nav li:hover .dropdown {
       </section>
     </div>
 
-    <aside>
-      <section class="card">
-        <h3>Корзина</h3>
-        <table class="cart-table" id="cartTable">
-          <thead><tr><th>Товар</th><th>Цена</th><th></th></tr></thead>
-          <tbody></tbody>
-        </table>
-        <div style="margin-top:12px;display:flex;justify-content:space-between;font-weight:600">
-          <span>Итого:</span>
-          <span id="cartTotal">0 ₽</span>
-        </div>
-        <button class="btn" style="width:100%;margin-top:12px" onclick="checkout()">Оформить</button>
-      </section>
-    </aside>
+    <section id="shopTab" class="card" style="margin-top:16px;display:none">
+  <h3>Корзина</h3>
+  <div class="muted">Ваши выбранные товары</div>
+
+  <div id="cartContainer" style="margin-top:16px">
+    <table class="cart-table" id="cartTable">
+      <thead>
+        <tr>
+          <th>Товар</th>
+          <th>Цена</th>
+          <th>Количество</th>
+          <th>Сумма</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
-</div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px">
+    <div class="muted" style="font-size:15px">Итого: <span id="cartTotal" style="font-weight:600">0 ₽</span></div>
+    <button class="btn" onclick="checkout()">Оформить заказ</button>
+  </div>
+</section>
+
 
 <footer class="footer">
   <div class="footer-inner">
@@ -998,81 +1030,83 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
   
+<!-- ====== SCRIPTS: API + UI logic (всё в одном блоке) ====== -->
 <script>
-/*
-  Final cabinet.js integrated in this file.
-  - Autologin via localStorage token
-  - Inline editing (input/select/date) with onchange -> PUT /api/profile
-  - Avatar upload -> POST /api/profile/avatar (multipart)
-  - Shop / cart and checkout
-  - userArea (avatar or name) in header
-*/
-
-const API = "https://s7avelii-airlines-1.onrender.com"; // <- заменяй, если у тебя другой бекенд
+/* ========== Конфигурация API ========== */
+const API = "https://s7avelii-airlines-1.onrender.com"; // <- поменяй, если другой бекенд
 function getToken(){ return localStorage.getItem('token'); }
 
-let currentUser = null;
-let products = [];
-let cart = [];
-
-// apiFetch reads token dynamically
+/* ========== apiFetch (твой исходный) ========== */
 async function apiFetch(endpoint, options = {}) {
   const token = getToken();
   options.headers = { ...(options.headers || {}) };
   if (token) options.headers['Authorization'] = 'Bearer ' + token;
-  // do not set Content-Type for FormData
   if (options.body && !(options.body instanceof FormData) && typeof options.body !== 'string') {
     options.headers['Content-Type'] = 'application/json';
     options.body = JSON.stringify(options.body);
   }
-  const res = await fetch(API + endpoint, options).catch(e => { console.error('fetch err', e); return null; });
-  if (!res) return null;
-  if (res.status === 401) { logout(); return null; }
-  const json = await res.json().catch(()=> ({}));
-  return json;
+  try {
+    const res = await fetch(API + endpoint, options);
+    if (!res) return null;
+    if (res.status === 401) { logout(); return null; }
+    // попробуем распарсить JSON, если нет — вернуть объект с текстом
+    const txt = await res.text();
+    try { return JSON.parse(txt); } catch(e) { return { raw: txt, status: res.status }; }
+  } catch (e) {
+    console.error('fetch err', e);
+    return null;
+  }
 }
 
-// Update header user area (avatar or name)
+/* ========== Global state ========== */
+let currentUser = null;
+let products = [];
+let cart = [];
+
+/* ========== Helper: escapeHtml (single definition) ========== */
+function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* ========== Update header user area ========== */
 async function updateUserArea() {
   const userArea = document.getElementById('userArea');
   const token = getToken();
   if (!token) {
-    userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+    if (userArea) userArea.innerHTML = `<a href="auth.html" style="color:#6dd808;border:1px solid #cfeab2;padding:6px 10px;border-radius:8px;text-decoration:none">Вход</a>`;
     return;
   }
   try {
     const user = await apiFetch('/api/profile');
-    if (!user || !user.fio) { userArea.innerHTML = `<a href="auth.html">Вход</a>`; return; }
+    if (!user || (!user.fio && !user.email)) { if (userArea) userArea.innerHTML = `<a href="auth.html">Вход</a>`; return; }
     currentUser = user;
-    // avatar path from server usually like /avatars/xxx
     if (user.avatar) {
       const avatarUrl = (user.avatar.startsWith('http') ? user.avatar : API + user.avatar);
-      userArea.innerHTML = `<img src="${avatarUrl}" alt="avatar" style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover" onclick="window.location.href='cabinet.html'">`;
-      document.getElementById('avatar').src = avatarUrl;
+      if (userArea) userArea.innerHTML = `<img src="${avatarUrl}" alt="avatar" style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover" onclick="window.location.href='cabinet.html'">`;
+      const avatarImg = document.getElementById('avatar');
+      if (avatarImg) avatarImg.src = avatarUrl;
     } else {
       const short = (user.fio && user.fio.split(' ')[0]) || user.email || 'Профиль';
-      userArea.innerHTML = `<span style="cursor:pointer;color:#2196f3;font-weight:500;" onclick="window.location.href='cabinet.html'">${escapeHtml(short)}</span>`;
+      if (userArea) userArea.innerHTML = `<span style="cursor:pointer;color:#2196f3;font-weight:600;" onclick="window.location.href='cabinet.html'">${escapeHtml(short)}</span>`;
     }
-    loadProfile(); // render details
+    loadProfile(); // render details after header
   } catch (e) {
     console.error('updateUserArea err', e);
-    userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+    if (userArea) userArea.innerHTML = `<a href="auth.html">Вход</a>`;
   }
 }
 
-// simple escape
-function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-// Tabs
+/* ========== Tabs show function ========== */
 function showTab(evt){
   const tab = evt.currentTarget.dataset.tab;
   document.querySelectorAll('.tabs a').forEach(a=>a.classList.remove('active'));
   evt.currentTarget.classList.add('active');
   document.querySelectorAll('.grid section').forEach(s=>s.style.display='none');
-  document.getElementById(tab).style.display = 'block';
+  const el = document.getElementById(tab);
+  if (el) el.style.display = 'block';
+  // scroll tab into view on mobile
+  try { evt.currentTarget.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}); } catch(e){}
 }
 
-// Render profile fields
+/* ========== Render profile fields ========== */
 function loadProfile(){
   if(!currentUser) return;
   document.getElementById('fioHeader').textContent = currentUser.fio || '—';
@@ -1085,9 +1119,10 @@ function loadProfile(){
   document.getElementById('card_field').textContent = currentUser.card_number || '—';
   document.getElementById('cardTypeField').textContent = currentUser.card_type || '—';
 
-  document.getElementById('bonusMiles').textContent = currentUser.bonus_miles || 0;
+  document.getElementById('bonusMiles').textContent = (currentUser.bonus_miles || 0);
   const perc = Math.min(100, (currentUser.bonus_miles || 0) / 1000 * 100);
-  document.getElementById('milesProgressBar').style.width = perc + '%';
+  const mpb = document.getElementById('milesProgressBar');
+  if(mpb) mpb.style.width = perc + '%';
   document.getElementById('milesLabelRight').textContent = (currentUser.bonus_miles || 0) + ' миль';
   document.getElementById('milesBonusStat').textContent = currentUser.bonus_miles || 0;
   document.getElementById('milesStatusStat').textContent = currentUser.status_miles || 0;
@@ -1095,224 +1130,275 @@ function loadProfile(){
   document.getElementById('nextLevelLeft').textContent = (currentUser.status_miles || 0) + '/1000';
 }
 
-// Inline editing: creates input/select/date, sends PUT /api/profile on change
+/* ========== Inline editing ========== */
 async function editInline(field) {
   if(!currentUser) return;
-  // map DOM ids and server field names
-  const domMap = {
-    fio: 'fioField',
-    dob: 'dobField',
-    gender: 'genderField',
-    email: 'emailField',
-    phone: 'phoneField',
-    card_number: 'card_field'
-  };
+  const domMap = { fio: 'fioField', dob: 'dobField', gender: 'genderField', email: 'emailField', phone: 'phoneField', card_number: 'card_field' };
   const domId = domMap[field] || field + 'Field';
   const container = document.getElementById(domId);
   if(!container) return;
-
-  // current value
   const cur = (field === 'card_number' ? currentUser.card_number : currentUser[field]) || '';
-
-  // create input element depending on field
   let input;
   if (field === 'dob') {
-    input = document.createElement('input');
-    input.type = 'date';
-    input.value = cur;
+    input = document.createElement('input'); input.type = 'date'; input.value = cur;
   } else if (field === 'gender') {
     input = document.createElement('select');
-    ['','Мужской','Женский','Другое'].forEach(val=>{
-      const o = document.createElement('option'); o.value = val; o.textContent = val || 'Не указан';
-      if(val === cur) o.selected = true;
-      input.appendChild(o);
-    });
+    ['', 'Мужской','Женский','Другое'].forEach(val=>{ const o=document.createElement('option'); o.value=val; o.textContent=val||'Не указан'; if(val===cur) o.selected=true; input.appendChild(o); });
   } else if (field === 'phone') {
-    input = document.createElement('input'); input.type = 'tel'; input.value = cur;
+    input = document.createElement('input'); input.type='tel'; input.value = cur;
   } else {
     input = document.createElement('input'); input.type = 'text'; input.value = cur;
   }
-
   input.className = 'input-inline';
-  // Save on change or on blur
   let saved = false;
-  input.addEventListener('change', async () => {
-    await saveField(field, input.value);
-    saved = true;
-  });
-  input.addEventListener('blur', async () => {
-    if(!saved) await saveField(field, input.value);
-  });
-
-  // replace content
-  container.innerHTML = '';
-  container.appendChild(input);
-  input.focus();
+  input.addEventListener('change', async () => { await saveField(field, input.value); saved = true; });
+  input.addEventListener('blur', async () => { if(!saved) await saveField(field, input.value); });
+  container.innerHTML = ''; container.appendChild(input); input.focus();
 }
 
-// Save single field to server
 async function saveField(field, value) {
-  const payload = {};
-  // server columns: fio, dob, gender, email, phone, card_number, card_type
-  payload[field] = value;
+  const payload = {}; payload[field] = value;
   const res = await apiFetch('/api/profile', { method: 'PUT', body: payload });
-  if (res && res.ok) {
-    // refresh user data
+  // apiFetch returns JSON; assume success if non-null
+  if (res) {
     const updated = await apiFetch('/api/profile');
     if (updated) { currentUser = updated; loadProfile(); updateUserArea(); }
   } else {
     alert('Ошибка при сохранении');
-    // reload profile to original
-    const re = await apiFetch('/api/profile'); if(re){ currentUser = re; loadProfile(); }
+    const re = await apiFetch('/api/profile'); if(re) { currentUser = re; loadProfile(); }
   }
 }
 
-// Avatar upload
-document.getElementById('avatarInput').addEventListener('change', async function(){
-  if(!this.files[0]) return;
-  const fd = new FormData();
-  fd.append('avatar', this.files[0]);
-  const token = getToken();
-  try{
-    const res = await fetch(API + '/api/profile/avatar', {
-      method: 'POST',
-      headers: token ? { 'Authorization': 'Bearer ' + token } : {},
-      body: fd
-    });
-    const data = await res.json();
-    if (data && data.avatar) {
-      const avatarUrl = data.avatar.startsWith('http') ? data.avatar : API + data.avatar;
-      document.getElementById('avatar').src = avatarUrl;
-      await updateUserArea();
-    } else {
-      alert('Ошибка загрузки аватара');
-    }
-  }catch(err){ console.error('avatar upload', err); alert('Ошибка сети при загрузке'); }
-});
+/* ========== Avatar upload (attach after DOM ready) ========== */
+function attachAvatarUpload(){
+  const avatarInput = document.getElementById('avatarInput');
+  if(!avatarInput) return;
+  avatarInput.addEventListener('change', async function(){
+    if(!this.files[0]) return;
+    const fd = new FormData();
+    fd.append('avatar', this.files[0]);
+    const token = getToken();
+    try{
+      const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+      const resRaw = await fetch(API + '/api/profile/avatar', { method: 'POST', headers, body: fd });
+      if(!resRaw) throw new Error('no response');
+      const txt = await resRaw.text();
+      let data;
+      try { data = JSON.parse(txt); } catch(e){ data = { raw: txt }; }
+      if (data && data.avatar) {
+        const avatarUrl = data.avatar.startsWith('http') ? data.avatar : API + data.avatar;
+        const avatarImg = document.getElementById('avatar');
+        if(avatarImg) avatarImg.src = avatarUrl;
+        await updateUserArea();
+      } else {
+        alert('Ошибка загрузки аватара');
+      }
+    }catch(err){ console.error('avatar upload', err); alert('Ошибка сети при загрузке'); }
+  });
+}
 
-// Shop & cart
+/* ========== Shop & cart (unchanged logic) ========== */
 async function loadShop(){
   const data = await apiFetch('/api/shop');
   products = (data && data.products) ? data.products : [];
   renderProducts();
 }
-
 function renderProducts(){
   const grid = document.getElementById('productGrid');
+  if(!grid) return;
   grid.innerHTML = '';
   products.forEach(p=>{
-    const div = document.createElement('div');
-    div.className = 'card';
+    const div = document.createElement('div'); div.className = 'card';
     div.innerHTML = `<div style="font-weight:600">${escapeHtml(p.name)}</div>
                      <div class="small-muted">${p.price} ₽</div>
                      <button class="btn" onclick="addToCart(${p.id})">В корзину</button>`;
     grid.appendChild(div);
   });
 }
-
 function addToCart(id){
   const p = products.find(x=>x.id===id);
   if(!p) return;
-  cart.push(p);
-  renderCart();
+  cart.push(p); renderCart();
 }
-
-function removeFromCart(i){
-  cart.splice(i,1);
-  renderCart();
-}
-
+function removeFromCart(i){ cart.splice(i,1); renderCart(); }
 function renderCart(){
   const tbody = document.getElementById('cartTable').querySelector('tbody');
   tbody.innerHTML = '';
   let total = 0;
-  cart.forEach((p,i)=>{
-    total += p.price;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${escapeHtml(p.name)}</td><td>${p.price} ₽</td><td><button class="btn secondary" onclick="removeFromCart(${i})">×</button></td>`;
-    tbody.appendChild(tr);
-  });
+  cart.forEach((p,i)=>{ total += p.price; const tr = document.createElement('tr'); tr.innerHTML = `<td>${escapeHtml(p.name)}</td><td>${p.price} ₽</td><td><button class="btn secondary" onclick="removeFromCart(${i})">×</button></td>`; tbody.appendChild(tr); });
   document.getElementById('cartTotal').textContent = total + ' ₽';
 }
-
 async function checkout(){
   if(cart.length === 0) { alert('Корзина пуста'); return; }
   const res = await apiFetch('/api/checkout', { method: 'POST', body: { items: cart } });
-  if(res && res.ok) { cart = []; renderCart(); alert('Заказ оформлен!'); }
+  if(res) { cart = []; renderCart(); alert('Заказ оформлен!'); }
   else alert('Ошибка при оформлении заказа');
 }
 
-// Logout
-function logout(){
-  localStorage.removeItem('token');
-  window.location.href = 'auth.html';
+/* ========== Logout ========== */
+function logout(){ localStorage.removeItem('token'); window.location.href = 'auth.html'; }
+
+/* ========== Loyalty system: levels, promos, card change ========== */
+const LEVELS = [
+  { name: 'Classic', min: 0, max: 1000 },
+  { name: 'Master', min: 1000, max: 5000 },
+  { name: 'Pro', min: 5000, max: 100000 }
+];
+const PROMOS = {
+  'S7GIFT1000': 1000,
+  'WELCOME500': 500,
+  'VIP2025': 2000
+};
+function getLevelByMiles(miles){
+  for(let i=LEVELS.length-1;i>=0;i--){ if(miles >= LEVELS[i].min) return LEVELS[i]; }
+  return LEVELS[0];
 }
-
-// init
-window.addEventListener('DOMContentLoaded', async () => {
-  const token = getToken();
-  if(!token){ window.location.href = 'auth.html'; return; }
-  await updateUserArea();
-  await loadShop();
-});
-
-// helper: escape HTML for text nodes
-function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
- function updateMilesSection() {
-  if (!currentUser) return;
-
-  const miles = currentUser.bonus_miles || 0;
-  const levelBadge = document.getElementById("userLevel");
-  const milesFill = document.getElementById("milesProgressFill");
-  const milesDisplay = document.getElementById("bonusMilesDisplay");
-  const progressText = document.getElementById("progressText");
-
-  milesDisplay.textContent = miles.toLocaleString();
-
-  let level = "Base";
-  let next = 1000;
-  let colorClass = "level-base";
-  let progress = miles / 1000 * 100;
-
-  if (miles >= 1000 && miles < 7000) {
-    level = "Master";
-    next = 7000;
-    colorClass = "level-master";
-    progress = ((miles - 1000) / (7000 - 1000)) * 100;
-  } else if (miles >= 7000) {
-    level = "Pro";
-    next = 100000;
-    colorClass = "level-pro";
-    progress = Math.min(100, ((miles - 7000) / (100000 - 7000)) * 100);
+function isOkApiRes(res){
+  if(!res) return false;
+  if(res.ok===true || res.success===true) return true;
+  if(typeof res==='object' && (res.fio || res.id || res.user_id)) return true;
+  if(typeof res==='object' && Object.keys(res).length>0) return true;
+  return false;
+}
+function updateMilesUIFromCurrentUser(){
+  if(!currentUser) return;
+  const statusMiles = Number(currentUser.status_miles || 0);
+  const bonusMiles = Number(currentUser.bonus_miles || 0);
+  const bonusEl = document.getElementById('milesBonusStat');
+  const statusEl = document.getElementById('milesStatusStat');
+  if(bonusEl) bonusEl.textContent = bonusMiles.toLocaleString('ru-RU');
+  if(statusEl) statusEl.textContent = statusMiles.toLocaleString('ru-RU');
+  const level = getLevelByMiles(statusMiles);
+  let nextBoundary = LEVELS.find(l => l.min > level.min);
+  const nextMin = nextBoundary ? nextBoundary.min : level.max;
+  const segmentRange = (nextMin - level.min) || 1;
+  const progressPercent = nextBoundary ? ((statusMiles - level.min) / segmentRange) * 100 : 100;
+  const bar = document.getElementById('milesProgressBar2');
+  if(bar) bar.style.width = Math.min(Math.max(progressPercent,0),100) + '%';
+  const left = document.getElementById('nextLevelLeft');
+  const right = document.getElementById('nextLevelRight');
+  if(left) left.textContent = `${statusMiles.toLocaleString('ru-RU')} / ${nextMin.toLocaleString('ru-RU')}`;
+  if(right) right.textContent = level.name;
+  const cardField = document.getElementById('cardTypeField');
+  if(cardField) cardField.textContent = currentUser.card_type || level.name;
+}
+async function ensureCardTypeMatchesMiles(){
+  if(!currentUser) return;
+  const statusMiles = Number(currentUser.status_miles || 0);
+  const level = getLevelByMiles(statusMiles);
+  const desiredType = level.name;
+  if((currentUser.card_type || '').toLowerCase() !== (desiredType || '').toLowerCase()){
+    const res = await apiFetch('/api/profile', { method: 'PUT', body: { card_type: desiredType }});
+    if(isOkApiRes(res)){
+      const refreshed = await apiFetch('/api/profile');
+      if(refreshed && (refreshed.fio || refreshed.id)) currentUser = refreshed;
+      else currentUser.card_type = desiredType;
+    } else {
+      currentUser.card_type = desiredType;
+    }
   }
-
-  levelBadge.textContent = level;
-  levelBadge.className = `level-badge ${colorClass}`;
-  milesFill.style.width = `${progress}%`;
-
-  const nextLevelName = level === "Base" ? "Master" :
-                        level === "Master" ? "Pro" : "MAX";
-  progressText.textContent = `${miles.toLocaleString()} / ${next.toLocaleString()} до ${nextLevelName}`;
+  updateMilesUIFromCurrentUser();
 }
 
-// Промокод
-document.getElementById('promoBtn').addEventListener('click', async () => {
-  const code = document.getElementById('promoInput').value.trim();
-  if (!code) return alert('Введите промокод');
-  const res = await apiFetch('/api/promo', { method: 'POST', body: { code } });
-  if (res && res.success) {
-    alert('Промокод успешно активирован! + ' + res.bonus + ' миль');
-    currentUser.bonus_miles = (currentUser.bonus_miles || 0) + res.bonus;
-    updateMilesSection();
-  } else alert(res?.error || 'Неверный промокод');
+/* PROMO activation */
+async function handleActivatePromo(){
+  const input = document.getElementById('promoInput');
+  if(!input) return alert('Не найдено поле промокода');
+  const code = (input.value||'').trim().toUpperCase();
+  if(!code) return alert('Введите промокод');
+  if(!PROMOS[code]) return alert('Неверный промокод');
+  const used = Array.isArray(currentUser?.used_promos) ? currentUser.used_promos : [];
+  if(used.includes(code)) return alert('Промокод уже использован');
+  const add = Number(PROMOS[code]||0);
+  const payload = {
+    bonus_miles: (Number(currentUser.bonus_miles || 0) + add),
+    status_miles: (Number(currentUser.status_miles || 0) + add),
+    used_promos: [...used, code]
+  };
+  const res = await apiFetch('/api/profile', { method: 'PUT', body: payload });
+  if(!isOkApiRes(res)) return alert('Ошибка сервера при активации промокода');
+  const updated = await apiFetch('/api/profile');
+  if(updated && (updated.fio || updated.id)) currentUser = updated;
+  else { currentUser.bonus_miles = payload.bonus_miles; currentUser.status_miles = payload.status_miles; currentUser.used_promos = payload.used_promos; }
+  updateMilesUIFromCurrentUser();
+  await ensureCardTypeMatchesMiles();
+  alert(`Промокод применён, +${add} миль`);
+  input.value = '';
+}
+
+/* card change by code */
+async function handleCardChange(){
+  const input = document.getElementById('cardChangeInput');
+  if(!input) return alert('Не найдено поле смены карты');
+  const code = (input.value||'').trim().toUpperCase();
+  if(!code) return alert('Введите код смены карты');
+  let newType = null;
+  if(code === 'VIP1111') newType = 'VIP';
+  else if(code === 'CLASS5555') newType = 'Classic';
+  else return alert('Неверный код смены карты');
+  const res = await apiFetch('/api/profile', { method: 'PUT', body: { card_type: newType }});
+  if(!isOkApiRes(res)) return alert('Ошибка при смене типа карты');
+  const updated = await apiFetch('/api/profile');
+  if(updated && (updated.fio || updated.id)) currentUser = updated;
+  else currentUser.card_type = newType;
+  updateMilesUIFromCurrentUser();
+  alert(`Тип карты изменён на ${newType}`);
+  input.value = '';
+}
+
+/* attach handlers */
+function attachPromoAndCardHandlers(){
+  const promoBtn = document.getElementById('promoActivateBtn');
+  if(promoBtn){ promoBtn.removeEventListener('click', handleActivatePromo); promoBtn.addEventListener('click', handleActivatePromo); }
+  const cardBtn = document.getElementById('cardChangeBtn');
+  if(cardBtn){ cardBtn.removeEventListener('click', handleCardChange); cardBtn.addEventListener('click', handleCardChange); }
+}
+
+/* override loadProfile to also update miles UI */
+const originalLoadProfile = window.loadProfile || function(){};
+window.loadProfile = function(){
+  try{ originalLoadProfile(); }catch(e){}
+  updateMilesUIFromCurrentUser();
+  ensureCardTypeMatchesMiles().catch(e=>console.warn(e));
+  attachPromoAndCardHandlers();
+};
+
+/* telegram block handlers */
+document.addEventListener('DOMContentLoaded', () => {
+  // attach avatar upload listener safely
+  attachAvatarUpload();
+
+  // attach telegram close & subscribe
+  const tClose = document.getElementById('telegramCloseBtn');
+  if(tClose) tClose.addEventListener('click', ()=>{ const b=document.getElementById('telegramBlock'); if(b) b.style.display='none'; });
+  const tSub = document.getElementById('telegramSubscribeBtn');
+  if(tSub) tSub.addEventListener('click', ()=>{ alert('Спасибо! Вы подписаны (симуляция)'); });
+
+  // ensure tabs show default tab on mobile
+  document.querySelectorAll('.tabs a').forEach(a=>{
+    a.addEventListener('click', (e)=>{ showTab(e); });
+  });
+
+  // finally initialize user area and shop
+  (async ()=>{
+    const token = getToken();
+    if(!token){ window.location.href = 'auth.html'; return; }
+    await updateUserArea(); // loads profile into currentUser and calls loadProfile()
+    await loadShop();
+    // ensure UI updated
+    updateMilesUIFromCurrentUser();
+    attachPromoAndCardHandlers();
+  })();
 });
 
-// вызывать после загрузки профиля
-window.addEventListener('DOMContentLoaded', () => {
-  if (currentUser) updateMilesSection();
-});
+/* expose some functions to window for inline html buttons */
+window.editInline = editInline;
+window.logout = logout;
+window.addToCart = addToCart;
+window.removeFromCart = removeFromCart;
+window.checkout = checkout;
 
 </script>
+   
 </body>
 </html>
