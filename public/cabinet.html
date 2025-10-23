@@ -238,68 +238,6 @@
   </div>
 
   <script>
-const API = 'https://s7avelii-airlines-1.onrender.com';
-function getToken(){ return localStorage.getItem('token'); }
-
-let currentUser = null;
-
-async function apiFetch(endpoint, options={}){
-  const token = getToken();
-  options.headers = {...(options.headers||{})};
-  if(token) options.headers['Authorization'] = 'Bearer '+token;
-  if(options.body && !(options.body instanceof FormData) && typeof options.body !== 'string'){
-    options.headers['Content-Type']='application/json';
-    options.body=JSON.stringify(options.body);
-  }
-  try{
-    const res = await fetch(API+endpoint, options);
-    const txt = await res.text();
-    try{return JSON.parse(txt);} catch { return {raw: txt}; }
-  } catch(e){console.error(e); return null;}
-}
-
-async function updateUserArea(){
-  const userArea = document.getElementById('userArea');
-  const token = getToken();
-  if(!token){
-    userArea.innerHTML=`<a href='auth.html' class='px-4 py-2 border rounded text-sm'>Вход</a>`;
-    return;
-  }
-  try{
-    const user = await apiFetch('/api/profile');
-    if(!user || !user.fio){ userArea.innerHTML=`<a href='auth.html' class='px-4 py-2 border rounded text-sm'>Вход</a>`; return; }
-    currentUser = user;
-    const avatarUrl = user.avatar ? (user.avatar.startsWith('http') ? user.avatar : API+user.avatar) : localStorage.getItem('avatar') || 'https://via.placeholder.com/48';
-    localStorage.setItem('avatar', avatarUrl);
-    document.getElementById('avatar').src = avatarUrl;
-    const shortFio = user.fio.split(' ')[0]+' '+user.fio.split(' ')[1]?.[0]+'.';
-    document.getElementById('fioHeader').textContent = shortFio;
-    updateMilesUI();
-  } catch(e){
-    console.error(e);
-    userArea.innerHTML=`<a href='auth.html' class='px-4 py-2 border rounded text-sm'>Вход</a>`;
-  }
-}
-
-function updateMilesUI(){
-  if(!currentUser) return;
-  const miles = Number(currentUser.miles || 0);
-  document.getElementById('bonusMiles').textContent = miles.toLocaleString('ru-RU');
-  document.getElementById('milesLabelRight').textContent = miles.toLocaleString('ru-RU')+' миль';
-  document.getElementById('milesSummary').textContent = miles.toLocaleString('ru-RU')+' миль';
-  let perc = 0;
-  if(miles<=1000) perc = miles/1000*100;
-  else if(miles<=10000) perc = (miles-1000)/9000*100;
-  else if(miles<=100000) perc = (miles-10000)/90000*100;
-  else perc = (miles-100000)/400000*100;
-  document.getElementById('milesProgressBar').style.width = Math.min(perc,100)+'%';
-}
-
-window.addEventListener('DOMContentLoaded',()=>{
-  updateUserArea();
-});
-</script>
-  <script>
     /* ========== Конфигурация API ========== */
     const API = "https://s7avelii-airlines-1.onrender.com"; // оставил твой адрес
     function getToken(){ return localStorage.getItem('token'); }
