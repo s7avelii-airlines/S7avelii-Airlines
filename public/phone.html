@@ -52,76 +52,78 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   </header>
 
-  <script>
-    const API = 'https://s7avelii-airlines-1.onrender.com';
+ <script>
+  const API = 'https://s7avelii-airlines-1.onrender.com';
 
-    async function updateUserArea() {
-      const userArea = document.getElementById('userArea');
-      const token = localStorage.getItem('token');
+  async function updateUserArea() {
+    const userArea = document.getElementById('userArea');
+    const token = localStorage.getItem('token');
 
-      // Если не залогинен
-      if (!token) {
-        userArea.innerHTML = `
-          <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
-            Войти
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
-            </svg>
-          </a>
-        `;
-        return;
-      }
-
-      try {
-        const res = await fetch(`${API}/api/profile`, {
-          headers: { 'Authorization': 'Bearer ' + token }
-        });
-
-        if (!res.ok) throw new Error('Не авторизован');
-
-        const data = await res.json();
-        const user = data.user || data;
-        const avatar = user.avatar ? 
-          (user.avatar.startsWith('http') ? user.avatar : API + user.avatar) : 
-          'images/default-avatar.png';
-        const fioParts = (user.fio || 'Профиль').split(' ');
-        const name = fioParts[0] || 'Профиль';
-        const surnameInitial = fioParts[1] ? fioParts[1][0] + '.' : '';
-        const miles = user.miles || 0;
-
-        userArea.innerHTML = `
-          <div class="flex items-center bg-white border rounded-2xl px-3 py-1.5 cursor-pointer hover:shadow-sm transition"
-               onclick="window.location.href='cabinet.html'">
-            <img src="${avatar}" alt="avatar" 
-              class="w-8 h-8 rounded-full object-cover mr-2 border">
-            <div class="flex flex-col mr-3">
-              <span class="text-sm font-semibold leading-tight">${name} ${surnameInitial}</span>
-              <span class="text-xs text-gray-500 flex items-center gap-1">
-                ${miles.toLocaleString()} 
-                <span class="text-green-600 font-bold">M</span>
-              </span>
-            </div>
-          </div>
-        `;
-      } catch (err) {
-        console.warn(err);
-        localStorage.removeItem('token');
-        userArea.innerHTML = `
-          <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
-            Войти
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
-            </svg>
-          </a>
-        `;
-      }
+    if (!token) {
+      userArea.innerHTML = `
+        <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
+          Войти
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
+          </svg>
+        </a>
+      `;
+      return;
     }
 
-    window.addEventListener('DOMContentLoaded', updateUserArea);
-    window.__S7_UPDATE_USER_AREA = updateUserArea;
-  </script>
+    try {
+      const res = await fetch(`${API}/api/profile`, {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+
+      if (!res.ok) throw new Error('Не авторизован');
+
+      const data = await res.json();
+      const user = data.user || data;
+
+      const avatar = user.avatar ? 
+        (user.avatar.startsWith('http') ? user.avatar : API + user.avatar) : 
+        'images/default-avatar.png';
+      const fioParts = (user.fio || 'Профиль').split(' ');
+      const name = fioParts[0] || 'Профиль';
+      const surnameInitial = fioParts[1] ? fioParts[1][0] + '.' : '';
+
+      // Ищем поле с милями по возможным вариантам
+      const miles = user.miles ?? user.miles_balance ?? user.bonus_miles ?? user.points ?? data.miles ?? 0;
+
+      userArea.innerHTML = `
+        <div class="flex items-center bg-white border rounded-2xl px-3 py-1.5 cursor-pointer hover:shadow-sm transition"
+             onclick="window.location.href='cabinet.html'">
+          <img src="${avatar}" alt="avatar" 
+            class="w-8 h-8 rounded-full object-cover mr-2 border">
+          <div class="flex flex-col mr-3">
+            <span class="text-sm font-semibold leading-tight">${name} ${surnameInitial}</span>
+            <span class="text-xs text-gray-500 flex items-center gap-1">
+              ${Number(miles).toLocaleString()} 
+              <span class="text-green-600 font-bold">M</span>
+            </span>
+          </div>
+        </div>
+      `;
+    } catch (err) {
+      console.warn(err);
+      localStorage.removeItem('token');
+      userArea.innerHTML = `
+        <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
+          Войти
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
+          </svg>
+        </a>
+      `;
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', updateUserArea);
+  window.__S7_UPDATE_USER_AREA = updateUserArea;
+</script>
 </body>
   
 <!-- Пробел между слайдером и акциями -->
