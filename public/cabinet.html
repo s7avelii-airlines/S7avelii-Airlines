@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>S7avelii | Профиль </title>
+  <title>S7 — Кабинет</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { background: #f6f7f9; -webkit-font-smoothing:antialiased; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
@@ -17,22 +17,21 @@
     .pill { background:#fff; border-radius:12px; padding:10px 12px; display:flex; align-items:center; gap:10px; box-shadow: 0 1px 0 rgba(0,0,0,0.04); }
     .big-button { background:#2b2f33; color:#fff; padding:14px; border-radius:12px; width:100%; text-align:center; font-weight:600; }
     .input-inline{ padding:6px 8px; border-radius:8px; border:1px solid #ddd; width:100%; }
-    @media(min-width:768px){ .mobile-only { display:block } .desktop-grid { display:grid; grid-template-columns: 1fr 340px; gap:18px; } }
+    @media(min-width:768px){ .desktop-grid { display:grid; grid-template-columns: 1fr 340px; gap:18px; } }
   </style>
 </head>
 <body>
 
 <header class="fixed top-0 left-0 w-full bg-white z-40 shadow px-4 py-3 flex items-center gap-3">
-  <img src="images/photo_5458690764071631635_y.jpg" alt="S7 logo" class="w-9 h-9 rounded-full object-cover">
+  <img src="images/telegram_block.jpg" alt="S7 logo" class="w-9 h-9 rounded-full object-cover">
   <div class="flex-1">
-    <div class="text-sm font-semibold"></div>
-    <div class="text-xs muted"></div>
+    <div class="text-sm font-semibold">S7 Priority</div>
+    <div class="text-xs muted">Личный кабинет</div>
   </div>
   <div id="userArea" class="flex items-center gap-2"></div>
 </header>
 
 <main class="pt-20 px-4 pb-24 max-w-1100 mx-auto">
-  <!-- top -->
   <div class="card mb-4 flex flex-col md:flex-row items-start md:items-center gap-4">
     <label for="avatarInput" title="Нажмите чтобы загрузить фото" class="cursor-pointer">
       <img id="bigAvatar" class="avatar-xl" src="https://via.placeholder.com/150" alt="avatar">
@@ -43,13 +42,12 @@
       <div class="small-muted" id="phoneHeader">—</div>
     </div>
 
-    <!-- balance small widget -->
     <div class="ml-auto min-w-[190px]">
       <div class="small-muted">Бонусные мили</div>
       <div class="flex items-center justify-between mt-2">
         <div class="flex items-center gap-3">
           <div class="mile-badge">
-            <img id="mileIconTop" src="images/mile-icon.svg" alt="M" class="mile-icon-sm" />
+            <img id="mileIconTop" src="images/mile_icon.jpg" alt="M" class="mile-icon-sm" />
           </div>
           <div>
             <div id="milesCountTop" class="text-lg font-bold">—</div>
@@ -67,10 +65,8 @@
     </div>
   </div>
 
-  <!-- main grid (content left, sidebar right on desktop) -->
   <div class="desktop-grid">
     <div>
-      <!-- Tabs -->
       <nav class="tabs flex gap-2 mb-4 overflow-auto">
         <a class="active px-3 py-2 rounded-lg bg-white" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
         <a class="px-3 py-2 rounded-lg" data-tab="milesTab" onclick="showTab(event)">Мои мили</a>
@@ -199,7 +195,6 @@
       </div>
     </div>
 
-    <!-- Sidebar (desktop right) -->
     <aside>
       <div class="card mb-4">
         <div class="flex items-center justify-between">
@@ -220,7 +215,6 @@
         </div>
       </div>
 
-      <!-- Telegram promo (твоя картинка) -->
       <div id="telegramBlock" class="card mb-4">
         <div class="flex items-center gap-3">
           <div style="flex:1">
@@ -231,15 +225,14 @@
             </div>
           </div>
           <div style="width:86px;">
-            <img src="images/photo_5458690764071631636_y.jpg" alt="telegram" class="w-20 h-20 object-cover rounded-xl">
+            <img src="images/telegram_block.jpg" alt="telegram" class="w-20 h-20 object-cover rounded-xl">
           </div>
         </div>
       </div>
 
-      <!-- Custom features (заглушки иконок, твои иконки сюда) -->
       <div class="space-y-3">
         <div class="card flex items-center gap-3">
-          <img src="images/icon-yandex-placeholder.png" alt="" class="w-10 h-10 object-contain">
+          <img src="images/yandex_plus.jpg" alt="" class="w-10 h-10 object-contain">
           <div>
             <div class="font-semibold">Яндекс Плюс x S7</div>
             <div class="muted text-xs">Партнёрские предложения</div>
@@ -247,7 +240,7 @@
         </div>
 
         <div class="card flex items-center gap-3">
-          <img src="images/icon-secret-placeholder.png" alt="" class="w-10 h-10 object-contain">
+          <img src="images/secret_passenger.jpg" alt="" class="w-10 h-10 object-contain">
           <div>
             <div class="font-semibold">Тайный пассажир</div>
             <div class="muted text-xs">Участвуйте и получайте мили</div>
@@ -255,7 +248,7 @@
         </div>
 
         <div class="card flex items-center gap-3">
-          <img src="images/icon-green-placeholder.png" alt="" class="w-10 h-10 object-contain">
+          <img src="images/green_steps.jpg" alt="" class="w-10 h-10 object-contain">
           <div>
             <div class="font-semibold">Green Steps</div>
             <div class="muted text-xs">Забота об окружающей среде</div>
@@ -266,7 +259,6 @@
     </aside>
   </div>
 
-  <!-- Cart Section (hidden by default) -->
   <section id="shopCart" class="card mt-6" style="display:none">
     <h3>Корзина</h3>
     <table class="w-full mt-3" id="cartTable">
@@ -286,10 +278,10 @@
 <!-- ====== SCRIPTS: API + UI logic (адаптированная версия) ====== -->
 <script>
 /* ========== Конфигурация API ========== */
-const API = "https://s7avelii-airlines-1.onrender.com"; // <- поменяй, если другой бекенд
+const API = "https://s7avelii-airlines-1.onrender.com";
 function getToken(){ return localStorage.getItem('token'); }
 
-/* ========== apiFetch (твой исходный) ========== */
+/* ========== apiFetch ========== */
 async function apiFetch(endpoint, options = {}) {
   const token = getToken();
   options.headers = { ...(options.headers || {}) };
@@ -315,10 +307,8 @@ let currentUser = null;
 let products = [];
 let cart = [];
 
-/* ========== Helper: escapeHtml (single def) ========== */
+/* ========== Helpers ========== */
 function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-/* ========== Robust miles finder (recursive fallback) ========== */
 function parseNumberSafe(v){
   if (v === null || v === undefined) return null;
   if (typeof v === 'number' && !Number.isNaN(v)) return v;
@@ -331,9 +321,8 @@ function parseNumberSafe(v){
     if (commaCount > 0 && dotCount === 0){ normalized = cleaned.replace(/,/g,''); }
     else if (dotCount > 0 && commaCount === 0){ normalized = cleaned; }
     else if (commaCount > 0 && dotCount > 0){
-      if (cleaned.lastIndexOf(',') > cleaned.lastIndexOf('.')){
-        normalized = cleaned.replace(/\./g,'').replace(',', '.');
-      } else { normalized = cleaned.replace(/,/g,''); }
+      if (cleaned.lastIndexOf(',') > cleaned.lastIndexOf('.')) normalized = cleaned.replace(/\./g,'').replace(',', '.');
+      else normalized = cleaned.replace(/,/g,'');
     }
     const num = Number(normalized);
     if (!Number.isNaN(num)) return Math.floor(num);
@@ -371,11 +360,11 @@ function findMilesInObject(obj, visited = new WeakSet()){
         if (deeper !== null) return deeper;
       }
     }
-  } catch(e){ /* ignore */ }
+  } catch(e){}
   return null;
 }
 
-/* ========== Levels (по твоей шкале) ========== */
+/* ========== Levels ========== */
 const LEVELS = [
   { name: 'Classic', min: 0, max: 1000 },
   { name: 'VIP', min: 1000, max: 10000 },
@@ -387,7 +376,7 @@ function getLevelByMiles(miles){
   return LEVELS[0];
 }
 
-/* ========== Update header user area (mini widget) ========== */
+/* ========== Update header user area ========== */
 async function updateUserArea() {
   const userArea = document.getElementById('userArea');
   const token = getToken();
@@ -401,23 +390,18 @@ async function updateUserArea() {
     const user = res.user || res;
     currentUser = user;
 
-    // determine avatar: prefer server value, else saved in localStorage
     const savedAvatar = localStorage.getItem('userAvatar') || '';
     let avatarUrl = null;
     if (user.avatar) avatarUrl = (String(user.avatar).startsWith('http') ? user.avatar : API + user.avatar);
     else if (savedAvatar) avatarUrl = savedAvatar;
-
-    // if still no avatar, fallback placeholder
     if (!avatarUrl) avatarUrl = 'https://via.placeholder.com/150';
 
-    // render header widget
     const fio = user.fio || user.email || 'Профиль';
     const parts = String(fio).split(/\s+/).filter(Boolean);
     const firstName = parts[0] || '';
     const surnameInitial = parts[1] ? parts[1][0] + '.' : '';
     const nameShort = firstName + (surnameInitial ? (' ' + surnameInitial) : '');
 
-    // get miles robustly
     let miles = null;
     if (user.miles !== undefined) miles = parseNumberSafe(user.miles);
     if (miles === null) miles = findMilesInObject(user) ?? findMilesInObject(res);
@@ -429,28 +413,24 @@ async function updateUserArea() {
           <img src="${avatarUrl}" alt="avatar" class="w-9 h-9 rounded-full object-cover">
           <div class="text-right">
             <div class="text-sm font-semibold">${escapeHtml(nameShort)}</div>
-            <div class="text-xs muted">${Number(miles).toLocaleString('ru-RU')} <img src="images/mile-icon.svg" class="inline-block w-3 h-3" alt="M"></div>
+            <div class="text-xs muted">${Number(miles).toLocaleString('ru-RU')} <img src="images/mile_icon.jpg" class="inline-block w-3 h-3" alt="M"></div>
           </div>
         </div>
       `;
     }
-    // save avatar persistently if server provided it (or keep existing)
     if (user.avatar) {
-      const toSave = avatarUrl;
-      try { localStorage.setItem('userAvatar', toSave); } catch(e){}
+      try { localStorage.setItem('userAvatar', avatarUrl); } catch(e){}
     }
-
-    // also update UI detail fields
     currentUser = user;
-    loadProfile(); // your existing renderer
-    updateMilesUIFromCurrentUser(); // update miles-dependent UI
+    loadProfile();
+    updateMilesUIFromCurrentUser();
   } catch (e) {
     console.error('updateUserArea err', e);
     if (userArea) userArea.innerHTML = `<a href="auth.html">Вход</a>`;
   }
 }
 
-/* ========== Render profile fields (твоя реализация) ========== */
+/* ========== Render profile fields ========== */
 function loadProfile(){
   if(!currentUser) return;
   document.getElementById('fioHeader').textContent = currentUser.fio || '—';
@@ -463,24 +443,20 @@ function loadProfile(){
   document.getElementById('card_field').textContent = currentUser.card_number || '—';
   document.getElementById('cardTypeField').textContent = currentUser.card_type || '—';
 
-  // Map server miles fields to UI counters (if exists)
-  const milesDetected = (currentUser.miles !== undefined ? parseNumberSafe(currentUser.miles) : null)
-                      ?? findMilesInObject(currentUser) ?? 0;
+  const milesDetected = (currentUser.miles !== undefined ? parseNumberSafe(currentUser.miles) : null) ?? findMilesInObject(currentUser) ?? 0;
 
   document.getElementById('bonusMiles') && (document.getElementById('bonusMiles').textContent = (currentUser.bonus_miles || 0));
-  const perc = Math.min(100, ((currentUser.bonus_miles || 0) / 1000) * 100);
   const mpb = document.getElementById('milesProgressBar');
-  if(mpb) mpb.style.width = perc + '%';
+  if(mpb) mpb.style.width = Math.min(100, ((currentUser.bonus_miles || 0)/1000)*100) + '%';
   document.getElementById('milesLabelRight') && (document.getElementById('milesLabelRight').textContent = (currentUser.bonus_miles || 0) + ' миль');
   document.getElementById('milesBonusStat') && (document.getElementById('milesBonusStat').textContent = currentUser.bonus_miles || 0);
   document.getElementById('milesStatusStat') && (document.getElementById('milesStatusStat').textContent = currentUser.status_miles || 0);
-  document.getElementById('milesProgressBar2') && (document.getElementById('milesProgressBar2').style.width = Math.min(100, (currentUser.status_miles || 0) / 1000 * 100) + '%');
+  document.getElementById('milesProgressBar2') && (document.getElementById('milesProgressBar2').style.width = Math.min(100, (currentUser.status_miles || 0)/1000*100) + '%');
   document.getElementById('nextLevelLeft') && (document.getElementById('nextLevelLeft').textContent = (currentUser.status_miles || 0) + '/1000');
 
-  // update top/right counters too
-  document.getElementById('milesCount') && (document.getElementById('milesCount').textContent = (milesDetected).toLocaleString('ru-RU') + ' м');
-  document.getElementById('milesCountTop') && (document.getElementById('milesCountTop').textContent = (milesDetected).toLocaleString('ru-RU'));
-  // top progress
+  document.getElementById('milesCount') && (document.getElementById('milesCount').textContent = milesDetected.toLocaleString('ru-RU') + ' м');
+  document.getElementById('milesCountTop') && (document.getElementById('milesCountTop').textContent = milesDetected.toLocaleString('ru-RU'));
+
   const topLevel = getLevelByMiles(milesDetected);
   const next = LEVELS.find(l => l.min > topLevel.min);
   const currentMin = topLevel.min;
@@ -490,12 +466,9 @@ function loadProfile(){
   document.getElementById('milesProgressTop') && (document.getElementById('milesProgressTop').style.width = Math.max(0, Math.min(100, progressPercentTop)) + '%');
   document.getElementById('progressLeftTop') && (document.getElementById('progressLeftTop').textContent = currentMin.toLocaleString('ru-RU') + ' миль');
   document.getElementById('progressRightTop') && (document.getElementById('progressRightTop').textContent = nextMin ? nextMin.toLocaleString('ru-RU') + ' миль' : '—');
-
-  // header tiny widget also updated
-  // (updateUserArea already set header widget)
 }
 
-/* ========== Inline editing, saveField (без изменений, но интегр.) ========== */
+/* ========== Inline editing & save ========== */
 async function editInline(field) {
   if(!currentUser) return;
   const domMap = { fio: 'fioField', dob: 'dobField', gender: 'genderField', email: 'emailField', phone: 'phoneField', card_number: 'card_field' };
@@ -533,7 +506,7 @@ async function saveField(field, value) {
   }
 }
 
-/* ========== Avatar upload (сохранение в localStorage для "вечности") ========== */
+/* ========== Avatar upload (сохраняем в localStorage) ========== */
 function attachAvatarUpload(){
   const avatarInput = document.getElementById('avatarInput');
   if(!avatarInput) return;
@@ -563,7 +536,7 @@ function attachAvatarUpload(){
   });
 }
 
-/* ========== Shop & cart (твоя логика) ========== */
+/* ========== Shop & cart ========== */
 async function loadShop(){
   const data = await apiFetch('/api/shop');
   products = (data && data.products) ? data.products : [];
@@ -604,8 +577,7 @@ async function checkout(){
 /* ========== Logout ========== */
 function logout(){ localStorage.removeItem('token'); window.location.href = 'auth.html'; }
 
-/* ========== Loyalty system: levels, promos, card change ========== */
-/* PROMOS - можно расширить */
+/* ========== PROMO, LEVEL sync ========== */
 const PROMOS = {
   'S717000': 17000,
   'WELCOME500': 500
@@ -619,7 +591,6 @@ function isOkApiRes(res){
 }
 function updateMilesUIFromCurrentUser(){
   if(!currentUser) return;
-  // Use robust miles detection
   const detectedMiles = (currentUser.miles !== undefined ? parseNumberSafe(currentUser.miles) : null) ?? findMilesInObject(currentUser) ?? 0;
   const statusMiles = Number(currentUser.status_miles || detectedMiles || 0);
   const bonusMiles = Number(currentUser.bonus_miles || 0);
@@ -641,10 +612,9 @@ function updateMilesUIFromCurrentUser(){
   if(left) left.textContent = `${statusMiles.toLocaleString('ru-RU')} / ${nextMin.toLocaleString('ru-RU')}`;
   if(right) right.textContent = level.name;
 
-  // update other progress places
   document.getElementById('milesCount') && (document.getElementById('milesCount').textContent = detectedMiles.toLocaleString('ru-RU') + ' м');
   document.getElementById('milesCountTop') && (document.getElementById('milesCountTop').textContent = detectedMiles.toLocaleString('ru-RU'));
-  // top bar
+
   const topLevel = getLevelByMiles(detectedMiles);
   const nextTop = LEVELS.find(l => l.min > topLevel.min);
   const currentMin = topLevel.min;
@@ -660,7 +630,7 @@ function updateMilesUIFromCurrentUser(){
   if(cardField) cardField.textContent = currentUser.card_type || level.name;
 }
 
-/* PROMO activation */
+/* ========== Promo handlers ========== */
 async function handleActivatePromo(){
   const input = document.getElementById('promoInput');
   if(!input) return alert('Не найдено поле промокода');
@@ -685,7 +655,7 @@ async function handleActivatePromo(){
   input.value = '';
 }
 
-/* card change by code */
+/* ========== Card change ========== */
 async function handleCardChange(){
   const input = document.getElementById('cardChangeInput');
   if(!input) return alert('Не найдено поле смены карты');
@@ -705,7 +675,7 @@ async function handleCardChange(){
   input.value = '';
 }
 
-/* attach handlers */
+/* ========== Attach handlers & init ========== */
 function attachPromoAndCardHandlers(){
   const promoBtn = document.getElementById('promoActivateBtn');
   if(promoBtn){ promoBtn.removeEventListener('click', handleActivatePromo); promoBtn.addEventListener('click', handleActivatePromo); }
@@ -713,42 +683,34 @@ function attachPromoAndCardHandlers(){
   if(cardBtn){ cardBtn.removeEventListener('click', handleCardChange); cardBtn.addEventListener('click', handleCardChange); }
 }
 
-/* override loadProfile to also update miles UI */
 const originalLoadProfile = window.loadProfile || function(){};
 window.loadProfile = function(){
   try{ originalLoadProfile(); }catch(e){}
   updateMilesUIFromCurrentUser();
-  // ensure card type sync in background
   (async ()=>{ await ensureCardTypeMatchesMiles(); })().catch(e=>console.warn(e));
   attachPromoAndCardHandlers();
 };
 
-/* telegram block handlers */
 document.addEventListener('DOMContentLoaded', () => {
-  // attach avatar upload listener safely
   attachAvatarUpload();
-
-  // telegram handlers
   const tClose = document.getElementById('telegramCloseBtn');
   if(tClose) tClose.addEventListener('click', ()=>{ const b=document.getElementById('telegramBlock'); if(b) b.style.display='none'; });
   const tSub = document.getElementById('telegramSubscribeBtn');
   if(tSub) tSub.addEventListener('click', ()=>{ alert('Спасибо! Вы подписаны (симуляция)'); });
 
-  // tabs
   document.querySelectorAll('.tabs a').forEach(a=>{ a.addEventListener('click', (e)=>{ showTab(e); }); });
 
-  // init
   (async ()=>{
     const token = getToken();
-    if(!token){ /* редирект или показать вход */ /* window.location.href='auth.html'; */ }
-    await updateUserArea(); // loads profile into currentUser and calls loadProfile()
+    if(!token){ /* optionally redirect to login */ }
+    await updateUserArea();
     await loadShop();
     updateMilesUIFromCurrentUser();
     attachPromoAndCardHandlers();
   })();
 });
 
-/* expose functions */
+/* expose some functions to window for inline html buttons */
 window.editInline = editInline;
 window.logout = logout;
 window.addToCart = addToCart;
