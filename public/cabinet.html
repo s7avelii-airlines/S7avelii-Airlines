@@ -2,721 +2,495 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>S7avelii | Профиль</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>S7 — Кабинет (мобильная версия)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { background: #f6f7f9; -webkit-font-smoothing:antialiased; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-    .card { background: #fff; border-radius: 12px; padding: 14px; box-shadow: 0 1px 0 rgba(0,0,0,0.04); }
-    .avatar-xl { width:86px; height:86px; border-radius:9999px; object-fit:cover; border: 4px solid #fff; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
-    .mile-badge { background: linear-gradient(180deg,#dfffa5,#c8e97a); border-radius:999px; width:46px; height:46px; display:flex;align-items:center;justify-content:center; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
-    .mile-icon-sm { width:18px; height:18px; }
-    .muted { color:#8b8f94; }
-    .progress-bg { background:#f0f2f4; border-radius:999px; height:10px; overflow:hidden; }
-    .progress-fill { height:100%; background:linear-gradient(90deg,#9cc42f,#6dbf2a); width:0%; transition:width .5s ease; }
-    .pill { background:#fff; border-radius:12px; padding:10px 12px; display:flex; align-items:center; gap:10px; box-shadow: 0 1px 0 rgba(0,0,0,0.04); }
-    .big-button { background:#2b2f33; color:#fff; padding:14px; border-radius:12px; width:100%; text-align:center; font-weight:600; }
-    .input-inline{ padding:6px 8px; border-radius:8px; border:1px solid #ddd; width:100%; }
-    @media(min-width:768px){ .desktop-grid { display:grid; grid-template-columns: 1fr 340px; gap:18px; } }
+    /* Mobile-first styles tuned to match the screenshot */
+    :root{
+      --bg: #f3f5f7;
+      --card: #ffffff;
+      --muted:#8b8f94;
+      --accent:#9cc42f;
+      --accent-dark:#6dbf2a;
+      --dark-btn:#2f3337;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    /* center mobile look and allow scale on desktop */
+    .viewport {
+      width: 412px; /* mobile width from screenshot */
+      margin: 0 auto;
+      transform-origin: top center;
+    }
+    @media (min-width: 900px){
+      /* scale the mobile layout to occupy a larger area on desktop */
+      .viewport { transform: scale(1.1); }
+    }
+
+    header.topbar{
+      position:sticky; top:0; z-index:40;
+      background:var(--card); padding:14px 16px;
+      display:flex; align-items:center; gap:12px;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+    }
+    .avatar-circle{
+      width:56px; height:56px; border-radius:9999px; object-fit:cover; border:4px solid var(--card); box-shadow:0 6px 18px rgba(0,0,0,0.06);
+    }
+    .big-avatar{ width:86px; height:86px; border-radius:9999px; object-fit:cover; border:6px solid var(--card); box-shadow:0 8px 24px rgba(0,0,0,0.06); }
+
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+    }
+    .muted { color: var(--muted); }
+    .mile-badge { width:46px;height:46px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#eaf7b6,#d6ee7e);box-shadow:0 2px 6px rgba(0,0,0,0.04) }
+    .progress-bg{ background:#f0f2f4;height:12px;border-radius:999px;overflow:hidden;}
+    .progress-fill{ height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-dark)); width:0%; transition:width .45s ease; }
+
+    /* big promo button */
+    .big-promo-btn{
+      width:100%; background:var(--dark-btn); color:#fff; border-radius:12px; padding:16px; text-align:center; font-size:22px; font-weight:600;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+    }
+
+    /* subtle spacing */
+    .gap-y-12 > * + * { margin-top:12px; }
+    .rounded-2xl { border-radius:18px; }
+
+    /* match screenshot small text sizes */
+    .small-muted{ color:var(--muted); font-size:13px; }
+    .xl-title{ font-size:28px; font-weight:800; letter-spacing:0.5px; }
+    .shadow-very-soft{ box-shadow: 0 6px 18px rgba(0,0,0,0.03); }
+
+    /* list items */
+    .list-row{ display:flex; gap:12px; align-items:center; padding:12px; background:var(--card); border-radius:12px; box-shadow:0 1px 0 rgba(0,0,0,0.03) }
+    .list-row + .list-row { margin-top:8px; }
+    .list-icon{ width:40px; height:40px; border-radius:10px; background:#f6fff0; display:flex; align-items:center; justify-content:center; }
+
+    /* tiny helpers */
+    .dot { width:14px;height:14px;border-radius:999px;background:var(--accent);display:inline-block;margin-right:8px;box-shadow:0 1px 3px rgba(0,0,0,0.06) }
+    /* ensure file inputs not visible */
+    input[type="file"]{ display:none; }
   </style>
 </head>
 <body>
+  <div class="viewport">
 
-<header class="fixed top-0 left-0 w-full bg-white z-40 shadow px-4 py-3 flex items-center gap-3">
-  <img src="images/telegram_block.jpg" alt="S7 logo" class="w-9 h-9 rounded-full object-cover">
-  <div class="flex-1">
-    <div class="text-sm font-semibold"></div>
-    <div class="text-xs muted"></div>
-  </div>
-  <div id="userArea" class="flex items-center gap-2"></div>
-</header>
-
-<main class="pt-20 px-4 pb-24 max-w-1100 mx-auto">
-  <div class="card mb-4 flex flex-col md:flex-row items-start md:items-center gap-4">
-    <label for="avatarInput" title="Нажмите чтобы загрузить фото" class="cursor-pointer">
-      <img id="bigAvatar" class="avatar-xl" src="https://via.placeholder.com/150" alt="avatar">
-    </label>
-    <input id="avatarInput" type="file" accept="image/*" style="display:none">
-    <div class="flex-1">
-      <div id="fioHeader" class="text-2xl font-extrabold">Загрузка...</div>
-      <div class="small-muted" id="phoneHeader">—</div>
-    </div>
-
-    <div class="ml-auto min-w-[190px]">
-      <div class="small-muted">Бонусные мили</div>
-      <div class="flex items-center justify-between mt-2">
-        <div class="flex items-center gap-3">
-          <div class="mile-badge">
-            <img id="mileIconTop" src="images/mile_icon.jpg" alt="M" class="mile-icon-sm" />
-          </div>
-          <div>
-            <div id="milesCountTop" class="text-lg font-bold">—</div>
-            <div class="muted text-xs">Текущий баланс</div>
-          </div>
-        </div>
+    <!-- top header (empty left icon same as screenshot) -->
+    <header class="topbar">
+      <div style="width:40px;height:40px;border-radius:9999px;background:#fff;display:flex;align-items:center;justify-content:center;">
+        <!-- small left placeholder -->
       </div>
-      <div class="progress-wrap mt-3">
-        <div class="progress-bg" aria-hidden="true"><div id="milesProgressTop" class="progress-fill" style="width:0%"></div></div>
-        <div class="flex justify-between text-xs muted mt-2">
-          <div id="progressLeftTop">0 миль</div>
-          <div id="progressRightTop">—</div>
-        </div>
+      <div style="flex:1"></div>
+      <div id="userArea"></div>
+    </header>
+
+    <main style="padding:16px 16px 60px;">
+      <!-- avatar & name -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:8px;">
+        <label for="avatarInput" title="Нажмите чтобы загрузить фото" style="cursor:pointer;">
+          <img id="bigAvatar" class="big-avatar" src="https://via.placeholder.com/150" alt="avatar">
+        </label>
+        <input id="avatarInput" type="file" accept="image/*">
+        <div id="fioTitle" class="xl-title">Загрузка...</div>
       </div>
-    </div>
-  </div>
 
-  <div class="desktop-grid">
-    <div>
-      <nav class="tabs flex gap-2 mb-4 overflow-auto">
-        <a class="active px-3 py-2 rounded-lg bg-white" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
-        <a class="px-3 py-2 rounded-lg" data-tab="milesTab" onclick="showTab(event)">Мои мили</a>
-        <a class="px-3 py-2 rounded-lg" data-tab="shopTab" onclick="showTab(event)">S7avelii Shop</a>
-        <a class="px-3 py-2 rounded-lg" data-tab="settingsTab" onclick="showTab(event)">Настройки</a>
-      </nav>
-
-      <div class="grid">
-        <section id="profileTab" class="card" aria-label="profile">
-          <h3>Персональные данные</h3>
-
-          <div class="field flex justify-between items-center mt-3">
+      <!-- top grid: left big card + right two small -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <!-- left large card (priority + balance) -->
+        <div class="card rounded-2xl" style="display:flex;flex-direction:column;justify:space-between;padding:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
             <div>
-              <div class="small-muted">ФИО</div>
-              <div id="fioField">—</div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:28px;height:28px;border-radius:6px;background:#eef2f6;display:flex;align-items:center;justify-content:center;font-weight:700;color:#556">S7</div>
+                <div style="font-weight:700">Priority</div>
+              </div>
+              <div class="muted" style="margin-top:8px;letter-spacing:2px">115 757 155</div>
             </div>
-            <button class="btn bg-gray-100 px-3 py-1 rounded" onclick="editInline('fio')">Изменить</button>
+            <div style="opacity:0.6">▢▢</div>
           </div>
 
-          <div class="field flex justify-between items-center mt-3">
-            <div>
-              <div class="small-muted">Дата рождения</div>
-              <div id="dobField">—</div>
-            </div>
-            <button class="btn bg-gray-100 px-3 py-1 rounded" onclick="editInline('dob')">Изменить</button>
-          </div>
+          <div style="height:12px;margin:12px 0;border-top:1px solid #f1f2f4"></div>
 
-          <div class="field flex justify-between items-center mt-3">
-            <div>
-              <div class="small-muted">Пол</div>
-              <div id="genderField">—</div>
-            </div>
-            <button class="btn bg-gray-100 px-3 py-1 rounded" onclick="editInline('gender')">Изменить</button>
-          </div>
-
-          <h3 class="mt-6">Контакты</h3>
-
-          <div class="field flex justify-between items-center mt-3">
-            <div>
-              <div class="small-muted">E-mail</div>
-              <div id="emailField">—</div>
-            </div>
-            <button class="btn bg-gray-100 px-3 py-1 rounded" onclick="editInline('email')">Изменить</button>
-          </div>
-
-          <div class="field flex justify-between items-center mt-3">
-            <div>
-              <div class="small-muted">Телефон</div>
-              <div id="phoneField">—</div>
-            </div>
-            <button class="btn bg-gray-100 px-3 py-1 rounded" onclick="editInline('phone')">Изменить</button>
-          </div>
-
-          <h3 class="mt-6">Карта</h3>
-
-          <div class="field flex justify-between items-center mt-3">
-            <div>
-              <div class="small-muted">Номер карты</div>
-              <div id="card_field">—</div>
-            </div>
-            <button class="btn bg-gray-100 px-3 py-1 rounded" onclick="editInline('card_number')">Изменить</button>
-          </div>
-
-          <div class="field flex justify-between items-center mt-3">
-            <div>
-              <div class="small-muted">Тип карты</div>
-              <div id="cardTypeField">—</div>
-            </div>
-          </div>
-        </section>
-
-        <section id="milesTab" class="card mt-4" style="display:none">
-          <h3>Мои мили</h3>
-          <div class="muted">Состояние бонусов и прогресс статуса</div>
-
-          <div class="grid grid-cols-2 gap-3 mt-4">
-            <div class="card">
-              <div class="small-muted">Бонусные мили</div>
-              <div style="font-weight:700;font-size:20px" id="milesBonusStat">—</div>
-            </div>
-            <div class="card">
-              <div class="small-muted">Статусные мили</div>
-              <div style="font-weight:700;font-size:20px" id="milesStatusStat">—</div>
-            </div>
-          </div>
-
-          <div class="mt-4">
-            <div class="small-muted">Прогресс до следующего уровня</div>
-            <div class="progress-bg mt-2" style="height:12px;border-radius:10px"><div id="milesProgressBar2" class="progress-fill" style="width:0%;height:100%;"></div></div>
-            <div class="flex justify-between text-xs muted mt-2">
-              <div id="nextLevelLeft">0 / 1000</div>
-              <div id="nextLevelRight">Classic</div>
-            </div>
-          </div>
-
-          <div class="card mt-4">
-            <h4 class="mb-2">Активация промокода</h4>
-            <div class="flex gap-2">
-              <input id="promoInput" class="input-inline" type="text" placeholder="Введите промокод">
-              <button id="promoActivateBtn" class="big-button" style="padding:10px 12px">Активировать</button>
-            </div>
-            <div class="small-muted mt-2">Промокод можно использовать один раз.</div>
-          </div>
-
-          <div class="card mt-4">
-            <h4 class="mb-2">Смена типа карты</h4>
-            <div class="flex gap-2">
-              <input id="cardChangeInput" class="input-inline" type="text" placeholder="Введите код (VIP1111 / CLASS5555)">
-              <button id="cardChangeBtn" class="big-button" style="padding:10px 12px">Применить</button>
-            </div>
-            <div class="small-muted mt-2">Коды: <strong>VIP1111</strong> → VIP, <strong>CLASS5555</strong> → Classic</div>
-          </div>
-        </section>
-
-        <section id="shopTab" class="card mt-4" style="display:none">
-          <h3>S7avelii Shop</h3>
-          <div class="muted">Товары, доступные к покупке</div>
-          <div id="productGrid" class="product-grid grid grid-cols-1 md:grid-cols-2 gap-3 mt-3"></div>
-        </section>
-
-        <section id="settingsTab" class="card mt-4" style="display:none">
-          <h3>Настройки</h3>
-          <button class="big-button" onclick="logout()">Выйти</button>
-        </section>
-
-      </div>
-    </div>
-
-    <aside>
-      <div class="card mb-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="small-muted">Статус</div>
-            <div id="levelName" class="text-lg font-semibold">—</div>
-          </div>
-          <div class="text-right">
-            <div class="muted text-xs">Баланс</div>
-            <div id="milesCount" class="text-lg font-bold">—</div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="small-muted">ваш баланс</div>
+            <div class="mile-badge"><img src="images/mile_icon.jpg" alt="M" style="width:20px;height:20px;object-fit:contain"></div>
           </div>
         </div>
 
-        <div class="progress-bg mt-4"><div id="milesProgressBar" class="progress-fill" style="width:0%"></div></div>
-        <div class="flex justify-between text-xs muted mt-2">
-          <div id="milesLabelLeft">0 миль</div>
-          <div id="milesLabelRight">—</div>
+        <!-- right column: two small action cards -->
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="card rounded-2xl" style="padding:14px;display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-weight:700">Начисления</div>
+              <div class="muted" style="font-size:13px">Списания</div>
+            </div>
+            <img src="images/mile_icon.jpg" alt="" style="width:44px;height:44px;object-fit:contain;opacity:0.9;border-radius:8px">
+          </div>
+
+          <div class="card rounded-2xl" style="padding:14px;display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-weight:700">Управлять</div>
+              <div class="muted" style="font-size:13px">милями</div>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center">
+              <img src="images/yandex_plus.jpg" alt="" style="width:36px;height:36px;object-fit:contain;border-radius:8px">
+            </div>
+          </div>
         </div>
       </div>
 
-      <div id="telegramBlock" class="card mb-4">
-        <div class="flex items-center gap-3">
+      <!-- progress card -->
+      <div class="card rounded-2xl" style="padding:14px;margin-bottom:14px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="dot"></span>
+            <div class="small-muted">О статусе</div>
+          </div>
+          <div class="muted">О статусе ▸</div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <div class="progress-bg"><div id="mainProgress" class="progress-fill" style="width:0%"></div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:13px;color:var(--muted)">
+            <div id="progressLeft">0 миль</div>
+            <div id="progressRight">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- big promo button -->
+      <div style="margin-top:12px;">
+        <button id="addPromoBtn" class="big-promo-btn">Добавить промокод</button>
+      </div>
+
+      <!-- telegram banner -->
+      <div style="margin-top:14px;">
+        <div class="card rounded-2xl" style="display:flex;align-items:center;justify-content:space-between;padding:18px;overflow:hidden;">
+          <div style="flex:1;padding-right:12px;">
+            <div style="font-weight:800;font-size:18px">Наш бот в Телеграме</div>
+            <div class="muted" style="margin-top:6px">Подписывайтесь, чтобы знать о статусе рейса</div>
+          </div>
+          <div style="width:100px;flex-shrink:0;">
+            <img src="images/telegram_block.jpg" alt="telegram" style="width:100px;height:100px;object-fit:cover;border-radius:12px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- features list -->
+      <div style="margin-top:16px;">
+        <div class="list-row">
+          <div class="list-icon"><img src="images/yandex_plus.jpg" alt="" style="width:22px;height:22px;object-fit:contain"></div>
           <div style="flex:1">
-            <div class="font-semibold">Наш бот в Телеграме</div>
-            <div class="muted text-sm">Подписывайтесь, чтобы знать о статусе рейса</div>
-            <div class="mt-3">
-              <button id="telegramSubscribeBtn" class="big-button" style="background:#0088cc">Подписаться</button>
-            </div>
+            <div style="font-weight:700">Яндекс Плюс x S7</div>
           </div>
-          <div style="width:86px;">
-            <img src="images/telegram_block.jpg" alt="telegram" class="w-20 h-20 object-cover rounded-xl">
+        </div>
+
+        <div class="list-row">
+          <div class="list-icon"><img src="images/secret_passenger.jpg" alt="" style="width:22px;height:22px;object-fit:contain"></div>
+          <div style="flex:1">
+            <div style="font-weight:700">Тайный пассажир</div>
+          </div>
+        </div>
+
+        <div class="list-row">
+          <div class="list-icon"><img src="images/green_steps.jpg" alt="" style="width:22px;height:22px;object-fit:contain"></div>
+          <div style="flex:1">
+            <div style="font-weight:700">Green Steps</div>
           </div>
         </div>
       </div>
 
-      <div class="space-y-3">
-        <div class="card flex items-center gap-3">
-          <img src="images/yandex_plus.jpg" alt="" class="w-10 h-10 object-contain">
-          <div>
-            <div class="font-semibold">Яндекс Плюс x S7</div>
-            <div class="muted text-xs">Партнёрские предложения</div>
-          </div>
-        </div>
-
-        <div class="card flex items-center gap-3">
-          <img src="images/secret_passenger.jpg" alt="" class="w-10 h-10 object-contain">
-          <div>
-            <div class="font-semibold">Тайный пассажир</div>
-            <div class="muted text-xs">Участвуйте и получайте мили</div>
-          </div>
-        </div>
-
-        <div class="card flex items-center gap-3">
-          <img src="images/green_steps.jpg" alt="" class="w-10 h-10 object-contain">
-          <div>
-            <div class="font-semibold">Green Steps</div>
-            <div class="muted text-xs">Забота об окружающей среде</div>
-          </div>
-        </div>
-      </div>
-
-    </aside>
+    </main>
   </div>
 
-  <section id="shopCart" class="card mt-6" style="display:none">
-    <h3>Корзина</h3>
-    <table class="w-full mt-3" id="cartTable">
-      <thead>
-        <tr><th>Товар</th><th>Цена</th><th></th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <div class="flex justify-between items-center mt-4">
-      <div class="muted">Итого: <span id="cartTotal" class="font-semibold">0 ₽</span></div>
-      <button class="big-button" onclick="checkout()">Оформить заказ</button>
-    </div>
-  </section>
+  <!-- ===== SCRIPTS: API + UI logic (интегрирован твой рабочий скрипт, адаптация под мобильный layout) ===== -->
+  <script>
+    /* ========== Конфигурация API ========== */
+    const API = "https://s7avelii-airlines-1.onrender.com";
+    function getToken(){ return localStorage.getItem('token'); }
 
-</main>
-
-<!-- ====== SCRIPTS: API + UI logic (адаптированная версия) ====== -->
-<script>
-/* ========== Конфигурация API ========== */
-const API = "https://s7avelii-airlines-1.onrender.com";
-function getToken(){ return localStorage.getItem('token'); }
-
-/* ========== apiFetch ========== */
-async function apiFetch(endpoint, options = {}) {
-  const token = getToken();
-  options.headers = { ...(options.headers || {}) };
-  if (token) options.headers['Authorization'] = 'Bearer ' + token;
-  if (options.body && !(options.body instanceof FormData) && typeof options.body !== 'string') {
-    options.headers['Content-Type'] = 'application/json';
-    options.body = JSON.stringify(options.body);
-  }
-  try {
-    const res = await fetch(API + endpoint, options);
-    if (!res) return null;
-    if (res.status === 401) { logout(); return null; }
-    const txt = await res.text();
-    try { return JSON.parse(txt); } catch(e) { return { raw: txt, status: res.status }; }
-  } catch (e) {
-    console.error('fetch err', e);
-    return null;
-  }
-}
-
-/* ========== Global state ========== */
-let currentUser = null;
-let products = [];
-let cart = [];
-
-/* ========== Helpers ========== */
-function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function parseNumberSafe(v){
-  if (v === null || v === undefined) return null;
-  if (typeof v === 'number' && !Number.isNaN(v)) return v;
-  if (typeof v === 'string'){
-    const cleaned = v.replace(/\s+/g,'').replace(/[^0-9\-,.]/g,'');
-    if (cleaned === '') return null;
-    let normalized = cleaned;
-    const commaCount = (cleaned.match(/,/g)||[]).length;
-    const dotCount = (cleaned.match(/\./g)||[]).length;
-    if (commaCount > 0 && dotCount === 0){ normalized = cleaned.replace(/,/g,''); }
-    else if (dotCount > 0 && commaCount === 0){ normalized = cleaned; }
-    else if (commaCount > 0 && dotCount > 0){
-      if (cleaned.lastIndexOf(',') > cleaned.lastIndexOf('.')) normalized = cleaned.replace(/\./g,'').replace(',', '.');
-      else normalized = cleaned.replace(/,/g,'');
+    /* ========== apiFetch ========== */
+    async function apiFetch(endpoint, options = {}) {
+      const token = getToken();
+      options.headers = { ...(options.headers || {}) };
+      if (token) options.headers['Authorization'] = 'Bearer ' + token;
+      if (options.body && !(options.body instanceof FormData) && typeof options.body !== 'string') {
+        options.headers['Content-Type'] = 'application/json';
+        options.body = JSON.stringify(options.body);
+      }
+      try {
+        const res = await fetch(API + endpoint, options);
+        if (!res) return null;
+        if (res.status === 401) { logout(); return null; }
+        const txt = await res.text();
+        try { return JSON.parse(txt); } catch(e) { return { raw: txt, status: res.status }; }
+      } catch (e) {
+        console.error('fetch err', e);
+        return null;
+      }
     }
-    const num = Number(normalized);
-    if (!Number.isNaN(num)) return Math.floor(num);
-    return null;
-  }
-  return null;
-}
-function findMilesInObject(obj, visited = new WeakSet()){
-  if (!obj || typeof obj !== 'object') return null;
-  if (visited.has(obj)) return null;
-  visited.add(obj);
-  try {
-    const keys = Object.keys(obj);
-    const keyPatterns = [/^miles?$/i, /bonus/i, /status/i, /points?/i, /balance/i, /mile/i];
-    for (const pat of keyPatterns){
-      for (const k of keys){
-        if (pat.test(k)){
-          const v = obj[k];
-          const n = parseNumberSafe(v);
-          if (n !== null) return n;
+
+    /* ========== Helpers ========== */
+    function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function parseNumberSafe(v){
+      if (v === null || v === undefined) return null;
+      if (typeof v === 'number' && !Number.isNaN(v)) return v;
+      if (typeof v === 'string'){
+        const cleaned = v.replace(/\s+/g,'').replace(/[^0-9\-,.]/g,'');
+        if (cleaned === '') return null;
+        let normalized = cleaned;
+        const commaCount = (cleaned.match(/,/g)||[]).length;
+        const dotCount = (cleaned.match(/\./g)||[]).length;
+        if (commaCount > 0 && dotCount === 0){ normalized = cleaned.replace(/,/g,''); }
+        else if (dotCount > 0 && commaCount === 0){ normalized = cleaned; }
+        else if (commaCount > 0 && dotCount > 0){
+          if (cleaned.lastIndexOf(',') > cleaned.lastIndexOf('.')) normalized = cleaned.replace(/\./g,'').replace(',', '.');
+          else normalized = cleaned.replace(/,/g,'');
         }
+        const num = Number(normalized);
+        if (!Number.isNaN(num)) return Math.floor(num);
+        return null;
+      }
+      return null;
+    }
+    function findMilesInObject(obj, visited = new WeakSet()){
+      if (!obj || typeof obj !== 'object') return null;
+      if (visited.has(obj)) return null;
+      visited.add(obj);
+      try {
+        const keys = Object.keys(obj);
+        const keyPatterns = [/^miles?$/i, /bonus/i, /status/i, /points?/i, /balance/i, /mile/i];
+        for (const pat of keyPatterns){
+          for (const k of keys){
+            if (pat.test(k)){
+              const v = obj[k];
+              const n = parseNumberSafe(v);
+              if (n !== null) return n;
+            }
+          }
+        }
+        for (const k of keys){
+          if (/mile|miles|bonus|points|balance|status/i.test(k)){
+            const v = obj[k];
+            const n = parseNumberSafe(v);
+            if (n !== null) return n;
+          }
+        }
+        for (const k of keys){
+          const v = obj[k];
+          if (v && typeof v === 'object'){
+            const deeper = findMilesInObject(v, visited);
+            if (deeper !== null) return deeper;
+          }
+        }
+      } catch(e){}
+      return null;
+    }
+
+    /* ========== Levels (твоя шкала) ========== */
+    const LEVELS = [
+      { name: 'Classic', min: 0, max: 1000 },
+      { name: 'VIP', min: 1000, max: 10000 },
+      { name: 'Master', min: 10000, max: 100000 },
+      { name: 'Flight Master', min: 100000, max: 500000 }
+    ];
+    function getLevelByMiles(miles){
+      for(let i=LEVELS.length-1;i>=0;i--){ if(miles >= LEVELS[i].min) return LEVELS[i]; }
+      return LEVELS[0];
+    }
+
+    /* ========== State ========== */
+    let currentUser = null;
+
+    /* ========== Update header user area (mini widget) ========== */
+    async function updateUserArea() {
+      const userArea = document.getElementById('userArea');
+      const token = getToken();
+      if (!token) {
+        if (userArea) userArea.innerHTML = `<a href="auth.html" style="color:#6dd808;border:1px solid #cfeab2;padding:6px 10px;border-radius:8px;text-decoration:none">Вход</a>`;
+        return;
+      }
+      try {
+        const res = await apiFetch('/api/profile');
+        if (!res || (Object.keys(res).length===0)) { if (userArea) userArea.innerHTML = `<a href="auth.html">Вход</a>`; return; }
+        const user = res.user || res;
+        currentUser = user;
+
+        const savedAvatar = localStorage.getItem('userAvatar') || '';
+        let avatarUrl = null;
+        if (user.avatar) avatarUrl = (String(user.avatar).startsWith('http') ? user.avatar : API + user.avatar);
+        else if (savedAvatar) avatarUrl = savedAvatar;
+        if (!avatarUrl) avatarUrl = 'https://via.placeholder.com/150';
+
+        const fio = user.fio || user.email || 'Профиль';
+        const parts = String(fio).split(/\s+/).filter(Boolean);
+        const firstName = parts[0] || '';
+        const surnameInitial = parts[1] ? parts[1][0] + '.' : '';
+        const nameShort = firstName + (surnameInitial ? (' ' + surnameInitial) : '');
+
+        let miles = null;
+        if (user.miles !== undefined) miles = parseNumberSafe(user.miles);
+        if (miles === null) miles = findMilesInObject(user) ?? findMilesInObject(res);
+        if (miles === null) miles = 0;
+
+        if (userArea) {
+          userArea.innerHTML = `
+            <div style="display:flex;align-items:center;gap:8px">
+              <img src="${avatarUrl}" alt="avatar" style="width:36px;height:36px;border-radius:9999px;object-fit:cover;border:2px solid #fff">
+              <div style="text-align:right">
+                <div style="font-weight:700;font-size:13px">${escapeHtml(nameShort)}</div>
+                <div style="font-size:12px;color:var(--muted)">${Number(miles).toLocaleString('ru-RU')} <img src="images/mile_icon.jpg" style="width:14px;height:14px;vertical-align:middle;margin-left:4px"></div>
+              </div>
+            </div>
+          `;
+        }
+
+        if (user.avatar) {
+          try { localStorage.setItem('userAvatar', avatarUrl); } catch(e){}
+        }
+        currentUser = user;
+        renderProfileUI();
+      } catch (e) {
+        console.error('updateUserArea err', e);
+        if (userArea) userArea.innerHTML = `<a href="auth.html">Вход</a>`;
       }
     }
-    for (const k of keys){
-      if (/mile|miles|bonus|points|balance|status/i.test(k)){
-        const v = obj[k];
-        const n = parseNumberSafe(v);
-        if (n !== null) return n;
-      }
-    }
-    for (const k of keys){
-      const v = obj[k];
-      if (v && typeof v === 'object'){
-        const deeper = findMilesInObject(v, visited);
-        if (deeper !== null) return deeper;
-      }
-    }
-  } catch(e){}
-  return null;
-}
 
-/* ========== Levels ========== */
-const LEVELS = [
-  { name: 'Classic', min: 0, max: 1000 },
-  { name: 'VIP', min: 1000, max: 10000 },
-  { name: 'Master', min: 10000, max: 100000 },
-  { name: 'Flight Master', min: 100000, max: 500000 }
-];
-function getLevelByMiles(miles){
-  for(let i=LEVELS.length-1;i>=0;i--){ if(miles >= LEVELS[i].min) return LEVELS[i]; }
-  return LEVELS[0];
-}
+    /* ========== Render profile to page (fills elements) ========== */
+    function renderProfileUI(){
+      if(!currentUser) return;
+      // name short
+      const fio = currentUser.fio || '';
+      const parts = String(fio).split(/\s+/).filter(Boolean);
+      const firstName = parts[0] || '';
+      const surnameInitial = parts[1] ? parts[1][0] + '.' : '';
+      const fioTitle = firstName ? (firstName + (surnameInitial ? (' ' + surnameInitial) : '')) : (currentUser.email || 'Профиль');
+      document.getElementById('fioTitle').textContent = fioTitle;
 
-/* ========== Update header user area ========== */
-async function updateUserArea() {
-  const userArea = document.getElementById('userArea');
-  const token = getToken();
-  if (!token) {
-    if (userArea) userArea.innerHTML = `<a href="auth.html" style="color:#6dd808;border:1px solid #cfeab2;padding:6px 10px;border-radius:8px;text-decoration:none">Вход</a>`;
-    return;
-  }
-  try {
-    const res = await apiFetch('/api/profile');
-    if (!res || (Object.keys(res).length===0)) { if (userArea) userArea.innerHTML = `<a href="auth.html">Вход</a>`; return; }
-    const user = res.user || res;
-    currentUser = user;
+      // avatar
+      const savedAvatar = localStorage.getItem('userAvatar') || '';
+      let avatarUrl = currentUser.avatar ? (String(currentUser.avatar).startsWith('http') ? currentUser.avatar : API + currentUser.avatar) : (savedAvatar || 'https://via.placeholder.com/150');
+      const bigAvatar = document.getElementById('bigAvatar');
+      if (bigAvatar) bigAvatar.src = avatarUrl;
 
-    const savedAvatar = localStorage.getItem('userAvatar') || '';
-    let avatarUrl = null;
-    if (user.avatar) avatarUrl = (String(user.avatar).startsWith('http') ? user.avatar : API + user.avatar);
-    else if (savedAvatar) avatarUrl = savedAvatar;
-    if (!avatarUrl) avatarUrl = 'https://via.placeholder.com/150';
+      // miles
+      const detectedMiles = (currentUser.miles !== undefined ? parseNumberSafe(currentUser.miles) : null) ?? findMilesInObject(currentUser) ?? 0;
+      // update counters
+      const topCount = document.getElementById('milesCountTop');
+      const rightCount = document.getElementById('milesCount');
+      if (topCount) topCount.textContent = detectedMiles.toLocaleString('ru-RU');
+      if (rightCount) rightCount.textContent = detectedMiles.toLocaleString('ru-RU') + ' м';
 
-    const fio = user.fio || user.email || 'Профиль';
-    const parts = String(fio).split(/\s+/).filter(Boolean);
-    const firstName = parts[0] || '';
-    const surnameInitial = parts[1] ? parts[1][0] + '.' : '';
-    const nameShort = firstName + (surnameInitial ? (' ' + surnameInitial) : '');
+      // progress calculation by defined levels
+      const level = getLevelByMiles(detectedMiles);
+      const nextLevel = LEVELS.find(l => l.min > level.min);
+      const currentMin = level.min;
+      const nextMin = nextLevel ? nextLevel.min : level.max;
+      const denom = (nextMin - currentMin) || 1;
+      const progressPercent = nextLevel ? ((detectedMiles - currentMin) / denom) * 100 : 100;
 
-    let miles = null;
-    if (user.miles !== undefined) miles = parseNumberSafe(user.miles);
-    if (miles === null) miles = findMilesInObject(user) ?? findMilesInObject(res);
-    if (miles === null) miles = 0;
+      const mainProgress = document.getElementById('mainProgress');
+      if (mainProgress) mainProgress.style.width = Math.max(0, Math.min(100, progressPercent)) + '%';
+      const progressLeft = document.getElementById('progressLeft');
+      const progressRight = document.getElementById('progressRight');
+      if (progressLeft) progressLeft.textContent = currentMin.toLocaleString('ru-RU') + ' миль';
+      if (progressRight) progressRight.textContent = nextMin ? nextMin.toLocaleString('ru-RU') + ' миль' : '—';
 
-    if (userArea) {
-      userArea.innerHTML = `
-        <div class="flex items-center gap-2 bg-white rounded-xl px-2 py-1" style="border:1px solid #eee">
-          <img src="${avatarUrl}" alt="avatar" class="w-9 h-9 rounded-full object-cover">
-          <div class="text-right">
-            <div class="text-sm font-semibold">${escapeHtml(nameShort)}</div>
-            <div class="text-xs muted">${Number(miles).toLocaleString('ru-RU')} <img src="images/mile_icon.jpg" class="inline-block w-3 h-3" alt="M"></div>
-          </div>
-        </div>
-      `;
-    }
-    if (user.avatar) {
-      try { localStorage.setItem('userAvatar', avatarUrl); } catch(e){}
-    }
-    currentUser = user;
-    loadProfile();
-    updateMilesUIFromCurrentUser();
-  } catch (e) {
-    console.error('updateUserArea err', e);
-    if (userArea) userArea.innerHTML = `<a href="auth.html">Вход</a>`;
-  }
-}
+      // level name in sidebar if exists
+      const levelName = document.getElementById('levelName');
+      if (levelName) levelName.textContent = level.name;
 
-/* ========== Render profile fields ========== */
-function loadProfile(){
-  if(!currentUser) return;
-  document.getElementById('fioHeader').textContent = currentUser.fio || '—';
-  document.getElementById('phoneHeader').textContent = currentUser.phone || '—';
-  document.getElementById('fioField').textContent = currentUser.fio || '—';
-  document.getElementById('dobField').textContent = currentUser.dob || '—';
-  document.getElementById('genderField').textContent = currentUser.gender || '—';
-  document.getElementById('emailField').textContent = currentUser.email || '—';
-  document.getElementById('phoneField').textContent = currentUser.phone || '—';
-  document.getElementById('card_field').textContent = currentUser.card_number || '—';
-  document.getElementById('cardTypeField').textContent = currentUser.card_type || '—';
-
-  const milesDetected = (currentUser.miles !== undefined ? parseNumberSafe(currentUser.miles) : null) ?? findMilesInObject(currentUser) ?? 0;
-
-  document.getElementById('bonusMiles') && (document.getElementById('bonusMiles').textContent = (currentUser.bonus_miles || 0));
-  const mpb = document.getElementById('milesProgressBar');
-  if(mpb) mpb.style.width = Math.min(100, ((currentUser.bonus_miles || 0)/1000)*100) + '%';
-  document.getElementById('milesLabelRight') && (document.getElementById('milesLabelRight').textContent = (currentUser.bonus_miles || 0) + ' миль');
-  document.getElementById('milesBonusStat') && (document.getElementById('milesBonusStat').textContent = currentUser.bonus_miles || 0);
-  document.getElementById('milesStatusStat') && (document.getElementById('milesStatusStat').textContent = currentUser.status_miles || 0);
-  document.getElementById('milesProgressBar2') && (document.getElementById('milesProgressBar2').style.width = Math.min(100, (currentUser.status_miles || 0)/1000*100) + '%');
-  document.getElementById('nextLevelLeft') && (document.getElementById('nextLevelLeft').textContent = (currentUser.status_miles || 0) + '/1000');
-
-  document.getElementById('milesCount') && (document.getElementById('milesCount').textContent = milesDetected.toLocaleString('ru-RU') + ' м');
-  document.getElementById('milesCountTop') && (document.getElementById('milesCountTop').textContent = milesDetected.toLocaleString('ru-RU'));
-
-  const topLevel = getLevelByMiles(milesDetected);
-  const next = LEVELS.find(l => l.min > topLevel.min);
-  const currentMin = topLevel.min;
-  const nextMin = next ? next.min : topLevel.max;
-  const denom = (nextMin - currentMin) || 1;
-  const progressPercentTop = next ? ((milesDetected - currentMin) / denom) * 100 : 100;
-  document.getElementById('milesProgressTop') && (document.getElementById('milesProgressTop').style.width = Math.max(0, Math.min(100, progressPercentTop)) + '%');
-  document.getElementById('progressLeftTop') && (document.getElementById('progressLeftTop').textContent = currentMin.toLocaleString('ru-RU') + ' миль');
-  document.getElementById('progressRightTop') && (document.getElementById('progressRightTop').textContent = nextMin ? nextMin.toLocaleString('ru-RU') + ' миль' : '—');
-}
-
-/* ========== Inline editing & save ========== */
-async function editInline(field) {
-  if(!currentUser) return;
-  const domMap = { fio: 'fioField', dob: 'dobField', gender: 'genderField', email: 'emailField', phone: 'phoneField', card_number: 'card_field' };
-  const domId = domMap[field] || field + 'Field';
-  const container = document.getElementById(domId);
-  if(!container) return;
-  const cur = (field === 'card_number' ? currentUser.card_number : currentUser[field]) || '';
-  let input;
-  if (field === 'dob') {
-    input = document.createElement('input'); input.type = 'date'; input.value = cur;
-  } else if (field === 'gender') {
-    input = document.createElement('select');
-    ['', 'Мужской','Женский','Другое'].forEach(val=>{ const o=document.createElement('option'); o.value=val; o.textContent=val||'Не указан'; if(val===cur) o.selected=true; input.appendChild(o); });
-  } else if (field === 'phone') {
-    input = document.createElement('input'); input.type='tel'; input.value = cur;
-  } else {
-    input = document.createElement('input'); input.type = 'text'; input.value = cur;
-  }
-  input.className = 'input-inline';
-  let saved = false;
-  input.addEventListener('change', async () => { await saveField(field, input.value); saved = true; });
-  input.addEventListener('blur', async () => { if(!saved) await saveField(field, input.value); });
-  container.innerHTML = ''; container.appendChild(input); input.focus();
-}
-
-async function saveField(field, value) {
-  const payload = {}; payload[field] = value;
-  const res = await apiFetch('/api/profile', { method: 'PUT', body: payload });
-  if (res) {
-    const updated = await apiFetch('/api/profile');
-    if (updated) { currentUser = updated.user || updated; loadProfile(); updateUserArea(); }
-  } else {
-    alert('Ошибка при сохранении');
-    const re = await apiFetch('/api/profile'); if(re) { currentUser = re.user || re; loadProfile(); }
-  }
-}
-
-/* ========== Avatar upload (сохраняем в localStorage) ========== */
-function attachAvatarUpload(){
-  const avatarInput = document.getElementById('avatarInput');
-  if(!avatarInput) return;
-  avatarInput.addEventListener('change', async function(){
-    if(!this.files[0]) return;
-    const fd = new FormData();
-    fd.append('avatar', this.files[0]);
-    const token = getToken();
-    try{
-      const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
-      const resRaw = await fetch(API + '/api/profile/avatar', { method: 'POST', headers, body: fd });
-      if(!resRaw) throw new Error('no response');
-      const txt = await resRaw.text();
-      let data;
-      try { data = JSON.parse(txt); } catch(e){ data = { raw: txt }; }
-      const avatarReturned = (data && (data.avatar || (data.user && data.user.avatar))) ? (data.avatar || data.user.avatar) : null;
-      if (avatarReturned) {
-        const avatarUrl = String(avatarReturned).startsWith('http') ? avatarReturned : API + avatarReturned;
-        const avatarImg = document.getElementById('bigAvatar');
-        if (avatarImg) avatarImg.src = avatarUrl;
+      // store avatar persistently
+      if (currentUser.avatar) {
         try { localStorage.setItem('userAvatar', avatarUrl); } catch(e){}
-        await updateUserArea();
-      } else {
-        alert('Ошибка загрузки аватара');
       }
-    }catch(err){ console.error('avatar upload', err); alert('Ошибка сети при загрузке'); }
-  });
-}
+    }
 
-/* ========== Shop & cart ========== */
-async function loadShop(){
-  const data = await apiFetch('/api/shop');
-  products = (data && data.products) ? data.products : [];
-  renderProducts();
-}
-function renderProducts(){
-  const grid = document.getElementById('productGrid');
-  if(!grid) return;
-  grid.innerHTML = '';
-  products.forEach(p=>{
-    const div = document.createElement('div'); div.className = 'card';
-    div.innerHTML = `<div style="font-weight:600">${escapeHtml(p.name)}</div>
-                     <div class="small-muted">${p.price} ₽</div>
-                     <button class="btn bg-green-500 text-white px-3 py-1 rounded mt-2" onclick="addToCart(${p.id})">В корзину</button>`;
-    grid.appendChild(div);
-  });
-}
-function addToCart(id){
-  const p = products.find(x=>x.id===id);
-  if(!p) return;
-  cart.push(p); renderCart();
-}
-function removeFromCart(i){ cart.splice(i,1); renderCart(); }
-function renderCart(){
-  const tbody = document.getElementById('cartTable').querySelector('tbody');
-  tbody.innerHTML = '';
-  let total = 0;
-  cart.forEach((p,i)=>{ total += Number(p.price||0); const tr = document.createElement('tr'); tr.innerHTML = `<td>${escapeHtml(p.name)}</td><td>${p.price} ₽</td><td><button class="btn bg-red-200 px-2 py-1 rounded" onclick="removeFromCart(${i})">×</button></td>`; tbody.appendChild(tr); });
-  document.getElementById('cartTotal').textContent = total + ' ₽';
-}
-async function checkout(){
-  if(cart.length === 0) { alert('Корзина пуста'); return; }
-  const res = await apiFetch('/api/checkout', { method: 'POST', body: { items: cart } });
-  if(res) { cart = []; renderCart(); alert('Заказ оформлен!'); }
-  else alert('Ошибка при оформлении заказа');
-}
+    /* ========== Avatar upload (persist) ========== */
+    function attachAvatarUpload(){
+      const avatarInput = document.getElementById('avatarInput');
+      if(!avatarInput) return;
+      avatarInput.addEventListener('change', async function(){
+        if(!this.files[0]) return;
+        const fd = new FormData();
+        fd.append('avatar', this.files[0]);
+        const token = getToken();
+        try{
+          const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+          const resRaw = await fetch(API + '/api/profile/avatar', { method: 'POST', headers, body: fd });
+          if(!resRaw) throw new Error('no response');
+          const txt = await resRaw.text();
+          let data;
+          try { data = JSON.parse(txt); } catch(e){ data = { raw: txt }; }
+          const avatarReturned = (data && (data.avatar || (data.user && data.user.avatar))) ? (data.avatar || data.user.avatar) : null;
+          if (avatarReturned) {
+            const avatarUrl = String(avatarReturned).startsWith('http') ? avatarReturned : API + avatarReturned;
+            const avatarImg = document.getElementById('bigAvatar');
+            if (avatarImg) avatarImg.src = avatarUrl;
+            try { localStorage.setItem('userAvatar', avatarUrl); } catch(e){}
+            await updateUserArea();
+          } else {
+            // If server didn't return avatar path, try to save using local blob url
+            const file = this.files[0];
+            const blobUrl = URL.createObjectURL(file);
+            try { localStorage.setItem('userAvatar', blobUrl); } catch(e){}
+            const avatarImg = document.getElementById('bigAvatar');
+            if (avatarImg) avatarImg.src = blobUrl;
+            await updateUserArea();
+          }
+        }catch(err){ console.error('avatar upload', err); alert('Ошибка сети при загрузке'); }
+      });
+    }
 
-/* ========== Logout ========== */
-function logout(){ localStorage.removeItem('token'); window.location.href = 'auth.html'; }
+    /* ========== Promo button (opens prompt, tries to PUT to profile) ========== */
+    document.getElementById && (function attachPromo(){
+      const btn = document.getElementById('addPromoBtn');
+      if (!btn) return;
+      btn.addEventListener('click', async ()=>{
+        const code = prompt('Введите промокод');
+        if (!code) return;
+        // example behavior: try to increase miles on server via PUT /api/profile
+        const inc = 500; // demo increment (can be replaced by server-side logic)
+        const profile = await apiFetch('/api/profile');
+        const user = (profile && profile.user) ? profile.user : profile;
+        const newMiles = (Number(user.miles || 0) + inc);
+        const upd = await apiFetch('/api/profile', { method: 'PUT', body: { miles: newMiles } });
+        if (upd) {
+          await updateUserArea();
+          alert('Промокод применён, +' + inc + ' миль');
+        } else {
+          alert('Ошибка применения промокода');
+        }
+      });
+    })();
 
-/* ========== PROMO, LEVEL sync ========== */
-const PROMOS = {
-  'S717000': 17000,
-  'WELCOME500': 500
-};
-function isOkApiRes(res){
-  if(!res) return false;
-  if(res.ok===true || res.success===true) return true;
-  if(typeof res==='object' && (res.fio || res.id || res.user_id)) return true;
-  if(typeof res==='object' && Object.keys(res).length>0) return true;
-  return false;
-}
-function updateMilesUIFromCurrentUser(){
-  if(!currentUser) return;
-  const detectedMiles = (currentUser.miles !== undefined ? parseNumberSafe(currentUser.miles) : null) ?? findMilesInObject(currentUser) ?? 0;
-  const statusMiles = Number(currentUser.status_miles || detectedMiles || 0);
-  const bonusMiles = Number(currentUser.bonus_miles || 0);
+    /* ========== Init on DOMContentLoaded ========== */
+    document.addEventListener('DOMContentLoaded', async ()=>{
+      attachAvatarUpload();
+      await updateUserArea();
+      // ensure profile rendering after update
+      renderProfileUI();
+    });
 
-  const bonusEl = document.getElementById('milesBonusStat');
-  const statusEl = document.getElementById('milesStatusStat');
-  if(bonusEl) bonusEl.textContent = bonusMiles.toLocaleString('ru-RU');
-  if(statusEl) statusEl.textContent = statusMiles.toLocaleString('ru-RU');
+    /* ========== Logout placeholder ========== */
+    function logout(){ localStorage.removeItem('token'); /* redirect if needed */ }
 
-  const level = getLevelByMiles(statusMiles);
-  let nextBoundary = LEVELS.find(l => l.min > level.min);
-  const nextMin = nextBoundary ? nextBoundary.min : level.max;
-  const segmentRange = (nextMin - level.min) || 1;
-  const progressPercent = nextBoundary ? ((statusMiles - level.min) / segmentRange) * 100 : 100;
-  const bar = document.getElementById('milesProgressBar2');
-  if(bar) bar.style.width = Math.min(Math.max(progressPercent,0),100) + '%';
-  const left = document.getElementById('nextLevelLeft');
-  const right = document.getElementById('nextLevelRight');
-  if(left) left.textContent = `${statusMiles.toLocaleString('ru-RU')} / ${nextMin.toLocaleString('ru-RU')}`;
-  if(right) right.textContent = level.name;
-
-  document.getElementById('milesCount') && (document.getElementById('milesCount').textContent = detectedMiles.toLocaleString('ru-RU') + ' м');
-  document.getElementById('milesCountTop') && (document.getElementById('milesCountTop').textContent = detectedMiles.toLocaleString('ru-RU'));
-
-  const topLevel = getLevelByMiles(detectedMiles);
-  const nextTop = LEVELS.find(l => l.min > topLevel.min);
-  const currentMin = topLevel.min;
-  const nextMinTop = nextTop ? nextTop.min : topLevel.max;
-  const denom = (nextMinTop - currentMin) || 1;
-  const progressPercentTop = nextTop ? ((detectedMiles - currentMin) / denom) * 100 : 100;
-  const topBar = document.getElementById('milesProgressTop');
-  if(topBar) topBar.style.width = Math.max(0, Math.min(100, progressPercentTop)) + '%';
-  document.getElementById('progressLeftTop') && (document.getElementById('progressLeftTop').textContent = currentMin.toLocaleString('ru-RU') + ' миль');
-  document.getElementById('progressRightTop') && (document.getElementById('progressRightTop').textContent = nextMinTop ? nextMinTop.toLocaleString('ru-RU') + ' миль' : '—');
-
-  const cardField = document.getElementById('cardTypeField');
-  if(cardField) cardField.textContent = currentUser.card_type || level.name;
-}
-
-/* ========== Promo handlers ========== */
-async function handleActivatePromo(){
-  const input = document.getElementById('promoInput');
-  if(!input) return alert('Не найдено поле промокода');
-  const code = (input.value||'').trim().toUpperCase();
-  if(!code) return alert('Введите промокод');
-  if(!PROMOS[code]) return alert('Неверный промокод');
-  const used = Array.isArray(currentUser?.used_promos) ? currentUser.used_promos : [];
-  if(used.includes(code)) return alert('Промокод уже использован');
-  const add = Number(PROMOS[code]||0);
-  const payload = {
-    bonus_miles: (Number(currentUser.bonus_miles || 0) + add),
-    status_miles: (Number(currentUser.status_miles || 0) + add),
-    used_promos: [...used, code]
-  };
-  const res = await apiFetch('/api/profile', { method: 'PUT', body: payload });
-  if(!isOkApiRes(res)) return alert('Ошибка сервера при активации промокода');
-  const updated = await apiFetch('/api/profile');
-  if(updated && (updated.fio || updated.id)) currentUser = updated.user || updated;
-  else { currentUser.bonus_miles = payload.bonus_miles; currentUser.status_miles = payload.status_miles; currentUser.used_promos = payload.used_promos; }
-  updateMilesUIFromCurrentUser();
-  alert(`Промокод применён, +${add} миль`);
-  input.value = '';
-}
-
-/* ========== Card change ========== */
-async function handleCardChange(){
-  const input = document.getElementById('cardChangeInput');
-  if(!input) return alert('Не найдено поле смены карты');
-  const code = (input.value||'').trim().toUpperCase();
-  if(!code) return alert('Введите код смены карты');
-  let newType = null;
-  if(code === 'VIP1111') newType = 'VIP';
-  else if(code === 'CLASS5555') newType = 'Classic';
-  else return alert('Неверный код смены карты');
-  const res = await apiFetch('/api/profile', { method: 'PUT', body: { card_type: newType }});
-  if(!isOkApiRes(res)) return alert('Ошибка при смене типа карты');
-  const updated = await apiFetch('/api/profile');
-  if(updated && (updated.fio || updated.id)) currentUser = updated.user || updated;
-  else currentUser.card_type = newType;
-  updateMilesUIFromCurrentUser();
-  alert(`Тип карты изменён на ${newType}`);
-  input.value = '';
-}
-
-/* ========== Attach handlers & init ========== */
-function attachPromoAndCardHandlers(){
-  const promoBtn = document.getElementById('promoActivateBtn');
-  if(promoBtn){ promoBtn.removeEventListener('click', handleActivatePromo); promoBtn.addEventListener('click', handleActivatePromo); }
-  const cardBtn = document.getElementById('cardChangeBtn');
-  if(cardBtn){ cardBtn.removeEventListener('click', handleCardChange); cardBtn.addEventListener('click', handleCardChange); }
-}
-
-const originalLoadProfile = window.loadProfile || function(){};
-window.loadProfile = function(){
-  try{ originalLoadProfile(); }catch(e){}
-  updateMilesUIFromCurrentUser();
-  (async ()=>{ await ensureCardTypeMatchesMiles(); })().catch(e=>console.warn(e));
-  attachPromoAndCardHandlers();
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-  attachAvatarUpload();
-  const tClose = document.getElementById('telegramCloseBtn');
-  if(tClose) tClose.addEventListener('click', ()=>{ const b=document.getElementById('telegramBlock'); if(b) b.style.display='none'; });
-  const tSub = document.getElementById('telegramSubscribeBtn');
-  if(tSub) tSub.addEventListener('click', ()=>{ alert('Спасибо! Вы подписаны (симуляция)'); });
-
-  document.querySelectorAll('.tabs a').forEach(a=>{ a.addEventListener('click', (e)=>{ showTab(e); }); });
-
-  (async ()=>{
-    const token = getToken();
-    if(!token){ /* optionally redirect to login */ }
-    await updateUserArea();
-    await loadShop();
-    updateMilesUIFromCurrentUser();
-    attachPromoAndCardHandlers();
-  })();
-});
-
-/* expose some functions to window for inline html buttons */
-window.editInline = editInline;
-window.logout = logout;
-window.addToCart = addToCart;
-window.removeFromCart = removeFromCart;
-window.checkout = checkout;
-</script>
-
+    /* expose minor functions if needed */
+    window.updateUserArea = updateUserArea;
+    window.renderProfileUI = renderProfileUI;
+  </script>
 </body>
 </html>
+
