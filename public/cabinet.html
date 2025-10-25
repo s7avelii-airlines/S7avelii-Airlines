@@ -2,304 +2,188 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>S7avelii | Профиль </title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>S7avelii | Профиль</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Mobile-first styles tuned to match the screenshot */
-    :root{
-      --bg: #f3f5f7;
-      --card: #ffffff;
-      --muted:#8b8f94;
-      --accent:#9cc42f;
-      --accent-dark:#6dbf2a;
-      --dark-btn:#2f3337;
-    }
-    html,body{height:100%}
-    body{
-      margin:0;
-      background:var(--bg);
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      -webkit-tap-highlight-color:transparent;
-    }
-
-    /* center mobile look and allow scale on desktop */
-    .viewport {
-      width: 412px; /* mobile width from screenshot */
-      margin: 0 auto;
-      transform-origin: top center;
-    }
-    @media (min-width: 900px){
-      /* scale the mobile layout to occupy a larger area on desktop */
-      .viewport { transform: scale(1.1); }
-    }
-
-    header.topbar{
-      position:sticky; top:0; z-index:40;
-      background:var(--card); padding:14px 16px;
-      display:flex; align-items:center; gap:12px;
-      box-shadow: 0 1px 0 rgba(0,0,0,0.04);
-    }
-    .avatar-circle{
-      width:56px; height:56px; border-radius:9999px; object-fit:cover; border:4px solid var(--card); box-shadow:0 6px 18px rgba(0,0,0,0.06);
-    }
-    .big-avatar{ width:86px; height:86px; border-radius:9999px; object-fit:cover; border:6px solid var(--card); box-shadow:0 8px 24px rgba(0,0,0,0.06); }
-
-    .card {
-      background: var(--card);
-      border-radius: 14px;
-      padding: 12px;
-      box-shadow: 0 1px 0 rgba(0,0,0,0.04);
-    }
-    .muted { color: var(--muted); }
-    .mile-badge { width:46px;height:46px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#eaf7b6,#d6ee7e);box-shadow:0 2px 6px rgba(0,0,0,0.04) }
-    .progress-bg{ background:#f0f2f4;height:12px;border-radius:999px;overflow:hidden;}
-    .progress-fill{ height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-dark)); width:0%; transition:width .45s ease; }
-
-    /* big promo button */
-    .big-promo-btn{
-      width:100%; background:var(--dark-btn); color:#fff; border-radius:12px; padding:16px; text-align:center; font-size:22px; font-weight:600;
-      box-shadow: 0 1px 0 rgba(0,0,0,0.05);
-    }
-
-    /* subtle spacing */
-    .gap-y-12 > * + * { margin-top:12px; }
-    .rounded-2xl { border-radius:18px; }
-
-    /* match screenshot small text sizes */
-    .small-muted{ color:var(--muted); font-size:13px; }
-    .xl-title{ font-size:28px; font-weight:800; letter-spacing:0.5px; }
-    .shadow-very-soft{ box-shadow: 0 6px 18px rgba(0,0,0,0.03); }
-
-    /* list items */
-    .list-row{ display:flex; gap:12px; align-items:center; padding:12px; background:var(--card); border-radius:12px; box-shadow:0 1px 0 rgba(0,0,0,0.03) }
-    .list-row + .list-row { margin-top:8px; }
-    .list-icon{ width:40px; height:40px; border-radius:10px; background:#f6fff0; display:flex; align-items:center; justify-content:center; }
-
-    /* tiny helpers */
-    .dot { width:14px;height:14px;border-radius:999px;background:var(--accent);display:inline-block;margin-right:8px;box-shadow:0 1px 3px rgba(0,0,0,0.06) }
-    /* ensure file inputs not visible */
-    input[type="file"]{ display:none; }
+    /* Немного дополнительных стилей, чтобы совпадало с визуалом */
+    body { background: #f6f7f9; -webkit-font-smoothing:antialiased; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+    .card { background: #fff; border-radius: 12px; padding: 14px; box-shadow: 0 1px 0 rgba(0,0,0,0.04); }
+    .avatar-xl { width:86px; height:86px; border-radius:9999px; object-fit:cover; border: 4px solid #fff; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+    .mile-badge { background: linear-gradient(180deg,#dfffa5,#c8e97a); border-radius:999px; width:46px; height:46px; display:flex;align-items:center;justify-content:center; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+    .mile-icon-sm { width:18px; height:18px; }
+    .muted { color:#8b8f94; }
+    .progress-bg { background:#f0f2f4; border-radius:999px; height:10px; overflow:hidden; }
+    .progress-fill { height:100%; background:linear-gradient(90deg,#9cc42f,#6dbf2a); width:0%; transition:width .5s ease; }
+    .pill { background:#fff; border-radius:12px; padding:10px 12px; display:flex; align-items:center; gap:10px; box-shadow: 0 1px 0 rgba(0,0,0,0.04); }
+    .big-button { background:#2b2f33; color:#fff; padding:14px; border-radius:12px; width:100%; text-align:center; font-weight:600; }
+    @media(min-width:768px){ .mobile-only { display:none } }
   </style>
 </head>
-<body>
-  <div class="viewport">
+<body class="mobile-only">
 
-    <!-- top header (empty left icon same as screenshot) -->
-    <header class="topbar">
-      <div style="width:40px;height:40px;border-radius:9999px;background:#fff;display:flex;align-items:center;justify-content:center;">
-        <!-- small left placeholder -->
+  <!-- header (small, sticky) -->
+  <header class="fixed top-0 left-0 w-full bg-white z-40 shadow px-4 py-3 flex items-center gap-3">
+    <img src="images/photo_5458690764071631635_y.jpg" alt="S7 logo" class="w-9 h-9 rounded-full object-cover">
+    <div class="flex-1">
+      <div class="text-sm font-semibold"></div>
+      <div class="text-xs muted"></div>
+    </div>
+    <div id="headerUserArea" class="flex items-center gap-2"></div>
+  </header>
+
+  <main class="pt-20 px-4 pb-24">
+    <!-- top: avatar + name -->
+    <div class="flex flex-col items-center gap-3 mb-4">
+      <label for="avatarInput" title="Нажмите чтобы загрузить фото" style="cursor:pointer">
+        <img id="bigAvatar" class="avatar-xl" src="https://via.placeholder.com/150" alt="avatar">
+      </label>
+      <input id="avatarInput" type="file" accept="image/*" style="display:none">
+      <div class="text-center">
+        <div id="fioTitle" class="text-2xl font-extrabold">Загрузка...</div>
+        <div id="cardNumber" class="muted text-sm mt-1">—</div>
       </div>
-      <div style="flex:1"></div>
-      <div id="userArea"></div>
-    </header>
+    </div>
 
-    <main style="padding:16px 16px 60px;">
-      <!-- avatar & name -->
-      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:8px;">
-        <label for="avatarInput" title="Нажмите чтобы загрузить фото" style="cursor:pointer;">
-          <img id="bigAvatar" class="big-avatar" src="https://via.placeholder.com/150" alt="avatar">
-        </label>
-        <input id="avatarInput" type="file" accept="image/*">
-        <div id="fioTitle" class="xl-title">Загрузка...</div>
-      </div>
-
-      <!-- top grid: left big card + right two small -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-        <!-- left large card (priority + balance) -->
-        <div class="card rounded-2xl" style="display:flex;flex-direction:column;justify:space-between;padding:12px;">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start">
-            <div>
-              <div style="display:flex;align-items:center;gap:8px;">
-                <div style="width:28px;height:28px;border-radius:6px;background:#eef2f6;display:flex;align-items:center;justify-content:center;font-weight:700;color:#556">S7</div>
-                <div style="font-weight:700">Priority</div>
+    <!-- balance + actions grid -->
+    <div class="grid grid-cols-2 gap-3 mb-3">
+      <!-- left: card with priority + balance -->
+      <div class="card">
+        <div class="flex justify-between items-start">
+          <div>
+            <div class="text-xs muted">S7avelii Priority</div>
+            <div id="cardNumShort" class="text-sm font-semibold mt-2">—</div>
+          </div>
+          <div class="text-right">
+            <div class="muted text-xs">ваш баланс</div>
+            <div class="mt-2 flex items-center gap-2">
+              <div class="mile-badge" title="Мили">
+                <!-- маленькая M иконка -->
+                <img id="mileIconHeader" src="images/mile-icon.svg" alt="M" class="mile-icon-sm">
               </div>
-              <div class="muted" style="margin-top:8px;letter-spacing:2px">115 757 155</div>
-            </div>
-            <div style="opacity:0.6">▢▢</div>
-          </div>
-
-          <div style="height:12px;margin:12px 0;border-top:1px solid #f1f2f4"></div>
-
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div class="small-muted">ваш баланс</div>
-            <div class="mile-badge"><img src="images/mile_icon.jpg" alt="M" style="width:20px;height:20px;object-fit:contain"></div>
-          </div>
-        </div>
-
-        <!-- right column: two small action cards -->
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div class="card rounded-2xl" style="padding:14px;display:flex;align-items:center;justify-content:space-between;">
-            <div>
-              <div style="font-weight:700">Начисления</div>
-              <div class="muted" style="font-size:13px">Списания</div>
-            </div>
-            <img src="images/mile_icon.jpg" alt="" style="width:44px;height:44px;object-fit:contain;opacity:0.9;border-radius:8px">
-          </div>
-
-          <div class="card rounded-2xl" style="padding:14px;display:flex;align-items:center;justify-content:space-between;">
-            <div>
-              <div style="font-weight:700">Управлять</div>
-              <div class="muted" style="font-size:13px">милями</div>
-            </div>
-            <div style="display:flex;gap:6px;align-items:center">
-              <img src="images/yandex_plus.jpg" alt="" style="width:36px;height:36px;object-fit:contain;border-radius:8px">
             </div>
           </div>
         </div>
       </div>
 
-      <!-- progress card -->
-      <div class="card rounded-2xl" style="padding:14px;margin-bottom:14px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <span class="dot"></span>
-            <div class="small-muted">О статусе</div>
+      <!-- right: actions -->
+      <div class="flex flex-col gap-3">
+        <div class="card flex items-center justify-between">
+          <div>
+            <div class="text-sm font-semibold">Начисления</div>
+            <div class="muted text-xs">История начислений</div>
           </div>
-          <div class="muted">О статусе ▸</div>
-        </div>
-
-        <div style="margin-top:12px;">
-          <div class="progress-bg"><div id="mainProgress" class="progress-fill" style="width:0%"></div></div>
-          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:13px;color:var(--muted)">
-            <div id="progressLeft">0 миль</div>
-            <div id="progressRight">—</div>
+          <div>
+            <!-- декоративный мини-бейдж -->
+            <img src="images/photo_5458690764071631635_y.jpg" alt="" class="w-9 h-9 object-cover rounded-full">
           </div>
         </div>
-      </div>
 
-      <!-- big promo button -->
-      <div style="margin-top:12px;">
-        <button id="addPromoBtn" class="big-promo-btn">Добавить промокод</button>
-      </div>
-
-      <!-- telegram banner -->
-      <div style="margin-top:14px;">
-        <div class="card rounded-2xl" style="display:flex;align-items:center;justify-content:space-between;padding:18px;overflow:hidden;">
-          <div style="flex:1;padding-right:12px;">
-            <div style="font-weight:800;font-size:18px">Наш бот в Телеграме</div>
-            <div class="muted" style="margin-top:6px">Подписывайтесь, чтобы знать о статусе рейса</div>
+        <div class="card flex items-center justify-between">
+          <div>
+            <div class="text-sm font-semibold">Управлять милями</div>
+            <div class="muted text-xs">Перевести/Потратить</div>
           </div>
-          <div style="width:100px;flex-shrink:0;">
-            <img src="images/telegram_block.jpg" alt="telegram" style="width:100px;height:100px;object-fit:cover;border-radius:12px;">
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/></svg>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- features list -->
-      <div style="margin-top:16px;">
-        <div class="list-row">
-          <div class="list-icon"><img src="images/yandex_plus.jpg" alt="" style="width:22px;height:22px;object-fit:contain"></div>
-          <div style="flex:1">
-            <div style="font-weight:700">Яндекс Плюс x S7</div>
-          </div>
+    <!-- progress & balance display -->
+    <div class="card mb-3">
+      <div class="flex items-center justify-between mb-3">
+        <div>
+          <div class="muted text-sm">Бонусные мили</div>
+          <div id="milesCount" class="text-lg font-bold">— <img src="images/mile-icon.svg" alt="M" class="inline-block w-4 h-4"></div>
         </div>
-
-        <div class="list-row">
-          <div class="list-icon"><img src="images/secret_passenger.jpg" alt="" style="width:22px;height:22px;object-fit:contain"></div>
-          <div style="flex:1">
-            <div style="font-weight:700">Тайный пассажир</div>
-          </div>
-        </div>
-
-        <div class="list-row">
-          <div class="list-icon"><img src="images/green_steps.jpg" alt="" style="width:22px;height:22px;object-fit:contain"></div>
-          <div style="flex:1">
-            <div style="font-weight:700">Green Steps</div>
-          </div>
+        <div class="text-right">
+          <div class="muted text-xs">О статусе</div>
+          <div id="levelName" class="text-sm font-semibold">—</div>
         </div>
       </div>
 
-    </main>
-  </div>
+      <div class="progress-wrap mb-2">
+        <div class="progress-bg" aria-hidden="true"><div id="milesProgress" class="progress-fill" style="width:0%"></div></div>
+      </div>
 
-  <!-- ===== SCRIPTS: API + UI logic (интегрирован твой рабочий скрипт, адаптация под мобильный layout) ===== -->
+      <div class="flex justify-between text-xs muted">
+        <div id="progressLeft">0 миль</div>
+        <div id="progressRight">—</div>
+      </div>
+    </div>
+
+    <!-- Add promo button -->
+    <div class="mb-3">
+      <button id="addPromoBtn" class="big-button">Добавить промокод</button>
+    </div>
+
+    <!-- Telegram promo block (твоя картинка) -->
+    <div class="card mb-4 flex items-center gap-3">
+      <div style="flex:1">
+        <div class="text-lg font-semibold">Наш бот в Телеграме</div>
+        <div class="muted text-sm mt-1">Подписывайтесь, чтобы знать о статусе рейса</div>
+      </div>
+      <div style="width:86px;">
+        <img src="images/photo_5458690764071631636_y.jpg" alt="telegram" class="w-20 h-20 object-cover rounded-xl">
+      </div>
+    </div>
+
+    <!-- list of features like on screenshot -->
+    <div class="space-y-3">
+      <div class="card flex items-center gap-3">
+        <div class="w-9 h-9 bg-green-50 rounded-full flex items-center justify-center">💚</div>
+        <div>
+          <div class="font-semibold">Яндекс Плюс x S7</div>
+          <div class="muted text-xs">Партнёрские предложения</div>
+        </div>
+      </div>
+
+      <div class="card flex items-center gap-3">
+        <div class="w-9 h-9 bg-green-50 rounded-full flex items-center justify-center">🕵️</div>
+        <div>
+          <div class="font-semibold">Тайный пассажир</div>
+          <div class="muted text-xs">Участвуйте и получайте мили</div>
+        </div>
+      </div>
+
+      <div class="card flex items-center gap-3">
+        <div class="w-9 h-9 bg-green-50 rounded-full flex items-center justify-center">🌱</div>
+        <div>
+          <div class="font-semibold">Green Steps</div>
+          <div class="muted text-xs">Забота об окружающей среде</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
   <script>
     /* ========== Конфигурация API ========== */
-    const API = "https://s7avelii-airlines-1.onrender.com";
+    const API = "https://s7avelii-airlines-1.onrender.com"; // оставил твой адрес
     function getToken(){ return localStorage.getItem('token'); }
 
-    /* ========== apiFetch ========== */
-    async function apiFetch(endpoint, options = {}) {
+    /* ========== Общая функция fetch с токеном ========== */
+    async function apiFetch(endpoint, opts = {}) {
+      opts.headers = opts.headers || {};
       const token = getToken();
-      options.headers = { ...(options.headers || {}) };
-      if (token) options.headers['Authorization'] = 'Bearer ' + token;
-      if (options.body && !(options.body instanceof FormData) && typeof options.body !== 'string') {
-        options.headers['Content-Type'] = 'application/json';
-        options.body = JSON.stringify(options.body);
+      if (token) opts.headers['Authorization'] = 'Bearer ' + token;
+      if (opts.body && !(opts.body instanceof FormData) && typeof opts.body !== 'string') {
+        opts.headers['Content-Type'] = 'application/json';
+        opts.body = JSON.stringify(opts.body);
       }
       try {
-        const res = await fetch(API + endpoint, options);
-        if (!res) return null;
+        const res = await fetch(API + endpoint, opts);
         if (res.status === 401) { logout(); return null; }
-        const txt = await res.text();
-        try { return JSON.parse(txt); } catch(e) { return { raw: txt, status: res.status }; }
-      } catch (e) {
-        console.error('fetch err', e);
+        const text = await res.text();
+        try { return JSON.parse(text); } catch(e) { return { raw: text, status: res.status }; }
+      } catch (err) {
+        console.error('apiFetch err', err);
         return null;
       }
     }
 
-    /* ========== Helpers ========== */
-    function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-    function parseNumberSafe(v){
-      if (v === null || v === undefined) return null;
-      if (typeof v === 'number' && !Number.isNaN(v)) return v;
-      if (typeof v === 'string'){
-        const cleaned = v.replace(/\s+/g,'').replace(/[^0-9\-,.]/g,'');
-        if (cleaned === '') return null;
-        let normalized = cleaned;
-        const commaCount = (cleaned.match(/,/g)||[]).length;
-        const dotCount = (cleaned.match(/\./g)||[]).length;
-        if (commaCount > 0 && dotCount === 0){ normalized = cleaned.replace(/,/g,''); }
-        else if (dotCount > 0 && commaCount === 0){ normalized = cleaned; }
-        else if (commaCount > 0 && dotCount > 0){
-          if (cleaned.lastIndexOf(',') > cleaned.lastIndexOf('.')) normalized = cleaned.replace(/\./g,'').replace(',', '.');
-          else normalized = cleaned.replace(/,/g,'');
-        }
-        const num = Number(normalized);
-        if (!Number.isNaN(num)) return Math.floor(num);
-        return null;
-      }
-      return null;
-    }
-    function findMilesInObject(obj, visited = new WeakSet()){
-      if (!obj || typeof obj !== 'object') return null;
-      if (visited.has(obj)) return null;
-      visited.add(obj);
-      try {
-        const keys = Object.keys(obj);
-        const keyPatterns = [/^miles?$/i, /bonus/i, /status/i, /points?/i, /balance/i, /mile/i];
-        for (const pat of keyPatterns){
-          for (const k of keys){
-            if (pat.test(k)){
-              const v = obj[k];
-              const n = parseNumberSafe(v);
-              if (n !== null) return n;
-            }
-          }
-        }
-        for (const k of keys){
-          if (/mile|miles|bonus|points|balance|status/i.test(k)){
-            const v = obj[k];
-            const n = parseNumberSafe(v);
-            if (n !== null) return n;
-          }
-        }
-        for (const k of keys){
-          const v = obj[k];
-          if (v && typeof v === 'object'){
-            const deeper = findMilesInObject(v, visited);
-            if (deeper !== null) return deeper;
-          }
-        }
-      } catch(e){}
-      return null;
-    }
-
-    /* ========== Levels (твоя шкала) ========== */
+    /* ========== Логика уровней (в соответствии с твоей шкалой) ========== */
     const LEVELS = [
       { name: 'Classic', min: 0, max: 1000 },
       { name: 'VIP', min: 1000, max: 10000 },
@@ -307,118 +191,93 @@
       { name: 'Flight Master', min: 100000, max: 500000 }
     ];
     function getLevelByMiles(miles){
-      for(let i=LEVELS.length-1;i>=0;i--){ if(miles >= LEVELS[i].min) return LEVELS[i]; }
+      for (let i = LEVELS.length - 1; i >= 0; i--) {
+        if (miles >= LEVELS[i].min) return LEVELS[i];
+      }
       return LEVELS[0];
     }
 
-    /* ========== State ========== */
+    /* ========== Обновление UI профиля ========== */
     let currentUser = null;
-
-    /* ========== Update header user area (mini widget) ========== */
-    async function updateUserArea() {
-      const userArea = document.getElementById('userArea');
-      const token = getToken();
-      if (!token) {
-        if (userArea) userArea.innerHTML = `<a href="auth.html" style="color:#6dd808;border:1px solid #cfeab2;padding:6px 10px;border-radius:8px;text-decoration:none">Вход</a>`;
-        return;
-      }
-      try {
-        const res = await apiFetch('/api/profile');
-        if (!res || (Object.keys(res).length===0)) { if (userArea) userArea.innerHTML = `<a href="auth.html">Вход</a>`; return; }
-        const user = res.user || res;
-        currentUser = user;
-
-        const savedAvatar = localStorage.getItem('userAvatar') || '';
-        let avatarUrl = null;
-        if (user.avatar) avatarUrl = (String(user.avatar).startsWith('http') ? user.avatar : API + user.avatar);
-        else if (savedAvatar) avatarUrl = savedAvatar;
-        if (!avatarUrl) avatarUrl = 'https://via.placeholder.com/150';
-
-        const fio = user.fio || user.email || 'Профиль';
-        const parts = String(fio).split(/\s+/).filter(Boolean);
-        const firstName = parts[0] || '';
-        const surnameInitial = parts[1] ? parts[1][0] + '.' : '';
-        const nameShort = firstName + (surnameInitial ? (' ' + surnameInitial) : '');
-
-        let miles = null;
-        if (user.miles !== undefined) miles = parseNumberSafe(user.miles);
-        if (miles === null) miles = findMilesInObject(user) ?? findMilesInObject(res);
-        if (miles === null) miles = 0;
-
-        if (userArea) {
-          userArea.innerHTML = `
-            <div style="display:flex;align-items:center;gap:8px">
-              <img src="${avatarUrl}" alt="avatar" style="width:36px;height:36px;border-radius:9999px;object-fit:cover;border:2px solid #fff">
-              <div style="text-align:right">
-                <div style="font-weight:700;font-size:13px">${escapeHtml(nameShort)}</div>
-                <div style="font-size:12px;color:var(--muted)">${Number(miles).toLocaleString('ru-RU')} <img src="images/mile_icon.jpg" style="width:14px;height:14px;vertical-align:middle;margin-left:4px"></div>
-              </div>
-            </div>
-          `;
-        }
-
-        if (user.avatar) {
-          try { localStorage.setItem('userAvatar', avatarUrl); } catch(e){}
-        }
-        currentUser = user;
-        renderProfileUI();
-      } catch (e) {
-        console.error('updateUserArea err', e);
-        if (userArea) userArea.innerHTML = `<a href="auth.html">Вход</a>`;
-      }
-    }
-
-    /* ========== Render profile to page (fills elements) ========== */
-    function renderProfileUI(){
-      if(!currentUser) return;
-      // name short
-      const fio = currentUser.fio || '';
-      const parts = String(fio).split(/\s+/).filter(Boolean);
+    async function loadProfileToUI(userObj){
+      if (!userObj) return;
+      currentUser = userObj;
+      // FIO и первая буква фамилии
+      const fio = userObj.fio || '';
+      const parts = fio.split(' ').filter(Boolean);
       const firstName = parts[0] || '';
-      const surnameInitial = parts[1] ? parts[1][0] + '.' : '';
-      const fioTitle = firstName ? (firstName + (surnameInitial ? (' ' + surnameInitial) : '')) : (currentUser.email || 'Профиль');
+      const surnameInitial = parts[1] ? (parts[1][0] + '.') : '';
+      const fioTitle = (firstName ? firstName + (surnameInitial ? (' ' + surnameInitial) : '') : (userObj.email || 'Профиль'));
+
       document.getElementById('fioTitle').textContent = fioTitle;
+      document.getElementById('cardNumShort').textContent = userObj.card_number || '—';
+      document.getElementById('cardNumber').textContent = userObj.card_number ? (userObj.card_number) : '—';
 
       // avatar
-      const savedAvatar = localStorage.getItem('userAvatar') || '';
-      let avatarUrl = currentUser.avatar ? (String(currentUser.avatar).startsWith('http') ? currentUser.avatar : API + currentUser.avatar) : (savedAvatar || 'https://via.placeholder.com/150');
+      const avatarUrl = userObj.avatar ? (userObj.avatar.startsWith('http') ? userObj.avatar : API + userObj.avatar) : 'https://via.placeholder.com/150';
       const bigAvatar = document.getElementById('bigAvatar');
       if (bigAvatar) bigAvatar.src = avatarUrl;
 
-      // miles
-      const detectedMiles = (currentUser.miles !== undefined ? parseNumberSafe(currentUser.miles) : null) ?? findMilesInObject(currentUser) ?? 0;
-      // update counters
-      const topCount = document.getElementById('milesCountTop');
-      const rightCount = document.getElementById('milesCount');
-      if (topCount) topCount.textContent = detectedMiles.toLocaleString('ru-RU');
-      if (rightCount) rightCount.textContent = detectedMiles.toLocaleString('ru-RU') + ' м';
+      // miles (поле называется miles по условию)
+      const miles = Number(userObj.miles || 0);
+      document.getElementById('milesCount').innerHTML = miles.toLocaleString('ru-RU') + ' <img src="images/mile-icon.svg" class="inline-block w-4 h-4" alt="M">';
+      document.getElementById('milesCount').setAttribute('data-miles', miles);
 
-      // progress calculation by defined levels
-      const level = getLevelByMiles(detectedMiles);
-      const nextLevel = LEVELS.find(l => l.min > level.min);
+      // level & progress
+      const level = getLevelByMiles(miles);
+      document.getElementById('levelName').textContent = level.name;
+
+      // расчёт следующего порога
+      let next = LEVELS.find(l => l.min > level.min);
       const currentMin = level.min;
-      const nextMin = nextLevel ? nextLevel.min : level.max;
+      const nextMin = next ? next.min : level.max;
       const denom = (nextMin - currentMin) || 1;
-      const progressPercent = nextLevel ? ((detectedMiles - currentMin) / denom) * 100 : 100;
+      const progressPercent = next ? ((miles - currentMin) / denom) * 100 : 100;
+      document.getElementById('milesProgress').style.width = Math.max(0, Math.min(100, progressPercent)) + '%';
+      document.getElementById('progressLeft').textContent = currentMin.toLocaleString('ru-RU') + ' миль';
+      document.getElementById('progressRight').textContent = (nextMin ? nextMin.toLocaleString('ru-RU') + ' миль' : '—');
 
-      const mainProgress = document.getElementById('mainProgress');
-      if (mainProgress) mainProgress.style.width = Math.max(0, Math.min(100, progressPercent)) + '%';
-      const progressLeft = document.getElementById('progressLeft');
-      const progressRight = document.getElementById('progressRight');
-      if (progressLeft) progressLeft.textContent = currentMin.toLocaleString('ru-RU') + ' миль';
-      if (progressRight) progressRight.textContent = nextMin ? nextMin.toLocaleString('ru-RU') + ' миль' : '—';
-
-      // level name in sidebar if exists
-      const levelName = document.getElementById('levelName');
-      if (levelName) levelName.textContent = level.name;
-
-      // store avatar persistently
-      if (currentUser.avatar) {
-        try { localStorage.setItem('userAvatar', avatarUrl); } catch(e){}
-      }
+      // header mini widget
+      renderHeaderUserArea(fioTitle, avatarUrl, miles);
     }
 
-    /* ========== Avatar upload (persist) ========== */
+    function renderHeaderUserArea(nameShort, avatarUrl, miles){
+      const header = document.getElementById('headerUserArea');
+      if(!header) return;
+      header.innerHTML = `
+        <div class="flex items-center gap-2 bg-white rounded-xl px-2 py-1" style="border:1px solid #eee">
+          <img src="${avatarUrl}" alt="avatar" class="w-9 h-9 rounded-full object-cover">
+          <div class="text-right">
+            <div class="text-sm font-semibold">${escapeHtml(nameShort)}</div>
+            <div class="text-xs muted">${Number(miles).toLocaleString('ru-RU')} <img src="images/mile-icon.svg" class="inline-block w-3 h-3" alt="M"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    /* ========== Загрузка профиля с API ========== */
+    async function fetchAndRenderProfile(){
+      const token = getToken();
+      if(!token){
+        // редирект на логин, если нужно
+        // window.location.href = 'auth.html';
+        // пока просто показываем "Вход"
+        document.getElementById('fioTitle').textContent = 'Войти';
+        return;
+      }
+      const res = await apiFetch('/api/profile');
+      if (!res) {
+        console.warn('no profile');
+        return;
+      }
+      // res может быть объектом user или { user: {...} } - поддержим оба
+      const user = res.user || res;
+      await loadProfileToUI(user);
+    }
+
+    /* ========== Avatar upload ========== */
     function attachAvatarUpload(){
       const avatarInput = document.getElementById('avatarInput');
       if(!avatarInput) return;
@@ -430,67 +289,57 @@
         try{
           const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
           const resRaw = await fetch(API + '/api/profile/avatar', { method: 'POST', headers, body: fd });
-          if(!resRaw) throw new Error('no response');
           const txt = await resRaw.text();
           let data;
-          try { data = JSON.parse(txt); } catch(e){ data = { raw: txt }; }
-          const avatarReturned = (data && (data.avatar || (data.user && data.user.avatar))) ? (data.avatar || data.user.avatar) : null;
-          if (avatarReturned) {
-            const avatarUrl = String(avatarReturned).startsWith('http') ? avatarReturned : API + avatarReturned;
-            const avatarImg = document.getElementById('bigAvatar');
-            if (avatarImg) avatarImg.src = avatarUrl;
-            try { localStorage.setItem('userAvatar', avatarUrl); } catch(e){}
-            await updateUserArea();
+          try { data = JSON.parse(txt); } catch(e) { data = { raw: txt }; }
+          if (data && (data.avatar || data.user?.avatar)) {
+            const avatar = data.avatar || data.user.avatar;
+            const avatarUrl = avatar.startsWith('http') ? avatar : API + avatar;
+            const bigAvatar = document.getElementById('bigAvatar');
+            if(bigAvatar) bigAvatar.src = avatarUrl;
+            await fetchAndRenderProfile();
           } else {
-            // If server didn't return avatar path, try to save using local blob url
-            const file = this.files[0];
-            const blobUrl = URL.createObjectURL(file);
-            try { localStorage.setItem('userAvatar', blobUrl); } catch(e){}
-            const avatarImg = document.getElementById('bigAvatar');
-            if (avatarImg) avatarImg.src = blobUrl;
-            await updateUserArea();
+            alert('Ошибка загрузки аватара');
           }
         }catch(err){ console.error('avatar upload', err); alert('Ошибка сети при загрузке'); }
       });
     }
 
-    /* ========== Promo button (opens prompt, tries to PUT to profile) ========== */
-    document.getElementById && (function attachPromo(){
+    /* ========== Промокод (попап простейший) ========== */
+    function attachPromoHandler(){
       const btn = document.getElementById('addPromoBtn');
-      if (!btn) return;
-      btn.addEventListener('click', async ()=>{
+      if(!btn) return;
+      btn.addEventListener('click', async () => {
         const code = prompt('Введите промокод');
-        if (!code) return;
-        // example behavior: try to increase miles on server via PUT /api/profile
-        const inc = 500; // demo increment (can be replaced by server-side logic)
+        if(!code) return;
+        // отправим на апи — у тебя, наверное, есть логика. Пока симуляция:
+        // Попробуем PUT /api/profile с увеличением miles (только если сервер поддержит)
+        const inc = 500; // пример
+        // получим актуальный профиль
         const profile = await apiFetch('/api/profile');
-        const user = (profile && profile.user) ? profile.user : profile;
-        const newMiles = (Number(user.miles || 0) + inc);
+        const u = profile.user || profile;
+        const newMiles = (Number(u.miles || 0) + inc);
         const upd = await apiFetch('/api/profile', { method: 'PUT', body: { miles: newMiles } });
         if (upd) {
-          await updateUserArea();
-          alert('Промокод применён, +' + inc + ' миль');
+          await fetchAndRenderProfile();
+          alert(`Промокод ${code} применён, +${inc} миль`);
         } else {
-          alert('Ошибка применения промокода');
+          alert('Ошибка при активации промокода');
         }
       });
-    })();
+    }
 
-    /* ========== Init on DOMContentLoaded ========== */
-    document.addEventListener('DOMContentLoaded', async ()=>{
+    /* ========== Logout (если понадобится) ========== */
+    function logout(){ localStorage.removeItem('token'); window.location.href = 'auth.html'; }
+
+    /* ========== On load ========== */
+    document.addEventListener('DOMContentLoaded', async () => {
       attachAvatarUpload();
-      await updateUserArea();
-      // ensure profile rendering after update
-      renderProfileUI();
+      attachPromoHandler();
+      await fetchAndRenderProfile();
     });
-
-    /* ========== Logout placeholder ========== */
-    function logout(){ localStorage.removeItem('token'); /* redirect if needed */ }
-
-    /* expose minor functions if needed */
-    window.updateUserArea = updateUserArea;
-    window.renderProfileUI = renderProfileUI;
   </script>
+
 </body>
 </html>
 
