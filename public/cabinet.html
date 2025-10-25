@@ -1,242 +1,664 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>S7avelii | Универсальный профиль</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S7avelii | Профиль</title>
+<link rel="icon" href="images/favicon.png" type="image/png">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root{--accent:#9cc42f;--muted:#8b97a6}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f7fa;color:#1f2937}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:60px;border-bottom:1px solid #e6e6e6;position:fixed;top:0;left:0;width:100%;background:#fff;z-index:1000}
+.logo-img{height:45px;cursor:pointer}
+nav ul{display:flex;gap:20px;margin:0;padding:0;list-style:none}
+nav a{text-decoration:none;color:#111}
+.page{max-width:1180px;margin:90px auto;padding:0 20px}
+.full-header{background:#fff;display:flex;align-items:center;gap:24px;padding:24px;border-radius:12px;box-shadow:0 6px 20px rgba(16,24,40,0.06);flex-wrap:wrap}
+.avatar{width:110px;height:110px;border-radius:999px;object-fit:cover;border:4px solid #fff;cursor:pointer}
+.tabs{display:flex;gap:14px;margin-top:18px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,0.04);overflow-x:auto}
+.tabs a{padding:10px 14px;text-decoration:none;color:#495057;border-radius:8px;cursor:pointer}
+.tabs a.active{color:var(--accent);background:rgba(156,196,47,0.06)}
+.grid{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:18px}
+.card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 4px 12px rgba(16,24,40,0.04)}
+.field{display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid rgba(0,0,0,0.03)}
+.small-muted{color:var(--muted);font-size:13px}
+.btn{background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
+.btn.secondary{background:#eef2f7;color:#111}
+.btn.red{background:#e66}
+.progress-wrap{width:100%;margin-top:8px}
+.progress-bg{width:100%;height:14px;background:#eee;border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;width:0%;background:var(--accent);transition:width .6s ease}
+.cart-table{width:100%;border-collapse:collapse}
+.cart-table th,.cart-table td{padding:8px;border-bottom:1px solid #eee;text-align:left}
+.muted{color:var(--muted)}
+.input-inline{width:70%;padding:6px;border-radius:6px;border:1px solid #d6d8db}
+@media(max-width:980px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+ <!-- Подключаем Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    body { background:#f6f7f9; -webkit-font-smoothing:antialiased; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; }
-    .card { background:#fff; border-radius:12px; padding:14px; box-shadow:0 1px 0 rgba(0,0,0,0.04); }
-    .avatar-xl { width:86px; height:86px; border-radius:9999px; object-fit:cover; border:4px solid #fff; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
-    .muted { color:#8b8f94; }
-    .progress-bg { background:#f0f2f4; border-radius:999px; height:10px; overflow:hidden; }
-    .progress-fill { height:100%; background:linear-gradient(90deg,#d8f07a,#9cc42f); width:0%; transition:width .6s ease; }
-    .big-button { background:#2b2f33; color:#fff; padding:14px; border-radius:12px; width:100%; text-align:center; font-weight:600; border:none; }
-    .big-button:hover { filter:brightness(.95); cursor:pointer; }
-    .mobile-only { display:none; }
-    .desktop-only { display:none; }
-
-    /* Mobile shown on small screens by default, desktop on large */
-    @media (max-width: 767px) {
-      .mobile-only { display:block; }
-      .desktop-only { display:none; }
+    /* применяем Roboto ко всем элементам */
+    * {
+      font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
     }
-    @media (min-width: 768px) {
-      .mobile-only { display:none; }
-      .desktop-only { display:block; }
+    body { overflow-x: hidden; }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 0.25rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      min-width: 160px;
+      z-index: 50;
     }
-
-    /* Mobile vibe like screenshot */
-    .name-hand { font-weight:800; font-size:22px; letter-spacing:1px; }
-    .promo-telegram { border-radius:12px; overflow:hidden; display:flex; gap:12px; align-items:center; padding:16px; background:linear-gradient(180deg,#355965,#78a6a3); color:#fff; }
-    .mile-badge { background:linear-gradient(180deg,#dfffa5,#c8e97a); border-radius:999px; width:46px; height:46px; display:flex;align-items:center;justify-content:center; box-shadow:0 2px 6px rgba(0,0,0,0.05); }
-    .pill { background:#fff; border-radius:12px; padding:10px 12px; display:flex; align-items:center; gap:10px; box-shadow: 0 1px 0 rgba(0,0,0,0.04); }
-
-    /* Desktop layout simple */
-    .desktop-shell { max-width:1100px; margin:30px auto; display:flex; gap:24px; align-items:flex-start; padding:0 16px; }
-    .desktop-sidebar { width:320px; }
-    .desktop-main { flex:1; }
-
+    .group:hover .dropdown-menu { display: block; }
   </style>
+</head>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    height: 60px;
+    border-bottom: 1px solid #ccc;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: #fff;
+  }
+
+  .logo-img {
+    height: 45px;
+    width: auto;
+    cursor: pointer;
+  }
+
+  nav {
+    display: flex;
+  }
+
+  nav ul {
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  nav a {
+    color: #000;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .right-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+
+  /* гамбургер */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+  }
+  .hamburger span {
+    width: 22px;
+    height: 2px;
+    background: #000;
+  }
+
+  /* нижнее меню */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255,255,255,0.95);
+    border-top: 1px solid #ddd;
+    display: none; /* показываем только на мобилке */
+    justify-content: space-around;
+    padding: 6px 0;
+    z-index: 1000;
+  }
+
+  .bottom-nav a {
+    text-decoration: none;
+    color: #666;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .bottom-nav a.active {
+    color: #6cd100;
+    font-weight: bold;
+  }
+  .bottom-nav svg {
+    width: 22px;
+    height: 22px;
+    margin-bottom: 3px;
+  }
+
+  /* адаптив */
+  @media (max-width: 768px) {
+    nav { display: none; }
+    .hamburger { display: flex; }
+    .bottom-nav { display: flex; }
+    header { height: 60px; padding: 0 12px; }
+    .logo-img { height: 40px; }
+  }
+</style>
 </head>
 <body>
 
-  <!-- ===== MOBILE VIEW (как на скрине) ===== -->
-  <main id="mobileView" class="mobile-only" style="padding:18px 16px 60px;">
-    <!-- top header -->
-    <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-      <div style="width:44px;height:44px;border-radius:9999px;background:#e6eef0; display:flex;align-items:center;justify-content:center;">
-        <div style="width:32px;height:32px;border-radius:9999px;background:#0b5fff"></div>
+<header>
+  <div class="logo">
+    <a href="index.html">
+      <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
+    </a>
+  </div>
+
+  <!-- Кнопка-бургер -->
+  <button class="burger" aria-label="Открыть меню">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- Главное меню -->
+  <nav class="nav">
+    <ul>
+      <li>
+        <a href="index.html">Покупка и управление</a>
+        <div class="dropdown">
+          <a href="bilet.html">Купить билет</a>
+          <a href="auth.html">Управление бронированием</a>
+          <a href="arrivel.html">Направления</a>
+          <a href="HOTEL.html">Отели</a>
+          <a href="class.html">Выбор класса</a>
+        </div>
+      </li>
+      <li>
+        <a href="priority.html">S7avelii Priority</a>
+        <div class="dropdown">
+          <a href="priority.html">О программе</a>
+          <a href="https://t.me/s7aveliihelper">Как копить</a>
+        </div>
+      </li>
+      <li>
+        <a href="#">Информация</a>
+        <div class="dropdown">
+          <a href="body.html">О нас</a>
+          <a href="office.html">Представительство</a>
+          <a href="plane.html">Наш флот</a>
+          <a href="eat.html">Питание</a>
+          <a href="https://t.me/s7aveliihelper">Контакты</a>
+        </div>
+      </li>
+      <li><a href="busines.html">Бизнесу</a></li>
+      <li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
+    </ul>
+  </nav>
+
+  <div class="right-menu">
+    <button aria-label="Search">
+      <svg class="icon-search" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </button>
+    <button>RUB</button>
+    <div class="flag" title="Russian flag">
+      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" />
+    </div>
+    <div id="userArea"></div>
+  </div>
+</header>
+
+<style>
+/* === БАЗОВЫЙ СТИЛЬ ДЛЯ ПК === */
+header {
+  display: flex;
+  align-items: center;
+  padding: 0 60px;
+  height: 80px;
+  border-bottom: 1px solid #ccc;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: #fff;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.logo-img {
+  height: 70px;
+  width: auto;
+  cursor: pointer;
+}
+
+nav {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+nav ul {
+  display: flex;
+  gap: 40px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+nav li {
+  position: relative;
+}
+
+nav a {
+  color: #000;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 28px 0;
+  position: relative;
+}
+
+nav a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background-color: #b3c900;
+  transition: width 0.3s ease;
+}
+nav li:hover > a::after {
+  width: 100%;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  padding: 20px;
+  border-top: 2px solid #b3c900;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  min-width: 240px;
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+nav li:hover .dropdown {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.dropdown a {
+  display: block;
+  padding: 8px 0;
+  color: #000;
+  font-size: 14px;
+}
+.dropdown a:hover {
+  color: #b3c900;
+}
+
+.right-menu {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 16px;
+}
+.right-menu button,
+.right-menu select {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+.flag {
+  width: 20px;
+  height: 14px;
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+}
+.flag img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#userArea a {
+  padding: 8px 14px;
+  border: 1px solid #7ad30d;
+  border-radius: 6px;
+  color: #6dd808;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* === КНОПКА-БУРГЕР === */
+.burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  width: 28px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  gap: 4px;
+  z-index: 1001;
+}
+.burger span {
+  display: block;
+  height: 3px;
+  background: #000;
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+/* === МЕДИА (адаптация под мобилки) === */
+@media (max-width: 992px) {
+  header {
+    padding: 0 20px;
+  }
+
+  nav ul {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .burger {
+    display: flex;
+  }
+
+  nav {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background: white;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 30px;
+    border-top: 1px solid #eee;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-120%);
+    transition: transform 0.3s ease;
+  }
+
+  nav.open {
+    transform: translateY(0);
+  }
+
+  nav ul {
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .dropdown {
+    position: static;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    display: none;
+  }
+
+  nav li:hover .dropdown {
+    display: block;
+  }
+
+  .right-menu {
+    display: none;
+  }
+
+  /* Анимация крестика */
+  .burger.active span:nth-child(1) {
+    transform: rotate(45deg) translateY(8px);
+  }
+  .burger.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .burger.active span:nth-child(3) {
+    transform: rotate(-45deg) translateY(-8px);
+  }
+}
+</style>
+
+<script>
+  // --- Бургер-меню ---
+  const burger = document.querySelector(".burger");
+  const nav = document.querySelector("nav");
+
+  burger.addEventListener("click", () => {
+    burger.classList.toggle("active");
+    nav.classList.toggle("open");
+  });
+
+  // --- Авторизация ---
+  async function updateUserArea() {
+    const userArea = document.getElementById("userArea");
+    try {
+      const res = await fetch("/api/profile");
+      if (!res.ok) throw new Error("Не авторизован");
+      const data = await res.json();
+      const user = data.user;
+
+      if (user.avatar) {
+        userArea.innerHTML = `
+          <img src="${user.avatar}" alt="avatar"
+            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;"
+            onclick="window.location.href='cabinet.html'" />
+        `;
+      } else {
+        userArea.innerHTML = `
+          <span style="cursor:pointer;color:#2196f3;font-weight:500;"
+            onclick="window.location.href='cabinet.html'">${user.fio.split(" ")[0]}</span>`;
+      }
+    } catch {
+      userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+    }
+  }
+  window.addEventListener("DOMContentLoaded", updateUserArea);
+</script>
+
+
+<div class="page">
+  <div class="full-header">
+    <div style="display:flex;align-items:center;gap:16px">
+      <label for="avatarInput" title="Нажмите чтобы загрузить фото">
+        <img id="avatar" class="avatar" src="https://via.placeholder.com/150" alt="avatar">
+      </label>
+      <input id="avatarInput" type="file" accept="image/*" style="display:none">
+      <div>
+        <h1 id="fioHeader">Загрузка...</h1>
+        <div class="small-muted" id="phoneHeader">—</div>
       </div>
-      <div style="flex:1;">
-        <div style="font-size:13px;color:#8b8f94;">Ваши опции</div>
-      </div>
-      <div id="headerUserAreaMobile"></div>
     </div>
 
-    <!-- avatar + name -->
-    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:16px;">
-      <img id="bigAvatarMobile" src="https://via.placeholder.com/150" alt="avatar" style="width:88px;height:88px;border-radius:9999px;object-fit:cover;border:4px solid #fff;box-shadow:0 6px 18px rgba(0,0,0,0.06);">
-      <div id="fioMobile" class="name-hand">Имя</div>
-    </div>
-
-    <!-- top cards grid -->
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
-      <div class="card">
-        <div style="font-size:13px;color:#8b8f94">S7 Priority</div>
-        <div id="cardNumberMobile" style="font-weight:700;margin-top:8px">—</div>
-        <div style="margin-top:12px; color:#8b8f94">ваш баланс</div>
-        <div style="margin-top:8px;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div class="mile-badge"><img src="images/mile-icon.svg" alt="M" style="width:20px;height:20px"></div>
-            <div id="milesCountMobile" style="font-weight:700;">0 <img src="images/mile-icon.svg" style="width:16px;height:16px;vertical-align:middle"></div>
-          </div>
-        </div>
-      </div>
-
-      <div style="display:flex;flex-direction:column;gap:12px;">
-        <div class="card" style="display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-weight:700">Начисления</div>
-            <div class="muted" style="font-size:13px">Списания</div>
-          </div>
-          <div><img src="images/photo_5458690764071631635_y.jpg" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover"></div>
-        </div>
-
-        <div class="card" style="display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-weight:700">Управлять милями</div>
-            <div class="muted" style="font-size:13px">Перевести/Потратить</div>
-          </div>
-          <div><svg xmlns="http://www.w3.org/2000/svg" style="width:20px;height:20px;color:#c2c6ca" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/></svg></div>
+    <div style="margin-left:auto;min-width:260px">
+      <div class="small-muted">Бонусные мили: <strong id="bonusMiles">—</strong></div>
+      <div class="progress-wrap">
+        <div class="progress-bg" aria-hidden="true"><div id="milesProgressBar" class="progress-fill" style="width:0%"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#777;margin-top:6px">
+          <div id="milesLabelLeft">0 миль</div>
+          <div id="milesLabelRight">—</div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- status progress -->
-    <div class="card" style="margin-bottom:12px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <div>
-          <div class="muted" style="font-size:13px">О статусе</div>
-          <div id="levelNameMobile" style="font-weight:700;margin-top:6px">—</div>
-        </div>
-        <div style="text-align:right" class="muted">О статусе</div>
-      </div>
-      <div class="progress-bg" aria-hidden="true"><div id="milesProgressMobile" class="progress-fill" style="width:0%"></div></div>
-      <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:13px;color:#8b8f94;">
-        <div id="progressLeftMobile">0 миль</div>
-        <div id="progressRightMobile">—</div>
-      </div>
-    </div>
+  <nav class="tabs" role="tablist" aria-label="tabs">
+    <a class="active" data-tab="profileTab" onclick="showTab(event)">Профиль</a>
+    <a data-tab="milesTab" onclick="showTab(event)">Мои мили</a>
+    <a data-tab="shopTab" onclick="showTab(event)">S7avelii Shop</a>
+    <a data-tab="settingsTab" onclick="showTab(event)">Настройки</a>
+  </nav>
 
-    <!-- promo button -->
-    <div style="margin-bottom:12px;">
-      <button id="openPromoMobile" class="big-button">Добавить промокод</button>
-    </div>
+  <div class="grid">
+    <div>
+      <section id="profileTab" class="card" aria-label="profile">
+        <h3>Персональные данные</h3>
 
-    <!-- telegram promo -->
-    <div id="telegramBlockMobile" class="card" style="padding:0; overflow:hidden; margin-bottom:12px;">
-      <div class="promo-telegram">
-        <div style="flex:1;">
-          <div style="font-weight:700;font-size:16px">Наш бот в Телеграме</div>
-          <div style="margin-top:6px" class="muted">Подписывайтесь, чтобы знать о статусе рейса</div>
-        </div>
-        <div style="width:86px;height:86px;display:flex;align-items:center;justify-content:center">
-          <img src="images/photo_5458690764071631636_y.jpg" alt="tg" style="width:60px;height:60px;border-radius:10px;object-fit:cover;background:#fff;">
-        </div>
-      </div>
-    </div>
-
-    <!-- feature list -->
-    <div style="display:flex;flex-direction:column;gap:8px;">
-      <div class="card" style="display:flex;gap:12px;align-items:center;">
-        <div style="width:40px;height:40px;border-radius:10px;background:#f3fff0;display:flex;align-items:center;justify-content:center">💚</div>
-        <div>
-          <div style="font-weight:700">Яндекс Плюс x S7</div>
-          <div class="muted" style="font-size:13px">Партнёрские предложения</div>
-        </div>
-      </div>
-
-      <div class="card" style="display:flex;gap:12px;align-items:center;">
-        <div style="width:40px;height:40px;border-radius:10px;background:#f3fff0;display:flex;align-items:center;justify-content:center">🕵️</div>
-        <div>
-          <div style="font-weight:700">Тайный пассажир</div>
-          <div class="muted" style="font-size:13px">Участвуйте и получайте мили</div>
-        </div>
-      </div>
-
-      <div class="card" style="display:flex;gap:12px;align-items:center;">
-        <div style="width:40px;height:40px;border-radius:10px;background:#f3fff0;display:flex;align-items:center;justify-content:center">🌱</div>
-        <div>
-          <div style="font-weight:700">Green Steps</div>
-          <div class="muted" style="font-size:13px">Забота об окружающей среде</div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- ===== DESKTOP VIEW (простая хабовая разметка; ПК-скрипт работает с элементами) ===== -->
-  <main id="desktopView" class="desktop-only">
-    <header style="background:#fff; border-bottom:1px solid #eee; position:sticky; top:0; z-index:40;">
-      <div style="max-width:1100px; margin:0 auto; padding:12px 16px; display:flex; align-items:center; gap:12px;">
-        <img src="images/photo_5458690764071631635_y.jpg" alt="S7 logo" style="width:44px;height:44px;border-radius:9999px;object-fit:cover">
-        <div style="flex:1">
-          <div style="font-weight:700">S7avelii</div>
-          <div class="muted" style="font-size:13px">Профиль</div>
-        </div>
-        <div id="userArea"></div>
-      </div>
-    </header>
-
-    <div class="desktop-shell" style="padding-bottom:60px;">
-      <aside class="desktop-sidebar">
-        <div class="card" style="text-align:center;">
-          <img id="avatar" src="https://via.placeholder.com/200" alt="avatar" style="width:128px;height:128px;border-radius:9999px;object-fit:cover;margin:18px auto 6px;">
-          <div id="fioHeader" style="font-weight:800;font-size:20px;">Загрузка...</div>
-          <div id="phoneHeader" class="muted" style="margin-top:6px;">—</div>
+        <div class="field">
+          <div><div class="small-muted">ФИО</div><div id="fioField">—</div></div>
+          <button class="btn" onclick="editInline('fio')">Изменить</button>
         </div>
 
-        <div style="height:12px"></div>
-
-        <div class="card">
-          <div style="font-weight:700;margin-bottom:8px;">Быстрые действия</div>
-          <button id="promoActivateBtn" class="big-button" style="width:100%;">Активировать промокод</button>
-          <button id="avatarUploadBtn" class="big-button" style="width:100%; margin-top:8px; background:#444;" onclick="document.getElementById('avatarInput').click()">Загрузить аватар</button>
-          <input id="avatarInput" type="file" accept="image/*" style="display:none">
-        </div>
-      </aside>
-
-      <section class="desktop-main">
-        <div class="card mb-4">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <div class="muted">Бонусные мили</div>
-              <div id="bonusMiles" style="font-size:22px;font-weight:800;">— <img src="images/mile-icon.svg" class="inline-block w-4 h-4" alt="M"></div>
-            </div>
-            <div style="width:60%;">
-              <div class="progress-bg"><div id="milesProgressBar" class="progress-fill" style="width:0%"></div></div>
-              <div style="display:flex; justify-content:space-between; margin-top:8px; font-size:13px;" class="muted">
-                <div id="milesLabelLeft">0 миль</div>
-                <div id="milesLabelRight">—</div>
-              </div>
-            </div>
-          </div>
+        <div class="field">
+          <div><div class="small-muted">Дата рождения</div><div id="dobField">—</div></div>
+          <button class="btn" onclick="editInline('dob')">Изменить</button>
         </div>
 
-        <!-- пример полей профиля для редактирования -->
-        <div class="card mb-4">
-          <div style="font-weight:700; margin-bottom:10px;">Данные профиля</div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-            <div>ФИО: <span id="fioField">—</span> <button onclick="editInline('fio')">✎</button></div>
-            <div>Дата рождения: <span id="dobField">—</span> <button onclick="editInline('dob')">✎</button></div>
-            <div>Пол: <span id="genderField">—</span></div>
-            <div>Email: <span id="emailField">—</span></div>
-            <div>Телефон: <span id="phoneField">—</span></div>
-            <div>Карта: <span id="card_field">—</span></div>
-            <div>Тип карты: <span id="cardTypeField">—</span></div>
-          </div>
+        <div class="field">
+          <div><div class="small-muted">Пол</div><div id="genderField">—</div></div>
+          <button class="btn" onclick="editInline('gender')">Изменить</button>
         </div>
 
-        <!-- shop demo (ПК-скрипт рендерит сюда) -->
-        <div class="card">
-          <div style="font-weight:700; margin-bottom:8px;">Магазин</div>
-          <div id="productGrid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px;"></div>
-          <div style="margin-top:12px;">
-            <table id="cartTable" style="width:100%;"><tbody></tbody></table>
-            <div style="margin-top:8px;">Итого: <span id="cartTotal">0 ₽</span></div>
-            <div style="margin-top:8px;">
-              <button class="big-button" style="width:auto;" onclick="checkout()">Оплатить</button>
-            </div>
-          </div>
+        <h3 style="margin-top:16px">Контакты</h3>
+
+        <div class="field">
+          <div><div class="small-muted">E-mail</div><div id="emailField">—</div></div>
+          <button class="btn" onclick="editInline('email')">Изменить</button>
+        </div>
+
+        <div class="field">
+          <div><div class="small-muted">Телефон</div><div id="phoneField">—</div></div>
+          <button class="btn" onclick="editInline('phone')">Изменить</button>
+        </div>
+
+        <h3 style="margin-top:16px">Карта</h3>
+
+        <div class="field">
+          <div><div class="small-muted">Номер карты</div><div id="card_field">—</div></div>
+          <button class="btn" onclick="editInline('card_number')">Изменить</button>
+        </div>
+
+        <div class="field">
+          <div><div class="small-muted">Тип карты</div><div id="cardTypeField">—</div></div>
         </div>
       </section>
-    </div>
-  </main>
 
-  <!-- ======= ПК-скрипт (тот, что ты прислал) ======= -->
-  <!-- Я вставил твой скрипт почти без изменений, чтобы всё работало как было -->
-  <script>
+    <section id="milesTab" class="card" style="margin-top:16px;display:none">
+        <h3>Мои мили</h3>
+        <div class="muted">Состояние бонусов и прогресс статуса</div>
+
+        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+          <div class="card" style="flex:1;min-width:200px">
+            <div class="small-muted">Бонусные мили</div>
+            <div style="font-weight:700;font-size:20px" id="milesBonusStat">—</div>
+          </div>
+          <div class="card" style="flex:1;min-width:200px">
+            <div class="small-muted">Статусные мили</div>
+            <div style="font-weight:700;font-size:20px" id="milesStatusStat">—</div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px">
+          <div class="small-muted">Прогресс до следующего уровня</div>
+          <div class="progress-bg" style="margin-top:8px;height:12px;border-radius:10px">
+            <div id="milesProgressBar2" class="progress-fill" style="width:0%;height:100%;background:linear-gradient(90deg,#9cc42f,#6dbf2a)"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:#666;margin-top:6px">
+            <div id="nextLevelLeft">0 / 1000</div>
+            <div id="nextLevelRight">Classic</div>
+          </div>
+        </div>
+
+        <!-- Промокод -->
+        <div class="card" style="margin-top:20px;padding:14px">
+          <h4 style="margin:0 0 8px 0">Активация промокода</h4>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="promoInput" type="text" placeholder="Введите промокод" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:8px">
+            <button id="promoActivateBtn" class="btn" style="white-space:nowrap">Активировать</button>
+          </div>
+          <div class="small-muted" style="margin-top:8px;font-size:13px">Промокод можно использовать один раз.</div>
+        </div>
+
+        <!-- Смена типа карты -->
+        <div class="card" style="margin-top:20px;padding:14px">
+          <h4 style="margin:0 0 8px 0">Смена типа карты</h4>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="cardChangeInput" type="text" placeholder="Введите код (VIP1111 / CLASS5555)" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:8px">
+            <button id="cardChangeBtn" class="btn secondary" style="white-space:nowrap">Применить</button>
+          </div>
+          <div class="small-muted" style="margin-top:8px;font-size:13px">Коды: <strong>VIP1111</strong> → VIP, <strong>CLASS5555</strong> → Classic</div>
+        </div>
+      </section>
+
+
+
+      <section id="shopTab" class="card" style="margin-top:16px;display:none">
+        <h3>S7avelii Shop</h3>
+        <div class="muted">Товары, доступные к покупке</div>
+        <div id="productGrid" class="product-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px"></div>
+      </section>
+
+      <section id="settingsTab" class="card" style="margin-top:16px;display:none">
+        <h3>Настройки</h3>
+        <button class="btn red" onclick="logout()">Выйти</button>
+      </section>
+    </div>
+
+    <section id="shopTab" class="card" style="margin-top:16px;display:none">
+  <h3>Корзина</h3>
+  <div class="muted">Ваши выбранные товары</div>
+
+  <div id="cartContainer" style="margin-top:16px">
+    <table class="cart-table" id="cartTable">
+      <thead>
+        <tr>
+          <th>Товар</th>
+          <th>Цена</th>
+          <th>Количество</th>
+          <th>Сумма</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px">
+    <div class="muted" style="font-size:15px">Итого: <span id="cartTotal" style="font-weight:600">0 ₽</span></div>
+    <button class="btn" onclick="checkout()">Оформить заказ</button>
+  </div>
+</section>
+ 
+<!-- ====== SCRIPTS: API + UI logic (всё в одном блоке) ====== -->
+<script>
 /* ========== Конфигурация API ========== */
 const API = "https://s7avelii-airlines-1.onrender.com"; // <- поменяй, если другой бекенд
 function getToken(){ return localStorage.getItem('token'); }
@@ -254,6 +676,7 @@ async function apiFetch(endpoint, options = {}) {
     const res = await fetch(API + endpoint, options);
     if (!res) return null;
     if (res.status === 401) { logout(); return null; }
+    // попробуем распарсить JSON, если нет — вернуть объект с текстом
     const txt = await res.text();
     try { return JSON.parse(txt); } catch(e) { return { raw: txt, status: res.status }; }
   } catch (e) {
@@ -306,6 +729,7 @@ function showTab(evt){
   document.querySelectorAll('.grid section').forEach(s=>s.style.display='none');
   const el = document.getElementById(tab);
   if (el) el.style.display = 'block';
+  // scroll tab into view on mobile
   try { evt.currentTarget.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}); } catch(e){}
 }
 
@@ -362,6 +786,7 @@ async function editInline(field) {
 async function saveField(field, value) {
   const payload = {}; payload[field] = value;
   const res = await apiFetch('/api/profile', { method: 'PUT', body: payload });
+  // apiFetch returns JSON; assume success if non-null
   if (res) {
     const updated = await apiFetch('/api/profile');
     if (updated) { currentUser = updated; loadProfile(); updateUserArea(); }
@@ -592,6 +1017,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(!token){ window.location.href = 'auth.html'; return; }
     await updateUserArea(); // loads profile into currentUser and calls loadProfile()
     await loadShop();
+    // ensure UI updated
     updateMilesUIFromCurrentUser();
     attachPromoAndCardHandlers();
   })();
@@ -604,114 +1030,7 @@ window.addToCart = addToCart;
 window.removeFromCart = removeFromCart;
 window.checkout = checkout;
 
-  </script>
-
-  <!-- ======= Доп. скрипт: синхронизация мобильного UI + view switching ======= -->
-  <script>
-    // Обновляет мобильную версию из currentUser (использует те же поля)
-    function updateMobileUI(){
-      if(!window.currentUser) return;
-      const u = window.currentUser;
-      // fio -> отображаем имя + инициала фамилии (пример: Иван П.)
-      const fio = u.fio || '';
-      const parts = fio.split(' ').filter(Boolean);
-      const first = parts[0] || '';
-      const surnameInitial = parts[1] ? (parts[1][0] + '.') : '';
-      const fioShort = first ? (first + (surnameInitial ? (' ' + surnameInitial) : '')) : (u.email || 'Пользователь');
-      const avatarUrl = u.avatar ? (u.avatar.startsWith('http') ? u.avatar : (API + u.avatar)) : 'https://via.placeholder.com/150';
-
-      const card = u.card_number || '—';
-      const status = u.card_type || '—';
-      const miles = Number(u.bonus_miles || 0);
-      const statusMiles = Number(u.status_miles || 0);
-
-      const bigAvatar = document.getElementById('bigAvatarMobile');
-      if(bigAvatar) bigAvatar.src = avatarUrl;
-      const fioEl = document.getElementById('fioMobile');
-      if(fioEl) fioEl.textContent = fioShort;
-      const cardEl = document.getElementById('cardNumberMobile');
-      if(cardEl) cardEl.textContent = card;
-      const levelEl = document.getElementById('levelNameMobile');
-      if(levelEl) levelEl.textContent = status;
-      const milesEl = document.getElementById('milesCountMobile');
-      if(milesEl) milesEl.innerHTML = miles.toLocaleString('ru-RU') + ' <img src="images/mile-icon.svg" style="width:16px;height:16px;vertical-align:middle" alt="M">';
-
-      // progress compute using same LEVELS and getLevelByMiles (from ПК-скрипта)
-      let level = (typeof getLevelByMiles === 'function') ? getLevelByMiles(statusMiles) : null;
-      if(!level) level = { min:0, name:'Classic' };
-      const currentMin = level.min;
-      const currentIndex = (typeof LEVELS !== 'undefined') ? LEVELS.findIndex(l => l.name === level.name) : -1;
-      const next = (currentIndex >=0 && typeof LEVELS !== 'undefined') ? LEVELS[currentIndex+1] : null;
-      const nextMin = next ? next.min : (level.max === Infinity ? currentMin : level.max);
-      let percent = next ? ((statusMiles - currentMin) / ((nextMin - currentMin) || 1)) * 100 : 100;
-      percent = Math.max(0, Math.min(100, percent));
-      const progressEl = document.getElementById('milesProgressMobile');
-      if(progressEl) progressEl.style.width = percent + '%';
-      const leftEl = document.getElementById('progressLeftMobile');
-      const rightEl = document.getElementById('progressRightMobile');
-      if(leftEl) leftEl.textContent = currentMin.toLocaleString('ru-RU') + ' миль';
-      if(rightEl) rightEl.textContent = next ? next.min.toLocaleString('ru-RU') + ' миль' : 'максимум';
-
-      // header small widget
-      const header = document.getElementById('headerUserAreaMobile');
-      if(header) header.innerHTML = `<div style="display:flex;align-items:center;gap:8px"><img src="${avatarUrl}" style="width:36px;height:36px;border-radius:9999px;object-fit:cover"><div style="text-align:right;"><div style="font-weight:700">${escapeHtml(fioShort)}</div><div class="muted" style="font-size:12px">${miles.toLocaleString('ru-RU')} <img src="images/mile-icon.svg" style="width:14px;height:14px;display:inline-block"></div></div></div>`;
-    }
-
-    // Если loadProfile уже определён (твой скрипт мог его переопределить), то оборачиваем его, чтобы вызывать updateMobileUI после него
-    (function(){
-      const orig = window.loadProfile || function(){};
-      window.loadProfile = function(){
-        try { orig(); } catch(e){ console.warn('orig loadProfile err', e); }
-        try { updateMilesUIFromCurrentUser(); } catch(e){/* игнор */ }
-        try { updateMobileUI(); } catch(e){ console.warn('updateMobileUI err', e); }
-      };
-    })();
-
-    // кнопка промокода в мобильной версии: откликается тот же flow, что в ПК (используем prompt -> handleActivatePromo)
-    document.addEventListener('DOMContentLoaded', ()=>{
-      const btn = document.getElementById('openPromoMobile');
-      if(btn) btn.addEventListener('click', async ()=>{
-        const code = prompt('Введите промокод');
-        if(!code) return;
-        // используем общий flow: проверки и запросы производит handleActivatePromo
-        const input = document.getElementById('promoInput');
-        if(!input){
-          // создадим временное поле для совместимости с handleActivatePromo
-          const tmp = document.createElement('input');
-          tmp.id = 'promoInput';
-          tmp.style.display = 'none';
-          document.body.appendChild(tmp);
-        }
-        document.getElementById('promoInput').value = code;
-        // call shared handler
-        try { await handleActivatePromo(); updateMobileUI(); } catch(e){ console.error(e); }
-      });
-
-      // Подписка на telegram (симуляция)
-      const tg = document.getElementById('telegramBlockMobile');
-      if(tg){
-        tg.addEventListener('click', ()=>{ alert('Откроется бот (симуляция)'); });
-      }
-
-    });
-
-    // View enforcement: показываем мобильную версию на телефонах
-    function preferMobileByUA(){
-      const ua = navigator.userAgent || navigator.vendor || window.opera;
-      return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(ua);
-    }
-    function enforceView(){
-      const w = window.innerWidth;
-      const useMobile = (w < 768) || preferMobileByUA();
-      document.getElementById('mobileView').style.display = useMobile ? 'block' : 'none';
-      document.getElementById('desktopView').style.display = useMobile ? 'none' : 'block';
-    }
-    window.addEventListener('resize', ()=>{ setTimeout(enforceView, 120); });
-
-    // Если профиль уже загружен — обновим мобильный UI
-    setTimeout(()=>{ try{ updateMobileUI(); }catch(e){} }, 600);
-  </script>
-
+</script>
+   
 </body>
 </html>
-
