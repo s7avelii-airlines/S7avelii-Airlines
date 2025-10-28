@@ -3,132 +3,194 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Профиль — Miles</title>
+<title>Профиль — точь в точь</title>
 <style>
-:root{
-  --bg:#f5f7fa; --card:#fff; --accent:#d9f65f; --accent-2:#c6e44e; --muted:#8b94a3; --btn:#2b2f36;
-  font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
-}
-html,body{height:100%;margin:0;background:var(--bg);color:#111}
-.wrap{max-width:420px;margin:0 auto;padding:18px}
-.header{display:flex;align-items:center;gap:12px;margin-top:18px;margin-bottom:8px}
-.avatar{width:76px;height:76px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;margin:0 auto;box-shadow:0 8px 24px rgba(18,22,32,0.06)}
-.avatar img{width:100%;height:100%;object-fit:cover}
-.name-big{font-size:40px;font-weight:800;text-align:center;margin-top:8px;letter-spacing:1px}
-.top-right-edit{position:fixed;right:18px;top:18px;width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
-.card{background:var(--card);padding:14px;border-radius:14px;box-shadow:0 6px 18px rgba(12,18,36,0.03);min-height:72px}
-.small{font-size:13px;color:var(--muted);margin-bottom:8px}
-.mono{font-family:monospace}
-.balance-wide{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding:16px}
-.balance-amount{font-size:20px;font-weight:700}
-.balance-icon{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 8px 26px rgba(200,220,80,0.12)}
-.status-card{margin-top:14px;background:var(--card);padding:14px;border-radius:14px;box-shadow:0 6px 18px rgba(12,18,36,0.03)}
-.status-line{height:12px;background:#eef2f5;border-radius:999px;overflow:hidden;margin-top:10px}
-.status-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:10%}
-.big-button{margin-top:18px;background:var(--btn);color:#fff;border:none;padding:16px;border-radius:12px;width:100%;font-size:20px;font-weight:800;cursor:pointer;box-shadow:0 8px 22px rgba(15,18,20,0.12)}
-.telegram{margin-top:14px;background:linear-gradient(180deg,#2e3a52,#33425b);color:white;padding:14px;border-radius:12px;display:flex;gap:12px;align-items:center}
-.telegram .circle{width:64px;height:64px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;color:#111}
-.list{margin-top:12px;border-radius:12px;overflow:hidden}
-.list .item{background:var(--card);padding:14px;border-bottom:1px solid #f1f3f6;display:flex;align-items:center;gap:12px}
-.list .item:last-child{border-bottom:none}
-.icon-box{width:44px;height:44px;border-radius:8px;background:#f3f6f8;display:flex;align-items:center;justify-content:center}
-.center{text-align:center}
-.muted{color:var(--muted)}
-/* modal */
-.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:100}
-.modal{background:var(--card);padding:18px;border-radius:12px;width:92%;max-width:420px}
-.input-row{display:flex;gap:8px;margin-top:12px}
-.input-row input{flex:1;padding:12px;border-radius:10px;border:1px solid #eef2f5}
-.input-row button{padding:12px 14px;border-radius:10px;border:none;background:#2b6df6;color:#fff;cursor:pointer}
-.close-x{position:absolute;top:14px;right:18px;cursor:pointer;color:#888}
-/* responsive */
-@media (max-width:420px){ .name-big{font-size:36px} .avatar{width:64px;height:64px} .balance-icon{width:44px;height:44px} }
+  /* --- Цвета / базовые --- */
+  :root{
+    --bg: #f6f8fa;
+    --card: #ffffff;
+    --accent: #d9f65f;
+    --accent-2: #c6e44e;
+    --muted: #76808b;
+    --dark: #111218;
+    --radius: 14px;
+    font-family: Inter, "Segoe UI", Roboto, system-ui, -apple-system, Arial, sans-serif;
+  }
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--dark);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:420px;margin:18px auto;padding:18px}
+
+  /* header: avatar, name, small action */
+  .header { display:flex; align-items:center; gap:12px; justify-content:center; position:relative; margin-bottom:8px; }
+  .avatar { width:72px; height:72px; border-radius:50%; background:var(--card); display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow:0 6px 18px rgba(20,24,40,0.06); cursor:pointer; border:1px solid #f0f3f6; }
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .avatar-initial { font-weight:800; font-size:26px; color:var(--dark); padding:6px; }
+  .name { font-weight:800; font-size:28px; letter-spacing:0.6px; text-align:center; line-height:1; margin:0; text-transform:none; }
+  .name.small { font-size:20px } /* fallback small */
+
+  .top-action { position:absolute; right:0; top:-6px; background:var(--card); padding:6px 8px; border-radius:10px; font-weight:700; box-shadow:0 8px 18px rgba(10,16,30,0.06); cursor:pointer; font-size:14px; border:1px solid #eef3f7; }
+
+  /* grid of small cards */
+  .grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:16px; }
+  .card { background:var(--card); padding:12px; border-radius:12px; box-shadow:0 6px 18px rgba(12,18,36,0.03); min-height:64px; display:flex; flex-direction:column; justify-content:center; }
+  .card .label { font-size:12px; color:var(--muted); margin-bottom:6px; }
+  .card .value { font-weight:700; font-size:15px; }
+
+  /* compact balance card (not full width huge) */
+  .balance-card { grid-column: 1 / -1; display:flex; align-items:center; justify-content:space-between; padding:14px; gap:12px; }
+  .balance-left { display:flex; flex-direction:column; }
+  .balance-left .label { font-size:12px; color:var(--muted); margin-bottom:6px; }
+  .balance-left .amount { font-weight:800; font-size:18px; }
+  .balance-icon { width:46px; height:46px; border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; font-weight:800; background:linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow:0 8px 18px rgba(200,220,80,0.12); }
+
+  /* status block */
+  .status { margin-top:14px; background:var(--card); padding:12px; border-radius:12px; box-shadow:0 6px 18px rgba(12,18,36,0.03); }
+  .status .row { display:flex; justify-content:space-between; align-items:center; }
+  .progress-line { height:12px; background:#eef2f5; border-radius:999px; overflow:hidden; margin-top:10px; }
+  .progress-fill { height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); }
+
+  /* big button for promo */
+  .promo-btn { margin-top:14px; width:100%; padding:12px 14px; border-radius:12px; border:none; font-weight:800; background:var(--dark); color:#fff; cursor:pointer; font-size:16px; box-shadow:0 8px 26px rgba(0,0,0,0.08) }
+
+  /* list with icons — clickable, open modal */
+  .list { margin-top:12px; border-radius:12px; overflow:hidden; }
+  .list .item { display:flex; align-items:center; gap:12px; padding:12px; background:var(--card); border-bottom:1px solid #f3f6f8; cursor:pointer; }
+  .list .item:last-child { border-bottom:none; }
+  .icon { width:44px; height:44px; border-radius:8px; display:flex; align-items:center; justify-content:center; background:#f4f7f9; overflow:hidden; }
+  .icon img{width:100%;height:100%;object-fit:contain}
+
+  /* modal generic */
+  .modal-backdrop { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(10,12,14,0.45); z-index:200; padding:18px; }
+  .modal { width:100%; max-width:420px; background:var(--card); border-radius:12px; padding:16px; box-shadow:0 20px 60px rgba(10,10,10,0.3); position:relative; }
+  .modal h3 { margin:0 0 8px 0; font-size:18px; }
+  .modal .muted { color:var(--muted); font-size:13px; }
+  .modal .close { position:absolute; right:12px; top:12px; cursor:pointer; color:var(--muted); font-weight:700; }
+
+  /* small input row */
+  .input-row { display:flex; gap:8px; margin-top:12px; }
+  .input-row input { flex:1; padding:10px 12px; border-radius:10px; border:1px solid #eef3f7; }
+  .input-row button { padding:10px 12px; border-radius:10px; border:none; background:#2b6df6; color:#fff; cursor:pointer; }
+
+  /* helper */
+  .muted { color:var(--muted); }
+  .center { text-align:center; }
+
+  @media (max-width:420px){
+    .name { font-size:24px; }
+    .avatar{ width:64px; height:64px; }
+    .balance-icon{ width:40px; height:40px; }
+  }
 </style>
 </head>
 <body>
-  <div class="top-right-edit" title="Редактировать">✎</div>
-
   <div class="wrap">
-    <div class="center">
-      <div class="avatar" id="avatarWrap">
-        <img id="avatarImg" src="" alt="avatar" style="display:none" />
-        <div id="avatarInitial" style="font-size:28px;font-weight:800">А</div>
+
+    <!-- header -->
+    <div class="header">
+      <div class="avatar" id="avatarBtn" title="Нажми, чтобы заменить аватар">
+        <img id="avatarImg" src="" alt="avatar" style="display:none">
+        <div id="avatarInitial" class="avatar-initial">А</div>
       </div>
-      <div class="name-big" id="fioName">ИМЯ</div>
+
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div id="fio" class="name">ИМЯ Ф.</div>
+      </div>
+
+      <div class="top-action" id="editBtn" title="Редактировать">✎</div>
     </div>
 
-    <div class="grid" style="margin-top:18px">
+    <!-- small cards grid -->
+    <div class="grid" aria-hidden="false">
       <div class="card">
-        <div class="small">S7 Priority</div>
-        <div class="mono" id="card_number">—</div>
+        <div class="label">S7 Priority</div>
+        <div class="value mono" id="card_number">—</div>
       </div>
 
       <div class="card">
-        <div class="small">Начисления<br>Списания</div>
+        <div class="label">Начисления / Списания</div>
+        <div class="value">—</div>
       </div>
 
-      <div class="card balance-wide" style="grid-column:1/-1">
-        <div>
-          <div class="small">ваш баланс</div>
-          <div class="balance-amount" id="bonus_miles">0</div>
+      <div class="card balance-card">
+        <div class="balance-left">
+          <div class="label">ваш баланс</div>
+          <div class="amount" id="bonus_miles">0</div>
         </div>
-        <div class="balance-icon">M</div>
+        <div class="balance-icon" id="balanceIcon">M</div>
       </div>
 
       <div class="card">
-        <div class="small">Управлять</div>
-        <div class="small">милями</div>
+        <div class="label">Управлять</div>
+        <div class="value">милями</div>
       </div>
     </div>
 
-    <div class="status-card">
-      <div style="display:flex;justify-content:space-between;align-items:center">
+    <!-- status -->
+    <div class="status" role="region" aria-label="Статус">
+      <div class="row">
         <div class="muted">Статус</div>
-        <div id="status_text" class="muted">О статусе</div>
+        <div id="card_type" class="muted">—</div>
       </div>
-      <div class="status-line"><div id="status_fill" class="status-fill" style="width:20%"></div></div>
-    </div>
-
-    <button class="big-button" id="openPromoBtn">Добавить промокод</button>
-
-    <div class="telegram">
-      <div class="circle">✈</div>
-      <div>
-        <div style="font-weight:700">Наш бот в Телеграме</div>
-        <div style="font-size:13px;opacity:0.95">Подписывайтесь, чтобы знать о статусе рейса</div>
+      <div class="progress-line">
+        <div id="status_fill" class="progress-fill" style="width:0%"></div>
       </div>
     </div>
 
+    <!-- promo -->
+    <button class="promo-btn" id="openPromo">Добавить промокод</button>
+
+    <!-- list (popup items) -->
     <div class="list">
-      <div class="item"><div class="icon-box">Я</div><div>Яндекс Плюс x S7</div></div>
-      <div class="item"><div class="icon-box">П</div><div>Тайный пассажир</div></div>
-      <div class="item"><div class="icon-box">🍃</div><div>Green Steps</div></div>
+      <div class="item" data-key="plus" id="item-plus">
+        <div class="icon"><img id="icon-plus" src="/icons/plus.svg" alt="plus"></div>
+        <div>Яндекс Плюс x S7</div>
+      </div>
+      <div class="item" data-key="mystery" id="item-mystery">
+        <div class="icon"><img id="icon-mystery" src="/icons/mystery.svg" alt="mystery"></div>
+        <div>Тайный пассажир</div>
+      </div>
+      <div class="item" data-key="green" id="item-green">
+        <div class="icon"><img id="icon-green" src="/icons/green.svg" alt="green"></div>
+        <div>Green Steps</div>
+      </div>
     </div>
   </div>
 
-  <!-- modal для промокода -->
-  <div class="modal-backdrop" id="modal">
+  <!-- hidden file input for avatar -->
+  <input id="avatarInput" type="file" accept="image/*" style="display:none">
+
+  <!-- modal: promo -->
+  <div class="modal-backdrop" id="promoModal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
-      <div style="position:relative">
-        <div class="close-x" id="closeModal">✕</div>
-        <h3>Введите промокод</h3>
-        <div class="muted">Промокод добавит мили на ваш баланс.</div>
-        <div class="input-row">
-          <input id="promoInput" placeholder="Код промокода" />
-          <button id="promoActivateBtn">Применить</button>
-        </div>
-        <div id="promoResult" class="muted" style="margin-top:10px"></div>
+      <div class="close" id="promoClose">✕</div>
+      <h3>Добавить промокод</h3>
+      <div class="muted">Вставьте ваш промокод — он добавит мили на баланс.</div>
+      <div class="input-row">
+        <input id="promoInput" placeholder="Промокод" />
+        <button id="promoApply">Применить</button>
+      </div>
+      <div id="promoMsg" class="muted" style="margin-top:10px"></div>
+    </div>
+  </div>
+
+  <!-- modal: info popup for list items -->
+  <div class="modal-backdrop" id="infoModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="close" id="infoClose">✕</div>
+      <h3 id="infoTitle">Заголовок</h3>
+      <div id="infoBody" class="muted" style="margin-top:8px">Описание...</div>
+      <!-- you can optionally place image/icon here -->
+      <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+        <button id="infoOk" class="btn-ok" style="padding:8px 12px;border-radius:8px;border:none;background:#2b6df6;color:#fff;cursor:pointer">ОК</button>
       </div>
     </div>
   </div>
 
 <script>
-/* ----- Настройки API (твой сервер) ----- */
-const API = "https://s7avelii-airlines-1.onrender.com";
+/* =================== Настройки API =================== */
+const API_BASE = "https://s7avelii-airlines-1.onrender.com"; // твой сервер
 function getToken(){ return localStorage.getItem('token'); }
 
-/* ========== apiFetch (как в твоём скрипте) ========== */
+/* =================== Вспомогательный fetch =================== */
 async function apiFetch(endpoint, options = {}) {
   const token = getToken();
   options.headers = { ...(options.headers || {}) };
@@ -138,146 +200,226 @@ async function apiFetch(endpoint, options = {}) {
     options.body = JSON.stringify(options.body);
   }
   try {
-    const res = await fetch(API + endpoint, options);
+    const res = await fetch(API_BASE + endpoint, options);
     if (!res) return null;
     if (res.status === 401) { logout(); return null; }
-    const txt = await res.text();
-    try { return JSON.parse(txt); } catch(e) { return { raw: txt, status: res.status }; }
-  } catch (e) {
-    console.error('fetch err', e);
+    const text = await res.text();
+    try { return JSON.parse(text); } catch(e) { return { raw: text, status: res.status }; }
+  } catch (err) {
+    console.error('fetch error', err);
     return null;
   }
 }
 
-/* ====== STATE ====== */
+/* =================== State =================== */
 let currentUser = null;
 
-/* ====== UI elements ====== */
-const sel = {
-  fioName: document.getElementById('fioName'),
+/* =================== Elements =================== */
+const EL = {
+  avatarBtn: document.getElementById('avatarBtn'),
   avatarImg: document.getElementById('avatarImg'),
   avatarInitial: document.getElementById('avatarInitial'),
+  fio: document.getElementById('fio'),
   card_number: document.getElementById('card_number'),
   bonus_miles: document.getElementById('bonus_miles'),
-  status_text: document.getElementById('status_text'),
   status_fill: document.getElementById('status_fill'),
-  openPromoBtn: document.getElementById('openPromoBtn'),
-  modal: document.getElementById('modal'),
-  closeModal: document.getElementById('closeModal'),
+  card_type: document.getElementById('card_type'),
+  openPromo: document.getElementById('openPromo'),
+  promoModal: document.getElementById('promoModal'),
+  promoClose: document.getElementById('promoClose'),
   promoInput: document.getElementById('promoInput'),
-  promoActivateBtn: document.getElementById('promoActivateBtn'),
-  promoResult: document.getElementById('promoResult')
+  promoApply: document.getElementById('promoApply'),
+  promoMsg: document.getElementById('promoMsg'),
+  avatarInput: document.getElementById('avatarInput'),
+  infoModal: document.getElementById('infoModal'),
+  infoClose: document.getElementById('infoClose'),
+  infoTitle: document.getElementById('infoTitle'),
+  infoBody: document.getElementById('infoBody'),
+  infoOk: document.getElementById('infoOk'),
+  itemPlus: document.getElementById('item-plus'),
+  itemMystery: document.getElementById('item-mystery'),
+  itemGreen: document.getElementById('item-green'),
 };
 
-/* ====== PROMOS (как в твоём коде) ====== */
+/* =================== PROMOS local mapping (still allowed) =================== */
 const PROMOS = {
   'S717000': 17000,
   'WELCOME500': 500,
   'VIP2025': 2000,
   '2025': 4000,
   'S2025': 3000,
-  'TAKE_OFFf500': 500,
-  'LANDING500': 500,
+  'TAKE_OFFF500': 500,
+  'LANDING500': 500
 };
 
-/* ====== Инициализация ====== */
+/* =================== Init =================== */
 document.addEventListener('DOMContentLoaded', () => {
-  // handlers
-  sel.openPromoBtn.addEventListener('click', ()=> sel.modal.style.display='flex');
-  sel.closeModal.addEventListener('click', closeModal);
-  sel.promoActivateBtn.addEventListener('click', handleActivatePromo);
-  sel.promoInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') handleActivatePromo(); });
-  sel.modal.addEventListener('click', (e)=>{ if(e.target === sel.modal) closeModal(); });
+  // avatar click -> open file picker
+  EL.avatarBtn.addEventListener('click', ()=> EL.avatarInput.click());
+  EL.avatarInput.addEventListener('change', onAvatarSelected);
 
+  // promo modal
+  EL.openPromo.addEventListener('click', ()=> showModal(EL.promoModal));
+  EL.promoClose.addEventListener('click', ()=> closeModal(EL.promoModal));
+  EL.promoApply.addEventListener('click', applyPromo);
+  EL.promoInput.addEventListener('keydown', (e)=> { if(e.key === 'Enter') applyPromo(); });
+
+  // info modal
+  EL.itemPlus.addEventListener('click', ()=> openInfo('Яндекс Плюс x S7', 'Тут можно вставить любой HTML/описание/иконку — заменяй /icons/plus.svg'));
+  EL.itemMystery.addEventListener('click', ()=> openInfo('Тайный пассажир', 'Описание тайного пассажира... вставляй свою картинку в /icons/mystery.svg'));
+  EL.itemGreen.addEventListener('click', ()=> openInfo('Green Steps', 'Инфо Green Steps — измени иконку в /icons/green.svg'));
+  EL.infoClose.addEventListener('click', ()=> closeModal(EL.infoModal));
+  EL.infoOk.addEventListener('click', ()=> closeModal(EL.infoModal));
+
+  // load profile if token exists
   (async ()=>{
     const token = getToken();
-    if(!token){ alert('Нет токена в localStorage. Выполни login и положи token.'); return; }
+    if(!token){ alert('Требуется авторизация: положи token в localStorage (localStorage.setItem(\"token\",\"ВАШ_ТОКЕН\"))'); return; }
     await loadProfile();
   })();
 });
 
-/* ====== Загрузка профиля ====== */
+/* =================== Load profile =================== */
 async function loadProfile(){
-  const user = await apiFetch('/api/profile');
-  if(!user){ console.warn('profile fetch failed'); return; }
-  currentUser = user;
+  const profile = await apiFetch('/api/profile');
+  if(!profile){ console.warn('profile fetch failed'); return; }
+  currentUser = profile;
   renderProfile();
 }
 
-/* ====== Отрисовка ====== */
+/* =================== Render =================== */
 function renderProfile(){
   if(!currentUser) return;
-  // ФИО: имя + первая буква фамилии
-  let fio = currentUser.fio || currentUser.name || '';
-  let first = fio.split(' ')[0] || fio;
-  let initial = (fio.split(' ')[1] || '').slice(0,1) || '';
-  sel.fioName.textContent = (first + (initial ? ' ' + initial + '.' : '')).toUpperCase();
+  // fio: имя + первая буква фамилии
+  const fioRaw = currentUser.fio || '';
+  const parts = fioRaw.trim().split(/\s+/);
+  const name = parts[0] || '';
+  const initial = parts[1] ? parts[1].slice(0,1) + '.' : '';
+  EL.fio.textContent = (name + (initial ? ' ' + initial : '')).trim();
 
   // avatar
   if(currentUser.avatar){
-    const u = currentUser.avatar.startsWith('http') ? currentUser.avatar : (API + currentUser.avatar);
-    sel.avatarImg.src = u; sel.avatarImg.style.display='block'; sel.avatarInitial.style.display='none';
+    const url = currentUser.avatar.startsWith('http') ? currentUser.avatar : (API_BASE + currentUser.avatar);
+    EL.avatarImg.src = url; EL.avatarImg.style.display = 'block'; EL.avatarInitial.style.display = 'none';
   } else {
-    sel.avatarImg.style.display='none'; sel.avatarInitial.style.display='block';
-    sel.avatarInitial.textContent = (first ? first[0].toUpperCase() : 'А');
+    EL.avatarImg.style.display = 'none'; EL.avatarInitial.style.display = 'block';
+    EL.avatarInitial.textContent = (name ? name[0].toUpperCase() : 'А');
   }
 
-  // card number
-  sel.card_number.textContent = currentUser.card_number || '—';
+  // card number (compact)
+  EL.card_number.textContent = currentUser.card_number || '—';
 
-  // miles
-  sel.bonus_miles.textContent = (currentUser.bonus_miles || 0).toLocaleString('ru-RU');
+  // bonus miles (compact)
+  EL.bonus_miles.textContent = Number(currentUser.bonus_miles || 0).toLocaleString('ru-RU');
 
-  // status
-  const statusText = currentUser.card_type || currentUser.status || 'О статусе';
-  sel.status_text.textContent = statusText;
-  const percent = Number(currentUser.status_miles || 0) / 1000 * 100;
-  sel.status_fill.style.width = Math.min(100, Math.max(0, percent)) + '%';
+  // status + progress
+  EL.card_type.textContent = currentUser.card_type || currentUser.status || '—';
+  const percent = Math.min(100, Math.round((Number(currentUser.status_miles || 0) / 1000) * 100));
+  EL.status_fill.style.width = percent + '%';
 }
 
-/* ====== Промокод: отправка как в твоём скрипте (PUT /api/profile) ====== */
-async function handleActivatePromo(){
-  const code = (sel.promoInput.value||'').trim().toUpperCase();
-  if(!code){ sel.promoResult.textContent = 'Введите промокод'; return; }
-  if(!PROMOS[code]){ sel.promoResult.textContent = 'Неверный промокод'; return; }
-  // проверим used_promos в currentUser
-  const used = Array.isArray(currentUser?.used_promos) ? currentUser.used_promos : [];
-  if(used.includes(code)){ sel.promoResult.textContent = 'Промокод уже использован'; return; }
-
-  const add = Number(PROMOS[code] || 0);
-  const payload = {
-    bonus_miles: (Number(currentUser.bonus_miles || 0) + add),
-    status_miles: (Number(currentUser.status_miles || 0) + add),
-    used_promos: [...used, code]
+/* =================== Avatar upload handler =================== */
+async function onAvatarSelected(e){
+  const f = e.target.files && e.target.files[0];
+  if(!f) return;
+  // preview immediately
+  const reader = new FileReader();
+  reader.onload = () => {
+    EL.avatarImg.src = reader.result; EL.avatarImg.style.display='block'; EL.avatarInitial.style.display='none';
   };
+  reader.readAsDataURL(f);
 
-  sel.promoActivateBtn.disabled = true;
-  sel.promoResult.textContent = 'Отправка...';
+  // send to server as FormData via PUT /api/profile (FormData)
+  const fd = new FormData();
+  fd.append('avatar', f);
 
-  const res = await apiFetch('/api/profile', { method: 'PUT', body: payload });
-  sel.promoActivateBtn.disabled = false;
-
-  if(!res){ sel.promoResult.textContent = 'Ошибка сервера'; return; }
-  // обновим currentUser: предпочитаем ответ сервера, если вернул профиль
-  const updated = await apiFetch('/api/profile');
-  if(updated && (updated.fio || updated.id || updated.email)) currentUser = updated;
-  else {
-    // если сервер не вернул, применим локально
-    currentUser.bonus_miles = payload.bonus_miles;
-    currentUser.status_miles = payload.status_miles;
-    currentUser.used_promos = payload.used_promos;
+  const token = getToken();
+  try {
+    // First try PUT /api/profile (FormData)
+    const resPut = await fetch(API_BASE + '/api/profile', {
+      method: 'PUT',
+      headers: token ? { 'Authorization': 'Bearer ' + token } : undefined,
+      body: fd
+    });
+    if (resPut && (resPut.status === 200 || resPut.status === 204)) {
+      // success — refresh profile
+      await loadProfile();
+      return;
+    }
+    // if PUT failed, try POST /api/profile/avatar (fallback)
+    const resPost = await fetch(API_BASE + '/api/profile/avatar', {
+      method: 'POST',
+      headers: token ? { 'Authorization': 'Bearer ' + token } : undefined,
+      body: fd
+    });
+    if (resPost && (resPost.status === 200 || resPost.status === 201 || resPost.status === 204)) {
+      await loadProfile();
+      return;
+    }
+    // otherwise show error
+    alert('Не удалось загрузить аватар (сервер вернул ошибку).');
+    await loadProfile();
+  } catch (err) {
+    console.error('avatar upload error', err);
+    alert('Ошибка сети при загрузке аватара');
+    await loadProfile();
   }
-  renderProfile();
-  sel.promoResult.textContent = `Промокод применён, +${add} миль`;
-  setTimeout(()=>{ closeModal(); sel.promoResult.textContent=''; sel.promoInput.value=''; }, 1000);
 }
 
-/* ====== Вспомогательные ====== */
-function closeModal(){
-  if(sel.modal) sel.modal.style.display = 'none';
+/* =================== Promo apply =================== */
+async function applyPromo(){
+  const code = (EL.promoInput.value || '').trim().toUpperCase();
+  if(!code){ EL.promoMsg.textContent = 'Введите код'; return; }
+
+  // If you want the same client-side mapping check (optional) - we still try server first
+  EL.promoApply.disabled = true; EL.promoMsg.textContent = 'Отправка...';
+
+  try {
+    // Send to server: POST /api/promo { code }
+    const result = await apiFetch('/api/promo', { method: 'POST', body: { code } });
+    // If server returned something meaningful, reload profile
+    if (result && (result.success === true || result.ok === true || result.user)) {
+      await loadProfile();
+      EL.promoMsg.textContent = (result.message) ? result.message : 'Промокод применён';
+      setTimeout(()=>{ closeModal(EL.promoModal); EL.promoMsg.textContent=''; EL.promoInput.value=''; }, 900);
+      return;
+    }
+
+    // If server didn't accept / returned generic, fallback: local PROMOS (old behaviour)
+    if (PROMOS[code]) {
+      const add = PROMOS[code];
+      // We'll attempt to update profile via PUT /api/profile (same as your script)
+      const payload = {
+        bonus_miles: (Number(currentUser.bonus_miles || 0) + add),
+        status_miles: (Number(currentUser.status_miles || 0) + add),
+        used_promos: Array.isArray(currentUser.used_promos) ? [...currentUser.used_promos, code] : [code]
+      };
+      const res = await apiFetch('/api/profile', { method: 'PUT', body: payload });
+      if (res) { await loadProfile(); EL.promoMsg.textContent = `Промокод применён, +${add} миль`; setTimeout(()=>{ closeModal(EL.promoModal); EL.promoMsg.textContent=''; EL.promoInput.value=''; },900); }
+      else EL.promoMsg.textContent = 'Ошибка сервера при применении';
+    } else {
+      EL.promoMsg.textContent = (result && result.message) ? result.message : 'Неверный промокод';
+    }
+  } catch (err) {
+    console.error('promo apply err', err);
+    EL.promoMsg.textContent = 'Ошибка сети';
+  } finally {
+    EL.promoApply.disabled = false;
+  }
 }
 
-/* ====== logout ====== */
+/* =================== Modal helpers =================== */
+function showModal(el){ if(!el) return; el.style.display = 'flex'; el.setAttribute('aria-hidden','false'); }
+function closeModal(el){ if(!el) return; el.style.display = 'none'; el.setAttribute('aria-hidden','true'); }
+
+/* =================== Info popup for list items =================== */
+function openInfo(title, html) {
+  EL.infoTitle.textContent = title;
+  EL.infoBody.innerHTML = html;
+  showModal(EL.infoModal);
+}
+
+/* =================== Logout helper =================== */
 function logout(){ localStorage.removeItem('token'); location.reload(); }
 </script>
 </body>
