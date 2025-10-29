@@ -1,196 +1,146 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Профиль — точь в точь</title>
-<style>
-  /* --- Цвета / базовые --- */
-  :root{
-    --bg: #f6f8fa;
-    --card: #ffffff;
-    --accent: #d9f65f;
-    --accent-2: #c6e44e;
-    --muted: #76808b;
-    --dark: #111218;
-    --radius: 14px;
-    font-family: Inter, "Segoe UI", Roboto, system-ui, -apple-system, Arial, sans-serif;
-  }
-  html,body{height:100%;margin:0;background:var(--bg);color:var(--dark);-webkit-font-smoothing:antialiased}
-  .wrap{max-width:420px;margin:18px auto;padding:18px}
-
-  /* header: avatar, name, small action */
-  .header { display:flex; align-items:center; gap:12px; justify-content:center; position:relative; margin-bottom:8px; }
-  .avatar { width:72px; height:72px; border-radius:50%; background:var(--card); display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow:0 6px 18px rgba(20,24,40,0.06); cursor:pointer; border:1px solid #f0f3f6; }
-  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
-  .avatar-initial { font-weight:800; font-size:26px; color:var(--dark); padding:6px; }
-  .name { font-weight:800; font-size:28px; letter-spacing:0.6px; text-align:center; line-height:1; margin:0; text-transform:none; }
-  .name.small { font-size:20px } /* fallback small */
-
-  .top-action { position:absolute; right:0; top:-6px; background:var(--card); padding:6px 8px; border-radius:10px; font-weight:700; box-shadow:0 8px 18px rgba(10,16,30,0.06); cursor:pointer; font-size:14px; border:1px solid #eef3f7; }
-
-  /* grid of small cards */
-  .grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:16px; }
-  .card { background:var(--card); padding:12px; border-radius:12px; box-shadow:0 6px 18px rgba(12,18,36,0.03); min-height:64px; display:flex; flex-direction:column; justify-content:center; }
-  .card .label { font-size:12px; color:var(--muted); margin-bottom:6px; }
-  .card .value { font-weight:700; font-size:15px; }
-
-  /* compact balance card (not full width huge) */
-  .balance-card { grid-column: 1 / -1; display:flex; align-items:center; justify-content:space-between; padding:14px; gap:12px; }
-  .balance-left { display:flex; flex-direction:column; }
-  .balance-left .label { font-size:12px; color:var(--muted); margin-bottom:6px; }
-  .balance-left .amount { font-weight:800; font-size:18px; }
-  .balance-icon { width:46px; height:46px; border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; font-weight:800; background:linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow:0 8px 18px rgba(200,220,80,0.12); }
-
-  /* status block */
-  .status { margin-top:14px; background:var(--card); padding:12px; border-radius:12px; box-shadow:0 6px 18px rgba(12,18,36,0.03); }
-  .status .row { display:flex; justify-content:space-between; align-items:center; }
-  .progress-line { height:12px; background:#eef2f5; border-radius:999px; overflow:hidden; margin-top:10px; }
-  .progress-fill { height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); }
-
-  /* big button for promo */
-  .promo-btn { margin-top:14px; width:100%; padding:12px 14px; border-radius:12px; border:none; font-weight:800; background:var(--dark); color:#fff; cursor:pointer; font-size:16px; box-shadow:0 8px 26px rgba(0,0,0,0.08) }
-
-  /* list with icons — clickable, open modal */
-  .list { margin-top:12px; border-radius:12px; overflow:hidden; }
-  .list .item { display:flex; align-items:center; gap:12px; padding:12px; background:var(--card); border-bottom:1px solid #f3f6f8; cursor:pointer; }
-  .list .item:last-child { border-bottom:none; }
-  .icon { width:44px; height:44px; border-radius:8px; display:flex; align-items:center; justify-content:center; background:#f4f7f9; overflow:hidden; }
-  .icon img{width:100%;height:100%;object-fit:contain}
-
-  /* modal generic */
-  .modal-backdrop { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(10,12,14,0.45); z-index:200; padding:18px; }
-  .modal { width:100%; max-width:420px; background:var(--card); border-radius:12px; padding:16px; box-shadow:0 20px 60px rgba(10,10,10,0.3); position:relative; }
-  .modal h3 { margin:0 0 8px 0; font-size:18px; }
-  .modal .muted { color:var(--muted); font-size:13px; }
-  .modal .close { position:absolute; right:12px; top:12px; cursor:pointer; color:var(--muted); font-weight:700; }
-
-  /* small input row */
-  .input-row { display:flex; gap:8px; margin-top:12px; }
-  .input-row input { flex:1; padding:10px 12px; border-radius:10px; border:1px solid #eef3f7; }
-  .input-row button { padding:10px 12px; border-radius:10px; border:none; background:#2b6df6; color:#fff; cursor:pointer; }
-
-  /* helper */
-  .muted { color:var(--muted); }
-  .center { text-align:center; }
-
-  @media (max-width:420px){
-    .name { font-size:24px; }
-    .avatar{ width:64px; height:64px; }
-    .balance-icon{ width:40px; height:40px; }
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>S7avelii | Профиль</title>
+   <link rel="icon" href="images/favicon.png" type="image/favicon.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* небольшие точные подправки */
+    .card-radius { border-radius: 14px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Helvetica Neue", monospace; }
+    /* уменьшил вертикальные отступы чтобы было компактно */
+  </style>
 </head>
-<body>
-  <div class="wrap">
+<body class="bg-gray-50 min-h-screen flex items-start justify-center py-6">
+  <div class="w-full max-w-md px-4">
 
-    <!-- header -->
-    <div class="header">
-      <div class="avatar" id="avatarBtn" title="Нажми, чтобы заменить аватар">
-        <img id="avatarImg" src="" alt="avatar" style="display:none">
-        <div id="avatarInitial" class="avatar-initial">А</div>
+    <!-- header: avatar + name + edit -->
+    <div class="relative flex flex-col items-center mb-3">
+      <label for="avatarInput" id="avatarBtn" class="cursor-pointer">
+        <div class="w-20 h-20 rounded-full bg-white shadow-md border border-gray-100 overflow-hidden flex items-center justify-center">
+          <img id="avatar" src="" alt="avatar" class="w-full h-full object-cover hidden">
+          <div id="avatarInitial" class="text-2xl font-extrabold text-gray-900">А</div>
+        </div>
+      </label>
+      <input id="avatarInput" type="file" accept="image/*" class="hidden">
+
+      <div class="mt-3 text-center">
+        <!-- ID который в твоём скрипте используется: fioHeader -->
+        <div id="fioHeader" class="text-2xl font-extrabold tracking-tight">ИМЯ Ф.</div>
       </div>
 
-      <div style="display:flex;flex-direction:column;align-items:center;">
-        <div id="fio" class="name">ИМЯ Ф.</div>
-      </div>
-
-      <div class="top-action" id="editBtn" title="Редактировать">✎</div>
+      <button id="editProfile" class="absolute right-0 top-0 -translate-y-1/4 bg-white p-2 rounded-full shadow border border-gray-100">
+        ✎
+      </button>
     </div>
 
-    <!-- small cards grid -->
-    <div class="grid" aria-hidden="false">
-      <div class="card">
-        <div class="label">S7 Priority</div>
-        <div class="value mono" id="card_number">—</div>
+    <!-- top grid -->
+    <div class="grid grid-cols-2 gap-3">
+      <div class="bg-white card-radius p-3 shadow-sm">
+        <div class="text-xs text-gray-500">S7avelii Priority</div>
+        <div id="card_field" class="mono text-sm font-semibold mt-1 text-gray-800">—</div>
       </div>
 
-      <div class="card">
-        <div class="label">Начисления / Списания</div>
-        <div class="value">—</div>
+      <div class="bg-white card-radius p-3 shadow-sm">
+        <div class="text-xs text-gray-500">Начисления / Списания</div>
+        <div class="text-sm font-semibold mt-1 text-gray-800"></div>
       </div>
 
-      <div class="card balance-card">
-        <div class="balance-left">
-          <div class="label">ваш баланс</div>
-          <div class="amount" id="bonus_miles">0</div>
+      <!-- balance: compact, centered -->
+      <div class="bg-white card-radius p-4 shadow-sm col-span-2">
+        <div class="text-center">
+          <div class="text-xs text-gray-500">ваш баланс</div>
+          <div id="bonusMiles" class="text-xl font-extrabold mt-1 text-gray-900">0</div>
+          <div class="mx-auto mt-2 w-10 h-10 bg-lime-300 rounded-md flex items-center justify-center font-bold text-white">M</div>
         </div>
-        <div class="balance-icon" id="balanceIcon">M</div>
       </div>
 
-      <div class="card">
-        <div class="label">Управлять</div>
-        <div class="value">милями</div>
+      <div class="bg-white card-radius p-3 shadow-sm">
+        <div class="text-xs text-gray-500">Управлять</div>
+        <div class="text-sm font-semibold mt-1 text-gray-900">МИЛЯМИ</div>
       </div>
+      <div class="bg-transparent"></div>
     </div>
 
     <!-- status -->
-    <div class="status" role="region" aria-label="Статус">
-      <div class="row">
-        <div class="muted">Статус</div>
-        <div id="card_type" class="muted">—</div>
+    <div class="bg-white card-radius p-4 mt-3 shadow-sm">
+      <div class="flex justify-between items-center">
+        <div class="text-sm text-gray-600">Статус</div>
+        <div id="cardTypeField" class="text-sm text-gray-600">—</div>
       </div>
-      <div class="progress-line">
-        <div id="status_fill" class="progress-fill" style="width:0%"></div>
+      <div class="w-full bg-gray-200 h-3 rounded-full mt-3 overflow-hidden">
+        <div id="milesProgressBar" class="h-full bg-lime-300 w-0"></div>
       </div>
     </div>
 
-    <!-- promo -->
-    <button class="promo-btn" id="openPromo">Добавить промокод</button>
+    <!-- big promo button -->
+    <button id="openPromo" class="mt-4 w-full bg-black text-white py-3 rounded-2xl font-bold">Добавить промокод</button>
 
-    <!-- list (popup items) -->
-    <div class="list">
-      <div class="item" data-key="plus" id="item-plus">
-        <div class="icon"><img id="icon-plus" src="/icons/plus.svg" alt="plus"></div>
-        <div>Яндекс Плюс x S7</div>
+    <!-- list items -->
+    <div class="mt-4 space-y-2">
+      <button id="item-plus" class="w-full bg-white card-radius p-3 flex items-center gap-3 shadow-sm justify-start">
+        <div class="w-10 h-10 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
+          <img id="icon-plus" src="/icons/plus.svg" alt="plus" class="w-8 h-8 object-contain">
+        </div>
+        <div class="text-sm text-gray-900">Quatro x S7avelii</div>
+      </button>
+
+      <button id="item-mystery" class="w-full bg-white card-radius p-3 flex items-center gap-3 shadow-sm justify-start">
+        <div class="w-10 h-10 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
+          <img id="icon-mystery" src="/icons/mystery.svg" alt="mystery" class="w-8 h-8 object-contain">
+        </div>
+        <div class="text-sm text-gray-900">Личные данные</div>
+      </button>
+
+      <button id="item-green" class="w-full bg-white card-radius p-3 flex items-center gap-3 shadow-sm justify-start">
+        <div class="w-10 h-10 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
+          <img id="icon-green" src="/icons/green.svg" alt="green" class="w-8 h-8 object-contain">
+        </div>
+        <div class="text-sm text-gray-900">S7avelii Shop</div>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Promo modal -->
+  <div id="promoModal" class="fixed inset-0 hidden items-center justify-center bg-black/40 z-50">
+    <div class="bg-white rounded-2xl p-4 w-11/12 max-w-sm">
+      <div class="flex justify-between items-center">
+        <h3 class="text-lg font-semibold">Добавить промокод</h3>
+        <button id="promoClose" class="text-gray-500 font-bold">✕</button>
       </div>
-      <div class="item" data-key="mystery" id="item-mystery">
-        <div class="icon"><img id="icon-mystery" src="/icons/mystery.svg" alt="mystery"></div>
-        <div>Тайный пассажир</div>
+      <p class="text-sm text-gray-500 mt-2">Вставьте промокод, чтобы добавить мили.</p>
+      <div class="mt-3 flex gap-2">
+        <input id="promoInput" class="flex-1 border border-gray-200 p-2 rounded-md" placeholder="PROMOCODE">
+        <button id="promoActivateBtn" class="bg-lime-400 px-3 rounded-md font-semibold">Применить</button>
       </div>
-      <div class="item" data-key="green" id="item-green">
-        <div class="icon"><img id="icon-green" src="/icons/green.svg" alt="green"></div>
-        <div>Green Steps</div>
-      </div>
+      <div id="promoResult" class="text-sm text-gray-600 mt-2"></div>
     </div>
   </div>
 
-  <!-- hidden file input for avatar -->
-  <input id="avatarInput" type="file" accept="image/*" style="display:none">
-
-  <!-- modal: promo -->
-  <div class="modal-backdrop" id="promoModal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true">
-      <div class="close" id="promoClose">✕</div>
-      <h3>Добавить промокод</h3>
-      <div class="muted">Вставьте ваш промокод — он добавит мили на баланс.</div>
-      <div class="input-row">
-        <input id="promoInput" placeholder="Промокод" />
-        <button id="promoApply">Применить</button>
+  <!-- Info modal -->
+  <div id="infoModal" class="fixed inset-0 hidden items-center justify-center bg-black/40 z-50">
+    <div class="bg-white rounded-2xl p-4 w-11/12 max-w-sm">
+      <div class="flex justify-between items-center">
+        <h3 id="infoTitle" class="text-lg font-semibold">Заголовок</h3>
+        <button id="infoClose" class="text-gray-500 font-bold">✕</button>
       </div>
-      <div id="promoMsg" class="muted" style="margin-top:10px"></div>
-    </div>
-  </div>
-
-  <!-- modal: info popup for list items -->
-  <div class="modal-backdrop" id="infoModal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true">
-      <div class="close" id="infoClose">✕</div>
-      <h3 id="infoTitle">Заголовок</h3>
-      <div id="infoBody" class="muted" style="margin-top:8px">Описание...</div>
-      <!-- you can optionally place image/icon here -->
-      <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
-        <button id="infoOk" class="btn-ok" style="padding:8px 12px;border-radius:8px;border:none;background:#2b6df6;color:#fff;cursor:pointer">ОК</button>
+      <div id="infoBody" class="text-sm text-gray-600 mt-2">Контент...</div>
+      <div class="mt-4 flex justify-end">
+        <button id="infoOk" class="px-4 py-2 bg-lime-400 rounded-md text-white font-semibold">ОК</button>
       </div>
     </div>
   </div>
 
 <script>
-/* =================== Настройки API =================== */
-const API_BASE = "https://s7avelii-airlines-1.onrender.com"; // твой сервер
+/* ==========================
+   Твоя логика apiFetch + token
+   ========================== */
+const API = "https://s7avelii-airlines-1.onrender.com"; // базовый хост (без /api)
 function getToken(){ return localStorage.getItem('token'); }
 
-/* =================== Вспомогательный fetch =================== */
 async function apiFetch(endpoint, options = {}) {
   const token = getToken();
   options.headers = { ...(options.headers || {}) };
@@ -200,37 +150,40 @@ async function apiFetch(endpoint, options = {}) {
     options.body = JSON.stringify(options.body);
   }
   try {
-    const res = await fetch(API_BASE + endpoint, options);
+    const res = await fetch(API + endpoint, options);
     if (!res) return null;
     if (res.status === 401) { logout(); return null; }
-    const text = await res.text();
-    try { return JSON.parse(text); } catch(e) { return { raw: text, status: res.status }; }
-  } catch (err) {
-    console.error('fetch error', err);
+    const txt = await res.text();
+    try { return JSON.parse(txt); } catch(e) { return { raw: txt, status: res.status }; }
+  } catch (e) {
+    console.error('fetch err', e);
     return null;
   }
 }
 
-/* =================== State =================== */
+/* ==========================
+   State
+   ========================== */
 let currentUser = null;
 
-/* =================== Elements =================== */
-const EL = {
-  avatarBtn: document.getElementById('avatarBtn'),
-  avatarImg: document.getElementById('avatarImg'),
+/* ==========================
+   Elements
+   ========================== */
+const el = {
+  avatar: document.getElementById('avatar'),
   avatarInitial: document.getElementById('avatarInitial'),
-  fio: document.getElementById('fio'),
-  card_number: document.getElementById('card_number'),
-  bonus_miles: document.getElementById('bonus_miles'),
-  status_fill: document.getElementById('status_fill'),
-  card_type: document.getElementById('card_type'),
+  avatarInput: document.getElementById('avatarInput'),
+  fioHeader: document.getElementById('fioHeader'),
+  card_field: document.getElementById('card_field'),
+  bonusMiles: document.getElementById('bonusMiles'),
+  milesProgressBar: document.getElementById('milesProgressBar'),
+  cardTypeField: document.getElementById('cardTypeField'),
   openPromo: document.getElementById('openPromo'),
   promoModal: document.getElementById('promoModal'),
   promoClose: document.getElementById('promoClose'),
   promoInput: document.getElementById('promoInput'),
-  promoApply: document.getElementById('promoApply'),
-  promoMsg: document.getElementById('promoMsg'),
-  avatarInput: document.getElementById('avatarInput'),
+  promoActivateBtn: document.getElementById('promoActivateBtn'),
+  promoResult: document.getElementById('promoResult'),
   infoModal: document.getElementById('infoModal'),
   infoClose: document.getElementById('infoClose'),
   infoTitle: document.getElementById('infoTitle'),
@@ -239,9 +192,14 @@ const EL = {
   itemPlus: document.getElementById('item-plus'),
   itemMystery: document.getElementById('item-mystery'),
   itemGreen: document.getElementById('item-green'),
+  iconPlus: document.getElementById('icon-plus'),
+  iconMystery: document.getElementById('icon-mystery'),
+  iconGreen: document.getElementById('icon-green'),
 };
 
-/* =================== PROMOS local mapping (still allowed) =================== */
+/* ==========================
+   PROMOS fallback (как в твоём скрипте)
+   ========================== */
 const PROMOS = {
   'S717000': 17000,
   'WELCOME500': 500,
@@ -249,178 +207,186 @@ const PROMOS = {
   '2025': 4000,
   'S2025': 3000,
   'TAKE_OFFF500': 500,
-  'LANDING500': 500
+  'LANDING500': 500,
 };
 
-/* =================== Init =================== */
+/* ==========================
+   Init UI handlers
+   ========================== */
 document.addEventListener('DOMContentLoaded', () => {
-  // avatar click -> open file picker
-  EL.avatarBtn.addEventListener('click', ()=> EL.avatarInput.click());
-  EL.avatarInput.addEventListener('change', onAvatarSelected);
+  // Avatar click triggers file chooser (input is label-bound)
+  el.avatarInput.addEventListener('change', onAvatarSelected);
 
-  // promo modal
-  EL.openPromo.addEventListener('click', ()=> showModal(EL.promoModal));
-  EL.promoClose.addEventListener('click', ()=> closeModal(EL.promoModal));
-  EL.promoApply.addEventListener('click', applyPromo);
-  EL.promoInput.addEventListener('keydown', (e)=> { if(e.key === 'Enter') applyPromo(); });
+  // Promo modal handlers
+  el.openPromo.addEventListener('click', ()=> show(el.promoModal));
+  el.promoClose.addEventListener('click', ()=> hide(el.promoModal));
+  el.promoActivateBtn.addEventListener('click', applyPromo);
+  el.promoInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') applyPromo(); });
 
-  // info modal
-  EL.itemPlus.addEventListener('click', ()=> openInfo('Яндекс Плюс x S7', 'Тут можно вставить любой HTML/описание/иконку — заменяй /icons/plus.svg'));
-  EL.itemMystery.addEventListener('click', ()=> openInfo('Тайный пассажир', 'Описание тайного пассажира... вставляй свою картинку в /icons/mystery.svg'));
-  EL.itemGreen.addEventListener('click', ()=> openInfo('Green Steps', 'Инфо Green Steps — измени иконку в /icons/green.svg'));
-  EL.infoClose.addEventListener('click', ()=> closeModal(EL.infoModal));
-  EL.infoOk.addEventListener('click', ()=> closeModal(EL.infoModal));
+  // Info modals
+  el.itemPlus.addEventListener('click', ()=> openInfo('Яндекс Плюс x S7', '<p>Тут описание Яндекс Плюс — замени на свой HTML или добавь иконку.</p>'));
+  el.itemMystery.addEventListener('click', ()=> openInfo('Тайный пассажир', '<p>Инфа о тайном пассажире.</p>'));
+  el.itemGreen.addEventListener('click', ()=> openInfo('Green Steps', '<p>Инфа о Green Steps.</p>'));
+  el.infoClose.addEventListener('click', ()=> hide(el.infoModal));
+  el.infoOk.addEventListener('click', ()=> hide(el.infoModal));
 
-  // load profile if token exists
+  // Load profile
   (async ()=>{
     const token = getToken();
-    if(!token){ alert('Требуется авторизация: положи token в localStorage (localStorage.setItem(\"token\",\"ВАШ_ТОКЕН\"))'); return; }
+    if(!token){ alert('Нет токена в localStorage. Вставь token: localStorage.setItem(\"token\",\"ВАШ_ТОКЕН\")'); return; }
     await loadProfile();
   })();
 });
 
-/* =================== Load profile =================== */
+/* ==========================
+   Load profile from server
+   ========================== */
 async function loadProfile(){
-  const profile = await apiFetch('/api/profile');
-  if(!profile){ console.warn('profile fetch failed'); return; }
-  currentUser = profile;
+  const data = await apiFetch('/api/profile');
+  if(!data){ console.warn('profile fetch failed'); return; }
+  currentUser = data;
   renderProfile();
 }
 
-/* =================== Render =================== */
+/* ==========================
+   Render profile into DOM
+   ========================== */
 function renderProfile(){
   if(!currentUser) return;
-  // fio: имя + первая буква фамилии
-  const fioRaw = currentUser.fio || '';
-  const parts = fioRaw.trim().split(/\s+/);
+  // ФИО: Имя + первая буква фамилии (как просил)
+  const fio = (currentUser.fio || '').trim();
+  const parts = fio.split(/\s+/);
   const name = parts[0] || '';
-  const initial = parts[1] ? parts[1].slice(0,1) + '.' : '';
-  EL.fio.textContent = (name + (initial ? ' ' + initial : '')).trim();
+  const fInitial = parts[1] ? parts[1].slice(0,1) + '.' : '';
+  el.fioHeader.textContent = (name + (fInitial ? ' ' + fInitial : '')).trim();
 
   // avatar
   if(currentUser.avatar){
-    const url = currentUser.avatar.startsWith('http') ? currentUser.avatar : (API_BASE + currentUser.avatar);
-    EL.avatarImg.src = url; EL.avatarImg.style.display = 'block'; EL.avatarInitial.style.display = 'none';
+    const url = currentUser.avatar.startsWith('http') ? currentUser.avatar : (API + currentUser.avatar);
+    el.avatar.src = url; el.avatar.classList.remove('hidden'); el.avatarInitial.style.display = 'none';
   } else {
-    EL.avatarImg.style.display = 'none'; EL.avatarInitial.style.display = 'block';
-    EL.avatarInitial.textContent = (name ? name[0].toUpperCase() : 'А');
+    el.avatar.classList.add('hidden'); el.avatarInitial.style.display = 'block';
+    el.avatarInitial.textContent = (name ? name[0].toUpperCase() : 'А');
   }
 
-  // card number (compact)
-  EL.card_number.textContent = currentUser.card_number || '—';
+  // card number (formatted)
+  el.card_field.textContent = currentUser.card_number || '—';
 
-  // bonus miles (compact)
-  EL.bonus_miles.textContent = Number(currentUser.bonus_miles || 0).toLocaleString('ru-RU');
+  // bonus miles
+  el.bonusMiles.textContent = Number(currentUser.bonus_miles || 0).toLocaleString('ru-RU');
 
   // status + progress
-  EL.card_type.textContent = currentUser.card_type || currentUser.status || '—';
+  el.cardTypeField.textContent = currentUser.card_type || currentUser.status || '—';
   const percent = Math.min(100, Math.round((Number(currentUser.status_miles || 0) / 1000) * 100));
-  EL.status_fill.style.width = percent + '%';
+  if(el.milesProgressBar) el.milesProgressBar.style.width = percent + '%';
 }
 
-/* =================== Avatar upload handler =================== */
+/* ==========================
+   Avatar upload
+   ========================== */
 async function onAvatarSelected(e){
   const f = e.target.files && e.target.files[0];
   if(!f) return;
-  // preview immediately
+  // instant preview
   const reader = new FileReader();
-  reader.onload = () => {
-    EL.avatarImg.src = reader.result; EL.avatarImg.style.display='block'; EL.avatarInitial.style.display='none';
-  };
+  reader.onload = () => { el.avatar.src = reader.result; el.avatar.classList.remove('hidden'); el.avatarInitial.style.display = 'none'; };
   reader.readAsDataURL(f);
 
-  // send to server as FormData via PUT /api/profile (FormData)
+  // send FormData to server
   const fd = new FormData();
   fd.append('avatar', f);
-
   const token = getToken();
   try {
-    // First try PUT /api/profile (FormData)
-    const resPut = await fetch(API_BASE + '/api/profile', {
+    // try PUT /api/profile
+    const resPut = await fetch(API + '/api/profile', {
       method: 'PUT',
       headers: token ? { 'Authorization': 'Bearer ' + token } : undefined,
       body: fd
     });
-    if (resPut && (resPut.status === 200 || resPut.status === 204)) {
-      // success — refresh profile
-      await loadProfile();
-      return;
-    }
-    // if PUT failed, try POST /api/profile/avatar (fallback)
-    const resPost = await fetch(API_BASE + '/api/profile/avatar', {
+    if (resPut && (resPut.status === 200 || resPut.status === 204)) { await loadProfile(); return; }
+
+    // fallback: POST /api/profile/avatar
+    const resPost = await fetch(API + '/api/profile/avatar', {
       method: 'POST',
       headers: token ? { 'Authorization': 'Bearer ' + token } : undefined,
       body: fd
     });
-    if (resPost && (resPost.status === 200 || resPost.status === 201 || resPost.status === 204)) {
-      await loadProfile();
-      return;
-    }
-    // otherwise show error
-    alert('Не удалось загрузить аватар (сервер вернул ошибку).');
+    if (resPost && (resPost.status === 200 || resPost.status === 201 || resPost.status === 204)) { await loadProfile(); return; }
+
+    alert('Ошибка загрузки аватара (сервер вернул ошибку)');
     await loadProfile();
   } catch (err) {
-    console.error('avatar upload error', err);
+    console.error('avatar upload', err);
     alert('Ошибка сети при загрузке аватара');
     await loadProfile();
   }
 }
 
-/* =================== Promo apply =================== */
+/* ==========================
+   Promo apply (server-first, fallback to local PROMOS)
+   ========================== */
 async function applyPromo(){
-  const code = (EL.promoInput.value || '').trim().toUpperCase();
-  if(!code){ EL.promoMsg.textContent = 'Введите код'; return; }
+  const code = (el.promoInput.value || '').trim().toUpperCase();
+  el.promoResult.textContent = '';
+  if(!code){ el.promoResult.textContent = 'Введите промокод'; return; }
 
-  // If you want the same client-side mapping check (optional) - we still try server first
-  EL.promoApply.disabled = true; EL.promoMsg.textContent = 'Отправка...';
+  el.promoActivateBtn.disabled = true;
+  el.promoResult.textContent = 'Отправка...';
 
   try {
-    // Send to server: POST /api/promo { code }
-    const result = await apiFetch('/api/promo', { method: 'POST', body: { code } });
-    // If server returned something meaningful, reload profile
-    if (result && (result.success === true || result.ok === true || result.user)) {
+    // try server endpoint POST /api/promo { code }
+    const res = await apiFetch('/api/promo', { method: 'POST', body: { code } });
+    if (res && (res.success === true || res.ok === true || (res.user || res.updated))) {
       await loadProfile();
-      EL.promoMsg.textContent = (result.message) ? result.message : 'Промокод применён';
-      setTimeout(()=>{ closeModal(EL.promoModal); EL.promoMsg.textContent=''; EL.promoInput.value=''; }, 900);
+      el.promoResult.textContent = (res.message) ? res.message : 'Промокод применён';
+      setTimeout(()=>{ hide(el.promoModal); el.promoResult.textContent = ''; el.promoInput.value = ''; }, 900);
       return;
     }
 
-    // If server didn't accept / returned generic, fallback: local PROMOS (old behaviour)
+    // fallback: local mapping and PUT /api/profile (как у тебя)
     if (PROMOS[code]) {
-      const add = PROMOS[code];
-      // We'll attempt to update profile via PUT /api/profile (same as your script)
+      const add = Number(PROMOS[code]);
+      const used = Array.isArray(currentUser?.used_promos) ? currentUser.used_promos : [];
+      if (used.includes(code)) { el.promoResult.textContent = 'Промокод уже использован'; el.promoActivateBtn.disabled = false; return; }
+
       const payload = {
         bonus_miles: (Number(currentUser.bonus_miles || 0) + add),
         status_miles: (Number(currentUser.status_miles || 0) + add),
-        used_promos: Array.isArray(currentUser.used_promos) ? [...currentUser.used_promos, code] : [code]
+        used_promos: [...used, code]
       };
-      const res = await apiFetch('/api/profile', { method: 'PUT', body: payload });
-      if (res) { await loadProfile(); EL.promoMsg.textContent = `Промокод применён, +${add} миль`; setTimeout(()=>{ closeModal(EL.promoModal); EL.promoMsg.textContent=''; EL.promoInput.value=''; },900); }
-      else EL.promoMsg.textContent = 'Ошибка сервера при применении';
+      const putRes = await apiFetch('/api/profile', { method: 'PUT', body: payload });
+      if (putRes) {
+        await loadProfile();
+        el.promoResult.textContent = `Промокод применён, +${add} миль`;
+        setTimeout(()=>{ hide(el.promoModal); el.promoResult.textContent=''; el.promoInput.value=''; }, 900);
+      } else el.promoResult.textContent = 'Ошибка сервера при применении';
     } else {
-      EL.promoMsg.textContent = (result && result.message) ? result.message : 'Неверный промокод';
+      el.promoResult.textContent = (res && res.message) ? res.message : 'Неверный промокод';
     }
   } catch (err) {
-    console.error('promo apply err', err);
-    EL.promoMsg.textContent = 'Ошибка сети';
+    console.error('promo err', err);
+    el.promoResult.textContent = 'Ошибка сети';
   } finally {
-    EL.promoApply.disabled = false;
+    el.promoActivateBtn.disabled = false;
   }
 }
 
-/* =================== Modal helpers =================== */
-function showModal(el){ if(!el) return; el.style.display = 'flex'; el.setAttribute('aria-hidden','false'); }
-function closeModal(el){ if(!el) return; el.style.display = 'none'; el.setAttribute('aria-hidden','true'); }
-
-/* =================== Info popup for list items =================== */
-function openInfo(title, html) {
-  EL.infoTitle.textContent = title;
-  EL.infoBody.innerHTML = html;
-  showModal(EL.infoModal);
+/* ==========================
+   Info modal helpers
+   ========================== */
+function openInfo(title, html){
+  el.infoTitle.textContent = title;
+  el.infoBody.innerHTML = html;
+  show(el.infoModal);
 }
+function show(node){ if(!node) return; node.classList.remove('hidden'); node.style.display = 'flex'; }
+function hide(node){ if(!node) return; node.classList.add('hidden'); node.style.display = 'none'; }
 
-/* =================== Logout helper =================== */
+/* ==========================
+   logout helper
+   ========================== */
 function logout(){ localStorage.removeItem('token'); location.reload(); }
 </script>
 </body>
 </html>
+
