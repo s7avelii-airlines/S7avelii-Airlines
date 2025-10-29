@@ -3,35 +3,34 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>S7avelii | Профиль</title>
-   <link rel="icon" href="images/favicon.png" type="image/favicon.png">
+  <title>s7avelii | Профиль</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* небольшие точные подправки */
-    .card-radius { border-radius: 14px; }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Helvetica Neue", monospace; }
-    /* уменьшил вертикальные отступы чтобы было компактно */
+    /* Точные мелкие правки для компактности */
+    .card-radius { border-radius:14px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; }
+    /* Уменьшаем вертикальные отступы для точного сходства */
+    .tight > * { margin-top: 0.25rem; margin-bottom: 0.25rem; }
   </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex items-start justify-center py-6">
   <div class="w-full max-w-md px-4">
 
     <!-- header: avatar + name + edit -->
-    <div class="relative flex flex-col items-center mb-3">
-      <label for="avatarInput" id="avatarBtn" class="cursor-pointer">
-        <div class="w-20 h-20 rounded-full bg-white shadow-md border border-gray-100 overflow-hidden flex items-center justify-center">
+    <div class="relative flex flex-col items-center mb-2">
+      <label for="avatarInput" class="cursor-pointer" title="Нажмите чтобы загрузить аватар">
+        <div id="avatarWrap" class="w-20 h-20 rounded-full bg-white shadow-md border border-gray-100 overflow-hidden flex items-center justify-center">
           <img id="avatar" src="" alt="avatar" class="w-full h-full object-cover hidden">
           <div id="avatarInitial" class="text-2xl font-extrabold text-gray-900">А</div>
         </div>
       </label>
       <input id="avatarInput" type="file" accept="image/*" class="hidden">
 
-      <div class="mt-3 text-center">
-        <!-- ID который в твоём скрипте используется: fioHeader -->
+      <div class="mt-2 text-center">
         <div id="fioHeader" class="text-2xl font-extrabold tracking-tight">ИМЯ Ф.</div>
       </div>
 
-      <button id="editProfile" class="absolute right-0 top-0 -translate-y-1/4 bg-white p-2 rounded-full shadow border border-gray-100">
+      <button id="editProfile" class="absolute right-0 top-0 -translate-y-1/4 bg-white p-2 rounded-full shadow border border-gray-100" title="Редактировать">
         ✎
       </button>
     </div>
@@ -48,12 +47,12 @@
         <div class="text-sm font-semibold mt-1 text-gray-800"></div>
       </div>
 
-      <!-- balance: compact, centered -->
+      <!-- compact balance -->
       <div class="bg-white card-radius p-4 shadow-sm col-span-2">
-        <div class="text-center">
+        <div class="text-center tight">
           <div class="text-xs text-gray-500">ваш баланс</div>
           <div id="bonusMiles" class="text-xl font-extrabold mt-1 text-gray-900">0</div>
-          <div class="mx-auto mt-2 w-10 h-10 bg-lime-300 rounded-md flex items-center justify-center font-bold text-white">M</div>
+          <div class="mx-auto mt-2 w-10 h-10 bg-lime-400 rounded-md flex items-center justify-center font-bold text-white">M</div>
         </div>
       </div>
 
@@ -61,6 +60,7 @@
         <div class="text-xs text-gray-500">Управлять</div>
         <div class="text-sm font-semibold mt-1 text-gray-900">МИЛЯМИ</div>
       </div>
+
       <div class="bg-transparent"></div>
     </div>
 
@@ -71,34 +71,34 @@
         <div id="cardTypeField" class="text-sm text-gray-600">—</div>
       </div>
       <div class="w-full bg-gray-200 h-3 rounded-full mt-3 overflow-hidden">
-        <div id="milesProgressBar" class="h-full bg-lime-300 w-0"></div>
+        <div id="milesProgressBar" class="h-full bg-lime-400 w-0"></div>
       </div>
     </div>
 
-    <!-- big promo button -->
+    <!-- promo -->
     <button id="openPromo" class="mt-4 w-full bg-black text-white py-3 rounded-2xl font-bold">Добавить промокод</button>
 
-    <!-- list items -->
+    <!-- list items (icons are replaceable in /icons) -->
     <div class="mt-4 space-y-2">
       <button id="item-plus" class="w-full bg-white card-radius p-3 flex items-center gap-3 shadow-sm justify-start">
         <div class="w-10 h-10 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
           <img id="icon-plus" src="/icons/plus.svg" alt="plus" class="w-8 h-8 object-contain">
         </div>
-        <div class="text-sm text-gray-900">Quatro x S7avelii</div>
+        <div class="text-sm text-gray-900">Яндекс Плюс x S7</div>
       </button>
 
       <button id="item-mystery" class="w-full bg-white card-radius p-3 flex items-center gap-3 shadow-sm justify-start">
         <div class="w-10 h-10 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
           <img id="icon-mystery" src="/icons/mystery.svg" alt="mystery" class="w-8 h-8 object-contain">
         </div>
-        <div class="text-sm text-gray-900">Личные данные</div>
+        <div class="text-sm text-gray-900">Тайный пассажир</div>
       </button>
 
       <button id="item-green" class="w-full bg-white card-radius p-3 flex items-center gap-3 shadow-sm justify-start">
         <div class="w-10 h-10 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
           <img id="icon-green" src="/icons/green.svg" alt="green" class="w-8 h-8 object-contain">
         </div>
-        <div class="text-sm text-gray-900">S7avelii Shop</div>
+        <div class="text-sm text-gray-900">Green Steps</div>
       </button>
     </div>
 
@@ -136,9 +136,9 @@
 
 <script>
 /* ==========================
-   Твоя логика apiFetch + token
+   apiFetch (твоё поведение)
    ========================== */
-const API = "https://s7avelii-airlines-1.onrender.com"; // базовый хост (без /api)
+const API = "https://s7avelii-airlines-1.onrender.com"; // базовый хост
 function getToken(){ return localStorage.getItem('token'); }
 
 async function apiFetch(endpoint, options = {}) {
@@ -162,14 +162,10 @@ async function apiFetch(endpoint, options = {}) {
 }
 
 /* ==========================
-   State
+   State + element refs
    ========================== */
 let currentUser = null;
-
-/* ==========================
-   Elements
-   ========================== */
-const el = {
+const EL = {
   avatar: document.getElementById('avatar'),
   avatarInitial: document.getElementById('avatarInitial'),
   avatarInput: document.getElementById('avatarInput'),
@@ -192,13 +188,10 @@ const el = {
   itemPlus: document.getElementById('item-plus'),
   itemMystery: document.getElementById('item-mystery'),
   itemGreen: document.getElementById('item-green'),
-  iconPlus: document.getElementById('icon-plus'),
-  iconMystery: document.getElementById('icon-mystery'),
-  iconGreen: document.getElementById('icon-green'),
 };
 
 /* ==========================
-   PROMOS fallback (как в твоём скрипте)
+   PROMOS fallback (твой ранее)
    ========================== */
 const PROMOS = {
   'S717000': 17000,
@@ -211,35 +204,35 @@ const PROMOS = {
 };
 
 /* ==========================
-   Init UI handlers
+   Init
    ========================== */
 document.addEventListener('DOMContentLoaded', () => {
-  // Avatar click triggers file chooser (input is label-bound)
-  el.avatarInput.addEventListener('change', onAvatarSelected);
+  // avatar upload
+  EL.avatarInput.addEventListener('change', onAvatarSelected);
 
-  // Promo modal handlers
-  el.openPromo.addEventListener('click', ()=> show(el.promoModal));
-  el.promoClose.addEventListener('click', ()=> hide(el.promoModal));
-  el.promoActivateBtn.addEventListener('click', applyPromo);
-  el.promoInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') applyPromo(); });
+  // promo modal
+  document.getElementById('openPromo').addEventListener('click', () => show(EL.promoModal));
+  EL.promoClose.addEventListener('click', () => hide(EL.promoModal));
+  EL.promoActivateBtn.addEventListener('click', applyPromo);
+  EL.promoInput.addEventListener('keydown', (e)=> { if(e.key === 'Enter') applyPromo(); });
 
-  // Info modals
-  el.itemPlus.addEventListener('click', ()=> openInfo('Яндекс Плюс x S7', '<p>Тут описание Яндекс Плюс — замени на свой HTML или добавь иконку.</p>'));
-  el.itemMystery.addEventListener('click', ()=> openInfo('Тайный пассажир', '<p>Инфа о тайном пассажире.</p>'));
-  el.itemGreen.addEventListener('click', ()=> openInfo('Green Steps', '<p>Инфа о Green Steps.</p>'));
-  el.infoClose.addEventListener('click', ()=> hide(el.infoModal));
-  el.infoOk.addEventListener('click', ()=> hide(el.infoModal));
+  // info modals
+  EL.itemPlus.addEventListener('click', ()=> openInfo('Яндекс Плюс x S7', '<p>Здесь можно вставить любой HTML / картинку — замени /icons/plus.svg</p>'));
+  EL.itemMystery.addEventListener('click', ()=> openInfo('Тайный пассажир', '<p>Инфо о Тайном пассажире.</p>'));
+  EL.itemGreen.addEventListener('click', ()=> openInfo('Green Steps', '<p>Инфо о Green Steps.</p>'));
+  EL.infoClose.addEventListener('click', ()=> hide(EL.infoModal));
+  EL.infoOk.addEventListener('click', ()=> hide(EL.infoModal));
 
-  // Load profile
+  // load profile
   (async ()=>{
     const token = getToken();
-    if(!token){ alert('Нет токена в localStorage. Вставь token: localStorage.setItem(\"token\",\"ВАШ_ТОКЕН\")'); return; }
+    if(!token){ console.warn('Нет токена в localStorage; положи token в localStorage и перезагрузи: localStorage.setItem(\"token\",\"ВАШ_ТОКЕН\")'); return; }
     await loadProfile();
   })();
 });
 
 /* ==========================
-   Load profile from server
+   Load profile from API
    ========================== */
 async function loadProfile(){
   const data = await apiFetch('/api/profile');
@@ -249,71 +242,69 @@ async function loadProfile(){
 }
 
 /* ==========================
-   Render profile into DOM
+   Render profile values
    ========================== */
 function renderProfile(){
   if(!currentUser) return;
-  // ФИО: Имя + первая буква фамилии (как просил)
-  const fio = (currentUser.fio || '').trim();
-  const parts = fio.split(/\s+/);
+  const fioRaw = (currentUser.fio || '').trim();
+  const parts = fioRaw.split(/\s+/);
   const name = parts[0] || '';
-  const fInitial = parts[1] ? parts[1].slice(0,1) + '.' : '';
-  el.fioHeader.textContent = (name + (fInitial ? ' ' + fInitial : '')).trim();
+  const initial = parts[1] ? parts[1].slice(0,1) + '.' : '';
+  EL.fioHeader.textContent = (name + (initial ? ' ' + initial : '')).trim();
 
   // avatar
   if(currentUser.avatar){
     const url = currentUser.avatar.startsWith('http') ? currentUser.avatar : (API + currentUser.avatar);
-    el.avatar.src = url; el.avatar.classList.remove('hidden'); el.avatarInitial.style.display = 'none';
+    EL.avatar.src = url; EL.avatar.classList.remove('hidden'); EL.avatarInitial.style.display = 'none';
   } else {
-    el.avatar.classList.add('hidden'); el.avatarInitial.style.display = 'block';
-    el.avatarInitial.textContent = (name ? name[0].toUpperCase() : 'А');
+    EL.avatar.classList.add('hidden'); EL.avatarInitial.style.display = 'block';
+    EL.avatarInitial.textContent = (name ? name[0].toUpperCase() : 'А');
   }
 
-  // card number (formatted)
-  el.card_field.textContent = currentUser.card_number || '—';
+  // card number
+  EL.card_field.textContent = currentUser.card_number || '—';
 
   // bonus miles
-  el.bonusMiles.textContent = Number(currentUser.bonus_miles || 0).toLocaleString('ru-RU');
+  EL.bonusMiles.textContent = Number(currentUser.bonus_miles || currentUser.bonus_miles === 0 ? currentUser.bonus_miles : (currentUser.bonus_miles || 0)).toLocaleString('ru-RU');
 
   // status + progress
-  el.cardTypeField.textContent = currentUser.card_type || currentUser.status || '—';
+  EL.cardTypeField.textContent = currentUser.card_type || currentUser.status || '—';
   const percent = Math.min(100, Math.round((Number(currentUser.status_miles || 0) / 1000) * 100));
-  if(el.milesProgressBar) el.milesProgressBar.style.width = percent + '%';
+  if (EL.milesProgressBar) EL.milesProgressBar.style.width = percent + '%';
 }
 
 /* ==========================
-   Avatar upload
+   Avatar upload -> PUT /api/profile or POST /api/profile/avatar
    ========================== */
 async function onAvatarSelected(e){
   const f = e.target.files && e.target.files[0];
   if(!f) return;
-  // instant preview
   const reader = new FileReader();
-  reader.onload = () => { el.avatar.src = reader.result; el.avatar.classList.remove('hidden'); el.avatarInitial.style.display = 'none'; };
+  reader.onload = () => { EL.avatar.src = reader.result; EL.avatar.classList.remove('hidden'); EL.avatarInitial.style.display = 'none'; };
   reader.readAsDataURL(f);
 
-  // send FormData to server
   const fd = new FormData();
   fd.append('avatar', f);
   const token = getToken();
+
   try {
-    // try PUT /api/profile
-    const resPut = await fetch(API + '/api/profile', {
+    // try PUT /api/profile with FormData (some backends accept)
+    const tryPut = await fetch(API + '/api/profile', {
       method: 'PUT',
       headers: token ? { 'Authorization': 'Bearer ' + token } : undefined,
       body: fd
     });
-    if (resPut && (resPut.status === 200 || resPut.status === 204)) { await loadProfile(); return; }
+    if (tryPut && (tryPut.status === 200 || tryPut.status === 204)) { await loadProfile(); return; }
 
-    // fallback: POST /api/profile/avatar
-    const resPost = await fetch(API + '/api/profile/avatar', {
+    // fallback POST /api/profile/avatar
+    const tryPost = await fetch(API + '/api/profile/avatar', {
       method: 'POST',
       headers: token ? { 'Authorization': 'Bearer ' + token } : undefined,
       body: fd
     });
-    if (resPost && (resPost.status === 200 || resPost.status === 201 || resPost.status === 204)) { await loadProfile(); return; }
+    if (tryPost && (tryPost.status === 200 || tryPost.status === 201 || tryPost.status === 204)) { await loadProfile(); return; }
 
-    alert('Ошибка загрузки аватара (сервер вернул ошибку)');
+    alert('Ошибка загрузки аватара (сервер вернул ошибку).');
     await loadProfile();
   } catch (err) {
     console.error('avatar upload', err);
@@ -323,31 +314,31 @@ async function onAvatarSelected(e){
 }
 
 /* ==========================
-   Promo apply (server-first, fallback to local PROMOS)
+   Apply promo: try server POST /api/promo, else fallback to PUT /api/profile
    ========================== */
 async function applyPromo(){
-  const code = (el.promoInput.value || '').trim().toUpperCase();
-  el.promoResult.textContent = '';
-  if(!code){ el.promoResult.textContent = 'Введите промокод'; return; }
+  const code = (EL.promoInput.value || '').trim().toUpperCase();
+  EL.promoResult.textContent = '';
+  if(!code){ EL.promoResult.textContent = 'Введите промокод'; return; }
 
-  el.promoActivateBtn.disabled = true;
-  el.promoResult.textContent = 'Отправка...';
+  EL.promoActivateBtn.disabled = true;
+  EL.promoResult.textContent = 'Отправка...';
 
   try {
-    // try server endpoint POST /api/promo { code }
+    // try server endpoint first
     const res = await apiFetch('/api/promo', { method: 'POST', body: { code } });
-    if (res && (res.success === true || res.ok === true || (res.user || res.updated))) {
+    if (res && (res.success === true || res.ok === true || res.user)) {
       await loadProfile();
-      el.promoResult.textContent = (res.message) ? res.message : 'Промокод применён';
-      setTimeout(()=>{ hide(el.promoModal); el.promoResult.textContent = ''; el.promoInput.value = ''; }, 900);
+      EL.promoResult.textContent = (res.message) ? res.message : 'Промокод применён';
+      setTimeout(()=>{ hide(EL.promoModal); EL.promoResult.textContent = ''; EL.promoInput.value = ''; }, 900);
       return;
     }
 
-    // fallback: local mapping and PUT /api/profile (как у тебя)
+    // fallback: local PROMOS mapping and PUT /api/profile (as in твой скрипт)
     if (PROMOS[code]) {
       const add = Number(PROMOS[code]);
       const used = Array.isArray(currentUser?.used_promos) ? currentUser.used_promos : [];
-      if (used.includes(code)) { el.promoResult.textContent = 'Промокод уже использован'; el.promoActivateBtn.disabled = false; return; }
+      if (used.includes(code)) { EL.promoResult.textContent = 'Промокод уже использован'; EL.promoActivateBtn.disabled = false; return; }
 
       const payload = {
         bonus_miles: (Number(currentUser.bonus_miles || 0) + add),
@@ -357,36 +348,35 @@ async function applyPromo(){
       const putRes = await apiFetch('/api/profile', { method: 'PUT', body: payload });
       if (putRes) {
         await loadProfile();
-        el.promoResult.textContent = `Промокод применён, +${add} миль`;
-        setTimeout(()=>{ hide(el.promoModal); el.promoResult.textContent=''; el.promoInput.value=''; }, 900);
-      } else el.promoResult.textContent = 'Ошибка сервера при применении';
+        EL.promoResult.textContent = `Промокод применён, +${add} миль`;
+        setTimeout(()=>{ hide(EL.promoModal); EL.promoResult.textContent=''; EL.promoInput.value=''; }, 900);
+      } else EL.promoResult.textContent = 'Ошибка сервера при применении';
     } else {
-      el.promoResult.textContent = (res && res.message) ? res.message : 'Неверный промокод';
+      EL.promoResult.textContent = (res && res.message) ? res.message : 'Неверный промокод';
     }
   } catch (err) {
     console.error('promo err', err);
-    el.promoResult.textContent = 'Ошибка сети';
+    EL.promoResult.textContent = 'Ошибка сети';
   } finally {
-    el.promoActivateBtn.disabled = false;
+    EL.promoActivateBtn.disabled = false;
   }
 }
 
 /* ==========================
-   Info modal helpers
+   Modal helpers & info
    ========================== */
 function openInfo(title, html){
-  el.infoTitle.textContent = title;
-  el.infoBody.innerHTML = html;
-  show(el.infoModal);
+  EL.infoTitle.textContent = title;
+  EL.infoBody.innerHTML = html;
+  show(EL.infoModal);
 }
 function show(node){ if(!node) return; node.classList.remove('hidden'); node.style.display = 'flex'; }
 function hide(node){ if(!node) return; node.classList.add('hidden'); node.style.display = 'none'; }
 
 /* ==========================
-   logout helper
+   Logout helper
    ========================== */
 function logout(){ localStorage.removeItem('token'); location.reload(); }
 </script>
 </body>
 </html>
-
