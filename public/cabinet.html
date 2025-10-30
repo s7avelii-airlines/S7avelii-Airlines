@@ -303,6 +303,20 @@
       </div>
     </div>
   </div>
+<script>
+document.querySelectorAll('.open-partner-modal').forEach(el => {
+  el.addEventListener('click', () => {
+    const id = el.getAttribute('data-modal');
+    document.getElementById(id).classList.remove('hidden');
+  });
+});
+
+document.querySelectorAll('.close-partner-modal').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.closest('[id^="modal"]').classList.add('hidden');
+  });
+});
+</script>
 
   <!-- === ВНИЗУ: твой оригинальный скрипт (оставлен без изменений) === -->
   <!-- Я вставляю сюда ровно ту логику, что ты присылал ранее, чтобы всё работало -->
