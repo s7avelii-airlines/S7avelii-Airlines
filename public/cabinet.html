@@ -521,18 +521,47 @@
     <div class="text-sm">S7avelii Shop</div>
   </div>
 </div>
-<div id="modal-quatro" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center">
-  <div class="bg-white w-full h-full p-6 relative overflow-auto">
-
-    <button class="absolute top-4 right-4 text-gray-500 text-xl close-partner-modal">✕</button>
-
-    <h2 class="text-xl font-semibold mb-4">Quatro x S7avelii</h2>
-    <p class="text-gray-600">
-      Здесь будет инфа про Quatro. Купоны, бонусы, описание…
-    </p>
-
+    
+<div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-quatro">
+  <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden relative">
+      <img src="images/photo_5197547870482463006_x.avif" alt="plus" class="w-8 h-8 object-contain">
+      <!-- badge -->
+      <span id="cartBadge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full"></span>
+    </div>
+    <div class="text-sm">S7avelii Shop</div>
   </div>
 </div>
+<script>
+async function updateCartBadge() {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  try {
+    const r = await fetch(`${API}/api/cart`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const data = await r.json();
+    
+    const cartCount = data.items?.length || 0;
+    const badge = document.getElementById("cartBadge");
+
+    if (cartCount > 0) {
+      badge.textContent = cartCount;
+      badge.classList.remove("hidden");
+    } else {
+      badge.classList.add("hidden");
+    }
+
+  } catch (err) {
+    console.log("Ошибка корзины", err);
+  }
+}
+
+// Обновляем при загрузке страницы
+updateCartBadge();
+</script>
+
     
 <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-quatro">
   <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
