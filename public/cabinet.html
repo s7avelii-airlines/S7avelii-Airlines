@@ -90,33 +90,16 @@
       <div></div>
     </div>
 
-    <div class="mt-4">
-  <div class="w-full bg-gray-200 rounded-full h-2.5">
-    <div id="status-bar" class="bg-[#B8E300] h-2.5 rounded-full" style="width: 0%;"></div>
+   <!-- Шкала статуса -->
+  <div class="mt-4">
+    <div class="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+      <div id="status_progress" class="h-full bg-blue-600 transition-all duration-700 ease-in-out" style="width: 0%;"></div>
+    </div>
+    <div class="flex justify-between text-xs text-gray-500 mt-1">
+      <span id="status_label">Classic</span>
+      <span id="status_range">0 / 3 000</span>
+    </div>
   </div>
-  <p id="status-text" class="text-xs text-gray-600 mt-1 text-right">CLASSIK</p>
-</div>
-
-<script>
-function updateStatusBar(miles) {
-  let width = 0;
-  let status = "CLASSIK";
-
-  if (miles >= 3000 && miles < 10000) {
-    width = 25; status = "VIP";
-  } else if (miles >= 10000 && miles < 100000) {
-    width = 50; status = "MASTER";
-  } else if (miles >= 100000) {
-    width = 100; status = "FLIGHT MASTER";
-  }
-
-  document.getElementById("status-bar").style.width = width + "%";
-  document.getElementById("status-text").textContent = status;
-}
-
-// пример: вызывай после загрузки данных из базы
-// updateStatusBar(user.status_miles);
-</script>
 
 
     <!-- big black promo button -->
@@ -307,6 +290,37 @@ function renderProfileFields(){
   const ctf = document.getElementById('cardTypeField'); if(ctf) ctf.textContent = currentUser.card_type || '—';
 }
 
+function updateStatusBar(miles) {
+  const bar = document.getElementById('status_progress');
+  const label = document.getElementById('status_label');
+  const range = document.getElementById('status_range');
+
+  // уровни
+  const LEVELS = [
+    { name: 'Classic', min: 0, max: 3000 },
+    { name: 'VIP', min: 3000, max: 10000 },
+    { name: 'Master', min: 10000, max: 100000 },
+    { name: 'Flight Master', min: 100000, max: 700000 }
+  ];
+
+  let current = LEVELS[0], next = LEVELS[1];
+  for (let i = LEVELS.length - 1; i >= 0; i--) {
+    if (miles >= LEVELS[i].min) {
+      current = LEVELS[i];
+      next = LEVELS[i + 1] || LEVELS[i];
+      break;
+    }
+  }
+
+  const totalRange = next.max - current.min;
+  const progress = Math.min(100, ((miles - current.min) / totalRange) * 100);
+
+  if (bar) bar.style.width = progress + '%';
+  if (label) label.textContent = current.name;
+  if (range) range.textContent = `${miles.toLocaleString('ru-RU')} / ${next.max.toLocaleString('ru-RU')}`;
+}
+
+  
 /* ========== Inline editing etc (not needed here but kept) ========== */
 async function editInline(field) {
   if(!currentUser) return;
