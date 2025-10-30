@@ -151,21 +151,97 @@
 </div>
 </div>
 
-<!-- ======= Priority Modal (одна общая модалка для обоих) =======
-     ВАЖНО: вставить модалку один раз внизу страницы (перед </body>) -->
-<div id="modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center" aria-hidden="true" role="dialog" aria-modal="true">
-  <div class="bg-white w-full h-full md:w-3/4 md:h-3/4 p-6 relative card-radius overflow-auto mx-4">
+<div id="loyaltyModal" class="fixed inset-0 hidden z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center">
+  <div class="bg-white w-11/12 max-w-sm p-6 rounded-2xl relative flex flex-col items-center">
     <!-- close -->
-    <button id="closeModal" class="absolute top-4 right-4 text-gray-500 text-xl" aria-label="Закрыть модалку">✕</button>
+    <button id="closeLoyaltyModal" class="absolute top-4 right-4 text-gray-500 text-2xl">✕</button>
 
-    <h2 class="text-xl font-semibold mb-4">Информация о карте</h2>
-    <p class="text-gray-600">Здесь ты можешь разместить детали карты, штрих-код, QR, и т.д.</p>
-    <!-- пример содержимого -->
-    <div class="mt-6">
-      <div class="mono text-lg">Номер карты: <span id="modalCardNumber">115 757 155</span></div>
+    <!-- CARD IMAGE -->
+    <img 
+        id="loyaltyCardImage"
+        src=""
+        class="w-64 mb-4 rounded-xl shadow-lg"
+        alt="card"
+    />
+
+    <!-- QR CODE -->
+    <div class="bg-white p-3 rounded-xl border border-gray-200 shadow">
+        <img id="qrImage" src="" class="w-56 h-56" alt="QR">
+    </div>
+
+    <!-- STATUS -->
+    <div class="mt-4 w-full">
+        <button class="w-full bg-gray-100 py-3 rounded-xl text-sm font-medium" id="checkStatus">
+            статус
+        </button>
+    </div>
+
+    <!-- PROMOCODE -->
+    <div class="mt-3 w-full">
+        <button class="w-full bg-black text-white py-3 rounded-xl text-sm font-semibold" id="addPromo">
+            Добавить промокод
+        </button>
     </div>
   </div>
 </div>
+    <script>
+// кнопки для открытия модалки
+document.querySelectorAll(".open-modal").forEach(el => {
+  el.addEventListener("click", async () => {
+    const token = getToken();
+    if (!token) return alert("Не авторизован");
+
+    // подтягиваем профиль пользователя
+    const user = await apiFetch("/api/profile", { headers: { Authorization: "Bearer " + token } });
+    if (!user) return alert("Ошибка загрузки профиля");
+
+    // карта
+    const cardImages = {
+      VIP: "images/card_vip.png",
+      Classic: "images/card_classic.png",
+      Priority: "images/card_priority.png"
+    };
+    document.getElementById("loyaltyCardImage").src = cardImages[user.card_type] || cardImages.Classic;
+
+    // QR-код (можно с ID пользователя или любым уникальным кодом)
+    const qrText = `${user.id}_${Date.now()}`;
+    document.getElementById("qrImage").src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrText)}`;
+
+    // статус
+    document.getElementById("checkStatus").textContent = user.card_type + " — " + (user.status_miles || 0) + " миль";
+
+    // открываем модал
+    document.getElementById("loyaltyModal").classList.remove("hidden");
+  });
+});
+
+// закрытие модалки
+document.getElementById("closeLoyaltyModal").addEventListener("click", () => {
+  document.getElementById("loyaltyModal").classList.add("hidden");
+});
+
+// закрытие по фону
+document.getElementById("loyaltyModal").addEventListener("click", (e) => {
+  if (e.target.id === "loyaltyModal") document.getElementById("loyaltyModal").classList.add("hidden");
+});
+
+// промокод
+document.getElementById("addPromo").addEventListener("click", async () => {
+  const code = prompt("Введите промокод");
+  if (!code) return;
+
+  const token = getToken();
+  const res = await apiFetch("/api/profile", { method: "PUT", body: { promo_code: code } });
+  if (res) {
+    alert(`Промокод ${code} активирован ✅`);
+    // обновим статус миль
+    const user = await apiFetch("/api/profile", { headers: { Authorization: "Bearer " + token } });
+    document.getElementById("checkStatus").textContent = user.card_type + " — " + (user.status_miles || 0) + " миль";
+  } else {
+    alert("Ошибка при активации промокода");
+  }
+});
+  </script>
 
 <!-- ======= Надёжный скрипт открытия/закрытия (один раз) ======= -->
 <script>
