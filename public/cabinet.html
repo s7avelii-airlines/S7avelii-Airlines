@@ -669,20 +669,32 @@ updateCartBadge();
       </div>
     </div>
   </div>
+
 <script>
-document.querySelectorAll('.open-partner-modal').forEach(el => {
-  el.addEventListener('click', () => {
-    const id = el.getAttribute('data-modal');
-    document.getElementById(id).classList.remove('hidden');
+// Открытие модалок
+document.querySelectorAll(".open-partner-modal").forEach(button => {
+  button.addEventListener("click", () => {
+    const modalId = button.getAttribute("data-modal");
+    const modal = document.getElementById(modalId);
+    if (modal) modal.classList.remove("hidden");
   });
 });
 
-document.querySelectorAll('.close-partner-modal').forEach(btn => {
-  btn.addEventListener('click', () => {
-    btn.closest('[id^="modal"]').classList.add('hidden');
+// Закрытие модалок по кнопке ✕
+document.querySelectorAll(".close-partner-modal").forEach(button => {
+  button.addEventListener("click", () => {
+    const modal = button.closest(".modal");
+    if (modal) modal.classList.add("hidden");
   });
 });
-</script>
+
+// Закрытие при клике на тёмный фон
+document.querySelectorAll(".modal").forEach(modal => {
+  modal.addEventListener("click", e => {
+    if (e.target === modal) modal.classList.add("hidden");
+  });
+});
+  </script>
 
 <!-- Пробел между слайдером и акциями -->
     <div class="h-10"></div>
