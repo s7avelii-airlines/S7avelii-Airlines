@@ -471,13 +471,113 @@
 
     <button class="absolute top-4 right-4 text-gray-500 text-xl close-partner-modal">✕</button>
 
-    <h2 class="text-xl font-semibold mb-4">Quatro x S7avelii</h2>
-    <p class="text-gray-600">
-      Здесь будет инфа про Quatro. Купоны, бонусы, описание…
-    </p>
+    <h2 class="text-xl font-semibold mb-4">Личные данные</h2>
+
+    <form id="profileForm" class="space-y-4">
+
+      <div>
+        <label class="block text-sm font-medium">ФИО</label>
+        <input id="full_name" type="text" class="w-full border p-2 rounded-md bg-gray-50">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium">Телефон</label>
+        <input id="phone" type="text" disabled class="w-full border p-2 rounded-md bg-gray-100">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium">Email</label>
+        <input id="email" type="email" class="w-full border p-2 rounded-md bg-gray-50">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium">Дата рождения</label>
+        <input id="birthdate" type="date" class="w-full border p-2 rounded-md bg-gray-50">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium">Пол</label>
+        <select id="gender" class="w-full border p-2 rounded-md bg-gray-50">
+          <option value="">Не выбран</option>
+          <option value="male">Мужской</option>
+          <option value="female">Женский</option>
+        </select>
+      </div>
+
+      <button type="submit" class="w-full bg-black text-white py-3 rounded-xl font-semibold">
+        Сохранить изменения
+      </button>
+    </form>
 
   </div>
 </div>
+
+<script>
+document.addEventListener("click", async (e) => {
+
+  // Открытие модалки "Личные данные"
+  if (e.target.closest('.open-partner-modal[data-modal="modal-quatro"]')) {
+    
+    const token = getToken();
+    if (!token) return alert("Не авторизован");
+
+    try {
+      const r = await fetch(`${API}/api/profile`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const user = await r.json();
+
+      // Заполняем форму
+      document.getElementById("full_name").value = user.full_name || "";
+      document.getElementById("phone").value = user.phone || "";
+      document.getElementById("email").value = user.email || "";
+      document.getElementById("birthdate").value = user.birthdate || "";
+      document.getElementById("gender").value = user.gender || "";
+
+      document.getElementById("modal-quatro").classList.remove("hidden");
+    } catch {
+      alert("Ошибка загрузки профиля");
+    }
+  }
+
+  // Закрытие
+  if (e.target.closest(".close-partner-modal")) {
+    document.getElementById("modal-quatro").classList.add("hidden");
+  }
+});
+
+// ✅ Обновление профиля
+document.getElementById("profileForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const token = getToken();
+
+  const body = {
+    full_name: document.getElementById("full_name").value,
+    email: document.getElementById("email").value,
+    birthdate: document.getElementById("birthdate").value,
+    gender: document.getElementById("gender").value
+  };
+
+  try {
+    await fetch(`${API}/api/profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(body)
+    });
+
+    alert("Данные обновлены ✅");
+    document.getElementById("modal-quatro").classList.add("hidden");
+  } catch {
+    alert("Ошибка сохранения ❌");
+  }
+});
+  </script>
+
+    
       <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-quatro">
   <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
     <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden">
