@@ -102,13 +102,18 @@
   });
 </script>
 
-     <!-- right: accrual / write-off -->
+    <!-- right: accrual / write-off -->
 <div class="bg-white card-radius p-4 shadow-sm relative cursor-pointer open-accrual-modal">
   <div class="text-sm font-semibold text-gray-800 leading-tight">
     Начисления<br/>Списания
   </div>
 
-  <img src="accrual-icon.png" class="w-14 h-14 absolute right-2 top-2" />
+  <!-- картинка в правом верхнем углу -->
+  <img 
+    src="accrual-icon.png"
+    alt="icon"
+    class="w-14 h-14 absolute right-2 top-2"
+  />
 </div>
 
 <div id="modal-accrual" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center">
@@ -154,12 +159,19 @@
   </div>
 </div>
 
- <div class="bg-white card-radius p-4 shadow-sm relative cursor-pointer open-modal">
+ <!-- small control card -->
+<div class="bg-white card-radius p-4 shadow-sm relative cursor-pointer open-modal">
   <div class="text-sm text-[#8b94a3]">Управлять</div>
   <div class="text-sm font-semibold mt-2">милиями</div>
 
-  <img src="your-image.png" class="w-8 h-8 absolute bottom-2 right-2" />
+  <!-- картинка в правом нижнем углу -->
+  <img
+    src="your-image.png"
+    alt="icon"
+    class="w-8 h-8 absolute bottom-2 right-2"
+  />
 </div>
+
 
   <!-- status bar full width -->
     <div class="bg-white card-radius p-4 mt-4 shadow-sm">
