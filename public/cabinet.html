@@ -151,70 +151,191 @@
 </div>
 </div>
 
-<!-- Modal -->
-<div id="loyaltyModal" class="fixed inset-0 hidden bg-black/60 flex items-center justify-center z-50">
-  <div class="bg-white w-11/12 max-w-sm p-6 rounded-2xl relative flex flex-col items-center">
-    <button id="closeLoyaltyModal" class="absolute top-4 right-4 text-gray-500 text-2xl">✕</button>
-    <img id="loyaltyCardImage" src="" class="w-64 mb-4 rounded-xl shadow-lg" alt="card"/>
-    <img id="qrImage" src="" class="w-56 h-56 mb-4" alt="QR"/>
-    <div id="statusText" class="text-gray-700 font-semibold text-center"></div>
-    <button id="promoBtn" class="mt-4 w-full bg-black text-white py-3 rounded-xl">Добавить промокод</button>
+<!-- ====== Loyalty Modal (вставь один раз перед </body>) ====== -->
+<div id="loyaltyModal" class="fixed inset-0 hidden z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center" aria-hidden="true" role="dialog">
+  <div class="bg-white w-11/12 max-w-md p-6 rounded-2xl relative flex flex-col items-center">
+    <button id="closeLoyaltyModal" class="absolute top-4 right-4 text-gray-500 text-2xl" aria-label="Закрыть">✕</button>
+
+    <!-- Card image -->
+    <img id="loyaltyCardImage" src="" alt="loyalty card" class="w-64 mb-4 rounded-xl shadow-lg object-cover" />
+
+    <!-- QR -->
+    <div class="bg-white p-3 rounded-xl border border-gray-200 shadow mb-3">
+      <img id="qrImage" src="" alt="QR code" class="w-56 h-56" />
+    </div>
+
+    <!-- status -->
+    <div id="statusText" class="text-center text-gray-700 font-semibold mb-3">Загрузка...</div>
+
+    <!-- promo -->
+    <div class="w-full">
+      <button id="promoBtn" class="w-full bg-black text-white py-3 rounded-xl">Добавить промокод</button>
+    </div>
   </div>
 </div>
-    <script>
-document.querySelectorAll(".open-loyalty-modal").forEach(el=>{
-  el.addEventListener("click", async ()=>{
-    const token = localStorage.getItem("token");
-    if(!token){ alert("Не авторизован"); return; }
 
-    // получаем профиль
-    const res = await fetch("https://s7avelii-airlines-1.onrender.com/api/profile", {
-      headers: { "Authorization": "Bearer " + token }
-    });
-    const user = await res.json();
+<script>
+(function(){
+  // карточки должны иметь класс open-loyalty-modal (это уже обсуждали в коде)
+  // делегируем клики — сработает даже если карточки добавляются динамически
+  document.addEventListener('click', async function onDocClick(e) {
+    const opener = e.target.closest('.open-loyalty-modal');
+    if (!opener) return;
 
-    // картинка карты
-    const cardImages = { VIP:"images/card_vip.png", Classic:"images/card_classic.png", Priority:"images/card_priority.png" };
-    document.getElementById("loyaltyCardImage").src = cardImages[user.card_type] || cardImages.Classic;
+    // prevent multiple opens quickly
+    try {
+      // token
+      const token = (typeof getToken === 'function') ? getToken() : localStorage.getItem('token');
+      if (!token) { alert('Пожалуйста, войдите в аккаунт'); return; }
 
-    // QR код уникальный
-    const qrText = `${user.id}_${Date.now()}`;
-    document.getElementById("qrImage").src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrText)}`;
+      // show loading state
+      const modal = document.getElementById('loyaltyModal');
+      const statusText = document.getElementById('statusText');
+      const qrImg = document.getElementById('qrImage');
+      const cardImg = document.getElementById('loyaltyCardImage');
 
-    // статус
-    document.getElementById("statusText").textContent = `${user.card_type} — ${user.status_miles || 0} миль`;
+      if (!modal || !statusText || !qrImg || !cardImg) {
+        console.error('Не хватает элементов модалки. Проверь HTML (loyaltyModal, statusText, qrImage, loyaltyCardImage).');
+        alert('Внутренняя ошибка: модалка не инициализирована');
+        return;
+      }
 
-    // показать модалку
-    document.getElementById("loyaltyModal").classList.remove("hidden");
+      statusText.textContent = 'Загрузка...';
+      qrImg.src = '';
+      cardImg.src = '';
+
+      // get profile: prefer apiFetch (если есть), иначе fetch
+      let user;
+      try {
+        if (typeof apiFetch === 'function') {
+          user = await apiFetch('/api/profile', { headers: { Authorization: 'Bearer ' + token } });
+        } else {
+          const r = await fetch((typeof API !== 'undefined' ? API : '') + '/api/profile', {
+            headers: { 'Authorization': 'Bearer ' + token }
+          });
+          user = await r.json();
+        }
+      } catch (err) {
+        console.error('profile fetch err', err);
+        alert('Не удалось загрузить профиль');
+        return;
+      }
+
+      if (!user) { alert('Профиль пустой'); return; }
+
+      // карточки — подставь свои пути
+      const cardImages = {
+        VIP: 'images/card_vip.png',
+        Classic: 'images/card_classic.png',
+        Priority: 'images/card_priority.png'
+      };
+
+      // choose image by card_type (fallback на Classic)
+      const cardType = (user.card_type || 'Classic');
+      cardImg.src = cardImages[cardType] || cardImages.Classic;
+
+      // generate unique QR string — можно заменить на user.some_unique_field
+      const qrPayload = `${user.id || user._id || (user.email || 'user') }|${Date.now()}`;
+      // external QR service (can be swapped to your backend)
+      qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrPayload)}`;
+
+      // status text
+      const miles = user.status_miles != null ? user.status_miles : (user.bonus_miles || 0);
+      statusText.textContent = `${cardType} — ${Number(miles).toLocaleString('ru-RU')} миль`;
+
+      // open modal
+      modal.classList.remove('hidden');
+      modal.setAttribute('aria-hidden','false');
+      document.documentElement.style.overflow = 'hidden';
+
+      // attach promo button handler (idempotent)
+      const promoBtn = document.getElementById('promoBtn');
+      promoBtn.onclick = async function onPromoClick() {
+        const code = prompt('Введите промокод');
+        if (!code) return;
+
+        try {
+          // try use apiFetch if exists (it handles token/header)
+          let resp;
+          if (typeof apiFetch === 'function') {
+            resp = await apiFetch('/api/profile', { method: 'PUT', body: { promo_code: code } });
+          } else {
+            const r = await fetch((typeof API !== 'undefined' ? API : '') + '/api/profile', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+              body: JSON.stringify({ promo_code: code })
+            });
+            resp = await r.json();
+          }
+
+          // simple success heuristic
+          if (resp && (resp.success === true || resp.ok === true || (typeof resp === 'object' && Object.keys(resp).length>0))) {
+            alert(`Промокод ${code} применён`);
+            // refresh profile to update miles
+            let refreshed;
+            if (typeof apiFetch === 'function') refreshed = await apiFetch('/api/profile', { headers: { Authorization: 'Bearer ' + token } });
+            else {
+              const r2 = await fetch((typeof API !== 'undefined' ? API : '') + '/api/profile', { headers: { Authorization: 'Bearer ' + token }});
+              refreshed = await r2.json();
+            }
+            if (refreshed) {
+              const newMiles = refreshed.status_miles != null ? refreshed.status_miles : (refreshed.bonus_miles || 0);
+              statusText.textContent = `${refreshed.card_type || cardType} — ${Number(newMiles).toLocaleString('ru-RU')} миль`;
+            }
+          } else {
+            console.warn('promo apply result', resp);
+            alert('Не удалось применить промокод');
+          }
+        } catch (err) {
+          console.error('promo err', err);
+          alert('Ошибка при применении промокода');
+        }
+      };
+
+    } catch (outerErr) {
+      console.error('open-loyalty-modal handler failed', outerErr);
+      alert('Ошибка при открытии окна');
+    }
   });
-});
 
-// закрытие модалки
-document.getElementById("closeLoyaltyModal").addEventListener("click", ()=>{
-  document.getElementById("loyaltyModal").classList.add("hidden");
-});
-
-// закрытие по клику на фон
-document.getElementById("loyaltyModal").addEventListener("click", (e)=>{
-  if(e.target.id==="loyaltyModal") document.getElementById("loyaltyModal").classList.add("hidden");
-});
-
-// промокод
-document.getElementById("promoBtn").addEventListener("click", async ()=>{
-  const code = prompt("Введите промокод");
-  if(!code) return;
-  const token = localStorage.getItem("token");
-  const res = await fetch("https://s7avelii-airlines-1.onrender.com/api/profile", {
-    method: "PUT",
-    headers: { "Authorization": "Bearer " + token, "Content-Type":"application/json" },
-    body: JSON.stringify({ promo_code: code })
+  // close handlers (delegated to document for safety)
+  document.addEventListener('click', function(e){
+    // close button
+    if (e.target.closest && e.target.closest('#closeLoyaltyModal')) {
+      const modal = document.getElementById('loyaltyModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden','true');
+        document.documentElement.style.overflow = '';
+      }
+    }
+    // click on backdrop
+    if (e.target && e.target.id === 'loyaltyModal') {
+      const modal = document.getElementById('loyaltyModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden','true');
+        document.documentElement.style.overflow = '';
+      }
+    }
   });
-  const data = await res.json();
-  if(data) alert(`Промокод ${code} активирован`);
-});
 
-  </script>
+  // ESC close
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const modal = document.getElementById('loyaltyModal');
+      if (modal && !modal.classList.contains('hidden')) {
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden','true');
+        document.documentElement.style.overflow = '';
+      }
+    }
+  });
+})();
+</script>
 
+
+    
 <!-- ======= Надёжный скрипт открытия/закрытия (один раз) ======= -->
 <script>
   (function(){
