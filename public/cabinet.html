@@ -1191,14 +1191,20 @@ function loadProfile(){
   renderProfileFields();
 }
 
-function renderProfileFields(){
-  if(!currentUser) return;
+function renderProfileFields() {
+  if (!currentUser) return;
+
   // Header
   const fioHeader = document.getElementById('fioHeader');
-  if(fioHeader){
+  if (fioHeader) {
     const parts = (currentUser.fio || '').split(/\s+/);
-    fioHeader.textContent = (parts[0] || '') + (parts[1] ? ' ' + parts[1][0] + '.' : '');
+
+    const lastName = parts[0] || '';        // Фамилия
+    const firstName = parts[1] || '';       // Имя
+    // Выводим имя полностью + первая буква фамилии
+    fioHeader.textContent = firstName + (lastName ? ' ' + lastName[0] + '.' : '');
   }
+}
 
   // avatar
   const avatarImg = document.getElementById('avatar');
