@@ -89,31 +89,70 @@
   </div>
 </div>
 <script>
-  const card = document.getElementById("card");
   const modal = document.getElementById("modal");
   const closeModal = document.getElementById("closeModal");
 
-  card.addEventListener("click", () => {
-    modal.classList.remove("hidden");
+  // Все элементы, открывающие окно
+  document.querySelectorAll(".open-modal").forEach(el => {
+    el.addEventListener("click", () => {
+      modal.classList.remove("hidden");
+    });
   });
 
   closeModal.addEventListener("click", () => {
     modal.classList.add("hidden");
   });
 
-  // закрытие по клику на фон
   modal.addEventListener("click", (e) => {
     if (e.target === modal) modal.classList.add("hidden");
   });
 </script>
 
-      <!-- right: accrual / write-off -->
-      <div class="bg-white card-radius p-4 shadow-sm">
-        <div class="text-sm font-semibold text-gray-800">Начисления<br/>Списания</div>
-        <div class="absolute w-10 h-10 -translate-y-2 translate-x-4 right-0 top-0">
-          <!-- decorative circle small -->
-        </div>
-      </div>
+     <!-- right: accrual / write-off -->
+<div class="bg-white card-radius p-4 shadow-sm relative cursor-pointer open-accrual-modal">
+  <div class="text-sm font-semibold text-gray-800 leading-tight">
+    Начисления<br/>Списания
+  </div>
+
+  <!-- картинка в правом верхнем углу -->
+  <img 
+    src="accrual-icon.png"
+    alt="icon"
+    class="w-14 h-14 absolute right-2 top-2"
+  />
+</div>
+<div id="modal-accrual" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center">
+  <div class="bg-white w-full h-full p-6 relative card-radius overflow-auto">
+
+    <!-- Close button -->
+    <button id="closeAccrualModal" class="absolute top-4 right-4 text-gray-500 text-xl">✕</button>
+
+    <h2 class="text-xl font-semibold mb-4">Начисления и списания</h2>
+    <p class="text-gray-600">Здесь будет информация по начислениям и списаниям.</p>
+
+  </div>
+</div>
+<script>
+  // Открыть модал начислений
+  document.querySelectorAll(".open-accrual-modal").forEach(el => {
+    el.addEventListener("click", () => {
+      document.getElementById("modal-accrual").classList.remove("hidden");
+    });
+  });
+
+  // Закрыть модал начислений
+  document.getElementById("closeAccrualModal").addEventListener("click", () => {
+    document.getElementById("modal-accrual").classList.add("hidden");
+  });
+
+  // Закрытие кликом по фону
+  document.getElementById("modal-accrual").addEventListener("click", (e) => {
+    if (e.target.id === "modal-accrual") {
+      document.getElementById("modal-accrual").classList.add("hidden");
+    }
+  });
+</script>
+
       
 <div class="mx-auto w-full max-w-[320px] bg-white rounded-2xl shadow-md p-4 text-center">
    <div class="flex items-center justify-between">
@@ -125,15 +164,19 @@
   </div>
 </div>
 
+   <!-- small control card -->
+<div class="bg-white card-radius p-4 shadow-sm relative cursor-pointer open-modal">
+  <div class="text-sm text-[#8b94a3]">Управлять</div>
+  <div class="text-sm font-semibold mt-2">милиями</div>
 
- <!-- small control card -->
-      <div class="bg-white card-radius p-4 shadow-sm">
-        <div class="text-sm text-[#8b94a3]">Управлять</div>
-        <div class="text-sm font-semibold mt-2">милиями</div>
-      </div>
+  <!-- картинка в правом нижнем углу -->
+  <img
+    src="your-image.png"
+    alt="icon"
+    class="w-8 h-8 absolute bottom-2 right-2"
+  />
+</div>
 
-      <div></div>
-    </div>
 
   <!-- status bar full width -->
     <div class="bg-white card-radius p-4 mt-4 shadow-sm">
