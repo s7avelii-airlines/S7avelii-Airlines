@@ -439,23 +439,40 @@
 <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-quatro">
   <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
     <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden">
-      <img src="images/photo_5197547870482463009_x.avif" alt="plus" class="w-8 h-8 object-contain">
+      <img src="images/photo_5197547870482463009_x.avif" alt="quatro" class="w-8 h-8 object-contain">
     </div>
     <div class="text-sm">Quatro x S7avelii</div>
   </div>
 </div>
+
 <div id="modal-quatro" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center">
-  <div class="bg-white w-full h-full p-6 relative overflow-auto">
+  <div class="bg-white w-full h-full sm:w-[450px] sm:h-auto sm:rounded-xl p-0 relative overflow-hidden flex flex-col">
 
     <button class="absolute top-4 right-4 text-gray-500 text-xl close-partner-modal">✕</button>
 
-    <h2 class="text-xl font-semibold mb-4">Quatro x S7avelii</h2>
-    <p class="text-gray-600">
-      Здесь будет инфа про Quatro. Купоны, бонусы, описание…
-    </p>
+    <!-- изображение сверху -->
+    <div class="w-full h-56 bg-gray-200 overflow-hidden">
+      <img src="images/photo_5197547870482463009_x.avif" class="w-full h-full object-cover" alt="quatro banner">
+    </div>
+
+    <!-- контент -->
+    <div class="p-6">
+      <h2 class="text-2xl font-bold mb-3">Quatro x S7avelii</h2>
+
+      <p class="text-gray-600 mb-6 leading-relaxed">
+        Программа эксклюзивных привилегий для любителей игр совместно с Quatro.
+        Получайте уникальные бонусы,подарочные мили и купоны для пополнения Steam кошелька.
+      </p>
+
+      <a href="@quatroorg_bot" target="_blank"
+        class="block text-center w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition">
+        Подробнее
+      </a>
+    </div>
 
   </div>
 </div>
+
 
      <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-quatro">
   <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
