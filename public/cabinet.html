@@ -457,14 +457,16 @@
   </div>
 </div>
 
-      <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-quatro">
+     <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-quatro">
   <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
     <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden">
-      <img src="images/photo_5197547870482463008_x.avif" alt="plus" class="w-8 h-8 object-contain">
+      <img src="images/photo_5197547870482463008_x.avif" alt="profile" class="w-8 h-8 object-contain">
     </div>
     <div class="text-sm">Личные данные</div>
   </div>
 </div>
+
+<!-- Modal -->
 <div id="modal-quatro" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center">
   <div class="bg-white w-full h-full p-6 relative overflow-auto">
 
@@ -504,7 +506,7 @@
       </div>
 
       <button type="submit" class="w-full bg-black text-white py-3 rounded-xl font-semibold">
-        Сохранить изменения
+        Сохранить
       </button>
     </form>
 
@@ -512,46 +514,55 @@
 </div>
 
 <script>
+const API = "https://s7avelii-airlines-1.onrender.com";
+
+function getToken() {
+  return localStorage.getItem("token");
+}
+
+// Открытие модалки
 document.addEventListener("click", async (e) => {
+  const btn = e.target.closest('.open-partner-modal[data-modal="modal-quatro"]');
+  if (!btn) return;
 
-  // Открытие модалки "Личные данные"
-  if (e.target.closest('.open-partner-modal[data-modal="modal-quatro"]')) {
-    
-    const token = getToken();
-    if (!token) return alert("Не авторизован");
+  const token = getToken();
+  if (!token) return alert("Вы не авторизованы");
 
-    try {
-      const r = await fetch(`${API}/api/profile`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const user = await r.json();
+  try {
+    const r = await fetch(`${API}/api/profile`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const user = await r.json();
 
-      // Заполняем форму
-      document.getElementById("full_name").value = user.full_name || "";
-      document.getElementById("phone").value = user.phone || "";
-      document.getElementById("email").value = user.email || "";
-      document.getElementById("birthdate").value = user.birthdate || "";
-      document.getElementById("gender").value = user.gender || "";
+    // Заполняем поля
+    document.getElementById("full_name").value = user.full_name || "";
+    document.getElementById("phone").value = user.phone || "";
+    document.getElementById("email").value = user.email || "";
+    document.getElementById("birthdate").value = user.birthdate || "";
+    document.getElementById("gender").value = user.gender || "";
 
-      document.getElementById("modal-quatro").classList.remove("hidden");
-    } catch {
-      alert("Ошибка загрузки профиля");
-    }
+    document.getElementById("modal-quatro").classList.remove("hidden");
+  } catch (err) {
+    console.log(err);
+    alert("Ошибка загрузки данных");
   }
+});
 
-  // Закрытие
+// Закрытие
+document.addEventListener("click", (e) => {
   if (e.target.closest(".close-partner-modal")) {
     document.getElementById("modal-quatro").classList.add("hidden");
   }
 });
 
-// ✅ Обновление профиля
+// Сохранение изменений
 document.getElementById("profileForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const token = getToken();
+  if (!token) return alert("Нет токена");
 
-  const body = {
+  const data = {
     full_name: document.getElementById("full_name").value,
     email: document.getElementById("email").value,
     birthdate: document.getElementById("birthdate").value,
@@ -565,17 +576,17 @@ document.getElementById("profileForm").addEventListener("submit", async (e) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(data)
     });
 
-    alert("Данные обновлены ✅");
+    alert("✅ Сохранено");
     document.getElementById("modal-quatro").classList.add("hidden");
-  } catch {
-    alert("Ошибка сохранения ❌");
+  } catch (err) {
+    console.log(err);
+    alert("❌ Ошибка при сохранении");
   }
 });
-  </script>
-
+</script>
     
       <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-quatro">
   <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
