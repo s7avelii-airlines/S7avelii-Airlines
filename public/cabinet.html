@@ -58,52 +58,26 @@
 
     <!-- grid with small cards (two columns) -->
      <div class="grid grid-cols-2 gap-3">
-<!-- left: card with S7 Priority & card number --> 
-      <div class="bg-white card-radius p-4 shadow-sm">
-        <div class="flex items-start justify-between"> 
-          <div> <div class="flex items-center gap-2">
-            <div class="w-6 h-6 rounded-full bg-[#dfe6ee] flex items-center justify-center text-xs font-bold">S7</div> 
-            <div class="text-sm text-[#55606b] font-semibold">avelii Priority</div>
-          </div> 
-            <div class="mt-3 mono text-[#6b7480]" id="card_field">115 757 155</div> 
-          </div>
-          <div class="ml-4 text-gray-300"> <!-- small QR icon placeholder -->
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="5" height="5" rx="1" fill="#e6e9ee"/><rect x="16" y="3" width="5" height="5" rx="1" fill="#e6e9ee"/><rect x="3" y="16" width="5" height="5" rx="1" fill="#e6e9ee"/></svg> 
-          </div>
-        </div>
+<!-- ======= Priority card (клик открывает modal) ======= -->
+<div class="bg-white card-radius p-4 shadow-sm cursor-pointer open-modal" data-modal="modal">
+  <div class="flex items-start justify-between">
+    <div>
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 rounded-full bg-[#dfe6ee] flex items-center justify-center text-xs font-bold">S7</div>
+        <div class="text-sm text-[#55606b] font-semibold">avelii Priority</div>
       </div>
-
-   <!-- Priority Modal -->
-<div id="modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center">
-  <div class="bg-white w-full h-full p-6 relative card-radius overflow-auto">
-
-    <button id="closeModal" class="absolute top-4 right-4 text-gray-500 text-xl">✕</button>
-
-    <h2 class="text-xl font-semibold mb-4">Информация о карте</h2>
-    <p class="text-gray-600">Здесь ты можешь разместить детали карты, штрих-код, QR, и т.д.</p>
-
+      <div class="mt-3 mono text-[#6b7480]" id="card_field">115 757 155</div>
+    </div>
+    <div class="ml-4 text-gray-300">
+      <!-- small QR icon placeholder -->
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="3" width="5" height="5" rx="1" fill="#e6e9ee"/>
+        <rect x="16" y="3" width="5" height="5" rx="1" fill="#e6e9ee"/>
+        <rect x="3" y="16" width="5" height="5" rx="1" fill="#e6e9ee"/>
+      </svg>
+    </div>
   </div>
 </div>
-
-<script>
-  const modal = document.getElementById("modal");
-  const closeModal = document.getElementById("closeModal");
-
-  // Все элементы, открывающие окно
-  document.querySelectorAll(".open-modal").forEach(el => {
-    el.addEventListener("click", () => {
-      modal.classList.remove("hidden");
-    });
-  });
-
-  closeModal.addEventListener("click", () => {
-    modal.classList.add("hidden");
-  });
-
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) modal.classList.add("hidden");
-  });
-</script>
 
     <!-- right: accrual / write-off -->
 <div class="bg-white card-radius p-4 shadow-sm relative cursor-pointer open-accrual-modal">
@@ -115,7 +89,7 @@
   <img 
     src="images/1761832960183.avif"
     alt="icon"
-    class="w-14 h-14 absolute right-2 top-2"
+    class="w-16 h-16 absolute right-2 top-2"
   />
 </div>
 
@@ -126,7 +100,7 @@
     <button id="closeAccrualModal" class="absolute top-4 right-4 text-gray-500 text-xl">✕</button>
 
     <h2 class="text-xl font-semibold mb-4">Начисления и списания</h2>
-    <p class="text-gray-600">Здесь будет информация по начислениям и списаниям.</p>
+    <p class="text-gray-600">Как на счёт того, чтобы управлять бонусами?</p>
 
   </div>
 </div>
@@ -158,12 +132,12 @@
             <div class="text-sm text-[#8b94a3]">ваш баланс</div>
             <div id="bonusMiles" class="text-lg font-extrabold mt-2">0</div>
           </div>
-     <div class="ml-1 text-[#B8E300] text-2xl font-bold">м</div>
+     <div class="ml-1 text-[#B8E300] text-2xl font-bold">М</div>
   </div>
 </div>
 
  <!-- small control card -->
-<div class="bg-white card-radius p-4 shadow-sm relative cursor-pointer open-modal">
+<div class="bg-white card-radius p-4 shadow-sm relative cursor-pointer open-modal mt-3" data-modal="modal">
   <div class="text-sm text-[#8b94a3]">Управлять</div>
   <div class="text-sm font-semibold mt-2">милиями</div>
 
@@ -176,6 +150,87 @@
 </div>
 </div>
 
+<!-- ======= Priority Modal (одна общая модалка для обоих) =======
+     ВАЖНО: вставить модалку один раз внизу страницы (перед </body>) -->
+<div id="modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="bg-white w-full h-full md:w-3/4 md:h-3/4 p-6 relative card-radius overflow-auto mx-4">
+    <!-- close -->
+    <button id="closeModal" class="absolute top-4 right-4 text-gray-500 text-xl" aria-label="Закрыть модалку">✕</button>
+
+    <h2 class="text-xl font-semibold mb-4">Информация о карте</h2>
+    <p class="text-gray-600">Здесь ты можешь разместить детали карты, штрих-код, QR, и т.д.</p>
+    <!-- пример содержимого -->
+    <div class="mt-6">
+      <div class="mono text-lg">Номер карты: <span id="modalCardNumber">115 757 155</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======= Надёжный скрипт открытия/закрытия (один раз) ======= -->
+<script>
+  (function(){
+    // на всякий случай — ждем, когда DOM готов
+    function onReady(fn){
+      if (document.readyState !== 'loading') fn();
+      else document.addEventListener('DOMContentLoaded', fn);
+    }
+
+    onReady(function(){
+      const openers = document.querySelectorAll('.open-modal');
+      const modal = document.getElementById('modal');
+      const closeBtn = document.getElementById('closeModal');
+
+      if(!modal) {
+        console.warn('Модалка #modal не найдена в DOM');
+        return;
+      }
+
+      // открыть модалку по любому .open-modal с атрибутом data-modal="modal"
+      openers.forEach(op => {
+        op.addEventListener('click', (e) => {
+          // если карточка передаёт дополнительные данные в модалку — можно тут взять их
+          // пример: показать номер карты в модалке, если он есть в DOM
+          const cardNumberEl = op.querySelector('#card_field') || document.getElementById('card_field');
+          const modalCardNumber = document.getElementById('modalCardNumber');
+          if(cardNumberEl && modalCardNumber) modalCardNumber.textContent = cardNumberEl.textContent.trim();
+
+          modal.classList.remove('hidden');
+          modal.setAttribute('aria-hidden','false');
+          // блокируем скролл страницы при открытом модале
+          document.documentElement.style.overflow = 'hidden';
+        });
+      });
+
+      // закрыть по кресту
+      closeBtn && closeBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden','true');
+        document.documentElement.style.overflow = '';
+      });
+
+      // закрыть по клику на фон (если кликнули именно на backdrop)
+      modal.addEventListener('click', (e) => {
+        if(e.target === modal){
+          modal.classList.add('hidden');
+          modal.setAttribute('aria-hidden','true');
+          document.documentElement.style.overflow = '';
+        }
+      });
+
+      // закрыть по ESC
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape' && !modal.classList.contains('hidden')){
+          modal.classList.add('hidden');
+          modal.setAttribute('aria-hidden','true');
+          document.documentElement.style.overflow = '';
+        }
+      });
+    });
+  })();
+</script>
+
+
+    
   <!-- status bar full width -->
     <div class="bg-white card-radius p-4 mt-4 shadow-sm">
       <div class="flex items-center justify-between mb-2">
@@ -215,7 +270,7 @@
 <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-quatro">
   <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
     <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden">
-      <img src="images/Black Simple Travel Logo.avif" alt="plus" class="w-8 h-8 object-contain">
+      <img src="images/photo_5197547870482463009_x.avif" alt="plus" class="w-8 h-8 object-contain">
     </div>
     <div class="text-sm">Quatro x S7avelii</div>
   </div>
@@ -236,7 +291,7 @@
       <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-quatro">
   <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
     <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden">
-      <img src="images/Black Simple Travel Logo.avif" alt="plus" class="w-8 h-8 object-contain">
+      <img src="images/photo_5197547870482463008_x.avif" alt="plus" class="w-8 h-8 object-contain">
     </div>
     <div class="text-sm">Личные данные</div>
   </div>
@@ -256,7 +311,7 @@
       <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-quatro">
   <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
     <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden">
-      <img src="images/Black Simple Travel Logo.avif" alt="plus" class="w-8 h-8 object-contain">
+      <img src="images/photo_5197547870482463006_x.avif" alt="plus" class="w-8 h-8 object-contain">
     </div>
     <div class="text-sm">S7avelii Shop</div>
   </div>
@@ -273,7 +328,67 @@
 
   </div>
 </div>
+    
+<div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-quatro">
+  <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden">
+      <img src="images/photo_5197547870482463007_x.avif" alt="plus" class="w-8 h-8 object-contain">
+    </div>
+    <div class="text-sm">Предложения партнёров</div>
+  </div>
+</div>
+<div id="modal-quatro" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center">
+  <div class="bg-white w-full h-full p-6 relative overflow-auto">
 
+    <button class="absolute top-4 right-4 text-gray-500 text-xl close-partner-modal">✕</button>
+
+    <h2 class="text-xl font-semibold mb-4">Quatro x S7avelii</h2>
+    <p class="text-gray-600">
+      Здесь будет инфа про Quatro. Купоны, бонусы, описание…
+    </p>
+
+  </div>
+</div>
+    <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-quatro">
+  <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden">
+      <img src="images/photo_5197547870482463010_x.avif" alt="plus" class="w-8 h-8 object-contain">
+    </div>
+    <div class="text-sm">Купить мили</div>
+  </div>
+</div>
+<div id="modal-quatro" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center">
+  <div class="bg-white w-full h-full p-6 relative overflow-auto">
+
+    <button class="absolute top-4 right-4 text-gray-500 text-xl close-partner-modal">✕</button>
+
+    <h2 class="text-xl font-semibold mb-4">Quatro x S7avelii</h2>
+    <p class="text-gray-600">
+      Здесь будет инфа про Quatro. Купоны, бонусы, описание…
+    </p>
+
+  </div>
+</div>
+    <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-quatro">
+  <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden">
+      <img src="images/photo_5197547870482463005_x.avif" alt="plus" class="w-8 h-8 object-contain">
+    </div>
+    <div class="text-sm">Настройки</div>
+  </div>
+</div>
+<div id="modal-quatro" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center">
+  <div class="bg-white w-full h-full p-6 relative overflow-auto">
+
+    <button class="absolute top-4 right-4 text-gray-500 text-xl close-partner-modal">✕</button>
+
+    <h2 class="text-xl font-semibold mb-4">Quatro x S7avelii</h2>
+    <p class="text-gray-600">
+      Здесь будет инфа про Quatro. Купоны, бонусы, описание…
+    </p>
+
+  </div>
+</div>
   <!-- Promo modal -->
   <div id="promoModal" class="fixed inset-0 hidden items-center justify-center bg-black/40 z-50">
     <div class="bg-white rounded-2xl p-4 w-11/12 max-w-sm">
@@ -318,6 +433,421 @@ document.querySelectorAll('.close-partner-modal').forEach(btn => {
 });
 </script>
 
+
+
+<footer class="footer">
+  <div class="footer-inner">
+    <!-- Верхнее меню -->
+    <div class="footer-menu fade-in">
+      <div class="footer-column">
+        <h3>S7avelii Airlines</h3>
+        <ul>
+          <li><a href="body.html">О компании</a></li>
+          <li><a href="https://t.me/s7aveliihelper">Партнеры</a></li>
+          <li><a href="https://t.me/s7aveliihelper">Контакты</a></li>
+          <li><a href="#">Вакансии</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <ul>
+          <li><a href="office.html">Офисы продаж и представительства</a></li>
+          <li><a href="https://t.me/S7saveliiairlines">Новости</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Информация</h3>
+        <ul>
+          <li><a href="arrivel.html">Направления</a></li>
+          <li><a href="bilet.html">Рейсы</a></li>
+          <li><a href="https://t.me/s7aveliihelper">Справочный центр</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <ul>
+          <li><a href="https://t.me/s7aveliihelper">Перевозка грузов</a></li>
+          <li><a href="plane.html">Наш флот</a></li>
+          <li><a href="mailto:s7avelii_airlines@mail.ru">Подать заявление на партнёрство</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Верх футера -->
+    <div class="footer-top fade-in">
+      <div class="footer-actions">
+        <a href="https://t.me/s7aveliihelper" class="action"><img src="icons/chat.svg" alt=""> Чат</a>
+      </div>
+      <div class="footer-phone">
+        <div class="label">тел: Бесплатно по России</div>
+        <div class="number">8 962 629–81–05</div>
+      </div>
+    </div>
+
+    <!-- Подписка -->
+    <div class="footer-subscribe fade-in">
+      <h3>Подпишитесь на рассылку S7avelii</h3>
+      <p>Будьте в курсе акций, открывайте новые маршруты</p>
+      <form class="subscribe-form">
+        <input type="email" placeholder="Ваша почта" required>
+        <button type="submit">→</button>
+      </form>
+      <label class="checkbox">
+        <input type="checkbox" required>
+        Хочу узнавать про скидки и идеи путешествий по почте и соглашаюсь на 
+        <a href="#">обработку персональных данных</a>
+      </label>
+    </div>
+
+    <!-- Низ футера -->
+    <div class="footer-bottom fade-in">
+      <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
+      <div class="socials">
+        <a href="https://vk.com/s7avelii"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
+        <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1"><img src="images/icons8-tiktok-logo-50 (1).avif" alt="TikTok"></a>
+        <a href="https://youtu.be/Dy31uUCFaWw?si=2gyqNYaT3ZVO8WJa"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
+        <a href="https://t.me/S7saveliiairlines"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+/* === Убираем горизонтальный скролл и белые полосы === */
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* ==== FOOTER ==== */
+.footer {
+  width: 100%;
+  background: #f1f5f9;
+  padding: 40px 60px;
+  font-family: "Inter", sans-serif;
+  color: #111;
+  box-sizing: border-box;
+}
+
+/* Верхнее меню */
+.footer-menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.footer-column h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+  color: #111;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.footer-column ul li a:hover {
+  text-decoration: underline;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 30px 0;
+  width: 100%;
+}
+
+/* Верх футера */
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 30px;
+}
+
+.footer-actions .action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  color: #111;
+}
+
+.footer-actions img {
+  width: 20px;
+}
+
+.footer-phone {
+  text-align: right;
+}
+
+.footer-phone .label {
+  font-size: 14px;
+  color: #555;
+}
+
+.footer-phone .number {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Подписка */
+.footer-subscribe {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+  border: 1px solid #d1d5db;
+}
+
+.footer-subscribe h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.footer-subscribe p {
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.subscribe-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.subscribe-form input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.subscribe-form button {
+  background: #9ac208;
+  border: none;
+  border-radius: 8px;
+  padding: 0 20px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.subscribe-form button:hover {
+  background: #8db807;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #333;
+}
+
+.checkbox a {
+  color: #abc70f;
+  text-decoration: underline;
+}
+
+/* Низ футера */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: #555;
+}
+
+.socials {
+  display: flex;
+  gap: 12px;
+}
+
+.socials a img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  padding: 6px;
+  transition: transform 0.2s ease;
+}
+
+.socials a img:hover {
+  transform: scale(1.1);
+}
+
+/* === АНИМАЦИЯ ПОЯВЛЕНИЯ === */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === АДАПТАЦИЯ === */
+@media (max-width: 1024px) {
+  .footer {
+    padding: 30px 40px;
+  }
+  .footer-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .footer-phone {
+    text-align: left;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 30px 20px;
+  }
+  .footer-menu {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .footer-column h3 {
+    font-size: 16px;
+  }
+  .footer-column ul li a {
+    font-size: 13px;
+  }
+  .footer-subscribe {
+    padding: 16px;
+  }
+  .subscribe-form {
+    flex-direction: column;
+  }
+  .subscribe-form button {
+    width: 100%;
+    padding: 10px;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .socials {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-menu {
+    grid-template-columns: 1fr;
+  }
+  .footer-subscribe h3 {
+    font-size: 16px;
+  }
+  .footer-subscribe p {
+    font-size: 13px;
+  }
+  .footer-phone .number {
+    font-size: 16px;
+  }
+  .footer-phone .label {
+    font-size: 12px;
+  }
+  .footer-actions .action {
+    font-size: 14px;
+  }
+  .socials a img {
+    width: 28px;
+    height: 28px;
+  }
+}
+</style>
+
+<script>
+/* === Плавное появление футера при прокрутке === */
+document.addEventListener("DOMContentLoaded", () => {
+  const fadeElements = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  fadeElements.forEach(el => observer.observe(el));
+});
+</script>
+
+  <!-- Нижнее меню -->
+<nav class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur border-t border-gray-200 shadow z-50">
+  <div class="flex justify-around py-2">
+    <!-- Главная -->
+    <a href="phone.html" class="flex flex-col items-center text-xs font-medium text-lime-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M3 9.75L12 3l9 6.75V21a.75.75 0 01-.75.75H3.75A.75.75 0 013 21V9.75z"/>
+      </svg>
+      Главная
+    </a>
+    <!-- Путешествия -->
+    <a href="priority.html" class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2l4 8H8l4-8zm0 20v-8m0 0l-8-4m8 4l8-4"/>
+      </svg>
+      Priority
+    </a>
+    <!-- Купить -->
+    <a href="bilet.html" class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20h6m-6 0a2 2 0 01-2-2V8h10v10a2 2 0 01-2 2m-6 0h6"/>
+      </svg>
+      Купить
+    </a>
+    <!-- Информация -->
+    <a href="helper.html" class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h.01M12 4v10"/>
+      </svg>
+      Информация
+    </a>
+    <!-- Профиль -->
+    <a href="phone.html" class="flex flex-col items-center text-xs font-medium text-lime-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M3 9.75L12 3l9 6.75V21a.75.75 0 01-.75.75H3.75A.75.75 0 013 21V9.75z"/>
+      </svg>
+      Профиль
+    </a>
+  </div>
+</nav>
+   
   <!-- === ВНИЗУ: твой оригинальный скрипт (оставлен без изменений) === -->
   <!-- Я вставляю сюда ровно ту логику, что ты присылал ранее, чтобы всё работало -->
 <script>
