@@ -1185,24 +1185,14 @@ function loadProfile(){
   renderProfileFields();
 }
 
-function renderProfileFields() {
-  if (!currentUser) return;
+function renderProfileFields(){ 
+  if(!currentUser) return;
+  //
+  Header const fioHeader = document.getElementById('fioHeader');
+  if(fioHeader){ const parts = (currentUser.fio || '').split(/\s+/);
+                fioHeader.textContent = (parts[0] || '') + (parts[1] ? ' ' + parts[1][0] + '.' : ''); 
+               } 
 
-  const fioHeader = document.getElementById('fioHeader');
-  if (!fioHeader) return;
-
-  const parts = (currentUser.fio || '').trim().split(/\s+/);
-  if (parts.length < 2) {
-    // Если ФИО неполное, просто выводим что есть
-    fioHeader.textContent = currentUser.fio || '';
-    return;
-  }
-
-  const lastName = parts[0];   // Фамилия
-  const firstName = parts[1];  // Имя
-
-  fioHeader.textContent = firstName + ' ' + lastName[0] + '.';
-}
 
 
   // avatar
