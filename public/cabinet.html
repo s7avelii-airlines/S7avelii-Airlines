@@ -1105,7 +1105,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const API = "https://s7avelii-airlines-1.onrender.com"; // <- поменяй, если другой бекенд
 function getToken(){ return localStorage.getItem('token'); }
 
-/* ========== apiFetch (твой исходный) ========== */
+/* ========== apiFetch ========== */
 async function apiFetch(endpoint, options = {}) {
   const token = getToken();
   options.headers = { ...(options.headers || {}) };
@@ -1118,7 +1118,6 @@ async function apiFetch(endpoint, options = {}) {
     const res = await fetch(API + endpoint, options);
     if (!res) return null;
     if (res.status === 401) { logout(); return null; }
-    // попробуем распарсить JSON, если нет — вернуть объект с текстом
     const txt = await res.text();
     try { return JSON.parse(txt); } catch(e) { return { raw: txt, status: res.status }; }
   } catch (e) {
@@ -1132,7 +1131,7 @@ let currentUser = null;
 let products = [];
 let cart = [];
 
-/* ========== Helper: escapeHtml (single definition) ========== */
+/* ========== Helper: escapeHtml ========== */
 function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 /* ========== Update header user area ========== */
@@ -1147,6 +1146,7 @@ async function updateUserArea() {
     const user = await apiFetch('/api/profile');
     if (!user || (!user.fio && !user.email)) { if (userArea) userArea.innerHTML = `<a href="auth.html">Вход</a>`; return; }
     currentUser = user;
+
     if (user.avatar) {
       const avatarUrl = (user.avatar.startsWith('http') ? user.avatar : API + user.avatar);
       if (userArea) userArea.innerHTML = `<img src="${avatarUrl}" alt="avatar" style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover" onclick="window.location.href='cabinet.html'">`;
@@ -1156,6 +1156,7 @@ async function updateUserArea() {
       const short = (user.fio && user.fio.split(' ')[0]) || user.email || 'Профиль';
       if (userArea) userArea.innerHTML = `<span style="cursor:pointer;color:#2196f3;font-weight:600;" onclick="window.location.href='cabinet.html'">${escapeHtml(short)}</span>`;
     }
+
     loadProfile(); // render details after header
   } catch (e) {
     console.error('updateUserArea err', e);
@@ -1171,38 +1172,41 @@ function showTab(evt){
   document.querySelectorAll('.grid section').forEach(s=>s.style.display='none');
   const el = document.getElementById(tab);
   if (el) el.style.display = 'block';
-  // scroll tab into view on mobile
   try { evt.currentTarget.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}); } catch(e){}
 }
 
 /* ========== Render profile fields ========== */
 function loadProfile(){
-  if(!currentUser) {
-    // try fetch directly if not loaded yet
-    apiFetch('/api/profile').then(u=>{ if(u){ currentUser = u; renderProfileFields(); } }).catch(()=>{});
+  if(!currentUser){
+    apiFetch('/api/profile').then(u=>{
+      if(u){ currentUser = u; renderProfileFields(); updateMilesUIFromCurrentUser(); ensureCardTypeMatchesMiles().catch(()=>{}); attachPromoAndCardHandlers(); }
+    }).catch(console.error);
     return;
   }
   renderProfileFields();
 }
 
-function renderProfileFields(){ 
+function renderProfileFields(){
   if(!currentUser) return;
-  //
-  Header const fioHeader = document.getElementById('fioHeader');
-  if(fioHeader){ const parts = (currentUser.fio || '').split(/\s+/);
-                fioHeader.textContent = (parts[0] || '') + (parts[1] ? ' ' + parts[1][0] + '.' : ''); 
-               } 
 
-
+  // ФИО
+  const fioHeader = document.getElementById('fioHeader');
+  if(fioHeader){
+    const parts = (currentUser.fio||'').trim().split(/\s+/);
+    let firstName = '', lastInitial = '';
+    if(parts.length >= 2){ firstName = parts[1]; lastInitial = parts[0][0]; }
+    else if(parts.length === 1){ firstName = parts[0]; }
+    fioHeader.textContent = firstName + (lastInitial ? ' ' + lastInitial + '.' : '');
+  }
 
   // avatar
   const avatarImg = document.getElementById('avatar');
   const avatarInitial = document.getElementById('avatarInitial');
   if(currentUser.avatar && avatarImg){
     const url = (currentUser.avatar.startsWith('http') ? currentUser.avatar : API + currentUser.avatar);
-    avatarImg.src = url; avatarImg.classList.remove('hidden'); if(avatarInitial) avatarInitial.style.display = 'none';
+    avatarImg.src = url; avatarImg.classList.remove('hidden'); if(avatarInitial) avatarInitial.style.display='none';
   } else {
-    if(avatarImg) avatarImg.classList.add('hidden'); if(avatarInitial) avatarInitial.style.display = 'block';
+    if(avatarImg) avatarImg.classList.add('hidden'); if(avatarInitial) avatarInitial.style.display='block';
   }
 
   // card number
@@ -1214,12 +1218,12 @@ function renderProfileFields(){
   const ctf = document.getElementById('cardTypeField'); if(ctf) ctf.textContent = currentUser.card_type || '—';
 }
 
-function updateStatusBar(miles) {
+/* ========== Status bar ========== */
+function updateStatusBar(miles){
   const bar = document.getElementById('status_progress');
   const label = document.getElementById('status_label');
   const range = document.getElementById('status_range');
 
-  // уровни
   const LEVELS = [
     { name: 'Classic', min: 0, max: 3000 },
     { name: 'VIP', min: 3000, max: 10000 },
@@ -1228,60 +1232,44 @@ function updateStatusBar(miles) {
   ];
 
   let current = LEVELS[0], next = LEVELS[1];
-  for (let i = LEVELS.length - 1; i >= 0; i--) {
-    if (miles >= LEVELS[i].min) {
-      current = LEVELS[i];
-      next = LEVELS[i + 1] || LEVELS[i];
-      break;
-    }
+  for(let i=LEVELS.length-1;i>=0;i--){
+    if(miles>=LEVELS[i].min){ current=LEVELS[i]; next=LEVELS[i+1]||LEVELS[i]; break; }
   }
 
-  const totalRange = next.max - current.min;
-  const progress = Math.min(100, ((miles - current.min) / totalRange) * 100);
+  const totalRange = next.max-current.min;
+  const progress = Math.min(100, ((miles-current.min)/totalRange)*100);
 
-  if (bar) bar.style.width = progress + '%';
-  if (label) label.textContent = current.name;
-  if (range) range.textContent = `${miles.toLocaleString('ru-RU')} / ${next.max.toLocaleString('ru-RU')}`;
+  if(bar) bar.style.width = progress+'%';
+  if(label) label.textContent = current.name;
+  if(range) range.textContent = `${miles.toLocaleString('ru-RU')} / ${next.max.toLocaleString('ru-RU')}`;
 }
 
-  
-/* ========== Inline editing etc (not needed here but kept) ========== */
-async function editInline(field) {
+/* ========== Inline editing ========== */
+async function editInline(field){
   if(!currentUser) return;
-  const domMap = { fio: 'fioField', dob: 'dobField', gender: 'genderField', email: 'emailField', phone: 'phoneField', card_number: 'card_field' };
-  const domId = domMap[field] || field + 'Field';
-  const container = document.getElementById(domId);
-  if(!container) return;
-  const cur = (field === 'card_number' ? currentUser.card_number : currentUser[field]) || '';
+  const domMap = { fio:'fioField', dob:'dobField', gender:'genderField', email:'emailField', phone:'phoneField', card_number:'card_field' };
+  const domId = domMap[field]||field+'Field';
+  const container = document.getElementById(domId); if(!container) return;
+  const cur = (field==='card_number'?currentUser.card_number:currentUser[field])||'';
   let input;
-  if (field === 'dob') {
-    input = document.createElement('input'); input.type = 'date'; input.value = cur;
-  } else if (field === 'gender') {
-    input = document.createElement('select');
+  if(field==='dob'){ input=document.createElement('input'); input.type='date'; input.value=cur; }
+  else if(field==='gender'){
+    input=document.createElement('select');
     ['', 'Мужской','Женский','Другое'].forEach(val=>{ const o=document.createElement('option'); o.value=val; o.textContent=val||'Не указан'; if(val===cur) o.selected=true; input.appendChild(o); });
-  } else if (field === 'phone') {
-    input = document.createElement('input'); input.type='tel'; input.value = cur;
-  } else {
-    input = document.createElement('input'); input.type = 'text'; input.value = cur;
-  }
-  input.className = 'input-inline';
-  let saved = false;
-  input.addEventListener('change', async () => { await saveField(field, input.value); saved = true; });
-  input.addEventListener('blur', async () => { if(!saved) await saveField(field, input.value); });
-  container.innerHTML = ''; container.appendChild(input); input.focus();
+  } else if(field==='phone'){ input=document.createElement('input'); input.type='tel'; input.value=cur; }
+  else { input=document.createElement('input'); input.type='text'; input.value=cur; }
+  input.className='input-inline';
+  let saved=false;
+  input.addEventListener('change', async()=>{ await saveField(field,input.value); saved=true; });
+  input.addEventListener('blur', async()=>{ if(!saved) await saveField(field,input.value); });
+  container.innerHTML=''; container.appendChild(input); input.focus();
 }
 
-async function saveField(field, value) {
-  const payload = {}; payload[field] = value;
-  const res = await apiFetch('/api/profile', { method: 'PUT', body: payload });
-  // apiFetch returns JSON; assume success if non-null
-  if (res) {
-    const updated = await apiFetch('/api/profile');
-    if (updated) { currentUser = updated; loadProfile(); updateUserArea(); }
-  } else {
-    alert('Ошибка при сохранении');
-    const re = await apiFetch('/api/profile'); if(re) { currentUser = re; loadProfile(); }
-  }
+async function saveField(field,value){
+  const payload={}; payload[field]=value;
+  const res = await apiFetch('/api/profile',{method:'PUT',body:payload});
+  if(res){ const updated = await apiFetch('/api/profile'); if(updated){ currentUser=updated; loadProfile(); updateUserArea(); } }
+  else{ alert('Ошибка при сохранении'); const re = await apiFetch('/api/profile'); if(re){ currentUser=re; loadProfile(); } }
 }
 
 /* ========== Avatar upload ========== */
@@ -1294,229 +1282,194 @@ function attachAvatarUpload(){
     fd.append('avatar', this.files[0]);
     const token = getToken();
     try{
-      const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
-      const resRaw = await fetch(API + '/api/profile/avatar', { method: 'POST', headers, body: fd });
+      const headers = token ? {'Authorization':'Bearer '+token} : {};
+      const resRaw = await fetch(API+'/api/profile/avatar',{method:'POST',headers,body:fd});
       if(!resRaw) throw new Error('no response');
       const txt = await resRaw.text();
       let data;
-      try { data = JSON.parse(txt); } catch(e){ data = { raw: txt }; }
-      if (data && data.avatar) {
+      try{ data=JSON.parse(txt); } catch(e){ data={ raw:txt }; }
+      if(data && data.avatar){
         const avatarUrl = data.avatar.startsWith('http') ? data.avatar : API + data.avatar;
         const avatarImg = document.getElementById('avatar');
-        if(avatarImg) avatarImg.src = avatarUrl;
+        if(avatarImg) avatarImg.src=avatarUrl;
         await updateUserArea();
-      } else {
-        alert('Ошибка загрузки аватара');
-      }
-    }catch(err){ console.error('avatar upload', err); alert('Ошибка сети при загрузке'); }
+      } else alert('Ошибка загрузки аватара');
+    }catch(err){ console.error('avatar upload',err); alert('Ошибка сети при загрузке'); }
   });
 }
 
-/* ========== Shop & cart (unchanged logic) ========== */
+/* ========== Shop & Cart ========== */
 async function loadShop(){
   const data = await apiFetch('/api/shop');
-  products = (data && data.products) ? data.products : [];
+  products = (data && data.products)?data.products:[];
   renderProducts();
 }
 function renderProducts(){
   const grid = document.getElementById('productGrid');
   if(!grid) return;
-  grid.innerHTML = '';
+  grid.innerHTML='';
   products.forEach(p=>{
-    const div = document.createElement('div'); div.className = 'card';
-    div.innerHTML = `<div style="font-weight:600">${escapeHtml(p.name)}</div>
-                     <div class="small-muted">${p.price} ₽</div>
-                     <button class="btn" onclick="addToCart(${p.id})">В корзину</button>`;
+    const div=document.createElement('div'); div.className='card';
+    div.innerHTML=`<div style="font-weight:600">${escapeHtml(p.name)}</div>
+                   <div class="small-muted">${p.price} ₽</div>
+                   <button class="btn" onclick="addToCart(${p.id})">В корзину</button>`;
     grid.appendChild(div);
   });
 }
-function addToCart(id){
-  const p = products.find(x=>x.id===id);
-  if(!p) return;
-  cart.push(p); renderCart();
-}
+function addToCart(id){ const p=products.find(x=>x.id===id); if(!p) return; cart.push(p); renderCart(); }
 function removeFromCart(i){ cart.splice(i,1); renderCart(); }
 function renderCart(){
   const tbody = document.getElementById('cartTable')?.querySelector('tbody');
   if(!tbody) return;
-  tbody.innerHTML = '';
-  let total = 0;
-  cart.forEach((p,i)=>{ total += p.price; const tr = document.createElement('tr'); tr.innerHTML = `<td>${escapeHtml(p.name)}</td><td>${p.price} ₽</td><td><button class="btn secondary" onclick="removeFromCart(${i})">×</button></td>`; tbody.appendChild(tr); });
+  tbody.innerHTML='';
+  let total=0;
+  cart.forEach((p,i)=>{ total+=p.price; const tr=document.createElement('tr'); tr.innerHTML=`<td>${escapeHtml(p.name)}</td><td>${p.price} ₽</td><td><button class="btn secondary" onclick="removeFromCart(${i})">×</button></td>`; tbody.appendChild(tr); });
   const cartTotal = document.getElementById('cartTotal');
-  if(cartTotal) cartTotal.textContent = total + ' ₽';
+  if(cartTotal) cartTotal.textContent=total+' ₽';
 }
-async function checkout(){
-  if(cart.length === 0) { alert('Корзина пуста'); return; }
-  const res = await apiFetch('/api/checkout', { method: 'POST', body: { items: cart } });
-  if(res) { cart = []; renderCart(); alert('Заказ оформлен!'); }
-  else alert('Ошибка при оформлении заказа');
-}
+async function checkout(){ if(cart.length===0){ alert('Корзина пуста'); return; } const res=await apiFetch('/api/checkout',{method:'POST',body:{items:cart}}); if(res){ cart=[]; renderCart(); alert('Заказ оформлен!'); } else alert('Ошибка при оформлении заказа'); }
 
-/* ========== Loyalty system: levels, promos, card change ========== */
-const LEVELS = [
-  { name: 'Classic', min: 0, max: 1000 },
-  { name: 'Master', min: 1000, max: 5000 },
-  { name: 'Pro', min: 5000, max: 100000 },
-  { name: 'Flight-master', min: 100000, max: 500000 }
+/* ========== Loyalty system & PROMOS ========== */
+const LEVELS=[
+  {name:'Classic',min:0,max:1000},
+  {name:'Master',min:1000,max:5000},
+  {name:'Pro',min:5000,max:100000},
+  {name:'Flight-master',min:100000,max:500000}
 ];
-const PROMOS = {
-  'S717000': 17000,
-  'WELCOME500': 500,
-  'VIP2025': 2000,
-  '2025': 4000,
-  'S2025': 3000,
-  'TAKE_OFFf500': 500,
-  'LANDING500': 500,
+const PROMOS={
+  'S717000':17000,
+  'WELCOME500':500,
+  'VIP2025':2000,
+  '2025':4000,
+  'S2025':3000,
+  'TAKE_OFFf500':500,
+  'LANDING500':500
 };
-function getLevelByMiles(miles){
-  for(let i=LEVELS.length-1;i>=0;i--){ if(miles >= LEVELS[i].min) return LEVELS[i]; }
-  return LEVELS[0];
-}
-function isOkApiRes(res){
-  if(!res) return false;
-  if(res.ok===true || res.success===true) return true;
-  if(typeof res==='object' && (res.fio || res.id || res.user_id)) return true;
-  if(typeof res==='object' && Object.keys(res).length>0) return true;
-  return false;
-}
+function getLevelByMiles(miles){ for(let i=LEVELS.length-1;i>=0;i--){ if(miles>=LEVELS[i].min) return LEVELS[i]; } return LEVELS[0]; }
+function isOkApiRes(res){ if(!res) return false; if(res.ok===true||res.success===true) return true; if(typeof res==='object'&&(res.fio||res.id||res.user_id)) return true; if(typeof res==='object'&&Object.keys(res).length>0) return true; return false; }
+
 function updateMilesUIFromCurrentUser(){
   if(!currentUser) return;
-  const statusMiles = Number(currentUser.status_miles || 0);
-  const bonusMiles = Number(currentUser.bonus_miles || 0);
-  const bonusEl = document.getElementById('milesBonusStat');
-  const statusEl = document.getElementById('milesStatusStat');
-  if(bonusEl) bonusEl.textContent = bonusMiles.toLocaleString('ru-RU');
-  if(statusEl) statusEl.textContent = statusMiles.toLocaleString('ru-RU');
-  const level = getLevelByMiles(statusMiles);
-  let nextBoundary = LEVELS.find(l => l.min > level.min);
-  const nextMin = nextBoundary ? nextBoundary.min : level.max;
-  const segmentRange = (nextMin - level.min) || 1;
-  const progressPercent = nextBoundary ? ((statusMiles - level.min) / segmentRange) * 100 : 100;
-  const bar = document.getElementById('milesProgressBar2');
-  if(bar) bar.style.width = Math.min(Math.max(progressPercent,0),100) + '%';
-  const left = document.getElementById('nextLevelLeft');
-  const right = document.getElementById('nextLevelRight');
-  if(left) left.textContent = `${statusMiles.toLocaleString('ru-RU')} / ${nextMin.toLocaleString('ru-RU')}`;
-  if(right) right.textContent = level.name;
-  const cardField = document.getElementById('cardTypeField');
-  if(cardField) cardField.textContent = currentUser.card_type || level.name;
+  const statusMiles=Number(currentUser.status_miles||0);
+  const bonusMiles=Number(currentUser.bonus_miles||0);
+  const bonusEl=document.getElementById('milesBonusStat');
+  const statusEl=document.getElementById('milesStatusStat');
+  if(bonusEl) bonusEl.textContent=bonusMiles.toLocaleString('ru-RU');
+  if(statusEl) statusEl.textContent=statusMiles.toLocaleString('ru-RU');
+  const level=getLevelByMiles(statusMiles);
+  let nextBoundary = LEVELS.find(l=>l.min>level.min);
+  const nextMin = nextBoundary?nextBoundary.min:level.max;
+  const segmentRange=(nextMin-level.min)||1;
+  const progressPercent=nextBoundary?((statusMiles-level.min)/segmentRange)*100:100;
+  const bar=document.getElementById('milesProgressBar2');
+  if(bar) bar.style.width=Math.min(Math.max(progressPercent,0),100)+'%';
+  const left=document.getElementById('nextLevelLeft');
+  const right=document.getElementById('nextLevelRight');
+  if(left) left.textContent=`${statusMiles.toLocaleString('ru-RU')} / ${nextMin.toLocaleString('ru-RU')}`;
+  if(right) right.textContent=level.name;
+  const cardField=document.getElementById('cardTypeField');
+  if(cardField) cardField.textContent=currentUser.card_type||level.name;
 }
+
 async function ensureCardTypeMatchesMiles(){
   if(!currentUser) return;
-  const statusMiles = Number(currentUser.status_miles || 0);
-  const level = getLevelByMiles(statusMiles);
-  const desiredType = level.name;
-  if((currentUser.card_type || '').toLowerCase() !== (desiredType || '').toLowerCase()){
-    const res = await apiFetch('/api/profile', { method: 'PUT', body: { card_type: desiredType }});
-    if(isOkApiRes(res)){
-      const refreshed = await apiFetch('/api/profile');
-      if(refreshed && (refreshed.fio || refreshed.id)) currentUser = refreshed;
-      else currentUser.card_type = desiredType;
-    } else {
-      currentUser.card_type = desiredType;
-    }
+  const statusMiles=Number(currentUser.status_miles||0);
+  const level=getLevelByMiles(statusMiles);
+  const desiredType=level.name;
+  if((currentUser.card_type||'').toLowerCase()!==(desiredType||'').toLowerCase()){
+    const res=await apiFetch('/api/profile',{method:'PUT',body:{card_type:desiredType}});
+    if(isOkApiRes(res)){ const refreshed=await apiFetch('/api/profile'); if(refreshed&& (refreshed.fio||refreshed.id)) currentUser=refreshed; else currentUser.card_type=desiredType; }
+    else currentUser.card_type=desiredType;
   }
   updateMilesUIFromCurrentUser();
 }
 
-/* PROMO activation */
 async function handleActivatePromo(){
-  const input = document.getElementById('promoInput');
+  const input=document.getElementById('promoInput');
   if(!input) return alert('Не найдено поле промокода');
-  const code = (input.value||'').trim().toUpperCase();
+  const code=(input.value||'').trim().toUpperCase();
   if(!code) return alert('Введите промокод');
   if(!PROMOS[code]) return alert('Неверный промокод');
-  const used = Array.isArray(currentUser?.used_promos) ? currentUser.used_promos : [];
+  const used=Array.isArray(currentUser?.used_promos)?currentUser.used_promos:[];
   if(used.includes(code)) return alert('Промокод уже использован');
-  const add = Number(PROMOS[code]||0);
-  const payload = {
-    bonus_miles: (Number(currentUser.bonus_miles || 0) + add),
-    status_miles: (Number(currentUser.status_miles || 0) + add),
-    used_promos: [...used, code]
+  const add=Number(PROMOS[code]||0);
+  const payload={
+    bonus_miles:(Number(currentUser.bonus_miles||0)+add),
+    status_miles:(Number(currentUser.status_miles||0)+add),
+    used_promos:[...used,code]
   };
-  const res = await apiFetch('/api/profile', { method: 'PUT', body: payload });
+  const res=await apiFetch('/api/profile',{method:'PUT',body:payload});
   if(!isOkApiRes(res)) return alert('Ошибка сервера при активации промокода');
-  const updated = await apiFetch('/api/profile');
-  if(updated && (updated.fio || updated.id)) currentUser = updated;
-  else { currentUser.bonus_miles = payload.bonus_miles; currentUser.status_miles = payload.status_miles; currentUser.used_promos = payload.used_promos; }
+  const updated=await apiFetch('/api/profile');
+  if(updated && (updated.fio||updated.id)) currentUser=updated;
+  else { currentUser.bonus_miles=payload.bonus_miles; currentUser.status_miles=payload.status_miles; currentUser.used_promos=payload.used_promos; }
   updateMilesUIFromCurrentUser();
   await ensureCardTypeMatchesMiles();
   alert(`Промокод применён, +${add} миль`);
-  input.value = '';
+  input.value='';
 }
 
-/* card change by code */
 async function handleCardChange(){
-  const input = document.getElementById('cardChangeInput');
+  const input=document.getElementById('cardChangeInput');
   if(!input) return alert('Не найдено поле смены карты');
-  const code = (input.value||'').trim().toUpperCase();
-  if(!code) return alert('Введите код смены карты');
-  let newType = null;
-  if(code === 'VIP1111') newType = 'VIP';
-  else if(code === 'CLASS5555') newType = 'Classic';
+  const code=(input.value||'').trim().toUpperCase();
+  let newType=null;
+  if(code==='VIP1111') newType='VIP';
+  else if(code==='CLASS5555') newType='Classic';
   else return alert('Неверный код смены карты');
-  const res = await apiFetch('/api/profile', { method: 'PUT', body: { card_type: newType }});
+  const res=await apiFetch('/api/profile',{method:'PUT',body:{card_type:newType}});
   if(!isOkApiRes(res)) return alert('Ошибка при смене типа карты');
-  const updated = await apiFetch('/api/profile');
-  if(updated && (updated.fio || updated.id)) currentUser = updated;
-  else currentUser.card_type = newType;
+  const updated=await apiFetch('/api/profile');
+  if(updated && (updated.fio||updated.id)) currentUser=updated;
+  else currentUser.card_type=newType;
   updateMilesUIFromCurrentUser();
   alert(`Тип карты изменён на ${newType}`);
-  input.value = '';
+  input.value='';
 }
 
-/* attach handlers */
 function attachPromoAndCardHandlers(){
-  const promoBtn = document.getElementById('promoActivateBtn');
-  if(promoBtn){ promoBtn.removeEventListener('click', handleActivatePromo); promoBtn.addEventListener('click', handleActivatePromo); }
-  const cardBtn = document.getElementById('cardChangeBtn');
-  if(cardBtn){ cardBtn.removeEventListener('click', handleCardChange); cardBtn.addEventListener('click', handleCardChange); }
+  const promoBtn=document.getElementById('promoActivateBtn');
+  if(promoBtn){ promoBtn.removeEventListener('click',handleActivatePromo); promoBtn.addEventListener('click',handleActivatePromo); }
+  const cardBtn=document.getElementById('cardChangeBtn');
+  if(cardBtn){ cardBtn.removeEventListener('click',handleCardChange); cardBtn.addEventListener('click',handleCardChange); }
 }
 
-/* override loadProfile to also update miles UI */
-const originalLoadProfile = window.loadProfile || function(){};
-window.loadProfile = function(){
+/* ========== Override loadProfile for additional updates ========== */
+const originalLoadProfile = window.loadProfile||function(){};
+window.loadProfile=function(){
   try{ originalLoadProfile(); }catch(e){}
   updateMilesUIFromCurrentUser();
   ensureCardTypeMatchesMiles().catch(e=>console.warn(e));
   attachPromoAndCardHandlers();
 };
 
-/* telegram block handlers */
-document.addEventListener('DOMContentLoaded', () => {
-  // attach avatar upload listener safely
+/* ========== Telegram block handlers & DOMContentLoaded ========== */
+document.addEventListener('DOMContentLoaded',()=>{
   attachAvatarUpload();
 
-  // attach telegram close & subscribe
-  const tClose = document.getElementById('telegramCloseBtn');
-  if(tClose) tClose.addEventListener('click', ()=>{ const b=document.getElementById('telegramBlock'); if(b) b.style.display='none'; });
-  const tSub = document.getElementById('telegramSubscribeBtn');
-  if(tSub) tSub.addEventListener('click', ()=>{ alert('Спасибо! Вы подписаны (симуляция)'); });
+  const tClose=document.getElementById('telegramCloseBtn');
+  if(tClose) tClose.addEventListener('click',()=>{ const b=document.getElementById('telegramBlock'); if(b) b.style.display='none'; });
+  const tSub=document.getElementById('telegramSubscribeBtn');
+  if(tSub) tSub.addEventListener('click',()=>{ alert('Спасибо! Вы подписаны (симуляция)'); });
 
-  // ensure tabs show default tab on mobile
-  document.querySelectorAll('.tabs a').forEach(a=>{
-    a.addEventListener('click', (e)=>{ showTab(e); });
-  });
+  document.querySelectorAll('.tabs a').forEach(a=>{ a.addEventListener('click',(e)=>{ showTab(e); }); });
 
-  // finally initialize user area and shop
   (async ()=>{
-    const token = getToken();
-    if(!token){ window.location.href = 'auth.html'; return; }
-    await updateUserArea(); // loads profile into currentUser and calls loadProfile()
+    const token=getToken();
+    if(!token){ window.location.href='auth.html'; return; }
+    await updateUserArea();
     await loadShop();
-    // ensure UI updated
     updateMilesUIFromCurrentUser();
     attachPromoAndCardHandlers();
   })();
 });
 
-/* expose some functions to window for inline html buttons */
-window.editInline = editInline;
-window.logout = logout;
-window.addToCart = addToCart;
-window.removeFromCart = removeFromCart;
-window.checkout = checkout;
-
+/* ========== Expose functions to window for inline html buttons ========== */
+window.editInline=editInline;
+window.logout=logout;
+window.addToCart=addToCart;
+window.removeFromCart=removeFromCart;
+window.checkout=checkout;
 </script>
 </body>
 </html>
