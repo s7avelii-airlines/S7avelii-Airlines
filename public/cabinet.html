@@ -138,7 +138,7 @@
 </div>
 
  <!-- small control card -->
-<div class="bg-white card-radius p-4 shadow-sm relative cursor-pointer open-modal mt-3" data-modal="modal">
+<div class="bg-white card-radius p-4 shadow-sm relative cursor-pointer open-modal mt-3" data-modal="loyalty-modal">
   <div class="text-sm text-[#8b94a3]">Управлять</div>
   <div class="text-sm font-semibold mt-2">милиями</div>
 
@@ -545,7 +545,19 @@
     <div class="text-sm">S7avelii Shop</div>
   </div>
 </div>
+<div id="modal-shop" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center">
+  <div class="bg-white w-full h-full p-6 relative card-radius overflow-auto">
 
+    <!-- Close button -->
+    <button id="closeAccrualModal" class="absolute top-4 right-4 text-gray-500 text-xl">✕</button>
+
+    <h2 class="text-xl font-semibold mb-4">Начисления и списания</h2>
+    <p class="text-gray-600">Как на счёт того, чтобы управлять бонусами?</p>
+
+  </div>
+</div>
+
+    
 <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-partners">
   <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
     <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden">
@@ -606,19 +618,19 @@
 
         <div class="space-y-2">
           <label class="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-            <input type="radio" name="miles" value="100" data-link="https://www.tinkoff.ru/rm/r_OkmPSiMWAS.tEuUxoSpGw/2Scji46502">
+            <input type="radio" name="miles" value="100" data-link="https://t.me/s7aveliishop">
             100М — 98 руб.
           </label>
           <label class="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-            <input type="radio" name="miles" value="300" data-link="https://www.tbank.ru/pay/link-300?success=1&miles=300">
+            <input type="radio" name="miles" value="300" data-link="https://t.me/s7aveliishop">
             300М — 320 руб.
           </label>
           <label class="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-            <input type="radio" name="miles" value="500" data-link="https://www.tbank.ru/pay/link-500?success=1&miles=500">
+            <input type="radio" name="miles" value="500" data-link="https://t.me/s7aveliishop">
             500М — 789 руб.
           </label>
           <label class="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-            <input type="radio" name="miles" value="1000" data-link="https://www.tbank.ru/pay/link-1000?success=1&miles=1000">
+            <input type="radio" name="miles" value="1000" data-link="https://t.me/s7aveliishop">
             1000М — 1023 руб.
           </label>
         </div>
@@ -647,13 +659,16 @@
     1000: ["1000L1F", "1000M9C", "1000R5X", "1000Z3B"]
   };
 
-  // === Открытие / закрытие модалки ===
-  document.querySelector('.open-partner-modal').addEventListener('click', () => {
-    document.getElementById('modal-buy-miles').classList.remove('hidden');
+  // === Открытие и закрытие модалки по кнопке ===
+  const modal = document.getElementById('modal-buy-miles');
+  document.querySelectorAll('.open-partner-modal').forEach(button => {
+    button.addEventListener('click', () => {
+      modal.classList.remove('hidden');
+    });
   });
 
   document.getElementById('closeLoyaltyModal').addEventListener('click', () => {
-    document.getElementById('modal-buy-miles').classList.add('hidden');
+    modal.classList.add('hidden');
   });
 
   // === Клик по кнопке оплаты ===
@@ -662,50 +677,40 @@
     if (!selected) return alert('Пожалуйста, выберите пакет миль.');
 
     const link = selected.dataset.link;
-    window.location.href = link;
+    window.location.href = link; // переход на оплату Т-Банка
   });
 
   // === Получение уникального промокода ===
   function getPromo(miles) {
-    // Сохраняем использованные промокоды в localStorage
     const used = JSON.parse(localStorage.getItem('usedPromos') || '{}');
 
     if (!promoList[miles] || promoList[miles].length === 0) {
       return "Нет доступных промокодов для этого пакета.";
     }
 
-    // Проверяем, какие ещё не использованы
     const available = promoList[miles].filter(code => !(used[miles]?.includes(code)));
 
     if (available.length === 0) {
       return "Все промокоды для этого пакета уже выданы.";
     }
 
-    const promo = available[0]; // Берём первый доступный
+    const promo = available[0];
     used[miles] = used[miles] ? [...used[miles], promo] : [promo];
     localStorage.setItem('usedPromos', JSON.stringify(used));
 
     return promo;
   }
 
-  // === Проверяем, вернулся ли пользователь после оплаты ===
-  window.addEventListener('load', () => {
-    const params = new URLSearchParams(window.location.search);
-    const success = params.get('success');
-    const miles = params.get('miles');
+  // === Функция для показа промокода вручную ===
+  function showPromoForMiles(miles) {
+    const promo = getPromo(miles);
+    const promoBox = document.getElementById('promoCode');
+    promoBox.innerHTML = `
+      <strong>Ваш промокод на ${miles} миль:</strong> <span class="font-mono text-lg">${promo}</span>
+    `;
+    promoBox.classList.remove('hidden');
+  }
 
-    if (success === '1' && miles) {
-      document.getElementById('modal-buy-miles').classList.remove('hidden');
-
-      const promo = getPromo(miles);
-      const promoBox = document.getElementById('promoCode');
-      promoBox.innerHTML = `
-        <strong>Оплата прошла успешно!</strong><br>
-        Ваш промокод на ${miles} миль: <span class="font-mono text-lg">${promo}</span>
-      `;
-      promoBox.classList.remove('hidden');
-    }
-  });
 </script>
 
 
