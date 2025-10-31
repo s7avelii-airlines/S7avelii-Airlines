@@ -1557,7 +1557,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const tClose=document.getElementById('telegramCloseBtn');
   if(tClose) tClose.addEventListener('click',()=>{ const b=document.getElementById('telegramBlock'); if(b) b.style.display='none'; });
   const tSub=document.getElementById('telegramSubscribeBtn');
-  if(tSub) tSub.addEventListener('click',()=>{ alert('Спасибо! Вы подписаны '); });
+  if(tSub) tSub.addEventListener('click',()=>{ alert('Спасибо! Вы подписаны (Симуляция)'); });
 
   document.querySelectorAll('.tabs a').forEach(a=>{ a.addEventListener('click',(e)=>{ showTab(e); }); });
 
