@@ -414,9 +414,62 @@
     </div>
 
     <!-- big black promo button -->
-    <div class="mt-5">
-      <button id="openPromo" class="w-full bg-[#2b2f36] text-white font-bold text-lg py-3 rounded-xl">Добавить промокод</button>
-    </div>
+<div class="mt-5">
+  <button id="openPromo" class="w-full bg-[#2b2f36] text-white font-bold text-lg py-3 rounded-xl">
+    Добавить промокод
+  </button>
+</div>
+
+<!-- Promo input (hidden by default) -->
+<div id="promoBlock" class="mt-3 hidden">
+  <input 
+    id="promoInput"
+    type="text"
+    placeholder="Введите промокод"
+    class="w-full border border-gray-300 rounded-xl p-2"
+  >
+  <button 
+    id="applyPromo"
+    class="mt-2 w-full bg-green-600 text-white py-2 rounded-xl"
+  >
+    Применить
+  </button>
+
+  <p id="promoMessage" class="mt-2 text-sm"></p>
+</div>
+
+<script>
+  // Промокоды и мили
+  const promoData = {
+    "WELCOME1100": 1100,
+    "SALE1250":1250,
+    "VIP500": 500,
+    "S7AVELII": 7777
+  };
+
+  document.getElementById("openPromo").onclick = () => {
+    document.getElementById("promoBlock").classList.remove("hidden");
+  };
+
+  document.getElementById("applyPromo").onclick = () => {
+    const code = document.getElementById("promoInput").value.trim().toUpperCase();
+    const message = document.getElementById("promoMessage");
+
+    if (promoData[code]) {
+      const miles = promoData[code];
+      message.textContent = `✅ Промокод применён! +${miles} миль`;
+      message.className = "mt-2 text-sm text-green-600";
+
+      // Здесь начисляем мили — вместо alert можно вставить вашу логику
+      console.log("Начислено миль:", miles);
+
+    } else {
+      message.textContent = "❌ Неверный промокод";
+      message.className = "mt-2 text-sm text-red-600";
+    }
+  };
+</script>
+
 
     <!-- Telegram promo card -->
     <div class="mt-4">
