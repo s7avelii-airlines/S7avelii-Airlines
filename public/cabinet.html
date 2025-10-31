@@ -545,16 +545,17 @@
     <div class="text-sm">S7avelii Shop</div>
   </div>
 </div>
-<div id="modal-shop" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center">
-  <div class="bg-white w-full h-full p-6 relative card-radius overflow-auto">
+<div id="modal-partners" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center" aria-hidden="true">
+  <div class="bg-white w-full h-full p-6 relative overflow-auto" role="dialog" aria-modal="true" aria-labelledby="partners-title">
+    <button data-close type="button" class="absolute top-4 right-4 text-gray-500 text-2xl" aria-label="Закрыть">✕</button>
 
-    <!-- Close button -->
-    <button id="closeAccrualModal" class="absolute top-4 right-4 text-gray-500 text-xl">✕</button>
+  <h2 class="text-xl font-semibold mb-4">Магазин</h2>
+  <p class="text-gray-600 mb-5">
+    Ваша корзина
+  </p>
+</div>
+</div>
 
-    <h2 class="text-xl font-semibold mb-4">Начисления и списания</h2>
-    <p class="text-gray-600">Как на счёт того, чтобы управлять бонусами?</p>
-
-  </div>
 </div>
 
     
@@ -1158,14 +1159,12 @@ document.addEventListener("DOMContentLoaded", () => {
 <nav class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur border-t border-gray-200 shadow z-50">
   <div class="flex justify-around py-2">
     <!-- Главная -->
-    <a href="phone.html" class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20h6m-6 0a2 2 0 01-2-2V8h10v10a2 2 0 01-2 2m-6 0h6"/>
+      <a href="phone.html" class="flex flex-col items-center text-xs font-medium text-lime-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M3 9.75L12 3l9 6.75V21a.75.75 0 01-.75.75H3.75A.75.75 0 013 21V9.75z"/>
       </svg>
       Главная
     </a>
-  </div>
-</nav>
     <!-- Путешествия -->
     <a href="priority.html" class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
