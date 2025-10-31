@@ -545,18 +545,90 @@
     <div class="text-sm">S7avelii Shop</div>
   </div>
 </div>
+<!-- Cart modal -->
 <div id="modal-partners" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center" aria-hidden="true">
-  <div class="bg-white w-full h-full p-6 relative overflow-auto" role="dialog" aria-modal="true" aria-labelledby="partners-title">
-    <button data-close type="button" class="absolute top-4 right-4 text-gray-500 text-2xl" aria-label="Закрыть">✕</button>
+  <div class="bg-white w-full max-w-md h-auto p-6 relative rounded-xl shadow-xl overflow-auto" role="dialog" aria-modal="true" aria-labelledby="partners-title">
+    <button data-close type="button" class="absolute top-4 right-4 text-gray-500 text-2xl">✕</button>
 
-  <h2 class="text-xl font-semibold mb-4">Магазин</h2>
-  <p class="text-gray-600 mb-5">
-    Ваша корзина
-  </p>
-</div>
+    <h2 id="partners-title" class="text-xl font-semibold mb-4">Корзина</h2>
+
+    <div id="cartItems" class="space-y-3 text-sm text-gray-800">
+      <!-- Cart items will render here -->
+    </div>
+
+    <div class="mt-4 border-t pt-3">
+      <div class="flex justify-between font-semibold text-lg">
+        <span>Итого:</span>
+        <span id="cartTotal">0 ₽</span>
+      </div>
+    </div>
+
+    <div class="mt-5 flex gap-3">
+      <button id="clearCart" class="w-1/2 bg-red-500 text-white py-2 rounded-lg">Очистить</button>
+      <a id="checkoutBtn" href="shop-checkout.html" class="w-1/2 text-center bg-green-600 text-white py-2 rounded-lg">Оформить</a>
+    </div>
+  </div>
 </div>
 
-</div>
+<script>
+// Simple cart example
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+const modal = document.getElementById('modal-partners');
+const cartItems = document.getElementById('cartItems');
+const cartTotal = document.getElementById('cartTotal');
+const clearCartBtn = document.getElementById('clearCart');
+
+function openCart() {
+  renderCart();
+  modal.classList.remove('hidden');
+}
+
+function closeCart() {
+  modal.classList.add('hidden');
+}
+
+function renderCart() {
+  cartItems.innerHTML = '';
+  let total = 0;
+
+  cart.forEach((item, index) => {
+    total += item.price * item.qty;
+    cartItems.innerHTML += `
+      <div class="flex justify-between items-center border-b pb-2">
+        <span>${item.name} (x${item.qty})</span>
+        <span>${item.price * item.qty} ₽</span>
+      </div>
+    `;
+  });
+
+  cartTotal.textContent = `${total} ₽`;
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+// Clear Cart
+clearCartBtn.addEventListener('click', () => {
+  cart = [];
+  renderCart();
+});
+
+// Close events
+modal.querySelector('[data-close]').addEventListener('click', closeCart);
+modal.addEventListener('click', e => {
+  if (e.target === modal) closeCart();
+});
+
+// Example add to cart function — call this from product buttons
+function addToCart(product) {
+  const existing = cart.find(i => i.id === product.id);
+  if (existing) existing.qty++;
+  else cart.push({...product, qty: 1});
+
+  renderCart();
+}
+
+// Example: addToCart({ id:1, name:"Товар", price:500 });
+</script>
+
 
     
 <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-partners">
