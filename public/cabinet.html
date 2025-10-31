@@ -567,34 +567,23 @@
   <div class="grid grid-cols-2 gap-4">
     <!-- карточка -->
     <div class="bg-gray-100 rounded-xl p-3 flex items-center justify-center">
-      <img src="images/partner1.png" alt="Partner 1" class="w-full h-24 object-contain">
+      <img src="images/photo_5197610388026424051_y.avif" alt="Partner 1" class="w-full h-24 object-contain">
     </div>
 
     <div class="bg-gray-100 rounded-xl p-3 flex items-center justify-center">
-      <img src="images/partner2.png" alt="Partner 2" class="w-full h-24 object-contain">
+      <img src="images/photo_5197610388026424049_y.avif" alt="Partner 2" class="w-full h-24 object-contain">
     </div>
 
     <div class="bg-gray-100 rounded-xl p-3 flex items-center justify-center">
-      <img src="images/partner3.png" alt="Partner 3" class="w-full h-24 object-contain">
+      <img src="images/photo_5197610388026424050_y.avif" alt="Partner 3" class="w-full h-24 object-contain">
     </div>
-
-    <div class="bg-gray-100 rounded-xl p-3 flex items-center justify-center">
-      <img src="images/partner4.png" alt="Partner 4" class="w-full h-24 object-contain">
-    </div>
-
-    <div class="bg-gray-100 rounded-xl p-3 flex items-center justify-center">
-      <img src="images/partner5.png" alt="Partner 5" class="w-full h-24 object-contain">
-    </div>
-
-    <div class="bg-gray-100 rounded-xl p-3 flex items-center justify-center">
-      <img src="images/partner6.png" alt="Partner 6" class="w-full h-24 object-contain">
-    </div>
-  </div>
 
 </div>
 </div>
-  
-    <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-buy-miles">
+
+</div>
+<!-- Кнопка "Купить мили" -->
+<div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-buy-miles">
   <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
     <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden">
       <img src="images/photo_5197547870482463010_x.avif" alt="plus" class="w-8 h-8 object-contain">
@@ -602,17 +591,124 @@
     <div class="text-sm">Купить мили</div>
   </div>
 </div>
+
+<!-- Модалка (как прежде) -->
 <div id="modal-buy-miles" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center">
-  <div class="bg-white w-full h-full p-6 relative overflow-auto">
-<button id="closeLoyaltyModal" class="absolute top-4 right-4 text-gray-500 text-2xl" aria-label="Закрыть">✕</button>
+  <div class="bg-white w-full max-w-2xl p-6 relative rounded-2xl shadow-xl">
+    <button id="closeLoyaltyModal" class="absolute top-4 right-4 text-gray-500 text-2xl" aria-label="Закрыть">✕</button>
 
     <h2 class="text-xl font-semibold mb-4">Покупка миль</h2>
-    <p class="text-gray-600">
-      Скоро разместим тарифы миль
-    </p>
 
+    <div class="flex flex-col md:flex-row items-center gap-6">
+      <!-- Левая часть -->
+      <div class="flex-1 space-y-4">
+        <p class="text-gray-600 mb-2">Выберите пакет:</p>
+
+        <div class="space-y-2">
+          <label class="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+            <input type="radio" name="miles" value="100" data-link="https://www.tinkoff.ru/rm/r_OkmPSiMWAS.tEuUxoSpGw/2Scji46502">
+            100М — 98 руб.
+          </label>
+          <label class="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+            <input type="radio" name="miles" value="300" data-link="https://www.tbank.ru/pay/link-300?success=1&miles=300">
+            300М — 320 руб.
+          </label>
+          <label class="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+            <input type="radio" name="miles" value="500" data-link="https://www.tbank.ru/pay/link-500?success=1&miles=500">
+            500М — 789 руб.
+          </label>
+          <label class="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+            <input type="radio" name="miles" value="1000" data-link="https://www.tbank.ru/pay/link-1000?success=1&miles=1000">
+            1000М — 1023 руб.
+          </label>
+        </div>
+
+        <button id="buyMiles" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
+          Оплатить
+        </button>
+
+        <div id="promoCode" class="hidden mt-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700"></div>
+      </div>
+
+      <!-- Правая часть -->
+      <div class="flex-1 flex justify-center">
+        <img src="images/1761832960183.avif" alt="airplane" class="max-w-xs rounded-xl object-contain">
+      </div>
+    </div>
   </div>
 </div>
+
+<script>
+  // === Заранее заготовленные промокоды ===
+  const promoList = {
+    100: ["100A9X", "100B4F", "100C8L", "100D7P"],
+    300: ["300K7M", "300Z9P", "300G2H", "300T1V"],
+    500: ["500N5R", "500Q8S", "500X2J", "500W4D"],
+    1000: ["1000L1F", "1000M9C", "1000R5X", "1000Z3B"]
+  };
+
+  // === Открытие / закрытие модалки ===
+  document.querySelector('.open-partner-modal').addEventListener('click', () => {
+    document.getElementById('modal-buy-miles').classList.remove('hidden');
+  });
+
+  document.getElementById('closeLoyaltyModal').addEventListener('click', () => {
+    document.getElementById('modal-buy-miles').classList.add('hidden');
+  });
+
+  // === Клик по кнопке оплаты ===
+  document.getElementById('buyMiles').addEventListener('click', () => {
+    const selected = document.querySelector('input[name="miles"]:checked');
+    if (!selected) return alert('Пожалуйста, выберите пакет миль.');
+
+    const link = selected.dataset.link;
+    window.location.href = link;
+  });
+
+  // === Получение уникального промокода ===
+  function getPromo(miles) {
+    // Сохраняем использованные промокоды в localStorage
+    const used = JSON.parse(localStorage.getItem('usedPromos') || '{}');
+
+    if (!promoList[miles] || promoList[miles].length === 0) {
+      return "Нет доступных промокодов для этого пакета.";
+    }
+
+    // Проверяем, какие ещё не использованы
+    const available = promoList[miles].filter(code => !(used[miles]?.includes(code)));
+
+    if (available.length === 0) {
+      return "Все промокоды для этого пакета уже выданы.";
+    }
+
+    const promo = available[0]; // Берём первый доступный
+    used[miles] = used[miles] ? [...used[miles], promo] : [promo];
+    localStorage.setItem('usedPromos', JSON.stringify(used));
+
+    return promo;
+  }
+
+  // === Проверяем, вернулся ли пользователь после оплаты ===
+  window.addEventListener('load', () => {
+    const params = new URLSearchParams(window.location.search);
+    const success = params.get('success');
+    const miles = params.get('miles');
+
+    if (success === '1' && miles) {
+      document.getElementById('modal-buy-miles').classList.remove('hidden');
+
+      const promo = getPromo(miles);
+      const promoBox = document.getElementById('promoCode');
+      promoBox.innerHTML = `
+        <strong>Оплата прошла успешно!</strong><br>
+        Ваш промокод на ${miles} миль: <span class="font-mono text-lg">${promo}</span>
+      `;
+      promoBox.classList.remove('hidden');
+    }
+  });
+</script>
+
+
     <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-settings"> 
       <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3"> 
         <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden"> 
@@ -700,37 +796,6 @@ document.addEventListener("keydown", function (e) {
   }
 });
 </script>
-
-    
-  <!-- Promo modal -->
-  <div id="promoModal" class="fixed inset-0 hidden items-center justify-center bg-black/40 z-50">
-    <div class="bg-white rounded-2xl p-4 w-11/12 max-w-sm">
-      <div class="flex justify-between items-center">
-        <h3 class="text-lg font-semibold">Добавить промокод</h3>
-        <button id="promoClose" class="text-gray-500 font-bold">✕</button>
-      </div>
-      <p class="text-sm text-gray-500 mt-2">Вставьте промокод, чтобы добавить мили.</p>
-      <div class="mt-3 flex gap-2">
-        <input id="promoInput" class="flex-1 border border-gray-200 p-2 rounded-md" placeholder="PROMOCODE">
-        <button id="promoActivateBtn" class="bg-lime-400 px-3 rounded-md font-semibold">Применить</button>
-      </div>
-      <div id="promoResult" class="text-sm text-gray-600 mt-2"></div>
-    </div>
-  </div>
-
-  <!-- Info modal -->
-  <div id="infoModal" class="fixed inset-0 hidden items-center justify-center bg-black/40 z-50">
-    <div class="bg-white rounded-2xl p-4 w-11/12 max-w-sm">
-      <div class="flex justify-between items-center">
-        <h3 id="infoTitle" class="text-lg font-semibold">Заголовок</h3>
-        <button id="infoClose" class="text-gray-500 font-bold">✕</button>
-      </div>
-      <div id="infoBody" class="text-sm text-gray-600 mt-2">Контент...</div>
-      <div class="mt-4 flex justify-end">
-        <button id="infoOk" class="px-4 py-2 bg-lime-400 rounded-md text-white font-semibold">ОК</button>
-      </div>
-    </div>
-  </div>
 
 <!-- Пробел между слайдером и акциями -->
     <div class="h-10"></div>
