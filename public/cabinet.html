@@ -60,7 +60,7 @@
     <!-- grid with small cards (two columns) -->
      <div class="grid grid-cols-2 gap-3">
 <!-- ======= Priority card (клик открывает modal) ======= -->
-<div class="bg-white card-radius p-4 shadow-sm cursor-pointer open-loyalty-modal">
+<div class="bg-white card-radius p-4 shadow-sm cursor-pointer open-accrual-modal cursor-pointer">
   <div class="flex items-start justify-between">
     <div>
       <div class="flex items-center gap-2">
@@ -164,7 +164,7 @@
 </div>
 
  <!-- small control card -->
-<div class="bg-white card-radius p-4 shadow-sm relative cursor-pointer open-modal mt-3" data-modal="open-loyalty-modal">
+<div class="bg-white card-radius p-4 shadow-sm relative open-accrual-modal cursor-pointer mt-3" data-modal="open-loyalty-modal">
   <div class="text-sm text-[#8b94a3]">Управлять</div>
   <div class="text-sm font-semibold mt-2">милиями</div>
 
@@ -178,7 +178,7 @@
 </div>
 
 <!-- ====== Loyalty Modal (вставь один раз перед </body>) ====== -->
-<div id="loyaltyModal" class="fixed inset-0 hidden z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center" aria-hidden="true" role="dialog">
+<div id="open-accrual-modal cursor-pointer" class="fixed inset-0 hidden z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center" aria-hidden="true" role="dialog">
   <div class="bg-white w-11/12 max-w-md p-6 rounded-2xl relative flex flex-col items-center">
     <button id="closeLoyaltyModal" class="absolute top-4 right-4 text-gray-500 text-2xl" aria-label="Закрыть">✕</button>
 
