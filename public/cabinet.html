@@ -613,25 +613,110 @@
 
   </div>
 </div>
-    <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-settings">
-  <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
-    <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden">
-      <img src="images/photo_5197547870482463005_x.avif" alt="plus" class="w-8 h-8 object-contain">
+    <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-settings"> 
+      <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3"> 
+        <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden"> 
+          <img src="images/photo_5197547870482463005_x.avif" alt="plus" class="w-8 h-8 object-contain">
+        </div>
+        <div class="text-sm">Настройки</div>
+      </div>
     </div>
-    <div class="text-sm">Настройки</div>
-  </div>
-</div>
-<div id="modal-settings" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center">
-  <div class="bg-white w-full h-full p-6 relative overflow-auto">
-<button id="closeLoyaltyModal" class="absolute top-4 right-4 text-gray-500 text-2xl" aria-label="Закрыть">✕</button>
+   <div id="modal-settings" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center">
+  <div class="bg-white w-full max-w-md rounded-2xl p-6 relative overflow-auto">
+    <button id="closeLoyaltyModal" class="absolute top-4 right-4 text-gray-500 text-2xl" aria-label="Закрыть">✕</button>
 
     <h2 class="text-xl font-semibold mb-4">Настройки</h2>
-    <p class="text-gray-600">
+    <p class="text-gray-600 mb-6">
       Здесь будет доступно настраивать личный кабинет
     </p>
 
+    <!-- Привязка аккаунта -->
+    <div class="mb-6">
+      <h3 class="text-lg font-medium mb-2">Привязка аккаунтов</h3>
+      <button id="linkAccountBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">
+        Привязать аккаунт
+      </button>
+
+      <div id="accountOptions" class="hidden mt-3 space-y-2">
+        <button class="bg-[#4C75A3] text-white px-4 py-2 w-full rounded-md" data-service="vk">
+          ВКонтакте
+        </button>
+        <button class="bg-[#0088cc] text-white px-4 py-2 w-full rounded-md" data-service="telegram">
+          Telegram
+        </button>
+      </div>
+
+      <div id="linkedAccount" class="mt-3 text-sm text-gray-700 hidden">
+        Привязан: <span id="accountName"></span>
+      </div>
+    </div>
+
+    <!-- Кнопка выхода -->
+    <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md">
+      Выйти
+    </button>
   </div>
 </div>
+<script>
+document.querySelector('.open-partner-modal').addEventListener('click', () => {
+  document.getElementById('modal-settings').classList.remove('hidden');
+});
+
+document.getElementById('closeLoyaltyModal').addEventListener('click', () => {
+  document.getElementById('modal-settings').classList.add('hidden');
+});
+
+const linkBtn = document.getElementById('linkAccountBtn');
+const options = document.getElementById('accountOptions');
+const linked = document.getElementById('linkedAccount');
+const nameSpan = document.getElementById('accountName');
+
+// открыть выбор сервисов
+linkBtn.addEventListener('click', () => {
+  options.classList.toggle('hidden');
+});
+
+// выбор сервиса
+document.querySelectorAll('#accountOptions button').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const service = btn.dataset.service;
+
+    // здесь должен быть вызов реальной OAuth авторизации
+    // пример (фиктивный):
+    const fakeUser = {
+      vk: { name: 'VK User', id: 'vk_123' },
+      telegram: { name: 'TG User', id: 'tg_123' }
+    }[service];
+
+    // сохраняем в localStorage (для демонстрации)
+    localStorage.setItem('linkedAccount', JSON.stringify(fakeUser));
+
+    nameSpan.textContent = `${fakeUser.name} (${service})`;
+    linked.classList.remove('hidden');
+    options.classList.add('hidden');
+    linkBtn.textContent = 'Аккаунт привязан ✅';
+  });
+});
+
+// загрузка сохранённого аккаунта
+window.addEventListener('load', () => {
+  const saved = JSON.parse(localStorage.getItem('linkedAccount'));
+  if (saved) {
+    nameSpan.textContent = `${saved.name}`;
+    linked.classList.remove('hidden');
+    linkBtn.textContent = 'Аккаунт привязан ✅';
+  }
+});
+
+// выход
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  localStorage.removeItem('linkedAccount');
+  // тут можно вызвать endpoint /logout
+  alert('Вы вышли. Необходимо авторизоваться заново.');
+  window.location.href = '/login'; // пример
+});
+</script>
+
   <!-- Promo modal -->
   <div id="promoModal" class="fixed inset-0 hidden items-center justify-center bg-black/40 z-50">
     <div class="bg-white rounded-2xl p-4 w-11/12 max-w-sm">
@@ -663,59 +748,45 @@
   </div>
 
 <script>
-(function(){
-  // открытие — по кнопкам data-open
-  document.querySelectorAll('[data-open]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const id = btn.getAttribute('data-open');
-      const modal = document.getElementById(id);
-      if (!modal) return;
+document.addEventListener('click', function (e) {
+
+  // Открытие модала
+  const openBtn = e.target.closest('[data-modal-open]');
+  if (openBtn) {
+    const modalName = openBtn.dataset.modalOpen;
+    const modal = document.querySelector(`[data-modal="${modalName}"]`);
+    if (modal) {
       modal.classList.remove('hidden');
-      modal.setAttribute('aria-hidden','false');
       document.body.classList.add('overflow-hidden');
-      // фокусируемся на первом фокусируемом элементе
-      modal.querySelector('[data-close], a, button, input, [tabindex]')?.focus?.();
+    }
+  }
+
+  // Закрытие по кнопке / крестику
+  if (e.target.closest('[data-modal-close]')) {
+    const modal = e.target.closest('[data-modal]');
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+  }
+
+  // Клик по фону
+  const modalOverlay = e.target.matches('[data-modal]');
+  if (modalOverlay) {
+    e.target.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
+});
+
+// Закрытие по Esc
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('[data-modal]:not(.hidden)').forEach(modal => {
+      modal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
     });
-  });
-
-  // делегируем закрытие по кнопке с data-close
-  document.addEventListener('click', (e) => {
-    const closeBtn = e.target.closest('[data-close]');
-    if (closeBtn) {
-      const modal = closeBtn.closest('[id]');
-      // ищем ближайший родительский модал (с id)
-      const modalEl = closeBtn.closest('[id]') || document.getElementById('modal-partners');
-      // лучше искать контейнер с классом overlay:
-      const overlay = closeBtn.closest('.fixed.inset-0') || document.getElementById('modal-partners');
-      if (overlay) {
-        overlay.classList.add('hidden');
-        overlay.setAttribute('aria-hidden','true');
-        document.body.classList.remove('overflow-hidden');
-      }
-    }
-  });
-
-  // клик по оверлею
-  document.addEventListener('click', (e) => {
-    const overlay = e.target.closest('.fixed.inset-0');
-    if (overlay && e.target === overlay) {
-      overlay.classList.add('hidden');
-      overlay.setAttribute('aria-hidden','true');
-      document.body.classList.remove('overflow-hidden');
-    }
-  });
-
-  // Esc
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.fixed.inset-0:not(.hidden)').forEach(m => {
-        m.classList.add('hidden');
-        m.setAttribute('aria-hidden','true');
-      });
-      document.body.classList.remove('overflow-hidden');
-    }
-  });
-})();
+  }
+});
 </script>
 
 <!-- Пробел между слайдером и акциями -->
