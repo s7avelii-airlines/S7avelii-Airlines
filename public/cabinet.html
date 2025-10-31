@@ -587,13 +587,13 @@
       let badge = document.getElementById('s7-cart-badge');
       if (!badge) {
         // создаём, если нет
-        const headerRight = document.querySelector('header .right-menu') || document.querySelector('');
+        const headerRight = document.querySelector('') || document.querySelector('');
         const cartButton = document.createElement('button');
         cartButton.type = 'button';
         cartButton.style.cursor = 'pointer';
         cartButton.style.fontWeight = '600';
         cartButton.id = 's7-cart-open-btn';
-        cartButton.innerHTML = 'Корзина <span id="s7-cart-badge" style="display:none">0</span>';
+        cartButton.innerHTML = ' <span id="s7-cart-badge" style="display:none">0</span>';
         headerRight.appendChild(cartButton);
         badge = document.getElementById('s7-cart-badge');
       }
@@ -1477,13 +1477,51 @@ function attachAvatarUpload(){
       let data;
       try{ data=JSON.parse(txt); } catch(e){ data={ raw:txt }; }
       if(data && data.avatar){
-        const avatarUrl = data.avatar.startsWith('http') ? data.avatar : API + data.avatar;
+        // Формируем URL с параметром timestamp, чтобы сбросить кеш
+        const avatarUrl = (data.avatar.startsWith('http') ? data.avatar : API + data.avatar) + '?t=' + Date.now();
         const avatarImg = document.getElementById('avatar');
-        if(avatarImg) avatarImg.src=avatarUrl;
+        if(avatarImg) avatarImg.src = avatarUrl;
+ // Обновляем хедер и профиль
         await updateUserArea();
       } else alert('Ошибка загрузки аватара');
-    }catch(err){ console.error('avatar upload',err); alert('Ошибка сети при загрузке'); }
+    }catch(err){ 
+      console.error('avatar upload',err); 
+      alert('Ошибка сети при загрузке'); 
+    }
   });
+}
+/* ========== Update user area: avatar fix with cache-busting ========== */
+async function updateUserArea() {
+  const userArea = document.getElementById('userArea');
+  const token = getToken();
+  if (!token) {
+    if (userArea) userArea.innerHTML = `<a href="auth.html" style="color:#6dd808;border:1px solid #cfeab2;padding:6px 10px;border-radius:8px;text-decoration:none">Вход</a>`;
+    return;
+  }
+  try {
+    const user = await apiFetch('/api/profile');
+    if (!user || (!user.fio && !user.email)) { 
+      if (userArea) userArea.innerHTML = `<a href="auth.html">Вход</a>`; 
+      return; 
+    }
+    currentUser = user;
+
+    if (user.avatar) {
+      // Добавляем ?t=timestamp чтобы браузер не кешировал старую аватарку
+      const avatarUrl = (user.avatar.startsWith('http') ? user.avatar : API + user.avatar) + '?t=' + Date.now();
+      if (userArea) userArea.innerHTML = `<img src="${avatarUrl}" alt="avatar" style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover" onclick="window.location.href='cabinet.html'">`;
+      const avatarImg = document.getElementById('avatar');
+      if (avatarImg) avatarImg.src = avatarUrl;
+    } else {
+      const short = (user.fio && user.fio.split(' ')[0]) || user.email || 'Профиль';
+      if (userArea) userArea.innerHTML = `<span style="cursor:pointer;color:#2196f3;font-weight:600;" onclick="window.location.href='cabinet.html'">${escapeHtml(short)}</span>`;
+    }
+
+    loadProfile(); // render details after header
+  } catch (e) {
+    console.error('updateUserArea err', e);
+    if (userArea) userArea.innerHTML = `<a href="auth.html">Вход</a>`;
+  }
 }
 
 /* ========== Shop & Cart ========== */
