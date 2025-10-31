@@ -658,6 +658,50 @@
   </div>
 </div>
 
+<script>
+document.addEventListener("click", function (e) {
+  // Открытие модалки
+  const openBtn = e.target.closest("[data-modal]");
+  if (openBtn) {
+    const modalId = openBtn.getAttribute("data-modal");
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+    }
+  }
+
+  // Закрытие по кнопке с data-close или id="closeLoyaltyModal"
+  if (e.target.matches("[data-close], #closeLoyaltyModal")) {
+    const modal = e.target.closest(".fixed.inset-0");
+    if (modal) {
+      modal.classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+    }
+  }
+
+  // Закрытие по клику на фон
+  if (
+    e.target.classList.contains("fixed") &&
+    e.target.classList.contains("inset-0")
+  ) {
+    e.target.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+  }
+});
+
+// Закрытие по ESC
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") {
+    document.querySelectorAll(".fixed.inset-0:not(.hidden)").forEach(m => {
+      m.classList.add("hidden");
+    });
+    document.body.classList.remove("overflow-hidden");
+  }
+});
+</script>
+
+    
   <!-- Promo modal -->
   <div id="promoModal" class="fixed inset-0 hidden items-center justify-center bg-black/40 z-50">
     <div class="bg-white rounded-2xl p-4 w-11/12 max-w-sm">
@@ -687,48 +731,6 @@
       </div>
     </div>
   </div>
-
-<script>
-document.addEventListener('click', function (e) {
-
-  // Открытие модала
-  const openBtn = e.target.closest('[data-modal-open]');
-  if (openBtn) {
-    const modalName = openBtn.dataset.modalOpen;
-    const modal = document.querySelector(`[data-modal="${modalName}"]`);
-    if (modal) {
-      modal.classList.remove('hidden');
-      document.body.classList.add('overflow-hidden');
-    }
-  }
-
-  // Закрытие по кнопке / крестику
-  if (e.target.closest('[data-modal-close]')) {
-    const modal = e.target.closest('[data-modal]');
-    if (modal) {
-      modal.classList.add('hidden');
-      document.body.classList.remove('overflow-hidden');
-    }
-  }
-
-  // Клик по фону
-  const modalOverlay = e.target.matches('[data-modal]');
-  if (modalOverlay) {
-    e.target.classList.add('hidden');
-    document.body.classList.remove('overflow-hidden');
-  }
-});
-
-// Закрытие по Esc
-document.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape') {
-    document.querySelectorAll('[data-modal]:not(.hidden)').forEach(modal => {
-      modal.classList.add('hidden');
-      document.body.classList.remove('overflow-hidden');
-    });
-  }
-});
-</script>
 
 <!-- Пробел между слайдером и акциями -->
     <div class="h-10"></div>
