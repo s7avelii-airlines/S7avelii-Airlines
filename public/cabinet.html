@@ -138,7 +138,7 @@
 </div>
 
  <!-- small control card -->
-<div class="bg-white card-radius p-4 shadow-sm relative cursor-pointer open-modal mt-3" data-modal="loyalty-modal">
+<div class="bg-white card-radius p-4 shadow-sm relative cursor-pointer open-modal mt-3" data-modal="open-loyalty-modal">
   <div class="text-sm text-[#8b94a3]">Управлять</div>
   <div class="text-sm font-semibold mt-2">милиями</div>
 
@@ -651,7 +651,7 @@
 </div>
 
 <script>
-  // === Заранее заготовленные промокоды ===
+  // Заранее заготовленные промокоды
   const promoList = {
     100: ["100A9X", "100B4F", "100C8L", "100D7P"],
     300: ["300K7M", "300Z9P", "300G2H", "300T1V"],
@@ -659,59 +659,36 @@
     1000: ["1000L1F", "1000M9C", "1000R5X", "1000Z3B"]
   };
 
-  // === Открытие и закрытие модалки по кнопке ===
+  // Модалка и кнопки
   const modal = document.getElementById('modal-buy-miles');
-  document.querySelectorAll('.open-partner-modal').forEach(button => {
-    button.addEventListener('click', () => {
-      modal.classList.remove('hidden');
-    });
-  });
+  const closeBtn = document.getElementById('closeLoyaltyModal');
+  const buyBtn = document.getElementById('buyMiles');
+  const promoBox = document.getElementById('promoCode');
 
-  document.getElementById('closeLoyaltyModal').addEventListener('click', () => {
-    modal.classList.add('hidden');
-  });
-
-  // === Клик по кнопке оплаты ===
-  document.getElementById('buyMiles').addEventListener('click', () => {
-    const selected = document.querySelector('input[name="miles"]:checked');
-    if (!selected) return alert('Пожалуйста, выберите пакет миль.');
-
-    const link = selected.dataset.link;
-    window.location.href = link; // переход на оплату Т-Банка
-  });
-
-  // === Получение уникального промокода ===
+  // Выдача уникального промокода
   function getPromo(miles) {
     const used = JSON.parse(localStorage.getItem('usedPromos') || '{}');
-
-    if (!promoList[miles] || promoList[miles].length === 0) {
-      return "Нет доступных промокодов для этого пакета.";
-    }
-
     const available = promoList[miles].filter(code => !(used[miles]?.includes(code)));
 
-    if (available.length === 0) {
-      return "Все промокоды для этого пакета уже выданы.";
-    }
+    if (available.length === 0) return "Все промокоды выданы.";
 
     const promo = available[0];
     used[miles] = used[miles] ? [...used[miles], promo] : [promo];
     localStorage.setItem('usedPromos', JSON.stringify(used));
-
     return promo;
   }
 
-  // === Функция для показа промокода вручную ===
+  // Функция для показа промокода (по кнопке)
   function showPromoForMiles(miles) {
     const promo = getPromo(miles);
-    const promoBox = document.getElementById('promoCode');
-    promoBox.innerHTML = `
-      <strong>Ваш промокод на ${miles} миль:</strong> <span class="font-mono text-lg">${promo}</span>
-    `;
+    promoBox.innerHTML = `<strong>Ваш промокод на ${miles} миль:</strong> <span class="font-mono">${promo}</span>`;
     promoBox.classList.remove('hidden');
   }
 
+  // Для примера: можно добавить отдельную кнопку в модалке
+  // <button onclick="showPromoForMiles(100)">Показать промокод</button>
 </script>
+
 
 
     <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-settings"> 
