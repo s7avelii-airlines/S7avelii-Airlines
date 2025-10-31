@@ -567,41 +567,7 @@
     </div>
   </div>
 </div>
-
-<script>
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
-const modal = document.getElementById('modal-partners');
-const cartItems = document.getElementById('cartItems');
-const cartTotal = document.getElementById('cartTotal');
-
-function openCart(){ renderCart(); modal.classList.remove('hidden'); }
-function closeCart(){ modal.classList.add('hidden'); }
-
-function renderCart(){
-  cartItems.innerHTML = '';
-  let total = 0;
-  cart.forEach(item=>{
-    total += item.price*item.qty;
-    cartItems.innerHTML += `
-      <div class="flex justify-between items-center border-b pb-2">
-        <span>${item.title} (x${item.qty})</span>
-        <span>${item.price * item.qty} ₽</span>
-      </div>`;
-  });
-  cartTotal.textContent = total + ' ₽';
-  localStorage.setItem('cart', JSON.stringify(cart));
-}
-
-document.getElementById('clearCart').onclick = ()=>{
-  cart = []; renderCart();
-};
-
-modal.querySelector('[data-close]').onclick = closeCart;
-modal.onclick = e => { if(e.target === modal) closeCart(); }
-</script>
-
-
-    
+   
 <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-partners">
   <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
     <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden">
