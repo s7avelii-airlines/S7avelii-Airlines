@@ -99,16 +99,6 @@
 
     <!-- Close button -->
     <button id="closeAccrualModal" class="absolute top-4 right-4 text-gray-500 text-xl">✕</button>
-<!-- Card image -->
-    <img id="loyaltyCardImage" src="" alt="loyalty card" class="w-64 mb-4 rounded-xl shadow-lg object-cover" />
-
-    <!-- QR -->
-    <div class="bg-white p-3 rounded-xl border border-gray-200 shadow mb-3">
-      <img id="qrImage" src="" alt="QR code" class="w-56 h-56" />
-    </div>
-
-    <!-- status -->
-    <div id="statusText" class="text-center text-gray-700 font-semibold mb-3">Загрузка...</div>
 
   </div>
 </div>
@@ -128,7 +118,7 @@
 
   // Закрытие кликом по фону
   document.getElementById("modal-accrual").addEventListener("click", (e) => {
-    if (e.target.id === "modal-accrual") {
+     if (e.target.id === "modal-accrual") {
       document.getElementById("modal-accrual").classList.add("hidden");
     }
   });
