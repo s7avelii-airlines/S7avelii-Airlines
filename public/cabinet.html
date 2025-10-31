@@ -563,11 +563,91 @@
 
     <div class="mt-5 flex gap-3">
       <button id="clearCart" class="w-1/2 bg-red-500 text-white py-2 rounded-lg">Очистить</button>
-      <a id="checkoutBtn" href="shop-checkout.html" class="w-1/2 text-center bg-green-600 text-white py-2 rounded-lg">Оформить</a>
+      <a id="checkoutBtn" href="https://t.me/s7aveliishop" class="w-1/2 text-center bg-green-600 text-white py-2 rounded-lg">Оформить</a>
     </div>
   </div>
 </div>
-   
+
+<!-- ===== S7avelii Cart (без открытия/закрытия модалки) ===== -->
+<script>
+(function(){
+  document.addEventListener('DOMContentLoaded', () => {
+
+    const STORAGE_KEY = 's7_cart_v1';
+
+    function loadCart() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } 
+      catch (e) { return []; }
+    }
+    function saveCart(cart) { localStorage.setItem(STORAGE_KEY, JSON.stringify(cart)); updateBadge(); }
+
+    function updateBadge() {
+      const cart = loadCart();
+      const qty = cart.reduce((s,i)=> s + (i.qty||0), 0);
+      let badge = document.getElementById('s7-cart-badge');
+      if (!badge) {
+        // создаём, если нет
+        const headerRight = document.querySelector('header .right-menu') || document.querySelector('header');
+        const cartButton = document.createElement('button');
+        cartButton.type = 'button';
+        cartButton.style.cursor = 'pointer';
+        cartButton.style.fontWeight = '600';
+        cartButton.id = 's7-cart-open-btn';
+        cartButton.innerHTML = 'Корзина <span id="s7-cart-badge" style="display:none">0</span>';
+        headerRight.appendChild(cartButton);
+        badge = document.getElementById('s7-cart-badge');
+      }
+      if (qty > 0) { badge.style.display = 'inline-block'; badge.textContent = qty; }
+      else { badge.style.display = 'none'; badge.textContent = ''; }
+    }
+
+    function formatPrice(n){ return Number(n).toLocaleString('ru-RU') + ' ₽'; }
+
+    function renderCart() {
+      const cart = loadCart();
+      let total = cart.reduce((sum,i)=> sum + (i.price||0)*(i.qty||0),0);
+      console.log('Корзина:', cart, 'Итого:', formatPrice(total));
+    }
+
+    // --- API корзины ---
+    const S7Cart = {
+      addItem(item) {
+        // item: { id, title, price, image, qty }
+        const cart = loadCart();
+        const idx = cart.findIndex(i => String(i.id) === String(item.id));
+        if (idx >= 0) cart[idx].qty = (Number(cart[idx].qty)||0) + (Number(item.qty)||1);
+        else cart.push(Object.assign({ qty: 1 }, item));
+        saveCart(cart);
+        renderCart(); // вывод в консоль
+      },
+      changeQty(index, delta) {
+        const cart = loadCart();
+        if (!cart[index]) return;
+        cart[index].qty = Math.max(0, (Number(cart[index].qty)||0)+delta);
+        if (cart[index].qty<=0) cart.splice(index,1);
+        saveCart(cart);
+        renderCart();
+      },
+      removeItem(index) {
+        const cart = loadCart();
+        cart.splice(index,1);
+        saveCart(cart);
+        renderCart();
+      },
+      clear() { saveCart([]); renderCart(); },
+      getCart() { return loadCart(); }
+    };
+
+    window.S7Cart = window.S7Cart || S7Cart;
+
+    // --- Инициализация ---
+    updateBadge();
+    renderCart();
+  });
+})();
+</script>
+
+    
 <div class="mt-4 card-radius overflow-hidden bg-transparent cursor-pointer open-partner-modal" data-modal="modal-partners">
   <div class="bg-white p-3 border-b border-gray-100 flex items-center gap-3">
     <div class="w-10 h-10 rounded-md bg-[#f3f7f4] flex items-center justify-center overflow-hidden">
@@ -1168,12 +1248,11 @@ document.addEventListener("DOMContentLoaded", () => {
 <nav class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur border-t border-gray-200 shadow z-50">
   <div class="flex justify-around py-2">
     <!-- Главная -->
-     <!-- Профиль -->
     <a href="auth.html" class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9.75L12 3l9 6.75V21a.75.75 0 01-.75.75H3.75A.75.75 0 013 21V9.75z"/>
       </svg>
-      Профиль
+      Главная
     </a>
     <!-- Путешествия -->
     <a href="priority.html" class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600">
