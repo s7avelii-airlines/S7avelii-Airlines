@@ -657,65 +657,6 @@
     </button>
   </div>
 </div>
-<script>
-document.querySelector('.open-partner-modal').addEventListener('click', () => {
-  document.getElementById('modal-settings').classList.remove('hidden');
-});
-
-document.getElementById('closeLoyaltyModal').addEventListener('click', () => {
-  document.getElementById('modal-settings').classList.add('hidden');
-});
-
-const linkBtn = document.getElementById('linkAccountBtn');
-const options = document.getElementById('accountOptions');
-const linked = document.getElementById('linkedAccount');
-const nameSpan = document.getElementById('accountName');
-
-// открыть выбор сервисов
-linkBtn.addEventListener('click', () => {
-  options.classList.toggle('hidden');
-});
-
-// выбор сервиса
-document.querySelectorAll('#accountOptions button').forEach(btn => {
-  btn.addEventListener('click', async () => {
-    const service = btn.dataset.service;
-
-    // здесь должен быть вызов реальной OAuth авторизации
-    // пример (фиктивный):
-    const fakeUser = {
-      vk: { name: 'VK User', id: 'vk_123' },
-      telegram: { name: 'TG User', id: 'tg_123' }
-    }[service];
-
-    // сохраняем в localStorage (для демонстрации)
-    localStorage.setItem('linkedAccount', JSON.stringify(fakeUser));
-
-    nameSpan.textContent = `${fakeUser.name} (${service})`;
-    linked.classList.remove('hidden');
-    options.classList.add('hidden');
-    linkBtn.textContent = 'Аккаунт привязан ✅';
-  });
-});
-
-// загрузка сохранённого аккаунта
-window.addEventListener('load', () => {
-  const saved = JSON.parse(localStorage.getItem('linkedAccount'));
-  if (saved) {
-    nameSpan.textContent = `${saved.name}`;
-    linked.classList.remove('hidden');
-    linkBtn.textContent = 'Аккаунт привязан ✅';
-  }
-});
-
-// выход
-document.getElementById('logoutBtn').addEventListener('click', () => {
-  localStorage.removeItem('linkedAccount');
-  // тут можно вызвать endpoint /logout
-  alert('Вы вышли. Необходимо авторизоваться заново.');
-  window.location.href = '/login'; // пример
-});
-</script>
 
   <!-- Promo modal -->
   <div id="promoModal" class="fixed inset-0 hidden items-center justify-center bg-black/40 z-50">
