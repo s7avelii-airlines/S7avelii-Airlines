@@ -1,802 +1,143 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>S7avelii Shop</title>
-<style>
-  body { font-family: Arial, sans-serif; margin:0; padding:20px; background:#f5f5f5; }
-  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:20px; }
-  .card { background:#fff; border-radius:12px; padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); display:flex; flex-direction:column; }
-  .thumb img { width:100%; height:200px; object-fit:contain; border-radius:12px; }
-  .title { font-weight:600; margin:8px 0; min-height:40px; }
-  .price { font-weight:700; margin-bottom:8px; }
-  .btn { padding:8px 12px; border:none; border-radius:8px; cursor:pointer; font-weight:600; margin-top:auto; }
-  .btn-buy { background:#4caf50; color:#fff; margin-bottom:6px; }
-  .btn-cart { background:#ff9800; color:#fff; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> S7avelii Shop </title>
+  <script src="https://cdn.tailwindcss.com/4.0.0"></script>
 </head>
+<body class="bg-white text-gray-900 font-sans">
 
-<header>
-  <div class="logo">
-    <a href="index.html">
-      <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
-    </a>
-  </div>
+  <!-- Header -->
+  <header class="border-b bg-white sticky top-0 z-20">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
+      <div class="flex items-center space-x-2">
+        <img src="images/1761835463057.avif" alt="Logo" class="h-8">
+        <span class="text-xl font-semibold">avelii Shop</span>
+      </div>
+      <div class="flex items-center space-x-6">
+        <a href="index.html" class="text-gray-700 hover:text-lime-600">Каталог</a>
+        <a href="#" class="text-gray-700 hover:text-lime-600">Наши товары</a>
+        <button id="cart-btn" class="relative">
+          🛒
+          <span id="cart-count" class="absolute -top-2 -right-2 bg-lime-500 text-white text-xs rounded-full px-1">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
 
-  <!-- Кнопка-бургер -->
-  <button class="burger" aria-label="Открыть меню">
-    <span></span><span></span><span></span>
-  </button>
-
-  <!-- Главное меню -->
-  <nav class="nav">
-    <ul>
-      <li>
-        <a href="index.html">Покупка и управление</a>
-        <div class="dropdown">
-          <a href="bilet.html">Купить билет</a>
-          <a href="auth.html">Управление бронированием</a>
-          <a href="arrivel.html">Направления</a>
-          <a href="HOTEL.html">Отели</a>
-          <a href="class.html">Выбор класса</a>
-        </div>
-      </li>
-      <li>
-        <a href="priority.html">S7avelii Priority</a>
-        <div class="dropdown">
-          <a href="priority.html">О программе</a>
-          <a href="https://t.me/s7aveliihelper">Как копить</a>
-        </div>
-      </li>
-      <li>
-        <a href="#">Информация</a>
-        <div class="dropdown">
-          <a href="body.html">О нас</a>
-          <a href="office.html">Представительство</a>
-          <a href="plane.html">Наш флот</a>
-          <a href="eat.html">Питание</a>
-          <a href="https://t.me/s7aveliihelper">Контакты</a>
-        </div>
-      </li>
-      <li><a href="busines.html">Бизнесу</a></li>
-      <li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
-    </ul>
+  <!-- Breadcrumb -->
+  <nav class="max-w-7xl mx-auto px-4 py-3 text-sm text-gray-500">
+    Главная / Товары S7avelii Airlines
   </nav>
 
-  <div class="right-menu">
-    <button aria-label="Search">
-      <svg class="icon-search" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle cx="11" cy="11" r="7"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
-    </button>
-    <button>RUB</button>
-    <div class="flag" title="Russian flag">
-      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" />
+  <!-- Title -->
+  <section class="max-w-7xl mx-auto px-4 py-4">
+    <h1 class="text-3xl font-bold mb-6">Сувениры</h1>
+
+    <div class="flex flex-col lg:flex-row gap-8">
+
+      <!-- Sidebar filters -->
+      <aside class="lg:w-1/4 space-y-6">
+        <div>
+          <h3 class="font-semibold mb-2">Цена товара</h3>
+          <div class="flex space-x-2">
+            <input type="number" placeholder="от 500" class="border rounded-lg w-1/2 p-2 text-sm">
+            <input type="number" placeholder="до 3700" class="border rounded-lg w-1/2 p-2 text-sm">
+          </div>
+        </div>
+
+        <div>
+          <h3 class="font-semibold mb-2">Изготовлен в</h3>
+          <label class="flex items-center space-x-2"><input type="checkbox"> <span>Россия</span></label>
+          <label class="flex items-center space-x-2"><input type="checkbox"> <span>Китай</span></label>
+        </div>
+      </aside>
+
+      <!-- Products -->
+      <main class="lg:w-3/4">
+        <div class="flex justify-between items-center mb-4">
+          <span class="text-gray-600 text-sm">5 товаров</span>
+          <select class="border rounded-lg p-2 text-sm">
+            <option>Популярные</option>
+            <option>Сначала дешевые</option>
+            <option>Сначала дорогие</option>
+          </select>
+        </div>
+
+        <div id="products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+      </main>
     </div>
-    <div id="userArea"></div>
-  </div>
-</header>
+  </section>
+
+  <script>
+    // --- CART API (используем твою реализацию) ---
+    const loadCart = () => JSON.parse(localStorage.getItem('cart') || '[]');
+    const saveCart = cart => localStorage.setItem('cart', JSON.stringify(cart));
+    const renderCart = () => {
+      const cart = loadCart();
+      document.querySelector('#cart-count').textContent = cart.reduce((a,c)=>a+c.qty,0);
+      console.log('Cart:', cart);
+    };
+
+    const S7Cart = {
+      addItem(item) {
+        const cart = loadCart();
+        const idx = cart.findIndex(i => String(i.id) === String(item.id));
+        if (idx >= 0) cart[idx].qty = (Number(cart[idx].qty)||0) + (Number(item.qty)||1);
+        else cart.push(Object.assign({ qty: 1 }, item));
+        saveCart(cart);
+        renderCart();
+      },
+      changeQty(index, delta) {
+        const cart = loadCart();
+        if (!cart[index]) return;
+        cart[index].qty = Math.max(0, (Number(cart[index].qty)||0)+delta);
+        if (cart[index].qty<=0) cart.splice(index,1);
+        saveCart(cart);
+        renderCart();
+      },
+      removeItem(index) {
+        const cart = loadCart();
+        cart.splice(index,1);
+        saveCart(cart);
+        renderCart();
+      },
+      clear() { saveCart([]); renderCart(); },
+      getCart() { return loadCart(); }
+    };
+
+    // --- PRODUCTS ---
+    const products = [
+      { id: 1, title: 'Ремувка «100-летие гражданской авиации»', price: 750, image: 'img1.jpg' },
+      { id: 2, title: 'Ремувка, Серый', price: 650, image: 'img2.jpg' },
+      { id: 3, title: 'Брелок из авиационного металла', price: 3700, image: 'img3.jpg' },
+      { id: 4, title: 'Ежедневник недатированный «Записи»', price: 1900, image: 'img4.jpg' },
+    ];
+
+    const renderProducts = () => {
+      const grid = document.querySelector('#products');
+      grid.innerHTML = products.map(p => `
+        <div class="border rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition">
+          <img src="${p.image}" alt="${p.title}" class="w-full h-48 object-cover">
+          <div class="p-4 flex flex-col h-full justify-between">
+            <div>
+              <p class="text-lg font-semibold mb-1">${p.price} ₽</p>
+              <p class="text-sm text-gray-700 mb-2">${p.title}</p>
+            </div>
+            <button 
+              onclick='S7Cart.addItem(${JSON.stringify(p)})' 
+              class="bg-lime-600 text-white rounded-xl py-2 mt-auto hover:bg-lime-700 transition">
+              В корзину
+            </button>
+          </div>
+        </div>
+      `).join('');
+    };
+
+    renderProducts();
+    renderCart();
+  </script>
 
-<style>
-/* === БАЗОВЫЙ СТИЛЬ ДЛЯ ПК === */
-header {
-  display: flex;
-  align-items: center;
-  padding: 0 60px;
-  height: 80px;
-  border-bottom: 1px solid #ccc;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  background: #fff;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
-
-.logo-img {
-  height: 70px;
-  width: auto;
-  cursor: pointer;
-}
-
-nav {
-  display: flex;
-  flex-grow: 1;
-  justify-content: center;
-}
-
-nav ul {
-  display: flex;
-  gap: 40px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-nav li {
-  position: relative;
-}
-
-nav a {
-  color: #000;
-  text-decoration: none;
-  font-size: 16px;
-  padding: 28px 0;
-  position: relative;
-}
-
-nav a::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 3px;
-  background-color: #b3c900;
-  transition: width 0.3s ease;
-}
-nav li:hover > a::after {
-  width: 100%;
-}
-
-.dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #fff;
-  padding: 20px;
-  border-top: 2px solid #b3c900;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-  min-width: 240px;
-  z-index: 999;
-  opacity: 0;
-  transform: translateY(-10px);
-  pointer-events: none;
-  transition: all 0.3s ease;
-}
-nav li:hover .dropdown {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-.dropdown a {
-  display: block;
-  padding: 8px 0;
-  color: #000;
-  font-size: 14px;
-}
-.dropdown a:hover {
-  color: #b3c900;
-}
-
-.right-menu {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  font-size: 16px;
-}
-.right-menu button,
-.right-menu select {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-}
-.flag {
-  width: 20px;
-  height: 14px;
-  border-radius: 2px;
-  overflow: hidden;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
-}
-.flag img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-#userArea a {
-  padding: 8px 14px;
-  border: 1px solid #7ad30d;
-  border-radius: 6px;
-  color: #6dd808;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-/* === КНОПКА-БУРГЕР === */
-.burger {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  width: 28px;
-  height: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  gap: 4px;
-  z-index: 1001;
-}
-.burger span {
-  display: block;
-  height: 3px;
-  background: #000;
-  border-radius: 2px;
-  transition: 0.3s;
-}
-
-/* === МЕДИА (адаптация под мобилки) === */
-@media (max-width: 992px) {
-  header {
-    padding: 0 20px;
-  }
-
-  nav ul {
-    gap: 24px;
-  }
-}
-
-@media (max-width: 768px) {
-  .burger {
-    display: flex;
-  }
-
-  nav {
-    position: fixed;
-    top: 80px;
-    left: 0;
-    right: 0;
-    background: white;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 20px 30px;
-    border-top: 1px solid #eee;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    transform: translateY(-120%);
-    transition: transform 0.3s ease;
-  }
-
-  nav.open {
-    transform: translateY(0);
-  }
-
-  nav ul {
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-  }
-
-  .dropdown {
-    position: static;
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    display: none;
-  }
-
-  nav li:hover .dropdown {
-    display: block;
-  }
-
-  .right-menu {
-    display: none;
-  }
-
-  /* Анимация крестика */
-  .burger.active span:nth-child(1) {
-    transform: rotate(45deg) translateY(8px);
-  }
-  .burger.active span:nth-child(2) {
-    opacity: 0;
-  }
-  .burger.active span:nth-child(3) {
-    transform: rotate(-45deg) translateY(-8px);
-  }
-}
-</style>
-
-<script>
-  // --- Бургер-меню ---
-  const burger = document.querySelector(".burger");
-  const nav = document.querySelector("nav");
-
-  burger.addEventListener("click", () => {
-    burger.classList.toggle("active");
-    nav.classList.toggle("open");
-  });
-
-const API = 'https://s7avelii-airlines-1.onrender.com';
-const userArea = document.getElementById("userArea");
-
-async function updateUserArea() {
-  const token = localStorage.getItem('token');
-
-  if (!token) {
-    userArea.innerHTML = `<a href="auth.html" style="color:#2196f3;font-weight:600">Вход</a>`;
-    return;
-  }
-
-  try {
-    const res = await fetch(`${API}/api/profile`, {
-      headers: { 'Authorization': 'Bearer ' + token }
-    });
-
-    if (!res.ok) throw new Error('Unauthorized');
-    const data = await res.json();
-    const user = data.user || data;
-
-    userArea.innerHTML = '';
-
-    if (user.avatar) {
-      const img = document.createElement('img');
-      img.src = user.avatar.startsWith('http') ? user.avatar : API + user.avatar;
-      img.alt = user.fio || user.email || "User";
-      img.style.width = '36px';
-      img.style.height = '36px';
-      img.style.borderRadius = '50%';
-      img.style.objectFit = 'cover';
-      img.style.cursor = 'pointer';
-      img.addEventListener('click', () => window.location.href='cabinet.html');
-      userArea.appendChild(img);
-    } else {
-      const span = document.createElement('span');
-      span.textContent = user.fio ? user.fio.split(' ')[0] : user.email;
-      span.style.cursor = 'pointer';
-      span.style.color = '#2196f3';
-      span.style.fontWeight = '500';
-      span.addEventListener('click', () => window.location.href='cabinet.html');
-      userArea.appendChild(span);
-    }
-  } catch (err) {
-    console.warn(err);
-    localStorage.removeItem('token');
-    userArea.innerHTML = `<a href="auth.html" style="color:#2196f3;font-weight:600">Вход</a>`;
-  }
-}
-
-window.addEventListener('DOMContentLoaded', updateUserArea);
-</script>
-  
-<body>
-
-<h1>S7avelii Shop</h1>
-<div class="grid" id="productGrid"></div>
-
-<script>
-// === СПИСОК ТОВАРОВ ===
-const products = [
-  { id: '1', title:'Блокнот S7avelii Airlines', price: 550, image:'images/photo_5330078908990750485_y.avif', buyLink:'https://t.me/s7aveliishop' },
-  { id: '2', title:'Комбо Блокнот + Футболка', price: 2350, image:'images/photo_5330078908990750484_y.avif', buyLink:'https://t.me/s7aveliishop' },
-  { id: '3', title:'Фирменная футболка S7avelii Airlines', price: 1900, image:'images/photo_5332515869139530693_y.avif', buyLink:'https://t.me/s7aveliishop' },
-  { id: '4', title:'Комбо Путешественник', price: 4500, image:'images/photo_5330078908990750483_y.avif', buyLink:'https://t.me/s7aveliishop' }
-];
-
-const grid = document.getElementById('productGrid');
-
-// === ГЕНЕРАЦИЯ ТОВАРОВ ===
-products.forEach(p => {
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.innerHTML = `
-    <div class="thumb"><img src="${p.image}" alt="${p.title}"></div>
-    <div class="title">${p.title}</div>
-    <div class="price">${p.price.toLocaleString('ru-RU')} ₽</div>
-    <button class="btn btn-buy" onclick="buyProduct('${p.buyLink}')">Купить</button>
-    <button class="btn btn-cart" onclick="addToCart('${p.id}','${p.title}',${p.price},'${p.image}')">В корзину</button>
-  `;
-  grid.appendChild(card);
-});
-
-// === ФУНКЦИЯ "КУПИТЬ" ===
-function buyProduct(link){
-  window.open(link,'_blank');
-}
-
-// === КОРЗИНА ===
-function getCart() {
-  return JSON.parse(localStorage.getItem('cart') || '[]');
-}
-
-function saveCart(cart) {
-  localStorage.setItem('cart', JSON.stringify(cart));
-}
-
-// === ДОБАВИТЬ В КОРЗИНУ ===
-function addToCart(id, title, price, image) {
-  let cart = getCart();
-  const existing = cart.find(item => item.id === id);
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({ id, title, price, image, qty: 1 });
-  }
-  saveCart(cart);
-  alert('✅ Товар добавлен в корзину!');
-}
-
-// === ПРОВЕРКА КОРЗИНЫ ===
-console.log('Cart loaded:', getCart());
-</script>
-
-
-<footer class="footer">
-  <div class="footer-inner">
-    <!-- Верхнее меню -->
-    <div class="footer-menu fade-in">
-      <div class="footer-column">
-        <h3>S7avelii Airlines</h3>
-        <ul>
-          <li><a href="body.html">О компании</a></li>
-          <li><a href="https://t.me/s7aveliihelper">Партнеры</a></li>
-          <li><a href="https://t.me/s7aveliihelper">Контакты</a></li>
-          <li><a href="#">Вакансии</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <ul>
-          <li><a href="office.html">Офисы продаж и представительства</a></li>
-          <li><a href="https://t.me/S7saveliiairlines">Новости</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <h3>Информация</h3>
-        <ul>
-          <li><a href="arrivel.html">Направления</a></li>
-          <li><a href="bilet.html">Рейсы</a></li>
-          <li><a href="https://t.me/s7aveliihelper">Справочный центр</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <ul>
-          <li><a href="https://t.me/s7aveliihelper">Перевозка грузов</a></li>
-          <li><a href="plane.html">Наш флот</a></li>
-          <li><a href="mailto:s7avelii_airlines@mail.ru">Подать заявление на партнёрство</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <hr>
-
-    <!-- Верх футера -->
-    <div class="footer-top fade-in">
-      <div class="footer-actions">
-        <a href="https://t.me/s7aveliihelper" class="action"><img src="icons/chat.svg" alt=""> Чат</a>
-      </div>
-      <div class="footer-phone">
-        <div class="label">тел: Бесплатно по России</div>
-        <div class="number">8 962 629–81–05</div>
-      </div>
-    </div>
-
-    <!-- Подписка -->
-    <div class="footer-subscribe fade-in">
-      <h3>Подпишитесь на рассылку S7avelii</h3>
-      <p>Будьте в курсе акций, открывайте новые маршруты</p>
-      <form class="subscribe-form">
-        <input type="email" placeholder="Ваша почта" required>
-        <button type="submit">→</button>
-      </form>
-      <label class="checkbox">
-        <input type="checkbox" required>
-        Хочу узнавать про скидки и идеи путешествий по почте и соглашаюсь на 
-        <a href="#">обработку персональных данных</a>
-      </label>
-    </div>
-
-    <!-- Низ футера -->
-    <div class="footer-bottom fade-in">
-      <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
-      <div class="socials">
-        <a href="https://vk.com/s7avelii"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
-        <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1"><img src="images/icons8-tiktok-logo-50 (1).avif" alt="TikTok"></a>
-        <a href="https://youtu.be/Dy31uUCFaWw?si=2gyqNYaT3ZVO8WJa"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
-        <a href="https://t.me/S7saveliiairlines"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<style>
-/* === Убираем горизонтальный скролл и белые полосы === */
-html, body {
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-}
-
-/* ==== FOOTER ==== */
-.footer {
-  width: 100%;
-  background: #f1f5f9;
-  padding: 40px 60px;
-  font-family: "Inter", sans-serif;
-  color: #111;
-  box-sizing: border-box;
-}
-
-/* Верхнее меню */
-.footer-menu {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 40px;
-  margin-bottom: 30px;
-}
-
-.footer-column h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-.footer-column ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footer-column ul li {
-  margin-bottom: 8px;
-}
-
-.footer-column ul li a {
-  color: #111;
-  text-decoration: none;
-  font-size: 14px;
-  transition: all 0.2s ease;
-}
-
-.footer-column ul li a:hover {
-  text-decoration: underline;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid #e2e8f0;
-  margin: 30px 0;
-  width: 100%;
-}
-
-/* Верх футера */
-.footer-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 30px;
-}
-
-.footer-actions {
-  display: flex;
-  gap: 30px;
-}
-
-.footer-actions .action {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  color: #111;
-}
-
-.footer-actions img {
-  width: 20px;
-}
-
-.footer-phone {
-  text-align: right;
-}
-
-.footer-phone .label {
-  font-size: 14px;
-  color: #555;
-}
-
-.footer-phone .number {
-  font-size: 18px;
-  font-weight: 600;
-}
-
-/* Подписка */
-.footer-subscribe {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 30px;
-  border: 1px solid #d1d5db;
-}
-
-.footer-subscribe h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.footer-subscribe p {
-  color: #555;
-  margin-bottom: 16px;
-}
-
-.subscribe-form {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.subscribe-form input {
-  flex: 1;
-  padding: 12px 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.subscribe-form button {
-  background: #9ac208;
-  border: none;
-  border-radius: 8px;
-  padding: 0 20px;
-  font-size: 20px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.subscribe-form button:hover {
-  background: #8db807;
-}
-
-.checkbox {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 10px;
-  font-size: 13px;
-  color: #333;
-}
-
-.checkbox a {
-  color: #abc70f;
-  text-decoration: underline;
-}
-
-/* Низ футера */
-.footer-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  font-size: 14px;
-  color: #555;
-}
-
-.socials {
-  display: flex;
-  gap: 12px;
-}
-
-.socials a img {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #fff;
-  padding: 6px;
-  transition: transform 0.2s ease;
-}
-
-.socials a img:hover {
-  transform: scale(1.1);
-}
-
-/* === АНИМАЦИЯ ПОЯВЛЕНИЯ === */
-.fade-in {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* === АДАПТАЦИЯ === */
-@media (max-width: 1024px) {
-  .footer {
-    padding: 30px 40px;
-  }
-  .footer-top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-  }
-  .footer-phone {
-    text-align: left;
-  }
-}
-
-@media (max-width: 768px) {
-  .footer {
-    padding: 30px 20px;
-  }
-  .footer-menu {
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-  .footer-column h3 {
-    font-size: 16px;
-  }
-  .footer-column ul li a {
-    font-size: 13px;
-  }
-  .footer-subscribe {
-    padding: 16px;
-  }
-  .subscribe-form {
-    flex-direction: column;
-  }
-  .subscribe-form button {
-    width: 100%;
-    padding: 10px;
-  }
-  .footer-bottom {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .socials {
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 480px) {
-  .footer-menu {
-    grid-template-columns: 1fr;
-  }
-  .footer-subscribe h3 {
-    font-size: 16px;
-  }
-  .footer-subscribe p {
-    font-size: 13px;
-  }
-  .footer-phone .number {
-    font-size: 16px;
-  }
-  .footer-phone .label {
-    font-size: 12px;
-  }
-  .footer-actions .action {
-    font-size: 14px;
-  }
-  .socials a img {
-    width: 28px;
-    height: 28px;
-  }
-}
-</style>
-
-<script>
-/* === Плавное появление футера при прокрутке === */
-document.addEventListener("DOMContentLoaded", () => {
-  const fadeElements = document.querySelectorAll('.fade-in');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.2 });
-  fadeElements.forEach(el => observer.observe(el));
-});
-</script>
-  
 </body>
 </html>
