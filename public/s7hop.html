@@ -1,93 +1,198 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> S7avelii Shop </title>
-  <script src="https://cdn.tailwindcss.com/4.0.0"></script>
-</head>
-<body class="bg-white text-gray-900 font-sans">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>S7avelii Shop</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;color:#1c1c1c;background:#fff}
+    a{text-decoration:none;color:inherit}
+    button{font:inherit}
 
-  <!-- Header -->
-  <header class="border-b bg-white sticky top-0 z-20">
-    <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
-      <div class="flex items-center space-x-2">
-        <img src="" alt="Logo" class="h-8">
-        <span class="text-xl font-semibold">avelii Shop</span>
-      </div>
-      <div class="flex items-center space-x-6">
-        <a href="index.html" class="text-gray-700 hover:text-lime-600">Каталог</a>
-        <a href="#" class="text-gray-700 hover:text-lime-600">Наши товары</a>
-        <button id="cart-btn" class="relative">
-          🛒
-          <span id="cart-count" class="absolute -top-2 -right-2 bg-lime-500 text-white text-xs rounded-full px-1">0</span>
+    :root{
+      --s7:#b4e600;
+      --s7-dark:#95c900;
+      --line:#e5e7eb;
+      --bg:#f6f7f9;
+      --shadow:0 1px 2px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.06);
+      --radius:14px;
+      --radius-lg:18px;
+    }
+
+    .topbar{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--line)}
+    .topbar-inner{max-width:1220px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:14px 20px;flex-wrap:wrap}
+
+    .logo{display:flex;align-items:center;gap:10px;font-weight:700}
+    .logo-img{width:36px;height:36px;border-radius:50%;object-fit:cover}
+
+    .catalog-btn{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--line);padding:10px 14px;border-radius:12px;white-space:nowrap}
+    .search{flex:1;display:flex;align-items:center;background:var(--bg);border:1px solid var(--line);padding:10px 12px;border-radius:12px;gap:10px;min-width:160px}
+    .search input{border:0;outline:0;background:transparent;width:100%}
+
+    .top-actions{display:flex;align-items:center;gap:18px;margin-left:auto;flex-wrap:wrap}
+
+    .crumbs{max-width:1220px;margin:14px auto 0;padding:0 20px;color:#6b7280;font-size:14px}
+
+    .page{max-width:1220px;margin:0 auto;padding:8px 20px 60px}
+    .page h1{font-size:42px;margin:16px 0 18px}
+
+    .content{display:grid;grid-template-columns:260px 1fr;gap:26px}
+
+    .filter{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+    .filter h3{margin:0 0 10px;font-size:16px}
+
+    .sort{display:flex;justify-content:flex-end;margin-bottom:8px}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+
+    .card{border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;background:#fff;box-shadow:var(--shadow);display:flex;flex-direction:column}
+    .thumb{background:#f9fafb;position:relative;display:grid;place-items:center;height:210px}
+    .heart{position:absolute;right:12px;top:12px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line)}
+    .card-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+    .price{font-weight:700}
+    .title{color:#1a1a1a;min-height:44px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;background:var(--s7);border:0;border-radius:12px;padding:10px 14px;font-weight:700;margin-top:auto;color:#111}
+    .btn:hover{background:var(--s7-dark);cursor:pointer}
+    .btn.small{padding:6px 10px;border-radius:10px;font-weight:600;font-size:14px}
+
+    /* cart badge */
+    .cart-btn{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;background:transparent;border:1px solid var(--line)}
+    .cart-count{position:absolute;right:-6px;top:-6px;background:var(--s7);color:#111;border-radius:50%;width:22px;height:22px;display:grid;place-items:center;font-weight:700;border:2px solid #fff}
+
+    /* modal / account panel */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;z-index:60}
+    .panel{width:920px;max-width:96%;background:#fff;border-radius:16px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;max-height:90vh}
+    .panel-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line)}
+    .panel-body{padding:16px 20px;overflow:auto}
+    .cart-item{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed #f0f0f0}
+    .cart-item img{width:72px;height:72px;object-fit:cover;border-radius:8px;background:#fafafa}
+    .qty-controls{display:flex;align-items:center;gap:8px}
+    .muted{color:#6b7280;font-size:13px}
+
+    /* toast */
+    .toast{position:fixed;right:16px;bottom:16px;background:#111;color:#fff;padding:10px 14px;border-radius:10px;display:none;z-index:70}
+
+    /* Адаптив */
+    @media (max-width: 900px){
+      .content{grid-template-columns:1fr}
+      .page h1{font-size:34px}
+      .filter{margin-bottom:20px}
+      .cart-count{right:-4px;top:-4px;width:20px;height:20px}
+    }
+
+    @media (max-width: 600px){
+      .topbar-inner{gap:10px;padding:10px;flex-direction:column;align-items:flex-start}
+      .top-actions{margin-left:0;gap:12px}
+      .search{width:100%}
+      .page h1{font-size:28px}
+      .crumbs{font-size:12px}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="logo" href="#">
+        <img src="images/photo_5276207082657412564_y.avif" alt="Логотип" class="logo-img">
+      </a>
+      <a class="catalog-btn" href="index.html">Главная</a>
+      <label class="search"><input placeholder="Поиск" /></label>
+      <nav class="top-actions">
+        <!-- Личный кабинет открывает панель -->
+        <button id="open-account" class="catalog-btn">Личный кабинет</button>
+
+        <button id="open-cart" class="cart-btn" title="Открыть корзину">
+          🛒 Корзина
+          <span id="cart-count" class="cart-count">0</span>
         </button>
-      </div>
+      </nav>
     </div>
   </header>
 
-  <!-- Breadcrumb -->
-  <nav class="max-w-7xl mx-auto px-4 py-3 text-sm text-gray-500">
-    Главная / Товары S7avelii Airlines
-  </nav>
+  <div class="crumbs">Главная · Товары S7avelii Airlines </div>
 
-  <!-- Title -->
-  <section class="max-w-7xl mx-auto px-4 py-4">
-    <h1 class="text-3xl font-bold mb-6">Сувениры</h1>
+  <main class="page">
+    <h1>Товары</h1>
 
-    <div class="flex flex-col lg:flex-row gap-8">
-
-      <!-- Sidebar filters -->
-      <aside class="lg:w-1/4 space-y-6">
-        <div>
-          <h3 class="font-semibold mb-2">Цена товара</h3>
-          <div class="flex space-x-2">
-            <input type="number" placeholder="от 500" class="border rounded-lg w-1/2 p-2 text-sm">
-            <input type="number" placeholder="до 3700" class="border rounded-lg w-1/2 p-2 text-sm">
-          </div>
-        </div>
-
-        <div>
-          <h3 class="font-semibold mb-2">Изготовлен в</h3>
-          <label class="flex items-center space-x-2"><input type="checkbox"> <span>Россия</span></label>
-          <label class="flex items-center space-x-2"><input type="checkbox"> <span>Китай</span></label>
+    <div class="content">
+      <aside>
+        <div class="filter">
+          <h3>Цена товара</h3>
+          <label>от <input id="min-price" type="number" value="500" style="width:100%;padding:8px;margin:6px 0"></label>
+          <label>до <input id="max-price" type="number" value="5000" style="width:100%;padding:8px;margin:6px 0"></label>
+          <h3>Изготовлен в</h3>
+          <label><input id="country-ru" type="checkbox"> Россия</label>
         </div>
       </aside>
 
-      <!-- Products -->
-      <main class="lg:w-3/4">
-        <div class="flex justify-between items-center mb-4">
-          <span class="text-gray-600 text-sm">5 товаров</span>
-          <select class="border rounded-lg p-2 text-sm">
-            <option>Популярные</option>
-            <option>Сначала дешевые</option>
-            <option>Сначала дорогие</option>
+      <section>
+        <div class="sort">
+          <select id="sort-select">
+            <option value="popular">Популярные</option>
+            <option value="cheap">Сначала дешевые</option>
+            <option value="expensive">Сначала дорогие</option>
           </select>
         </div>
 
-        <div id="products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-      </main>
+        <div class="grid" id="product-grid"></div>
+      </section>
     </div>
-  </section>
+  </main>
+
+  <!-- Account / Cart overlay -->
+  <div id="overlay" class="overlay" aria-hidden="true">
+    <div class="panel" role="dialog" aria-modal="true">
+      <div class="panel-header">
+        <div>
+          <strong>Личный кабинет — Корзина</strong>
+          <div class="muted" id="panel-sub">Здесь хранятся товары, которые вы добавили</div>
+        </div>
+        <div>
+          <button id="clear-cart" class="btn small" style="background:#fff;border:1px solid var(--line)">Очистить</button>
+          <button id="close-overlay" class="btn small" style="margin-left:8px">Закрыть</button>
+        </div>
+      </div>
+
+      <div class="panel-body" id="panel-body">
+        <!-- Сюда будут рендериться позиции корзины -->
+      </div>
+
+      <div style="padding:16px 20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center">
+        <div class="muted" id="total-text">Итого: 0 ₽</div>
+        <div>
+          <button id="checkout" class="btn small">Оформить заказ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
 
   <script>
-    // --- CART API (используем твою реализацию) ---
-    const loadCart = () => JSON.parse(localStorage.getItem('cart') || '[]');
-    const saveCart = cart => localStorage.setItem('cart', JSON.stringify(cart));
-    const renderCart = () => {
-      const cart = loadCart();
-      document.querySelector('#cart-count').textContent = cart.reduce((a,c)=>a+c.qty,0);
-      console.log('Cart:', cart);
-    };
+    /* ------------- Utilities: load/save cart ------------- */
+    const CART_KEY = 's7_cart';
 
+    function loadCart() {
+      try {
+        return JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+      } catch (e) { return []; }
+    }
+    function saveCart(cart) {
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    }
+
+    /* ------------- S7Cart API (по твоему примеру) ------------- */
     const S7Cart = {
       addItem(item) {
+        // item: { id, title, price, image, qty }
         const cart = loadCart();
         const idx = cart.findIndex(i => String(i.id) === String(item.id));
         if (idx >= 0) cart[idx].qty = (Number(cart[idx].qty)||0) + (Number(item.qty)||1);
         else cart.push(Object.assign({ qty: 1 }, item));
         saveCart(cart);
-        renderCart();
+        renderCartBadge();
+        renderCartPanel();
       },
       changeQty(index, delta) {
         const cart = loadCart();
@@ -95,49 +200,224 @@
         cart[index].qty = Math.max(0, (Number(cart[index].qty)||0)+delta);
         if (cart[index].qty<=0) cart.splice(index,1);
         saveCart(cart);
-        renderCart();
+        renderCartBadge();
+        renderCartPanel();
       },
       removeItem(index) {
         const cart = loadCart();
         cart.splice(index,1);
         saveCart(cart);
-        renderCart();
+        renderCartBadge();
+        renderCartPanel();
       },
-      clear() { saveCart([]); renderCart(); },
+      clear() { saveCart([]); renderCartBadge(); renderCartPanel(); },
       getCart() { return loadCart(); }
     };
 
-    // --- PRODUCTS ---
+    /* ------------- Products data (extend with id + numeric price) ------------- */
     const products = [
-      { id: 1, title: 'Ремувка «100-летие гражданской авиации»', price: 750, image: 'img1.jpg' },
-      { id: 2, title: 'Ремувка, Серый', price: 650, image: 'img2.jpg' },
-      { id: 3, title: 'Брелок из авиационного металла', price: 3700, image: 'img3.jpg' },
-      { id: 4, title: 'Ежедневник недатированный «Записи»', price: 1900, image: 'img4.jpg' },
+      {
+        id: "note-1",
+        price: 550,
+        priceText: "550 ₽",
+        title: "Блокнот S7avelii Airlnes",
+        image: "images/photo_5330078908990750485_y.avif"
+      },
+      {
+        id: "combo-1",
+        price: 2350,
+        priceText: "2 350 ₽",
+        title: "Комбо Блокнот + Футболка",
+        image: "images/photo_5330078908990750484_y.avif"
+      },
+      {
+        id: "shirt-1",
+        price: 1900,
+        priceText: "1 900 ₽",
+        title: "Фирменная футболка S7avelii Airlines",
+        image: "images/photo_5332515869139530693_y.avif"
+      },
+      {
+        id: "combo-2",
+        price: 4500,
+        priceText: "4 500 ₽",
+        title: "Комбо Путешественник ",
+        image: "images/photo_5330078908990750483_y.avif"
+      }
     ];
 
-    const renderProducts = () => {
-      const grid = document.querySelector('#products');
-      grid.innerHTML = products.map(p => `
-        <div class="border rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition">
-          <img src="${p.image}" alt="${p.title}" class="w-full h-48 object-cover">
-          <div class="p-4 flex flex-col h-full justify-between">
-            <div>
-              <p class="text-lg font-semibold mb-1">${p.price} ₽</p>
-              <p class="text-sm text-gray-700 mb-2">${p.title}</p>
-            </div>
-            <button 
-              onclick='S7Cart.addItem(${JSON.stringify(p)})' 
-              class="bg-lime-600 text-white rounded-xl py-2 mt-auto hover:bg-lime-700 transition">
-              В корзину
-            </button>
-          </div>
+    /* ------------- Render products ------------- */
+    const grid = document.getElementById("product-grid");
+
+    function createCard(p) {
+      const card = document.createElement("article");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="thumb">
+          <img src="${p.image}" alt="${p.title}" style="max-height:100%; max-width:100%; object-fit:contain;">
+          <div class="heart">♡</div>
         </div>
-      `).join('');
-    };
+        <div class="card-body">
+          <div class="price">${p.priceText}</div>
+          <div class="title">${p.title}</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:auto">
+            <button class="btn add-to-cart">В корзину</button>
+            <button class="btn small" onclick="location.href='#'">Подробнее</button>
+          </div>
+        </div>`;
+      // bind add to cart
+      const addBtn = card.querySelector('.add-to-cart');
+      addBtn.addEventListener('click', () => {
+        S7Cart.addItem({ id: p.id, title: p.title, price: p.price, image: p.image, qty: 1 });
+        showToast(`Добавлено: ${p.title}`);
+        // краткая визуальная обратная связь
+        addBtn.textContent = 'Добавлено';
+        setTimeout(()=> addBtn.textContent = 'В корзину', 1200);
+      });
+      return card;
+    }
+
+    function renderProducts(list = products) {
+      grid.innerHTML = '';
+      list.forEach(p => grid.appendChild(createCard(p)));
+    }
 
     renderProducts();
-    renderCart();
-  </script>
 
+    /* ------------- Cart badge ------------- */
+    const cartCountEl = document.getElementById('cart-count');
+    function renderCartBadge() {
+      const cart = loadCart();
+      const totalQty = cart.reduce((s,i)=>s + (Number(i.qty)||0), 0);
+      cartCountEl.textContent = totalQty;
+    }
+    renderCartBadge();
+
+    /* ------------- Toast ------------- */
+    const toastEl = document.getElementById('toast');
+    let toastTimer = null;
+    function showToast(text, ms = 1600) {
+      toastEl.textContent = text;
+      toastEl.style.display = 'block';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(()=> { toastEl.style.display = 'none'; }, ms);
+    }
+
+    /* ------------- Account / Cart panel ------------- */
+    const overlay = document.getElementById('overlay');
+    const panelBody = document.getElementById('panel-body');
+    const panelSub = document.getElementById('panel-sub');
+    const totalText = document.getElementById('total-text');
+
+    document.getElementById('open-account').addEventListener('click', ()=> {
+      overlay.style.display = 'flex';
+      renderCartPanel();
+    });
+    document.getElementById('open-cart').addEventListener('click', ()=> {
+      overlay.style.display = 'flex';
+      renderCartPanel();
+    });
+    document.getElementById('close-overlay').addEventListener('click', ()=> overlay.style.display = 'none');
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.style.display = 'none';
+    });
+
+    document.getElementById('clear-cart').addEventListener('click', ()=> {
+      if (!confirm('Очистить корзину?')) return;
+      S7Cart.clear();
+      showToast('Корзина очищена');
+    });
+
+    document.getElementById('checkout').addEventListener('click', ()=> {
+      const cart = S7Cart.getCart();
+      if (!cart.length) { showToast('Корзина пуста'); return; }
+      // здесь можно отправить заказ на сервер
+      console.log('Оформляем заказ:', cart);
+      showToast('Заказ отправлен (демо)');
+      S7Cart.clear();
+      overlay.style.display = 'none';
+    });
+
+    function formatPrice(num) {
+      return String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽';
+    }
+
+    function renderCartPanel() {
+      const cart = loadCart();
+      panelBody.innerHTML = '';
+      if (!cart.length) {
+        panelBody.innerHTML = '<div class="muted">Ваша корзина пуста.</div>';
+        totalText.textContent = 'Итого: 0 ₽';
+        panelSub.textContent = 'Здесь хранятся товары, которые вы добавили';
+        renderCartBadge();
+        return;
+      }
+      cart.forEach((it, idx) => {
+        const row = document.createElement('div');
+        row.className = 'cart-item';
+        row.innerHTML = `
+          <img src="${it.image}" alt="${it.title}">
+          <div style="flex:1">
+            <div style="font-weight:700">${it.title}</div>
+            <div class="muted">${formatPrice(it.price)} × ${it.qty} = <strong>${formatPrice(it.price * it.qty)}</strong></div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+            <div class="qty-controls">
+              <button class="btn small dec">−</button>
+              <div style="min-width:28px;text-align:center">${it.qty}</div>
+              <button class="btn small inc">+</button>
+            </div>
+            <button class="btn small" style="background:#fff;border:1px solid var(--line);color:#111" data-remove>Удалить</button>
+          </div>
+        `;
+        // bind buttons
+        row.querySelector('.dec').addEventListener('click', ()=> {
+          S7Cart.changeQty(idx, -1);
+          showToast('Количество обновлено');
+        });
+        row.querySelector('.inc').addEventListener('click', ()=> {
+          S7Cart.changeQty(idx, +1);
+          showToast('Количество обновлено');
+        });
+        row.querySelector('[data-remove]').addEventListener('click', ()=> {
+          if (!confirm('Удалить товар?')) return;
+          S7Cart.removeItem(idx);
+          showToast('Товар удалён');
+        });
+        panelBody.appendChild(row);
+      });
+
+      // total
+      const total = cart.reduce((s,i)=> s + (Number(i.price)||0) * (Number(i.qty)||0), 0);
+      totalText.textContent = 'Итого: ' + formatPrice(total);
+      panelSub.textContent = `Товаров: ${cart.length}`;
+      renderCartBadge();
+    }
+
+    // initial render
+    renderCartBadge();
+
+    /* ------------- Optional: filter / sort (basic) ------------- */
+    document.getElementById('sort-select').addEventListener('change', (e)=>{
+      const val = e.target.value;
+      let list = [...products];
+      if (val === 'cheap') list.sort((a,b)=> a.price - b.price);
+      if (val === 'expensive') list.sort((a,b)=> b.price - a.price);
+      renderProducts(list);
+    });
+
+    // price filter
+    document.getElementById('min-price').addEventListener('change', applyFilters);
+    document.getElementById('max-price').addEventListener('change', applyFilters);
+    document.getElementById('country-ru').addEventListener('change', applyFilters);
+
+    function applyFilters() {
+      const min = Number(document.getElementById('min-price').value) || 0;
+      const max = Number(String(document.getElementById('max-price').value).replace(/\s/g,'')) || 1e9;
+      // country filter not applied because products don't have country; placeholder for future
+      const list = products.filter(p => p.price >= min && p.price <= max);
+      renderProducts(list);
+    }
+  </script>
 </body>
 </html>
