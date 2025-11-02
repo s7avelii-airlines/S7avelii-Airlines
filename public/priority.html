@@ -747,7 +747,7 @@ const observer = new IntersectionObserver(entries => {
 cards.forEach(card => observer.observe(card));
 </script>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://docs.google.com/forms/d/e/1FAIpQLSfszvbcGaZsVaysjA_uBBdt9bUEDfPcFKxlqxyHj2_yClaOtw/viewform?usp=publish-editor">
 <style>
 * {box-sizing: border-box; margin: 0; padding: 0;}
 body {
@@ -772,73 +772,6 @@ h1 {font-size: 36px; margin-bottom: 40px;}
 }
 </style>
 </head>
-
-
-<title>Форма заказа карты</title>
-<style>
-  body { font-family: Arial, sans-serif; background: #f3f5f9; padding: 40px; }
-  .container { background: #fff; padding: 30px; border-radius: 15px; max-width: 500px; margin: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1);}
-  label { display:block; margin-top:15px; font-weight: bold;}
-  input, select { width:100%; padding:10px; margin-top:5px; border-radius:8px; border:1px solid #ccc; }
-  .payment { display:none; margin-top:20px; padding:10px; background:#fff3cd; border:1px solid #ffeeba; border-radius:8px; }
-  button { margin-top:20px; width:100%; padding:12px; background:#3b82f6; color:white; font-weight:bold; border:none; border-radius:10px; cursor:pointer;}
-  button:hover { background:#2563eb; }
-</style>
-</head>
-<body>
-
-<div class="container">
-  <h2>Оформление карты</h2>
-
-  <label for="card">Выберите карту:</label>
-  <select id="card">
-    <option value="classik">Классик</option>
-    <option value="vip">VIP CLASSIK</option>
-  </select>
-
-  <form id="cardForm">
-    <label for="fio">ФИО:</label>
-    <input type="text" id="fio" required placeholder="Иванов Иван Иванович">
-
-    <label for="email">Email:</label>
-    <input type="email" id="email" required placeholder="example@mail.com">
-
-    <label for="phone">Телефон:</label>
-    <input type="tel" id="phone" required placeholder="+7 (___) ___-__-__">
-
-    <div id="payment" class="payment">💳 Оплатить 77 руб.</div>
-
-    <button type="submit">Оформить</button>
-  </form>
-</div>
-
-<script>
-const cardSelect = document.getElementById('card');
-const paymentDiv = document.getElementById('payment');
-const form = document.getElementById('cardForm');
-
-cardSelect.addEventListener('change', () => {
-  if(cardSelect.value === 'vip'){
-    paymentDiv.style.display = 'block';
-  } else {
-    paymentDiv.style.display = 'none';
-  }
-});
-
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const data = {
-    card: cardSelect.value,
-    fio: document.getElementById('fio').value,
-    email: document.getElementById('email').value,
-    phone: document.getElementById('phone').value
-  };
-  alert(`Заказ оформлен!\n\nДанные формы:\nКарта: ${data.card}\nФИО: ${data.fio}\nEmail: ${data.email}\nТелефон: ${data.phone}`);
-  form.reset();
-  paymentDiv.style.display = 'none';
-});
-</script>
-
 
  
 <footer class="footer">
