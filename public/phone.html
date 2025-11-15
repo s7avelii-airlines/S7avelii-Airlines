@@ -164,32 +164,139 @@ document.addEventListener("DOMContentLoaded", () => {
   
 <!-- Пробел между слайдером и акциями -->
     <div class="h-20"></div>
-<!-- Слайд-шоу -->
-<div class="relative w-full max-w-[400px] h-[370px] overflow-hidden rounded-2xl mx-auto mt-4">
-  <div id="slider" class="absolute w-full h-full">
-    <img src="images/phoneshow-1.avif" class="w-full h-full object-cover absolute" style="opacity:1;transition:opacity 1s;">
-    <img src="images/phoneshow-2.avif" class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
-    <img src="images/3_20251012_201255_0002.avif" class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
-    <img src="images/2_20251012_201255_0001.avif" class="w-full h-full object-cover absolute" style="opacity:0;transition:opacity 1s;">
-  </div>
+<style>
+  .slider-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 370px;
+    overflow: hidden;
+    border-radius: 16px;
+    margin: 20px auto;
+  }
+
+  .slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1s;
+  }
+
+  .slide.active {
+    opacity: 1;
+  }
+
+  .slide-text {
+    position: absolute;
+    bottom: 60px;
+    left: 20px;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  }
+
+  .slide-btn {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background: rgba(0,0,0,0.55);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-decoration: none;
+    backdrop-filter: blur(4px);
+    transition: background .3s;
+  }
+
+  .slide-btn:hover {
+    background: rgba(0,0,0,0.75);
+  }
+
+  /* точки */
+  .dots {
+    position: absolute;
+    bottom: 12px;
+    right: 15px;
+    display: flex;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    background: white;
+    opacity: 0.4;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: opacity 0.3s;
+  }
+
+  .dot.active {
+    opacity: 1;
+  }
+</style>
+
+<div class="slider-container">
+  <img src="images/phoneshow-1.avif" class="slide active">
+  <div class="slide-text">Путешествуй выгодно</div>
+  <a href="page1.html" class="slide-btn">Подробнее</a>
+
+  <img src="images/phoneshow-2.avif" class="slide">
+  <div class="slide-text">Новые направления</div>
+  <a href="page2.html" class="slide-btn">Подробнее</a>
+
+  <img src="images/3_20251012_201255_0002.avif" class="slide">
+  <div class="slide-text">Комфорт на каждом рейсе</div>
+  <a href="page3.html" class="slide-btn">Подробнее</a>
+
+  <img src="images/2_20251012_201255_0001.avif" class="slide">
+  <div class="slide-text">S7avelii — летай с нами</div>
+  <a href="page4.html" class="slide-btn">Подробнее</a>
+
+  <!-- точки -->
+  <div class="dots"></div>
 </div>
 
 <script>
-const slides = document.querySelectorAll("#slider img");
-let currentIndex = 0;
-function showSlide(nextIndex) {
-  slides[currentIndex].style.opacity = "0";
-  slides[nextIndex].style.opacity = "1";
-  currentIndex = nextIndex;
-}
-function autoSlide() {
-  let nextIndex = (currentIndex + 1) % slides.length;
-  showSlide(nextIndex);
-}
-setInterval(autoSlide, 4000);
+  const slides = document.querySelectorAll(".slide");
+  const dotsContainer = document.querySelector(".dots");
+  let current = 0;
+
+  // создаём точки
+  slides.forEach((_, i) => {
+    let dot = document.createElement("div");
+    dot.classList.add("dot");
+    if (i === 0) dot.classList.add("active");
+    dot.addEventListener("click", () => showSlide(i));
+    dotsContainer.appendChild(dot);
+  });
+
+  const dots = document.querySelectorAll(".dot");
+
+  function showSlide(i) {
+    slides[current].classList.remove("active");
+    dots[current].classList.remove("active");
+
+    slides[i].classList.add("active");
+    dots[i].classList.add("active");
+
+    current = i;
+  }
+
+  function autoSlide() {
+    let next = (current + 1) % slides.length;
+    showSlide(next);
+  }
+
+  setInterval(autoSlide, 4000);
 </script>
+
 <!-- Пробел между слайдером и акциями -->
-    <div class="h-10"></div>
+    <div class="h-15"></div>
 <body class="bg-[#f7f8fc] font-sans">
 
  <!-- Большая зелёная кнопка-ссылка -->
@@ -202,6 +309,9 @@ setInterval(autoSlide, 4000);
     </a>
   </section>
 
+<!-- Пробел между слайдером и акциями -->
+    <div class="h-10"></div>
+  
   <!-- Кнопки-ссылки -->
   <section class="px-4 space-y-3">
 
