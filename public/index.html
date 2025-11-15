@@ -4,21 +4,45 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Купить онлайн все продукты S7avelii Airlines</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" href="images/favicon.png" type="image/png">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
-  box-sizing: border-box;
-}
 
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Favicon -->
+  <link rel="icon" href="images/favicon.png" type="image/png">
+
+  <!-- Montserrat -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Сбрасываем все box-sizing */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    /* Применяем Montserrat ко всей странице */
+    html, body, div, span, applet, object, iframe,
+    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+    a, abbr, acronym, address, big, cite, code,
+    del, dfn, em, img, ins, kbd, q, s, samp,
+    small, strike, strong, sub, sup, tt, var,
+    b, u, i, center,
+    dl, dt, dd, ol, ul, li,
+    fieldset, form, label, legend,
+    table, caption, tbody, tfoot, thead, tr, th, td,
+    article, aside, canvas, details, embed,
+    figure, figcaption, footer, header, hgroup,
+    menu, nav, output, ruby, section, summary,
+    time, mark, audio, video,
+    input, button, select, textarea {
+      font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif !important;
+    }
+    /* Body background */
     body {
       margin: 0;
       padding: 0;
       background: linear-gradient(90deg, #ffffff 0%, #f5f5f5 100%);
     }
-
     /* Контейнер с адаптивной шириной */
     .responsive-container {
       width: 100%;
