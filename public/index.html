@@ -1164,40 +1164,89 @@ function setDefaultCity(input){
   </div>
 </section>
 
-  <!-- Акции -->
   <section class="max-w-7xl mx-auto px-4 py-12">
-    <h2 class="text-3xl font-bold mb-8">Акции</h2>
-    <div class="grid grid-cols-3 gap-6">
-      <div class="rounded-xl shadow-md bg-white p-6 flex flex-col justify-between">
-        <img src="images/photo_5253869756614833558_x.avif" alt="Телеграм-канал" class="rounded-t-lg mb-4">
-        <div>
-          <h3 class="text-xl font-semibold mb-2">Телеграм-канал</h3>
-          <p class="text-gray-600 mb-4">Новости и специальные предложения S7avelii Airlines</p>
-          <a href="https://t.me/S7saveliiairlines" class="gradient-green p-2 col-span-1 md:col-span-2 hover:opacity-90 rounded inline-block">Подробнее</a>
-          </a>
-        </div>
-      </div>
-      <div class="rounded-xl shadow-md bg-white p-6 flex flex-col justify-between">
-        <img src="images/2025-08-13_17-34-29.avif" alt="Отели для отпуска" class="rounded-t-lg mb-4">
-        <div>
-          <h3 class="text-xl font-semibold mb-2">S7avelii Shop</h3>
-          <p class="text-gray-600 mb-4">Покупайте мерч и получайте кэшбэк S7avelii Priority</p>
-          <a href="s7hop.html" class="gradient-green p-2 col-span-1 md:col-span-2 hover:opacity-90 rounded inline-block">Подробнее</a>
-        </div>
-      </div>
-      <div class="rounded-xl shadow-md bg-white p-6 flex flex-col justify-between">
-        <h3 class="text-xl font-bold mb-4">Мы вам напишем</h3>
-        <p class="text-gray-600 mb-4">Сообщим о скидках, поделимся идеями путешествий</p>
-        <input type="email" name="email" id="email" required class="border p-2 rounded mb-2">
-        <label class="text-sm text-gray-600 mb-2 block">
-          <input type="checkbox" class="mr-2">Хочу узнавать про скидки и идеи путешествий и соглашаюсь на
-          <a href="#" class="text-blue-600 underline">обработку персональных данных</a>
-        </label>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLScQd1PcjVsdhixtw3oEuyaspZKNVNbES7xjNVbp7kuBNFAPRA/viewform?usp=header" class="gradient-green p-2 col-span-1 md:col-span-2 hover:opacity-90 rounded inline-block">Подписаться</a>
-</form>
+
+  <!-- Встроенный CSS -->
+  <style>
+    :root {
+     --btn-more-bg: #cecdd1;       /* тёмно-серый для Подробнее */
+      --btn-more-hover: #3a3a3a;
+      --btn-subscribe-bg: #b1d90e;  /* фирменный цвет для Подписаться */
+      --btn-subscribe-hover: #b1d90e;
+      --btn-text-color: #ffffff;
+    }
+
+    .btn-more {
+      background-color: var(--btn-more-bg);
+      color: var(--btn-text-color);
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      display: inline-block;
+      text-align: center;
+      font-weight: 500;
+      transition: background-color 0.3s;
+      text-decoration: none;
+    }
+    .btn-more:hover {
+      background-color: var(--btn-more-hover);
+      cursor: pointer;
+    }
+
+    .btn-subscribe {
+      background-color: var(--btn-subscribe-bg);
+      color: var(--btn-text-color);
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      display: inline-block;
+      text-align: center;
+      font-weight: 600;
+      transition: background-color 0.3s;
+      text-decoration: none;
+    }
+    .btn-subscribe:hover {
+      background-color: var(--btn-subscribe-hover);
+      cursor: pointer;
+    }
+  </style>
+
+  <h2 class="text-3xl font-bold mb-8">Акции</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    <!-- Акция 1 -->
+    <div class="rounded-xl shadow-md bg-white p-6 flex flex-col justify-between">
+      <img src="images/1763196209722.avif" alt="Телеграм-канал" class="rounded-t-lg mb-4">
+      <div>
+        <h3 class="text-xl font-semibold mb-2">Мили за рубли!</h3>
+        <p class="text-gray-600 mb-4">Теперь вы можете купить мили, для того, чтобы быстрее накопить на мерч или путешествие</p>
+        <a href="https://t.me/S7saveliiairlines" class="btn-more">Подробнее</a>
       </div>
     </div>
-  </section>
+
+    <!-- Акция 2 -->
+    <div class="rounded-xl shadow-md bg-white p-6 flex flex-col justify-between">
+      <img src="images/2025-08-13_17-34-29.avif" alt="Отели для отпуска" class="rounded-t-lg mb-4">
+      <div>
+        <h3 class="text-xl font-semibold mb-2">S7avelii Shop</h3>
+        <p class="text-gray-600 mb-4">Покупайте мерч и получайте кэшбэк S7avelii Priority</p>
+        <a href="s7hop.html" class="btn-more">Подробнее</a>
+      </div>
+    </div>
+
+    <!-- Акция 3: Подписка -->
+    <div class="rounded-xl shadow-md bg-white p-6 flex flex-col justify-between">
+      <h3 class="text-xl font-bold mb-4">Мы вам напишем</h3>
+      <p class="text-gray-600 mb-4">Сообщим о скидках, поделимся идеями путешествий</p>
+      <input type="email" name="email" id="email" required class="border p-2 rounded mb-2">
+      <label class="text-sm text-gray-600 mb-2 block">
+        <input type="checkbox" class="mr-2">Хочу узнавать про скидки и идеи путешествий и соглашаюсь на
+        <a href="#" class="text-blue-600 underline">обработку персональных данных</a>
+      </label>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLScQd1PcjVsdhixtw3oEuyaspZKNVNbES7xjNVbp7kuBNFAPRA/viewform?usp=header" class="btn-subscribe mt-2">Подписаться</a>
+    </div>
+
+  </div>
+</section>
 
 <head>
   <meta charset="UTF-8">
