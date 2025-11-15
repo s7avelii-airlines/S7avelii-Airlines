@@ -424,7 +424,7 @@
   *{box-sizing:border-box}
   body{
     margin:0;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
     background:#f5f6f7;
     color:#101112;
   }
@@ -585,19 +585,18 @@
 
 <div class="hero relative w-full h-[372px] overflow-hidden">
 
-  <!-- Контейнер текста -->
-  <div id="slideText"
-       class="absolute z-20 left-10 top-1/2 -translate-y-1/2 text-white drop-shadow-xl transition-opacity duration-700">
+ <div id="slideText"
+     class="absolute z-20 left-10 top-1/2 -translate-y-1/2 text-white drop-shadow-xl transition-opacity duration-700 montserrat-text">
 
-    <div id="slideTitle" class="text-4xl font-bold">
-      Заголовок первого слайда
-    </div>
-
-    <div id="slideSubtitle" class="text-lg mt-2 opacity-90">
-      Подзаголовок первого слайда
-    </div>
-
+  <div id="slideTitle" class="text-4xl font-bold">
+    Заголовок первого слайда
   </div>
+
+  <div id="slideSubtitle" class="text-lg mt-2 opacity-90">
+    Подзаголовок первого слайда
+  </div>
+
+</div>
 
   <!-- Слайды -->
   <div id="slider" class="absolute w-full h-full">
@@ -613,8 +612,8 @@
 
     <!-- Slide 2 -->
     <a href="link2.html" class="slide absolute w-full h-full"
-       data-title="Заголовок второго слайда"
-       data-subtitle="Текст второго слайда, можно длиннее"
+       data-title="Мили за рубли!"
+       data-subtitle="Покупайте дополнительную валюту и участвуйте в распродажах"
        style="opacity: 0; transition: opacity 1s;">
       <img src="images/slideshow-2.avif" class="w-full h-full object-cover">
     </a>
