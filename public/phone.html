@@ -353,57 +353,78 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="h-10"></div>
     
 <section class="mt-8 px-4">
-  <!-- Заголовок -->
+
+  <!-- Хит -->
   <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full">Хит</span>
   <h2 class="text-2xl font-bold mt-2 mb-4">Самые актуальные предложения</h2>
 
-  <!-- Карточки -->
-  <div class="flex flex-col gap-4">
-    <!-- Карточка 1 -->
-    <div class="bg-gradient-to-r from-green-500 to-teal-400 rounded-2xl p-5 text-white flex justify-between items-center shadow-md">
-      <div class="flex flex-col justify-center">
-        <h3 class="text-lg font-bold leading-tight">S7avelii-IT </h3>
-        <p class="text-sm opacity-90 mt-1">Занимаемся разработкой цифровых продуктов</p>
+  <!-- Сетка -->
+  <div class="grid grid-cols-1 gap-4">
+
+    <!-- Большая карточка 1 -->
+    <a href="busines.html"
+       class="bg-[#1fb36a] bg-gradient-to-r from-green-500 to-emerald-500 rounded-3xl p-5 text-white shadow-md flex justify-between items-center relative overflow-hidden">
+
+      <div>
+        <h3 class="text-xl font-bold leading-tight">S7avelii-IT</h3>
+        <p class="text-sm opacity-90 mt-1">
+          Занимаемся разработкой<br>цифровых продуктов
+        </p>
       </div>
-      <a href="busines.html" class="flex-shrink-0">
-        <img src="images/photo_5330078908990750711_x.avif" alt="Семейный счёт" class="w-16 h-16 ml-3">
+
+      <img src="images/photo_5330078908990750711_x.avif"
+           class="w-20 h-20 object-contain" alt="">
+    </a>
+
+    <!-- Блок из двух карточек рядом -->
+    <div class="grid grid-cols-2 gap-4">
+
+      <!-- Карточка 2 -->
+      <a href="HOTEL.html"
+         class="bg-gradient-to-br from-purple-600 to-gray-800 rounded-3xl p-4 text-white shadow-md flex flex-col justify-between overflow-hidden">
+
+        <div>
+          <h3 class="text-base font-bold leading-tight">В 2 раза больше миль</h3>
+          <p class="text-xs opacity-90 mt-1">
+            За бронь отелей,<br>апартаментов и экскурсий
+          </p>
+        </div>
+
+        <img src="images/photo_5330078908990750712_x.avif"
+             class="w-16 h-16 mt-3 ml-auto" alt="">
       </a>
+
+      <!-- Карточка 3 -->
+      <a href="priority.html"
+         class="bg-gradient-to-br from-green-400 to-emerald-400 rounded-3xl p-4 text-white shadow-md flex flex-col justify-between overflow-hidden">
+
+        <div>
+          <h3 class="text-base font-bold leading-tight">S7avelii Priority</h3>
+          <p class="text-xs opacity-90 mt-1">Оплачивайте путешествия милями</p>
+        </div>
+
+        <img src="images/photo_5330078908990750713_y.avif"
+             class="w-16 h-16 mt-3 ml-auto" alt="">
+      </a>
+
     </div>
 
-    <!-- Карточка 2 -->
-    <div class="bg-gradient-to-r from-pink-400 to-orange-300 rounded-2xl p-5 text-white flex justify-between items-center shadow-md">
-      <div>
-        <h3 class="text-lg font-bold leading-tight">Отели для отпуска</h3>
-        <p class="text-sm opacity-90 mt-1">Мы миниатюрная компания и это страница по-настоящему ещё не функционирует</p>
-      </div>
-      <a href="HOTEL.html" class="flex-shrink-0">
-        <img src="images/photo_5330078908990750712_x.avif" alt="Отели" class="w-16 h-16 ml-3">
-      </a>
-    </div>
+    <!-- Большая карточка 4 -->
+    <a href="s7hop.html"
+       class="bg-gradient-to-r from-blue-500 to-indigo-500 rounded-3xl p-5 text-white flex justify-between items-center shadow-md overflow-hidden">
 
-    <!-- Карточка 3 -->
-    <div class="bg-gradient-to-r from-green-400 to-teal-300 rounded-2xl p-5 text-white flex justify-between items-center shadow-md">
       <div>
-        <h3 class="text-lg font-bold leading-tight">S7avelii Priority</h3>
-        <p class="text-sm opacity-90 mt-1">Оплачивайте путешествия милями</p>
-      </div>
-      <a href="priority.html" class="flex-shrink-0">
-        <img src="images/photo_5330078908990750713_y.avif" alt="Miles & Cash" class="w-16 h-16 ml-3">
-      </a>
-    </div>
-
-    <!-- Карточка 4 -->
-    <div class="bg-gradient-to-r from-blue-400 to-indigo-400 rounded-2xl p-5 text-white flex justify-between items-center shadow-md">
-      <div>
-        <h3 class="text-lg font-bold leading-tight">S7avelii Shop</h3>
+        <h3 class="text-xl font-bold leading-tight">S7avelii Shop</h3>
         <p class="text-sm opacity-90 mt-1">Устройте себе шопинг за мили</p>
       </div>
-      <a href="s7hop.html" class="flex-shrink-0">
-        <img src="images/photo_5330078908990750714_x (1).avif" alt="S7 Shop" class="w-16 h-16 ml-3">
-      </a>
-    </div>
+
+      <img src="images/photo_5330078908990750714_x (1).avif"
+           class="w-20 h-20" alt="">
+    </a>
+
   </div>
 </section>
+
 
   <!-- Рейсы из Москвы -->
   <section class="mt-8 px-4">
