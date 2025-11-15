@@ -584,10 +584,18 @@
 
 <div class="hero relative w-full h-[372px] overflow-hidden">
 
-  <!-- Текст (общий контейнер, но будет меняться под каждый слайд) -->
+  <!-- Контейнер текста -->
   <div id="slideText"
-       class="absolute z-20 left-10 top-1/2 -translate-y-1/2 text-white text-4xl font-bold drop-shadow-xl transition-opacity duration-700">
-    S7avelii Airlines
+       class="absolute z-20 left-10 top-1/2 -translate-y-1/2 text-white drop-shadow-xl transition-opacity duration-700">
+
+    <div id="slideTitle" class="text-4xl font-bold">
+      Заголовок первого слайда
+    </div>
+
+    <div id="slideSubtitle" class="text-lg mt-2 opacity-90">
+      Подзаголовок первого слайда
+    </div>
+
   </div>
 
   <!-- Слайды -->
@@ -595,7 +603,8 @@
 
     <!-- Slide 1 -->
     <a href="link1.html" class="slide absolute w-full h-full"
-       data-text="Текст первого слайда"
+       data-title="Заголовок первого слайда"
+       data-subtitle="Подзаголовок первого слайда"
        style="opacity: 1; transition: opacity 1s;">
       <img src="images/Beige Black Minimalist Event Music Festival Concert Ticket (6).avif"
            class="w-full h-full object-cover">
@@ -603,26 +612,26 @@
 
     <!-- Slide 2 -->
     <a href="link2.html" class="slide absolute w-full h-full"
-       data-text="Текст второго слайда"
+       data-title="Заголовок второго слайда"
+       data-subtitle="Текст второго слайда, можно длиннее"
        style="opacity: 0; transition: opacity 1s;">
-      <img src="images/slideshow-2.avif"
-           class="w-full h-full object-cover">
+      <img src="images/slideshow-2.avif" class="w-full h-full object-cover">
     </a>
 
     <!-- Slide 3 -->
     <a href="link3.html" class="slide absolute w-full h-full"
-       data-text="Текст третьего слайда"
+       data-title="Заголовок третьего слайда"
+       data-subtitle="Описание третьего слайда"
        style="opacity: 0; transition: opacity 1s;">
-      <img src="images/2025-10-11_13-39-34.avif"
-           class="w-full h-full object-cover">
+      <img src="images/2025-10-11_13-39-34.avif" class="w-full h-full object-cover">
     </a>
 
     <!-- Slide 4 -->
     <a href="link4.html" class="slide absolute w-full h-full"
-       data-text="Текст четвёртого слайда"
+       data-title="Заголовок четвертого слайда"
+       data-subtitle="Подпись к четвертому слайду"
        style="opacity: 0; transition: opacity 1s;">
-      <img src="images/3_20251012_174217_0002.avif"
-           class="w-full h-full object-cover">
+      <img src="images/3_20251012_174217_0002.avif" class="w-full h-full object-cover">
     </a>
 
   </div>
@@ -637,15 +646,19 @@
   <!-- Точки -->
   <div id="dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2"></div>
 </div>
-  
+
 <script>
-  const slides = document.querySelectorAll("#slider .slide");
+const slides = document.querySelectorAll("#slider .slide");
 const dotsContainer = document.getElementById("dots");
-const slideText = document.getElementById("slideText");
+
+// Элементы текста
+const slideTitle = document.getElementById("slideTitle");
+const slideSubtitle = document.getElementById("slideSubtitle");
+const textWrapper = document.getElementById("slideText");
 
 let current = 0;
 
-// Создание точек
+// Создаем точки
 slides.forEach((_, i) => {
   const dot = document.createElement("button");
   dot.className = "w-3 h-3 rounded-full bg-white/50 hover:bg-white transition";
@@ -667,15 +680,17 @@ function showSlide(index) {
   dots[current].classList.add("bg-white");
   dots[current].classList.remove("bg-white/50");
 
-  // Меняем текст
-  slideText.style.opacity = 0;
+  // Меняем текст плавно
+  textWrapper.style.opacity = 0;
+
   setTimeout(() => {
-    slideText.textContent = slides[current].dataset.text;
-    slideText.style.opacity = 1;
-  }, 300); // плавная смена текста
+    slideTitle.textContent = slides[current].dataset.title;
+    slideSubtitle.textContent = slides[current].dataset.subtitle;
+    textWrapper.style.opacity = 1;
+  }, 300);
 }
 
-// Кнопки
+// Стрелки
 document.getElementById("prev").addEventListener("click", () => showSlide(current - 1));
 document.getElementById("next").addEventListener("click", () => showSlide(current + 1));
 
@@ -1079,7 +1094,7 @@ function setDefaultCity(input){
     }, 7000);
   </script>
   
-  <div class="actions mt-[1,5px]"></div>
+  <div class="actions mt-[5 px]"></div>
 
 <!-- Веселые рейсы из Савелий -->
    <section class="max-w-7xl mx-auto px-4 py-12">
