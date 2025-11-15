@@ -312,37 +312,43 @@ document.addEventListener("DOMContentLoaded", () => {
 <!-- Пробел между слайдером и акциями -->
     <div class="h-10"></div>
   
-  <!-- Кнопки-ссылки -->
-  <section class="px-4 space-y-3">
+ <section class="px-4 mt-4">
+  <div class="bg-white rounded-3xl overflow-hidden shadow-sm">
 
-    <!-- Регистрация на рейс -->
-    <div class="bg-white rounded-2xl p-4 flex items-center shadow-sm">
-      <a href="arrivel.html"
-         class="w-12 h-12 flex items-center justify-center bg-[#e9f4d6] rounded-xl mr-4">
-        <img src="images/photo_5398063018606193773_y.avif" alt="Регистрация на рейс" class="w-6 h-6">
-      </a>
+    <!-- 1. Наши рейсы -->
+    <a href="arrivel.html"
+       class="flex items-center p-4 active:bg-gray-50 transition">
+      <div class="w-12 h-12 flex items-center justify-center bg-[#e9f4d6] rounded-xl mr-4">
+        <img src="images/photo_5398063018606193773_y.avif" class="w-6 h-6" alt="">
+      </div>
       <p class="text-gray-900 font-medium text-[16px]">Наши рейсы</p>
-    </div>
+    </a>
 
-    <!-- Мои бронирования -->
-    <div class="bg-white rounded-2xl p-4 flex items-center shadow-sm">
-      <a href="HOTEL.html"
-         class="w-12 h-12 flex items-center justify-center bg-[#e5ecfd] rounded-xl mr-4">
-        <img src="images/photo_5398063018606193774_y.avif" alt="Мои бронирования" class="w-6 h-6">
-      </a>
+    <div class="border-t border-gray-200"></div>
+
+    <!-- 2. Отели -->
+    <a href="HOTEL.html"
+       class="flex items-center p-4 active:bg-gray-50 transition">
+      <div class="w-12 h-12 flex items-center justify-center bg-[#e5ecfd] rounded-xl mr-4">
+        <img src="images/photo_5398063018606193774_y.avif" class="w-6 h-6" alt="">
+      </div>
       <p class="text-gray-900 font-medium text-[16px]">Отели</p>
-    </div>
+    </a>
 
-    <!-- Табло рейсов -->
-    <div class="bg-white rounded-2xl p-4 flex items-center shadow-sm">
-      <a href="s7hop.html"
-         class="w-12 h-12 flex items-center justify-center bg-[#efe8fd] rounded-xl mr-4">
-        <img src="images/photo_5398063018606193772_y.avif" alt="Табло рейсов" class="w-6 h-6">
-      </a>
+    <div class="border-t border-gray-200"></div>
+
+    <!-- 3. Для путешествия -->
+    <a href="s7hop.html"
+       class="flex items-center p-4 active:bg-gray-50 transition">
+      <div class="w-12 h-12 flex items-center justify-center bg-[#efe8fd] rounded-xl mr-4">
+        <img src="images/photo_5398063018606193772_y.avif" class="w-6 h-6" alt="">
+      </div>
       <p class="text-gray-900 font-medium text-[16px]">Для путешествия</p>
-    </div>
-  </section>
-  
+    </a>
+
+  </div>
+</section>
+
 <!-- Пробел между слайдером и акциями -->
     <div class="h-10"></div>
     
