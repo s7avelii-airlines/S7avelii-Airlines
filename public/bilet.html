@@ -1,993 +1,352 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Миниатюрный билет</title>
-  <!-- Иконка сайта (favicon) -->
-  <link rel="icon" href="images/favicon.png" type="image/favicon.png">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Карты — 100+ маршрутов (20 самолётов)</title>
 
-<header>
-  <div class="logo">
-    <a href="index.html">
-      <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
-    </a>
-  </div>
-
-  <!-- Кнопка-бургер -->
-  <button class="burger" aria-label="Открыть меню">
-    <span></span><span></span><span></span>
-  </button>
-
-  <!-- Главное меню -->
-  <nav class="nav">
-    <ul>
-      <li>
-        <a href="index.html">Покупка и управление</a>
-        <div class="dropdown">
-          <a href="bilet.html">Купить билет</a>
-          <a href="auth.html">Управление бронированием</a>
-          <a href="arrivel.html">Направления</a>
-          <a href="HOTEL.html">Отели</a>
-          <a href="class.html">Выбор класса</a>
-        </div>
-      </li>
-      <li>
-        <a href="priority.html">S7avelii Priority</a>
-        <div class="dropdown">
-          <a href="priority.html">О программе</a>
-          <a href="https://t.me/s7aveliihelper">Как копить</a>
-        </div>
-      </li>
-      <li>
-        <a href="#">Информация</a>
-        <div class="dropdown">
-          <a href="body.html">О нас</a>
-          <a href="office.html">Представительство</a>
-          <a href="plane.html">Наш флот</a>
-          <a href="eat.html">Питание</a>
-          <a href="https://t.me/s7aveliihelper">Контакты</a>
-        </div>
-      </li>
-      <li><a href="busines.html">Бизнесу</a></li>
-      <li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
-    </ul>
-  </nav>
-
-  <div class="right-menu">
-    <button aria-label="Search">
-      <svg class="icon-search" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle cx="11" cy="11" r="7"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
-    </button>
-    <button>RUB</button>
-    <div class="flag" title="Russian flag">
-      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" />
-    </div>
-    <div id="userArea"></div>
-  </div>
-</header>
-
+<!-- Leaflet (для удобной карты/тайлов) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+ integrity="sha512-sA+q1m7wqVJ2qpo4eG6B8q6T8xQqZrRjnk2kq0Qp5g2l+6w6Fq1E2SxQ3bq2W2c8b1Z9Wz4l9nK6YvGk6G6QA=="
+ crossorigin=""/>
 <style>
-/* === БАЗОВЫЙ СТИЛЬ ДЛЯ ПК === */
-header {
-  display: flex;
-  align-items: center;
-  padding: 0 60px;
-  height: 80px;
-  border-bottom: 1px solid #ccc;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  background: #fff;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
+  :root{
+    --neon-green: #baff00;
+    --sky-blue: #77b7ff;
+    --muted: #d9d9d9;
+    --bg: #0f1720; /* dark background so neon stands out */
+  }
+  html,body{height:100%;margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);}
+  /* блок занимает весь экран (вариант A) */
+  .map-screen{position:relative;height:100vh;width:100%;overflow:hidden;}
 
-.logo-img {
-  height: 70px;
-  width: auto;
-  cursor: pointer;
-}
+  /* контейнер карты (Leaflet) */
+  #map{height:100%;width:100%;}
 
-nav {
-  display: flex;
-  flex-grow: 1;
-  justify-content: center;
-}
+  /* стили маршрутов — будут добавляться в SVG overlay */
+  .route-line { stroke-width:2.4; stroke-linecap:round; fill:none; opacity:0.95; filter:drop-shadow(0 0 8px rgba(186,255,0,0.15)); }
+  .route-green { stroke:var(--neon-green); }
+  .route-blue  { stroke:var(--sky-blue); }
 
-nav ul {
-  display: flex;
-  gap: 40px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+  /* самолётик — маленький кружок, будет html element */
+  .plane {
+    position:absolute;
+    width:10px;height:10px;border-radius:50%;
+    transform:translate(-50%,-50%) rotate(0deg);
+    box-shadow:0 0 8px rgba(186,255,0,0.9);
+    pointer-events:none;
+    z-index:6000;
+  }
+  .plane.blue { background:var(--sky-blue); box-shadow:0 0 10px rgba(119,183,255,0.9); }
+  .plane.green { background:var(--neon-green); box-shadow:0 0 10px rgba(186,255,0.9); }
 
-nav li {
-  position: relative;
-}
+  /* точки-городa */
+  .city-dot {
+    width:12px;height:12px;border-radius:50%;
+    position:absolute; transform:translate(-50%,-50%); z-index:5000;
+    box-shadow:0 0 8px rgba(0,0,0,0.45);
+  }
+  .city-dot.small { width:8px;height:8px; box-shadow:none; opacity:0.95; }
 
-nav a {
-  color: #000;
-  text-decoration: none;
-  font-size: 16px;
-  padding: 28px 0;
-  position: relative;
-}
+  /* выделенные центры */
+  .city-moscow { background:var(--neon-green); border:2px solid rgba(0,0,0,0.12); box-shadow:0 0 18px rgba(186,255,0,0.8); }
+  .city-nsk    { background:var(--sky-blue);  border:2px solid rgba(0,0,0,0.12); box-shadow:0 0 18px rgba(119,183,255,0.9); }
 
-nav a::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 3px;
-  background-color: #b3c900;
-  transition: width 0.3s ease;
-}
-nav li:hover > a::after {
-  width: 100%;
-}
+  /* 100+ box */
+  .counter-box {
+    position:absolute; right:36px; bottom:36px; z-index:7000;
+    width:220px;height:130px;border-radius:20px;
+    background:linear-gradient(135deg, rgba(196,255,0,0.95), rgba(180,240,20,0.95));
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    box-shadow:0 8px 40px rgba(0,0,0,0.45);
+    color:#111;
+  }
+  #counter { font-size:52px;font-weight:800; line-height:1; }
+  .counter-sub { font-size:16px; margin-top:6px; opacity:0.85; }
 
-.dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #fff;
-  padding: 20px;
-  border-top: 2px solid #b3c900;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-  min-width: 240px;
-  z-index: 999;
-  opacity: 0;
-  transform: translateY(-10px);
-  pointer-events: none;
-  transition: all 0.3s ease;
-}
-nav li:hover .dropdown {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-.dropdown a {
-  display: block;
-  padding: 8px 0;
-  color: #000;
-  font-size: 14px;
-}
-.dropdown a:hover {
-  color: #b3c900;
-}
-
-.right-menu {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  font-size: 16px;
-}
-.right-menu button,
-.right-menu select {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-}
-.flag {
-  width: 20px;
-  height: 14px;
-  border-radius: 2px;
-  overflow: hidden;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
-}
-.flag img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-#userArea a {
-  padding: 8px 14px;
-  border: 1px solid #7ad30d;
-  border-radius: 6px;
-  color: #6dd808;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-/* === КНОПКА-БУРГЕР === */
-.burger {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  width: 28px;
-  height: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  gap: 4px;
-  z-index: 1001;
-}
-.burger span {
-  display: block;
-  height: 3px;
-  background: #000;
-  border-radius: 2px;
-  transition: 0.3s;
-}
-
-/* === МЕДИА (адаптация под мобилки) === */
-@media (max-width: 992px) {
-  header {
-    padding: 0 20px;
+  /* карта подписи (минималистичный стиль подсказки) */
+  .legend {
+    position:absolute; left:24px; bottom:24px; z-index:7000; color:#fff; font-size:13px;
+    background: rgba(255,255,255,0.06); padding:8px 12px; border-radius:10px; backdrop-filter: blur(6px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.6);
   }
 
-  nav ul {
-    gap: 24px;
-  }
-}
-
-@media (max-width: 768px) {
-  .burger {
-    display: flex;
-  }
-
-  nav {
-    position: fixed;
-    top: 80px;
-    left: 0;
-    right: 0;
-    background: white;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 20px 30px;
-    border-top: 1px solid #eee;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    transform: translateY(-120%);
-    transition: transform 0.3s ease;
-  }
-
-  nav.open {
-    transform: translateY(0);
-  }
-
-  nav ul {
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-  }
-
-  .dropdown {
-    position: static;
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    display: none;
-  }
-
-  nav li:hover .dropdown {
-    display: block;
-  }
-
-  .right-menu {
-    display: none;
-  }
-
-  /* Анимация крестика */
-  .burger.active span:nth-child(1) {
-    transform: rotate(45deg) translateY(8px);
-  }
-  .burger.active span:nth-child(2) {
-    opacity: 0;
-  }
-  .burger.active span:nth-child(3) {
-    transform: rotate(-45deg) translateY(-8px);
-  }
-}
-</style>
-
-<script>
-  // --- Бургер-меню ---
-  const burger = document.querySelector(".burger");
-  const nav = document.querySelector("nav");
-
-  burger.addEventListener("click", () => {
-    burger.classList.toggle("active");
-    nav.classList.toggle("open");
-  });
-
-  // --- Авторизация ---
-  async function updateUserArea() {
-    const userArea = document.getElementById("userArea");
-    try {
-      const res = await fetch("/api/profile");
-      if (!res.ok) throw new Error("Не авторизован");
-      const data = await res.json();
-      const user = data.user;
-
-      if (user.avatar) {
-        userArea.innerHTML = `
-          <img src="${user.avatar}" alt="avatar"
-            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;"
-            onclick="window.location.href='cabinet.html'" />
-        `;
-      } else {
-        userArea.innerHTML = `
-          <span style="cursor:pointer;color:#2196f3;font-weight:500;"
-            onclick="window.location.href='cabinet.html'">${user.fio.split(" ")[0]}</span>`;
-      }
-    } catch {
-      userArea.innerHTML = `<a href="auth.html">Вход</a>`;
-    }
-  }
-  window.addEventListener("DOMContentLoaded", updateUserArea);
-</script>
-
-  
-  <style>
-  .container {
-    max-width: 1400px;
-    margin: 0 auto; /* центрирует */
-  }
-  body {
-    overflow-x: hidden; /* убирает горизонтальный скролл */
+  /* адаптация для мобильных */
+  @media (max-width:720px){
+    .counter-box{right:16px; bottom:16px; width:160px; height:110px;}
+    #counter{font-size:36px}
   }
 </style>
-  <style>
-    body {
-      background-color: rgb(45, 44, 44);
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 0;
-    }
-
-    h1 {
-      font-size: 5em;
-      text-shadow: 0 0 20px white;
-      margin: 0;
-    }
-
-    h2 {
-      font-size: 4em;
-      text-shadow: 0 0 20px white;
-      margin: 0;
-    }
-
-    .search-container {
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .input-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .input-container input {
-      padding: 10px;
-      font-size: 1.5em;
-      border: none;
-      border-radius: 5px;
-    }
-
-    .search-button {
-      padding: 10px 20px;
-      font-size: 1.5em;
-      color: black;
-      background-color: rgb(200, 239, 5);
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .search-button:hover {
-      background-color: rgb(198, 241, 4);
-      color: white;
-    }
-
-    /* ===== Блок подписки ===== */
-    .subscribe-section {
-      position: relative;
-      width: 100%;
-      height: 600px;
-      margin-top: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      overflow: hidden;
-    }
-
-    .subscribe-section::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.85));
-      z-index: 1;
-    }
-
-    .subscribe-section img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 0;
-    }
-
-    .subscribe-content {
-      position: relative;
-      z-index: 2;
-      max-width: 1000px;
-      padding: 20px;
-      text-align: left;
-    }
-
-    .subscribe-title {
-      font-size: 4em;
-      font-weight: bold;
-      text-align: center;
-      line-height: 1.2;
-      text-shadow: 0 0 20px rgba(255,255,255,0.8);
-    }
-
-    .subscribe-card {
-      margin-top: 30px;
-      background: rgba(0, 0, 0, 0.65);
-      border-radius: 20px;
-      padding: 30px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .subscribe-left {
-      flex: 1 1 50%;
-    }
-
-    .subscribe-left div {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .subscribe-left span {
-      color: rgb(200, 239, 5);
-      font-size: 1.5em;
-    }
-
-    .subscribe-right {
-      flex: 1 1 40%;
-    }
-
-    .subscribe-form {
-      display: flex;
-    }
-
-    .subscribe-form input {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 10px 0 0 10px;
-      background: rgba(255, 255, 255, 0.15);
-      color: white;
-      font-size: 1em;
-    }
-
-    .subscribe-form input::placeholder {
-      color: #ddd;
-    }
-
-    .subscribe-form button {
-      padding: 0 20px;
-      border: none;
-      background: rgb(200, 239, 5);
-      color: black;
-      font-weight: bold;
-      border-radius: 0 10px 10px 0;
-      cursor: pointer;
-      position: relative;
-    }
-
-    .subscribe-form button:hover {
-      background: rgb(198, 241, 4);
-    }
-
-    .subscribe-form button::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 0 10px 10px 0;
-      background: rgb(200, 239, 5);
-      filter: blur(10px);
-      opacity: 0.6;
-      z-index: -1;
-    }
-
-    .subscribe-checkbox {
-      margin-top: 15px;
-      font-size: 0.8em;
-      color: #ccc;
-    }
-
-    .subscribe-checkbox a {
-      color: #ccc;
-      text-decoration: underline;
-    }
-
-    /* Footer */
-    .footer {
-      background-color: #444546;
-      padding: 20px 40px;
-      position: relative;
-      bottom: 0;
-      width: 100%;
-    }
-
-    .footer-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .footer-left {
-      font-size: 14px;
-      color: rgb(255, 255, 255);
-    }
-
-    .footer-right a {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      width: 40px;
-      height: 40px;
-      margin-left: 10px;
-      border-radius: 50%;
-      background: white;
-      transition: transform 0.2s;
-    }
-
-    .footer-right a:hover {
-      transform: scale(1.1);
-    }
-
-    .footer-right img {
-      width: 20px;
-      height: 20px;
-    }
-  </style>
 </head>
-  <!-- 🔹 Контент -->
-  <h1>140 НАПРАВЛЕНИЙ</h1>
-  <h2>10 СТРАН МИРА</h2>
+<body>
 
-  <div class="search-container">
-    <div class="input-container">
-      <input type="text" placeholder="Откуда" />
-      <span>→</span>
-      <input type="text" placeholder="Куда" />
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZzmTce2fp-65_t9hS8de9JvoTv9YUWAoW4GgwMsqq1Yc4VQ/viewform?usp=header">
-        <button class="search-button">НАЙТИ БИЛЕТЫ</button>
-      </a>
-    </div>
+<div class="map-screen">
+  <div id="map"></div>
+
+  <!-- city dots and planes will be positioned absolutely over the map -->
+  <div id="overlay" style="position:absolute; inset:0; pointer-events:none;"></div>
+
+  <div class="counter-box">
+    <div id="counter">100+</div>
+    <div class="counter-sub">направлений</div>
   </div>
 
-  <!-- 🔹 Подписка -->
-  <section class="subscribe-section">
-    <img src="images/photo_5278432678875623428_y.avif" alt="Фон">
-    <div class="subscribe-content">
-      <h2 class="subscribe-title">ПОДПИСЫВАЙТЕСЬ<br>НА РАССЫЛКУ</h2>
-      <div class="subscribe-card">
-        <div class="subscribe-left">
-          <div>
-            <span>?</span>
-            <p>Будете всегда в курсе наших акций и обновлений</p>
-          </div>
-          <div>
-            <span>%</span>
-            <p>Будем присылать <b>новости о скидках и распродажах</b>, а также идеи для путешествий</p>
-          </div>
-        </div>
-        <div class="subscribe-right">
-          <form class="subscribe-form" action="https://docs.google.com/forms/d/e/1FAIpQLScQd1PcjVsdhixtw3oEuyaspZKNVNbES7xjNVbp7kuBNFAPRA/viewform?usp=header" method="get">
-            <input type="email" name="email" placeholder="Ваша почта" required>
-            <button type="submit" class="search-button">➝</button>
-          </form>
-        </div>
-        <div class="subscribe-checkbox">
-          <label>
-            <input type="checkbox">
-            Хочу получать новости и подтверждаю согласие на 
-            <a href="#">обработку персональных данных</a>
-          </label>
-        </div>
-      </div>
-    </div>
-  </section>
-<footer class="footer">
-  <div class="footer-inner">
-    <!-- Верхнее меню -->
-    <div class="footer-menu fade-in">
-      <div class="footer-column">
-        <h3>S7avelii Airlines</h3>
-        <ul>
-          <li><a href="body.html">О компании</a></li>
-          <li><a href="https://t.me/s7aveliihelper">Партнеры</a></li>
-          <li><a href="https://t.me/s7aveliihelper">Контакты</a></li>
-          <li><a href="#">Вакансии</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <ul>
-          <li><a href="office.html">Офисы продаж и представительства</a></li>
-          <li><a href="https://t.me/S7saveliiairlines">Новости</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <h3>Информация</h3>
-        <ul>
-          <li><a href="arrivel.html">Направления</a></li>
-          <li><a href="bilet.html">Рейсы</a></li>
-          <li><a href="https://t.me/s7aveliihelper">Справочный центр</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <ul>
-          <li><a href="https://t.me/s7aveliihelper">Перевозка грузов</a></li>
-          <li><a href="plane.html">Наш флот</a></li>
-          <li><a href="mailto:s7avelii_airlines@mail.ru">Подать заявление на партнёрство</a></li>
-        </ul>
-      </div>
-    </div>
+  <div class="legend">20 маршрутов (анимировано)</div>
+</div>
 
-    <hr>
-
-    <!-- Верх футера -->
-    <div class="footer-top fade-in">
-      <div class="footer-actions">
-        <a href="https://t.me/s7aveliihelper" class="action"><img src="icons/chat.svg" alt=""> Чат</a>
-      </div>
-      <div class="footer-phone">
-        <div class="label">тел: Бесплатно по России</div>
-        <div class="number">8 962 629–81–05</div>
-      </div>
-    </div>
-
-    <!-- Подписка -->
-    <div class="footer-subscribe fade-in">
-      <h3>Подпишитесь на рассылку S7avelii</h3>
-      <p>Будьте в курсе акций, открывайте новые маршруты</p>
-      <form class="subscribe-form">
-        <input type="email" placeholder="Ваша почта" required>
-        <button type="submit">→</button>
-      </form>
-      <label class="checkbox">
-        <input type="checkbox" required>
-        Хочу узнавать про скидки и идеи путешествий по почте и соглашаюсь на 
-        <a href="#">обработку персональных данных</a>
-      </label>
-    </div>
-
-    <!-- Низ футера -->
-    <div class="footer-bottom fade-in">
-      <div class="copy">© 2025. S7avelii Airlines — Все права защищены</div>
-      <div class="socials">
-        <a href="https://vk.com/s7avelii"><img src="images/icons8-vk-logo-30.avif" alt="VK"></a>
-        <a href="https://www.tiktok.com/@s7avelii?_t=ZT-8yviZwu6jAT&_r=1"><img src="images/icons8-tiktok-logo-50 (1).avif" alt="TikTok"></a>
-        <a href="https://youtu.be/Dy31uUCFaWw?si=2gyqNYaT3ZVO8WJa"><img src="images/icons8-youtube-logo-50.avif" alt="YouTube"></a>
-        <a href="https://t.me/S7saveliiairlines"><img src="images/icons8-telegram-logo-50 (1).avif" alt="Telegram"></a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<style>
-/* === Убираем горизонтальный скролл и белые полосы === */
-html, body {
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-}
-
-/* ==== FOOTER ==== */
-.footer {
-  width: 100%;
-  background: #f1f5f9;
-  padding: 40px 60px;
-  font-family: "Inter", sans-serif;
-  color: #111;
-  box-sizing: border-box;
-}
-
-/* Верхнее меню */
-.footer-menu {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 40px;
-  margin-bottom: 30px;
-}
-
-.footer-column h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-.footer-column ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footer-column ul li {
-  margin-bottom: 8px;
-}
-
-.footer-column ul li a {
-  color: #111;
-  text-decoration: none;
-  font-size: 14px;
-  transition: all 0.2s ease;
-}
-
-.footer-column ul li a:hover {
-  text-decoration: underline;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid #e2e8f0;
-  margin: 30px 0;
-  width: 100%;
-}
-
-/* Верх футера */
-.footer-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 30px;
-}
-
-.footer-actions {
-  display: flex;
-  gap: 30px;
-}
-
-.footer-actions .action {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  color: #111;
-}
-
-.footer-actions img {
-  width: 20px;
-}
-
-.footer-phone {
-  text-align: right;
-}
-
-.footer-phone .label {
-  font-size: 14px;
-  color: #555;
-}
-
-.footer-phone .number {
-  font-size: 18px;
-  font-weight: 600;
-}
-
-/* Подписка */
-.footer-subscribe {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 30px;
-  border: 1px solid #d1d5db;
-}
-
-.footer-subscribe h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.footer-subscribe p {
-  color: #555;
-  margin-bottom: 16px;
-}
-
-.subscribe-form {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.subscribe-form input {
-  flex: 1;
-  padding: 12px 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.subscribe-form button {
-  background: #9ac208;
-  border: none;
-  border-radius: 8px;
-  padding: 0 20px;
-  font-size: 20px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.subscribe-form button:hover {
-  background: #8db807;
-}
-
-.checkbox {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 10px;
-  font-size: 13px;
-  color: #333;
-}
-
-.checkbox a {
-  color: #abc70f;
-  text-decoration: underline;
-}
-
-/* Низ футера */
-.footer-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  font-size: 14px;
-  color: #555;
-}
-
-.socials {
-  display: flex;
-  gap: 12px;
-}
-
-.socials a img {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #fff;
-  padding: 6px;
-  transition: transform 0.2s ease;
-}
-
-.socials a img:hover {
-  transform: scale(1.1);
-}
-
-/* === АНИМАЦИЯ ПОЯВЛЕНИЯ === */
-.fade-in {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* === АДАПТАЦИЯ === */
-@media (max-width: 1024px) {
-  .footer {
-    padding: 30px 40px;
-  }
-  .footer-top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-  }
-  .footer-phone {
-    text-align: left;
-  }
-}
-
-@media (max-width: 768px) {
-  .footer {
-    padding: 30px 20px;
-  }
-  .footer-menu {
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-  .footer-column h3 {
-    font-size: 16px;
-  }
-  .footer-column ul li a {
-    font-size: 13px;
-  }
-  .footer-subscribe {
-    padding: 16px;
-  }
-  .subscribe-form {
-    flex-direction: column;
-  }
-  .subscribe-form button {
-    width: 100%;
-    padding: 10px;
-  }
-  .footer-bottom {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .socials {
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 480px) {
-  .footer-menu {
-    grid-template-columns: 1fr;
-  }
-  .footer-subscribe h3 {
-    font-size: 16px;
-  }
-  .footer-subscribe p {
-    font-size: 13px;
-  }
-  .footer-phone .number {
-    font-size: 16px;
-  }
-  .footer-phone .label {
-    font-size: 12px;
-  }
-  .footer-actions .action {
-    font-size: 14px;
-  }
-  .socials a img {
-    width: 28px;
-    height: 28px;
-  }
-}
-</style>
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+ integrity="sha512-XQoYMqMTK8LvdlxU8nQ2JYjvAqv4rZ6a1Gq8qGQw7rEw5QFv1k9BNp1z1Kq0x3sQ1uF6zQfP5d7Y3gY3sY7SA=="
+ crossorigin=""></script>
 
 <script>
-/* === Плавное появление футера при прокрутке === */
-document.addEventListener("DOMContentLoaded", () => {
-  const fadeElements = document.querySelectorAll('.fade-in');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.2 });
-  fadeElements.forEach(el => observer.observe(el));
+/* ========= ДАННЫЕ: 20 городов (реальные / приблизительные координаты) =========
+   Источники: Москва и Новосибирск (см. ссылки внизу). Остальные — стандартные координаты городов.
+   Формат: [name, lat, lon]
+*/
+const cities = [
+  ['Moscow', 55.7558, 37.6173],
+  ['Saint Petersburg', 59.9343, 30.3351],
+  ['Novosibirsk', 55.0188, 82.9339],
+  ['Yekaterinburg', 56.8389, 60.6057],
+  ['Omsk', 54.9924, 73.3686],
+  ['Kazan', 55.8304, 49.0661],
+  ['Chelyabinsk', 55.1644, 61.4368],
+  ['Samara', 53.2415, 50.2212],
+  ['Rostov-on-Don', 47.2357, 39.7015],
+  ['Ufa', 54.7388, 55.9721],
+  ['Volgograd', 48.7080, 44.5133],
+  ['Krasnoyarsk', 56.0153, 92.8932],
+  ['Perm', 58.0105, 56.2502],
+  ['Voronezh', 51.6720, 39.1843],
+  ['Saratov', 51.5331, 46.0342],
+  ['Tyumen', 57.1522, 65.5272],
+  ['Irkutsk', 52.2833, 104.2833],
+  ['Khabarovsk', 48.4799, 135.0725],
+  ['Vladivostok', 43.1155, 131.8855],
+  ['Murmansk', 68.9730, 33.0900]
+];
+
+/* ===== инициализация карты (минималистичный тайл: CartoDB Positron) ===== */
+const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([60, 95], 3.2);
+
+/* Carto Positron — минималистичные светлые тайлы (подчёркивают не мешая линиям) */
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  maxZoom: 19
+}).addTo(map);
+
+/* overlay SVG — будем рисовать кривые в svg поверх карты */
+const svgLayer = L.svg({ clickable: false }).addTo(map);
+const svg = d3SelectSVG(); // helper (определён ниже)
+
+/* helpers: latlng -> point in SVG coords */
+function latLngToLayerPoint(lat, lon){
+  return map.latLngToLayerPoint([lat, lon]);
+}
+
+/* рисуем точки городов и выделяем Москва + Новосиб */
+const overlay = document.getElementById('overlay');
+
+function addCityDots(){
+  cities.forEach(([name, lat, lon], i)=>{
+    const p = map.latLngToContainerPoint([lat, lon]);
+    const el = document.createElement('div');
+    el.className = 'city-dot' + ( (name==='Moscow') ? ' city-moscow' : (name==='Novosibirsk' ? ' city-nsk' : ' small' ) );
+    el.style.left = p.x + 'px';
+    el.style.top  = p.y + 'px';
+    el.title = name;
+    overlay.appendChild(el);
+  });
+}
+
+/* при движении/зуме — обновляем позиции city dots */
+map.on('move zoom', () => {
+  // reposition dots
+  const dots = overlay.querySelectorAll('.city-dot');
+  dots.forEach((el, idx)=>{
+    const [ , lat, lon ] = cities[idx];
+    const p = map.latLngToContainerPoint([lat, lon]);
+    el.style.left = p.x + 'px';
+    el.style.top  = p.y + 'px';
+  });
+  // redraw curves
+  drawAllCurves();
 });
+
+/* ===== функция для создания «кривой» между двумя точками — возвращает массив точек =====
+   Мы создаём мягкую дугу, аппроксимируя её N точками (чтобы можно было анимировать движение).
+*/
+function curvePoints(fromLatLng, toLatLng, options = {}) {
+  const steps = options.steps || 120;
+  const cpFactor = options.cpFactor || 0.35; // насколько дуга выпуклая
+  const lat1 = fromLatLng[0], lon1 = fromLatLng[1];
+  const lat2 = toLatLng[0], lon2 = toLatLng[1];
+
+  // промежуточная «высота» для дуги — больше расстояние => выше дуга
+  const dLat = lat2 - lat1;
+  const dLon = lon2 - lon1;
+  const dist = Math.sqrt(dLat*dLat + dLon*dLon);
+  const height = Math.max(1, dist * cpFactor);
+
+  const pts = [];
+  for (let t=0; t<=1; t+=1/steps) {
+    // базовая линейная интерполяция
+    const lat = lat1 + (lat2 - lat1) * t;
+    const lon = lon1 + (lon2 - lon1) * t;
+    // добавить «подъём» перпендикулярно отрезку — простая модель
+    // вычислим нормаль (rotate 90deg)
+    const nx = - (dLat);
+    const ny =   (dLon);
+    // нормализуем
+    const nlen = Math.sqrt(nx*nx + ny*ny) || 1;
+    const nxn = nx / nlen;
+    const nyn = ny / nlen;
+    // профиль подъёма — синус для плавности
+    const lift = Math.sin(Math.PI * t) * height;
+    // скорректируем lon/lat непрямолинейно (прибл.)
+    const latAdj = lat + nxn * lift * 0.1;
+    const lonAdj = lon + nyn * lift * 0.1;
+    pts.push([latAdj, lonAdj]);
+  }
+  return pts;
+}
+
+/* массив объектов маршрутов (будем брать 10 маршрутов от Москвы, 10 — от Новосиба) */
+const routes = [];
+(function buildRoutes(){
+  // отделяем Москву и Новосибирск
+  const moscow = cities[0];
+  const novosib = cities[2];
+
+  // остальные индексы
+  const others = cities.filter((c,i)=> i!==0 && i!==2);
+  // первые 10 от Москвы, остальные 10 от Новосиба
+  const first10 = others.slice(0,10);
+  const second10 = others.slice(10,20);
+
+  first10.forEach(dest => routes.push({from: moscow, to: dest, color:'green'}));
+  second10.forEach(dest => routes.push({from: novosib, to: dest, color:'blue'}));
+})();
+
+/* Отрисовка кривых в SVG overlay (каждый раз при зуме/пане) */
+function drawAllCurves(){
+  // очистим svg
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+  routes.forEach((r, idx) => {
+    const ptsLatLng = curvePoints([r.from[1] ? r.from[1] : r.from[0], 0], [0,0]); // placeholder, we won't use this branch
+    // Instead compute actual curvePoints with correct args:
+    const points = curvePoints([r.from[1] ? r.from[0] : r.from[0], r.from[1] ? r.from[1] : r.from[1]]); // normalize
+    // simpler: call with arrays:
+    const from = [r.from[1] ? r.from[0] : r.from[0], r.from[1] ? r.from[1] : r.from[1]];
+    const to   = [r.to[1] ? r.to[0] : r.to[0], r.to[1] ? r.to[1] : r.to[1]];
+    const latlngs = curvePoints([r.from[1] ? r.from[0] : r.from[0], r.from[1] ? r.from[1] : r.from[1]], 
+                                [r.to[0], r.to[1]], {steps:120, cpFactor:0.4});
+
+    // convert to svg path d
+    const d = latlngs.map((ll,i)=>{
+      const p = map.latLngToLayerPoint([ll[0], ll[1]]);
+      return (i===0?('M'+p.x+','+p.y):('L'+p.x+','+p.y));
+    }).join(' ');
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d', d);
+    path.setAttribute('class', 'route-line ' + (r.color==='green' ? 'route-green' : 'route-blue'));
+    path.setAttribute('data-idx', idx);
+    svg.appendChild(path);
+
+    // store polyline points in route for animation
+    const segs = [];
+    latlngs.forEach(ll => {
+      const pt = map.latLngToLayerPoint([ll[0], ll[1]]);
+      segs.push([pt.x, pt.y]);
+    });
+    r._segments = segs;
+  });
+}
+
+/* ========== анимация самолётов: создадим 20 DOM-элементов и анимируем вдоль r._segments ========== */
+const planes = [];
+
+function createPlanes(){
+  // уберём старые
+  const old = overlay.querySelectorAll('.plane'); old.forEach(o=>o.remove());
+  routes.forEach((r, idx) => {
+    const el = document.createElement('div');
+    el.className = 'plane ' + (r.color==='green' ? 'green' : 'blue');
+    // случайный смещение начальной позиции по маршруту
+    el.dataset.offset = Math.random();
+    overlay.appendChild(el);
+    planes.push({el, route: r, speed: 0.0009 + Math.random()*0.0012}); // скорость
+  });
+}
+
+/* функция, двигающая каждую plane по сегментам */
+let lastTime = performance.now();
+function animatePlanes(now){
+  const dt = now - lastTime; lastTime = now;
+  planes.forEach(pl => {
+    const seg = pl.route._segments;
+    if(!seg || seg.length===0) return;
+    // offset в [0,1)
+    let off = parseFloat(pl.el.dataset.offset);
+    off += pl.speed * dt; // скорость * dt
+    off = off % 1;
+    pl.el.dataset.offset = off;
+    // compute index along seg
+    const pos = off * (seg.length-1);
+    const i = Math.floor(pos);
+    const t = pos - i;
+    const [x1,y1] = seg[i];
+    const [x2,y2] = seg[Math.min(i+1, seg.length-1)];
+    const x = x1 + (x2-x1)*t;
+    const y = y1 + (y2-y1)*t;
+    pl.el.style.left = x + 'px';
+    pl.el.style.top  = y + 'px';
+    // rotate to direction
+    const angle = Math.atan2(y2-y1, x2-x1) * 180/Math.PI;
+    pl.el.style.transform = `translate(-50%,-50%) rotate(${angle}deg)`;
+  });
+  requestAnimationFrame(animatePlanes);
+}
+
+/* d3SelectSVG helper: returns the SVG node added by leaflet's L.svg() */
+function d3SelectSVG(){
+  // leaflet puts an <svg> as first child of map.getPanes().overlayPane
+  const overlayPane = map.getPanes().overlayPane;
+  const svgs = overlayPane.getElementsByTagName('svg');
+  if(svgs.length) return svgs[0];
+  // fallback: create svg and append
+  const s = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  s.setAttribute('width','100%'); s.setAttribute('height','100%');
+  overlayPane.appendChild(s);
+  return s;
+}
+
+/* === старт: разместим точки, нарисуем кривые, создадим самолёты и запустим анимацию === */
+addCityDots();
+drawAllCurves();
+createPlanes();
+requestAnimationFrame(animatePlanes);
+
+/* также пересоздаём кривые и самолёты при завершении загрузки карты и при зуме/пане (чтобы сегменты пересчитались) */
+map.whenReady(()=>{ drawAllCurves(); createPlanes(); });
+
+map.on('zoomend moveend', ()=>{
+  drawAllCurves();
+  // пересоздаём planes — чтобы сегменты совпали
+  planes.length = 0;
+  createPlanes();
+});
+
+/* ===== счётчик 100+ (плавно меняется) ===== */
+const counterEl = document.getElementById('counter');
+let v = 100;
+setInterval(()=> {
+  v++; if(v>140) v = 100;
+  counterEl.innerText = v + '+';
+}, 140);
+
 </script>
-
-
 </body>
 </html>
