@@ -3,134 +3,128 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Россия — маршруты</title>
+<title>Маршруты России</title>
 <style>
-body, html {
-  margin:0; padding:0; height:100%; width:100%;
-  background:#f2f3f4;
+body,html{
+  margin:0;
+  padding:0;
+  height:100%;
+  width:100%;
+  background:#f4f5f7; /* светлый фон */
   font-family:Arial, sans-serif;
   overflow:hidden;
 }
 
 /* Контейнер */
-.map-screen {
+.map-screen{
   position:relative;
   width:100%;
   height:100vh;
   overflow:hidden;
 }
 
-/* SVG (контур России) */
-svg {
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-}
-
-/* Контур России */
-.russia-path {
-  fill:none;
-  stroke:#c7c7c7;
-  stroke-width:1.2;
-  opacity:0.9;
-}
-
-/* Дуги маршрутов */
-.route {
-  fill:none;
-  stroke-linecap:round;
+/* Карта */
+.russia-path{
+  fill:#e6e8ea;      /* светлая заливка */
+  stroke:#b5b7ba;    /* контур */
   stroke-width:1.5;
-  opacity:0.9;
 }
 
-.route.green { stroke:#b5d800; }
-.route.blue  { stroke:#6fa7ff; }
-.route.gray  { stroke:#a6a6a6; }
+/* Маршруты */
+.route{
+  fill:none;
+  stroke-width:2;
+  stroke-linecap:round;
+  opacity:0.85;
+}
+.route.green{ stroke:#baff00; }
+.route.blue{  stroke:#77b7ff; }
 
-/* Города */
-.city {
+/* Город */
+.city{
   position:absolute;
-  width:8px; height:8px;
+  width:9px;height:9px;
   border-radius:50%;
-  background:#555;
+  background:#333;
   transform:translate(-50%,-50%);
+  z-index:5;
 }
+.city.moscow{ background:#77b7ff; }
+.city.saratov{ background:#baff00; }
+.city.other{ background:#555; opacity:0.8; }
 
-.city.moscow  { background:#6fa7ff; }
-.city.saratov { background:#b5d800; }
-
-/* Самолётики */
-.plane {
+/* Самолётик */
+.plane{
   position:absolute;
-  width:7px; height:7px;
+  width:8px;height:8px;
   border-radius:50%;
   transform:translate(-50%,-50%);
+  z-index:10;
 }
-
-.plane.green { background:#b5d800; }
-.plane.blue  { background:#6fa7ff; }
-.plane.gray  { background:#999; }
+.plane.green{ background:#baff00; }
+.plane.blue{  background:#77b7ff; }
 
 /* Счётчик */
-.counter-box {
+.counter-box{
   position:absolute;
-  right:50px;
-  bottom:50px;
-  width:230px;
-  height:140px;
-
-  background:#b5d800;
+  right:40px;
+  bottom:40px;
+  width:220px;
+  height:130px;
+  background:#c4ff00;
   border-radius:20px;
-  box-shadow:0 0 40px rgba(0,0,0,0.2);
-
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
-
-  font-weight:900;
+  align-items:center;
+  font-weight:800;
+  box-shadow:0 10px 35px rgba(0,0,0,0.25);
 }
-
-#counter {
-  font-size:60px;
-  color:#222;
+#counter{
+  font-size:54px;
+  color:#111;
 }
-.counter-sub {
-  font-size:18px;
-  margin-top:4px;
+.counter-sub{
+  font-size:16px;
   color:#222;
+  opacity:0.8;
 }
 </style>
 </head>
 <body>
 
 <div class="map-screen">
-  <svg id="map-svg" viewBox="0 0 1600 1200">
-    <path class="russia-path"
-      d="M50,400 L80,380 L120,370 L180,360 L220,340 L300,320 L400,300 L500,280 L600,260 
-      L700,240 L800,230 L900,220 L1000,230 L1100,240 L1200,260 L1300,280 L1400,300 
-      L1450,320 L1500,350 L1550,400 L1500,450 L1450,500 L1400,550 L1350,580 L1300,600 
-      L1250,620 L1200,640 L1150,650 L1100,660 L1050,670 L1000,680 L950,690 L900,700 
-      L850,710 L800,720 L750,730 L700,740 L650,750 L600,760 L550,770 L500,780 
-      L450,790 L400,800 L350,810 L300,820 L250,830 L200,840 L150,850 L100,860 Z">
-    </path>
-  </svg>
 
-  <div id="overlay" style="position:absolute; inset:0;"></div>
+<!-- КАРТА РОССИИ -->
+<svg id="map-svg" viewBox="0 0 2200 1200" preserveAspectRatio="xMidYMid meet">
+  <path class="russia-path" d="
+  M2025 270l-47 -39l-95 -18l-40 -37l-57 8l-40 -32
+  l4 -35l-60 -43l-54 -6l-101 28l-73 -10l-23 -25l-65 3
+  l-35 28l12 45l-68 17l-80 -12l-46 28l-97 -5l-240 78
+  l-122 20l-60 -12l-102 17l-93 -5l-68 25l-42 38l-88 30
+  l-40 44l-115 33l-38 36l-5 42l-90 40l20 45l-10 55l40 35
+  l45 -15l38 40l12 80l70 55l85 10l50 -35l40 5l22 60l80 20
+  l45 -25l85 15l30 -30l38 5l55 50l120 10l40 -22l85 17l25 -25
+  l60 15l25 40l90 15l60 -35l80 10l40 -30l70 5l45 40l75 -5
+  l20 -45l60 -18l25 -32l75 10l45 -35l10 -55l60 -30l45 -40
+  l-10 -60l45 -40l-40 -50z"/>
+</svg>
 
-  <div class="counter-box">
-    <div id="counter">100+</div>
-    <div class="counter-sub">направлений</div>
-  </div>
+<div id="overlay" style="position:absolute;inset:0;"></div>
+
+<!-- Счётчик -->
+<div class="counter-box">
+  <div id="counter">100+</div>
+  <div class="counter-sub">направлений</div>
+</div>
+
 </div>
 
 <script>
-// Города
+/* Города */
 const cities = [
   {name:'Moscow',x:590,y:390,type:'moscow'},
   {name:'Saratov',x:670,y:500,type:'saratov'},
-
   {name:'Saint Petersburg',x:530,y:300,type:'other'},
   {name:'Novosibirsk',x:1050,y:480,type:'other'},
   {name:'Yekaterinburg',x:800,y:420,type:'other'},
@@ -139,101 +133,89 @@ const cities = [
   {name:'Chelyabinsk',x:830,y:440,type:'other'},
   {name:'Samara',x:700,y:400,type:'other'},
   {name:'Rostov-on-Don',x:600,y:500,type:'other'},
-  {name:'Ufa',x:750,y:420,type:'other'},
   {name:'Volgograd',x:620,y:520,type:'other'},
-  {name:'Krasnoyarsk',x:1100,y:460,type:'other'},
-  {name:'Perm',x:720,y:390,type:'other'},
-  {name:'Voronezh',x:650,y:480,type:'other'},
-  {name:'Tyumen',x:820,y:430,type:'other'},
-  {name:'Irkutsk',x:1200,y:480,type:'other'},
-  {name:'Khabarovsk',x:1450,y:400,type:'other'},
-  {name:'Vladivostok',x:1500,y:420,type:'other'}
 ];
 
-const overlay = document.getElementById('overlay');
+/* Рендер точек */
+const overlay=document.getElementById("overlay");
 cities.forEach(c=>{
-  const div=document.createElement('div');
-  div.className='city '+(c.type || 'other');
-  div.style.left=c.x+'px';
-  div.style.top=c.y+'px';
+  const div=document.createElement("div");
+  div.className="city "+c.type;
+  div.style.left=c.x+"px";
+  div.style.top=c.y+"px";
   overlay.appendChild(div);
-  c.el = div;
+  c.el=div;
 });
 
-// Маршруты
-const routes = [];
+/* Маршруты */
+const routes=[];
+const fromMoscow=cities[0];
+const fromSaratov=cities[1];
 
-const greenTargets = cities.filter(c=>c.name!=='Saratov').slice(0,12);
-greenTargets.forEach(c=>routes.push({from:cities[1],to:c,color:'green'}));
+cities.slice(2,8).forEach(c=>routes.push({from:fromMoscow,to:c,color:'blue'}));
+cities.slice(4,10).forEach(c=>routes.push({from:fromSaratov,to:c,color:'green'}));
 
-const blueTargets = cities.filter(c=>c.name!=='Moscow').slice(0,6);
-blueTargets.forEach(c=>routes.push({from:cities[0],to:c,color:'blue'}));
-
-const grayTargets = cities.slice(10,16);
-grayTargets.forEach(c=>routes.push({from:cities[0],to:c,color:'gray'}));
-
-// Самолётики
-const planes = [];
+/* Создание самолётиков */
+const planes=[];
 routes.forEach(r=>{
-  const div=document.createElement('div');
-  div.className='plane '+r.color;
+  const div=document.createElement("div");
+  div.className="plane "+r.color;
   overlay.appendChild(div);
   planes.push({
     el:div,
     route:r,
     offset:Math.random(),
-    speed:0.0009+Math.random()*0.0012
+    speed:0.001+Math.random()*0.0015
   });
 });
 
-// Кривая Безье
+/* Кривая Безье */
 function getCurvePoints(from,to,steps=120){
-  const pts=[];
-  const cx=(from.x+to.x)/2;
-  const cy=Math.min(from.y,to.y)-Math.abs(from.x-to.x)*0.30;
+  let pts=[];
+  let cx=(from.x+to.x)/2;
+  let cy=Math.min(from.y,to.y)-Math.abs(from.x-to.x)*0.32;
+
   for(let i=0;i<=steps;i++){
-    const t=i/steps;
-    const x=(1-t)**2*from.x + 2*(1-t)*t*cx + t**2*to.x;
-    const y=(1-t)**2*from.y + 2*(1-t)*t*cy + t**2*to.y;
+    let t=i/steps;
+    let x=(1-t)**2*from.x + 2*(1-t)*t*cx + t**2*to.x;
+    let y=(1-t)**2*from.y + 2*(1-t)*t*cy + t**2*to.y;
     pts.push({x,y});
   }
   return pts;
 }
 
-const svg=document.getElementById('map-svg');
-
+/* Отрисовка линий */
+const svg=document.getElementById("map-svg");
 routes.forEach(r=>{
   r.points=getCurvePoints(r.from,r.to);
 
-  const p=document.createElementNS('http://www.w3.org/2000/svg','path');
-  p.setAttribute('d', r.points.map((p,i)=> `${i?'L':'M'}${p.x},${p.y}`).join(' '));
-  p.setAttribute('class','route '+r.color);
-  svg.appendChild(p);
+  const path=document.createElementNS("http://www.w3.org/2000/svg","path");
+  path.setAttribute("d", r.points.map((p,i)=>`${i?'L':'M'}${p.x},${p.y}`).join(" "));
+  path.setAttribute("class","route " + r.color);
+  svg.appendChild(path);
 });
 
-// Анимация
+/* Анимация */
 function animate(){
   planes.forEach(p=>{
     const pts=p.route.points;
     let idx=Math.floor(p.offset*(pts.length-1));
-    p.el.style.left=pts[idx].x+'px';
-    p.el.style.top=pts[idx].y+'px';
+    p.el.style.left=pts[idx].x+"px";
+    p.el.style.top =pts[idx].y+"px";
     p.offset+=p.speed;
-    if(p.offset>1) p.offset=0;
+    if(p.offset>1)p.offset=0;
   });
   requestAnimationFrame(animate);
 }
 animate();
 
-// Счётчик
+/* Счётчик */
 let n=100;
 setInterval(()=>{
-  n++;
-  if(n>138) n=100;
-  document.getElementById('counter').textContent = n + '+';
-},140);
+  n++; if(n>138)n=100;
+  document.getElementById("counter").textContent=n+"+";
+},120);
 </script>
 
 </body>
 </html>
-
