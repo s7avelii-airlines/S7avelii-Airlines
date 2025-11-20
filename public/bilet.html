@@ -117,7 +117,7 @@ svg {
 
 <div class="map-screen">
 
-  <!-- SVG карта (контур России) -->
+  <!-- НОВАЯ ВСТРОЕННАЯ SVG-КАРТА -->
   <svg id="map-svg" viewBox="0 0 1600 1200" preserveAspectRatio="xMidYMid meet">
     <path class="russia-path" d="M94.6,627.1 L97.3,624.1 L104.8,624.6 L106.7,620.4 L113.3,619.5 
 L118.1,611.2 L126.5,612.5 L132.4,608.4 L138.4,605.2 L146.3,603.3 L152.2,600.1 
@@ -150,10 +150,8 @@ L1396.4,320.4 L1405.1,318.8 L1413.8,317.3 L1422.6,316.1 L1431.7,315 L1440.4,313.
 L1449.3,312.8 L1457.8,311.3" />
   </svg>
 
-  <!-- overlay для городов и самолётов -->
   <div id="overlay" style="position:absolute; inset:0; pointer-events:none;"></div>
 
-  <!-- Счётчик -->
   <div class="counter-box">
     <div id="counter">100+</div>
     <div class="counter-sub">направлений</div>
@@ -186,7 +184,6 @@ const cities = [
   {name:'Murmansk',x:520,y:250,type:'other'}
 ];
 
-// точки городов
 const overlay = document.getElementById('overlay');
 
 cities.forEach(c=>{
@@ -205,7 +202,6 @@ greenTargets.forEach(c=>routes.push({from:cities[1],to:c,color:'green'}));
 const blueTargets=cities.filter(c=>c.name!=='Moscow').slice(0,5);
 blueTargets.forEach(c=>routes.push({from:cities[0],to:c,color:'blue'}));
 
-// Самолёты
 const planes=[];
 
 function addPlanes(color){
@@ -225,7 +221,6 @@ function addPlanes(color){
 addPlanes('green');
 addPlanes('blue');
 
-// Генерация дуги
 function getCurvePoints(from,to,steps=120){
   const points=[];
   const cx=(from.x+to.x)/2;
@@ -239,14 +234,12 @@ function getCurvePoints(from,to,steps=120){
   return points;
 }
 
-// подготовка линий
 routes.forEach(r=>{
   r.points=getCurvePoints(r.from,r.to);
 });
 
 const svg=document.getElementById('map-svg');
 
-// отрисовка линий
 routes.forEach(r=>{
   const path=document.createElementNS('http://www.w3.org/2000/svg','path');
   path.setAttribute('class','route '+r.color);
@@ -254,7 +247,6 @@ routes.forEach(r=>{
   svg.appendChild(path);
 });
 
-// Анимация самолётов
 function animatePlanes(){
   planes.forEach(p=>{
     const pts=p.route.points;
@@ -268,7 +260,6 @@ function animatePlanes(){
 }
 animatePlanes();
 
-// Счетчик
 let n=100;
 setInterval(()=>{
   n++; if(n>140)n=100;
