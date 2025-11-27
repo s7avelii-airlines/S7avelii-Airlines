@@ -674,14 +674,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <div class="header">
     <!-- Динамическая область аккаунта -->
-    <a href="auth.html" 
-   class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gray-100 text-gray-700 text-sm font-medium">
-    Войти
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+     <!-- Контейнер для динамической области аккаунта -->
+  <div id="userArea" class="flex items-center gap-1 px-3 py-1.5 rounded-xl">
+    <!-- сюда будет вставляться содержимое скриптом -->
+    <a href="auth.html" class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gray-100 text-gray-700 text-sm font-medium">
+      Войти
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707M17.657 6.343l-.707.707M6.343 17.657l-.707.707"/>
-    </svg>
-</a>
+              d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707M17.657 6.343l-.707.707M6.343 17.657l-.707.707"/>
+      </svg>
+    </a>
 
 
     <!-- Правые иконки -->
@@ -695,15 +697,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function updateUserArea() {
     const userArea = document.getElementById('userArea');
+    if (!userArea) {
+      console.warn('updateUserArea: #userArea not found in DOM');
+      return;
+    }
+
     const token = localStorage.getItem('token');
 
+    // Если нет токена — показываем ссылку "Войти"
     if (!token) {
       userArea.innerHTML = `
         <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
           Войти
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-            d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
+                  d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
           </svg>
         </a>
       `;
@@ -715,29 +723,54 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { 'Authorization': 'Bearer ' + token }
       });
 
-      if (!res.ok) throw new Error('Не авторизован');
+      // Если не авторизован — удаляем токен и показываем "Войти"
+      if (res.status === 401) {
+        localStorage.removeItem('token');
+        userArea.innerHTML = `
+          <a href="auth.html" class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gray-100 text-gray-700 text-sm font-medium">
+            Войти
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707M17.657 6.343l-.707.707M6.343 17.657l-.707.707"/>
+            </svg>
+          </a>`;
+        return;
+      }
+
+      if (!res.ok) throw new Error('Fetch error: ' + res.status);
 
       const data = await res.json();
-      const user = data.user || data;
+      const user = data.user ?? data;
 
-      const avatar = user.avatar ? 
-        (user.avatar.startsWith('http') ? user.avatar : API + user.avatar) : 
-        'images/default-avatar.png';
-      const fioParts = (user.fio || 'Профиль').split(' ');
+      // Надёжный путь к аватару: если относительный — приклеиваем базу API
+      let avatar = user.avatar || '';
+      if (avatar) {
+        try {
+          // если avatar — абсолютный URL, new URL не выбросит
+          avatar = new URL(avatar).href;
+        } catch (e) {
+          // относительный путь — объединяем с API
+          avatar = (API.replace(/\/$/, '')) + '/' + avatar.replace(/^\//, '');
+        }
+      } else {
+        avatar = 'images/default-avatar.png';
+      }
+
+      const fio = (user.fio || 'Профиль').trim();
+      const fioParts = fio.split(/\s+/);
       const name = fioParts[0] || 'Профиль';
       const surnameInitial = fioParts[1] ? fioParts[1][0] + '.' : '';
 
       // Универсальный поиск поля с милями
       const miles = user.miles ?? user.miles_balance ?? user.bonus_miles ?? user.points ?? data.miles ?? 0;
 
-      // 🟢 путь к иконке миль — просто подставь свой
       const mileIcon = 'images/1761237779917.avif';
 
       userArea.innerHTML = `
         <div class="flex items-center bg-white border rounded-2xl px-3 py-1.5 cursor-pointer hover:shadow-sm transition"
              onclick="window.location.href='cabinet.html'">
           <img src="${avatar}" alt="avatar" 
-            class="w-8 h-8 rounded-full object-cover mr-2 border">
+               class="w-8 h-8 rounded-full object-cover mr-2 border" onerror="this.src='images/default-avatar.png'">
           <div class="flex flex-col mr-3">
             <span class="text-sm font-semibold leading-tight">${name} ${surnameInitial}</span>
             <span class="text-xs text-gray-500 flex items-center gap-1">
@@ -748,24 +781,23 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       `;
     } catch (err) {
-      console.warn(err);
+      console.warn('updateUserArea error', err);
+      // В случае ошибки (CORS, network, parse и т.д.) — удаляем токен и показываем "Войти"
       localStorage.removeItem('token');
       userArea.innerHTML = `
-  <a href="auth.html" 
-     class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gray-100 text-gray-700 text-sm font-medium">
-      Войти
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707M17.657 6.343l-.707.707M6.343 17.657l-.707.707"/>
-      </svg>
-  </a>
-
-      `;
+        <a href="auth.html" class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gray-100 text-gray-700 text-sm font-medium">
+          Войти
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707M17.657 6.343l-.707.707M6.343 17.657l-.707.707"/>
+          </svg>
+        </a>`;
     }
   }
 
   window.addEventListener('DOMContentLoaded', updateUserArea);
   window.__S7_UPDATE_USER_AREA = updateUserArea;
+
 </script>
 
 
