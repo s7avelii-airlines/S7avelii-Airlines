@@ -672,18 +672,27 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<div class="header flex items-center justify-between px-4 py-2">
+<div class="header">
     
-    <!-- ЛЕВАЯ ЧАСТЬ (логотип) -->
-    <div class="flex items-center gap-3">
-        <img src="images/photo_5276207082657412564_y.avif" class="header-logo w-8 h-8 object-contain">
+    <!-- Динамическая область аккаунта -->
+    <div id="userArea" class="header-userarea">
+        <a href="auth.html" class="login-btn">
+            Войти
+            <svg xmlns="http://www.w3.org/2000/svg" class="login-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707M17.657 6.343l-.707.707M6.343 17.657l-.707.707"/>
+            </svg>
+        </a>
+
+        <!-- Правые иконки -->
+        <div class="header-right">
+            <img src="images/photo_5276207082657412564_y.avif" class="header-logo">
+            <img src="images/1764255724120.avif" class="header-support">
+        </div>
     </div>
 
-    <!-- ПРАВАЯ ЧАСТЬ (динамический профиль + поддержка) -->
-    <div class="flex items-center gap-3">
+</div>
 
-        <!-- ДИНАМИЧЕСКИЙ БЛОК -->
-        <div id="userArea" class="flex items-center">
            <script>
   const API = 'https://s7avelii-airlines-1.onrender.com';
 
@@ -789,24 +798,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener('DOMContentLoaded', updateUserArea);
   window.__S7_UPDATE_USER_AREA = updateUserArea;
-
-</script>
-
-            <a href="auth.html"
-               class="px-3 py-1.5 text-sm rounded-lg bg-gray-100 text-gray-700 font-medium flex items-center gap-1">
-               Войти
-               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                       d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707M17.657 6.343l-.707.707M6.343 17.657l-.707.707"/>
-               </svg>
-            </a>
-        </div>
-
-        <!-- ИКОНКА ПОДДЕРЖКИ -->
-        <img src="images/1764255724120.avif" class="header-support w-7 h-7 object-contain cursor-pointer">
-
-    </div>
-</div>
+           </script>
 
 <!-- STORIES -->
 <div class="stories">
