@@ -657,55 +657,30 @@ nav.bottom-nav{
 .bottom-nav .nav-item:active{
   transform:translateY(0);
 }
-/* Контейнер, чтобы всё выстроилось в один ряд */
-.header-userarea {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Кнопка "Войти" — СВОЙ СОБСТВЕННЫЙ СТИЛЬ */
 .login-btn {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 10px;
+    all: unset !important; /* УДАЛЯЕМ ВСЁ ДЕРЬМО, ЧТО ПОДМЕШАЛОСЬ */
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
 
-    background: #f2f2f2;
-    color: #333;
+    background: #f2f2f2 !important;
+    color: #333 !important;
 
-    font-size: 14px;
-    font-weight: 500;
+    padding: 4px 10px !important;
+    border-radius: 8px !important;
+    border: 1px solid #dcdcdc !important;
 
-    border-radius: 8px;
-    border: 1px solid #dcdcdc;
+    font-size: 14px !important;
+    font-weight: 500 !important;
 
-    height: 30px; /* подгоняем под логотип */
-    cursor: pointer;
-
-    transition: background 0.2s;
-}
-.login-btn:hover {
-    background: #e5e5e5;
+    height: 30px !important;
+    cursor: pointer !important;
 }
 
-/* Иконка внутри */
-.login-icon {
-    width: 16px;
-    height: 16px;
+.login-btn svg {
+    width: 16px !important;
+    height: 16px !important;
 }
-
-/* Твои иконки справа */
-.header-logo {
-    height: 32px;
-    width: auto;
-}
-.header-support {
-    height: 28px;
-    width: auto;
-    cursor: pointer;
-}
-
 </style>
 </head>
 <body>
