@@ -1,171 +1,237 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Купить онлайн все продукты S7avelii Airlines</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S7avelii Airlines: Ваши путешествия</title>
+ <link rel="icon" href="images/favicon.png" type="image/png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Favicon -->
-  <link rel="icon" href="images/favicon.png" type="image/png">
-
-  <!-- Montserrat -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    /* Сбрасываем все box-sizing */
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-
-    /* Применяем Montserrat ко всей странице */
-    html, body, div, span, applet, object, iframe,
-    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-    a, abbr, acronym, address, big, cite, code,
-    del, dfn, em, img, ins, kbd, q, s, samp,
-    small, strike, strong, sub, sup, tt, var,
-    b, u, i, center,
-    dl, dt, dd, ol, ul, li,
-    fieldset, form, label, legend,
-    table, caption, tbody, tfoot, thead, tr, th, td,
-    article, aside, canvas, details, embed,
-    figure, figcaption, footer, header, hgroup,
-    menu, nav, output, ruby, section, summary,
-    time, mark, audio, video,
-    input, button, select, textarea {
-      font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif !important;
-    }
-
-    /* Body background */
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(90deg, #ffffff 0%, #f5f5f5 100%);
-    }
-    .mobile-wrapper {
-      width: 430px;
-      min-height: 100vh;
-      background: #f5f5f6;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
-  </style>
-</head>
-
-<body>
-<div class="mobile-wrapper">
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const isMobile = /Android|iPhone|iPad|iPod|Windows Phone|Mobi/i.test(navigator.userAgent);
-  if (!isMobile) {
-    window.location.href = "index.html"; // редирект обратно на ПК-версию
-  }
-});
-</script>
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>S7 — Шапка</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50">
-
-  <!-- Шапка -->
-  <header class="fixed top-0 left-0 w-full flex justify-between items-center p-4 bg-white shadow z-50">
-    <!-- Логотип -->
-    <img src="images/photo_5276207082657412564_y.avif" alt="S7" class="w-10 h-10">
-
-    <!-- Кнопки -->
-    <div class="flex gap-2 items-center" id="userArea">
-      <!-- Вход / блок пользователя -->
-    </div>
-  </header>
-
- <script>
-  const API = 'https://s7avelii-airlines-1.onrender.com';
-
-  async function updateUserArea() {
-    const userArea = document.getElementById('userArea');
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      userArea.innerHTML = `
-        <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
-          Войти
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-            d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
-          </svg>
-        </a>
-      `;
-      return;
-    }
-
-    try {
-      const res = await fetch(`${API}/api/profile`, {
-        headers: { 'Authorization': 'Bearer ' + token }
-      });
-
-      if (!res.ok) throw new Error('Не авторизован');
-
-      const data = await res.json();
-      const user = data.user || data;
-
-      const avatar = user.avatar ? 
-        (user.avatar.startsWith('http') ? user.avatar : API + user.avatar) : 
-        'images/default-avatar.png';
-      const fioParts = (user.fio || 'Профиль').split(' ');
-      const name = fioParts[0] || 'Профиль';
-      const surnameInitial = fioParts[1] ? fioParts[1][0] + '.' : '';
-
-      // Универсальный поиск поля с милями
-      const miles = user.miles ?? user.miles_balance ?? user.bonus_miles ?? user.points ?? data.miles ?? 0;
-
-      // 🟢 путь к иконке миль — просто подставь свой
-      const mileIcon = 'images/1761237779917.avif';
-
-      userArea.innerHTML = `
-        <div class="flex items-center bg-white border rounded-2xl px-3 py-1.5 cursor-pointer hover:shadow-sm transition"
-             onclick="window.location.href='cabinet.html'">
-          <img src="${avatar}" alt="avatar" 
-            class="w-8 h-8 rounded-full object-cover mr-2 border">
-          <div class="flex flex-col mr-3">
-            <span class="text-sm font-semibold leading-tight">${name} ${surnameInitial}</span>
-            <span class="text-xs text-gray-500 flex items-center gap-1">
-              ${Number(miles).toLocaleString()}
-              <img src="${mileIcon}" alt="M" class="w-3 h-3 object-contain inline-block" />
-            </span>
-          </div>
-        </div>
-      `;
-    } catch (err) {
-      console.warn(err);
-      localStorage.removeItem('token');
-      userArea.innerHTML = `
-        <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
-          Войти
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-            d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
-          </svg>
-        </a>
-      `;
-    }
-  }
-
-  window.addEventListener('DOMContentLoaded', updateUserArea);
-  window.__S7_UPDATE_USER_AREA = updateUserArea;
-</script>
-
-</body>
-  
-<!-- Пробел между слайдером и акциями -->
-    <div class="h-20"></div>
 <style>
-  .slider-container {
+  body {
+        background: #F3F5F7;
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial;
+    }
+
+    /* HEADER */
+    .header {
+        background: white;
+        padding: 20px 16px 10px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .header img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+    }
+    .header-name {
+        font-size: 20px;
+        font-weight: 700;
+    }
+    .header-miles {
+        color: #7AC943;
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    /* STORIES */
+    .stories { background: white; padding: 14px 0; }
+    .swiper-stories { height: 110px; padding-left: 16px; }
+    .swiper-stories .swiper-slide {
+        width: 90px !important;
+        height: 90px;
+        border-radius: 20px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+    }
+    .swiper-stories img {
+        width: 100%; height: 100%; object-fit: cover;
+    }
+    .story-title {
+        position: absolute; bottom: 6px; left: 6px; right: 6px;
+        color: white; font-size: 12px; font-weight: 600;
+        text-shadow: 0 0 6px black;
+    }
+
+    /* BIG BUTTON */
+    .big-btn {
+        background: #8DC63F;
+        margin: 12px 16px;
+        border-radius: 12px;
+        padding: 14px;
+        font-size: 17px;
+        color: white;
+        font-weight: 600;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    /* ADD BOOKING */
+    .add-booking {
+        background: white;
+        margin: 0 16px 14px;
+        border-radius: 12px;
+        padding: 18px;
+        font-size: 17px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+    }
+
+    /* AD */
+    .ad {
+        margin: 0 16px 20px;
+        border-radius: 16px;
+        overflow: hidden;
+    }
+    .ad img {
+        width: 100%;
+        display: block;
+    }
+
+    .swiper-pagination-bullet {
+        background: #C7D0D8;
+        opacity: 1;
+    }
+    .swiper-pagination-bullet-active {
+        background: #7AC943;
+    }
+
+    /* USEFUL */
+    .useful {
+        background: white;
+        border-radius: 20px;
+        margin: 0 16px 100px;
+        padding: 16px;
+    }
+    .useful-title {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    .useful-item {
+        display: flex;
+        align-items: center;
+        padding: 16px 0;
+        border-bottom: 1px solid #F0F0F0;
+        font-size: 17px;
+        font-weight: 500;
+        gap: 12px;
+        cursor: pointer;
+    }
+    .useful-item:last-child { border-bottom: none; }
+
+    .useful-item img {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    /* FULLSCREEN STORY */
+    #storyFull {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        background: black;
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+    }
+    #storyFull img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+    #storyClose {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 32px;
+        color: white;
+        cursor: pointer;
+    }
+
+    /* NAVBAR */
+    .navbar {
+        position: fixed;
+        bottom: 0; left: 0;
+        width: 100%;
+        height: 70px;
+        background: white;
+        border-top: 1px solid #E5E5E5;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .nav-item {
+        text-align: center;
+        color: #888;
+        font-size: 13px;
+        cursor: pointer;
+    }
+    .nav-item img {
+        width: 26px;
+        height: 26px;
+    }
+    .nav-item.active { color: #7AC943; }
+    .header {
+    background: white;
+    padding: 20px 16px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.header-logo {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    cursor: pointer;
+}
+
+.header-support {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    cursor: pointer;
+}
+.big-btn {
+    background: #8ccf20;
+    color: white;
+    padding: 16px;
+    text-align: center;
+    border-radius: 16px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
+}
+
+.add-booking {
+    margin-top: 10px;
+    text-align: center;
+    color: #666666;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+}
+.slider-container {
     position: relative;
     width: 100%;
     max-width: 400px;
@@ -242,367 +308,828 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   .dot.active {
-    opacity: 1;
+     opacity: 1;
   }
+ 
+  /* Популярные направления */
+.popular-section {
+    margin: 26px 0 0;
+    padding: 0 16px;
+}
+
+.popular-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+/* Горизонтальная лента */
+.popular-scroll {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+}
+.popular-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+/* Карточка */
+.popular-card {
+    position: relative;
+    min-width: 260px;
+    height: 190px;
+    border-radius: 22px;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+}
+
+/* Фото */
+.popular-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Градиент снизу как на S7 */
+.popular-gradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 85px;
+    background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+}
+
+/* Контент */
+.popular-content {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    right: 14px;
+    color: white;
+}
+
+.popular-title-card {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.popular-desc {
+    margin-top: 4px;
+    font-size: 12px;
+    opacity: 0.92;
+    line-height: 1.25em;
+}
+/* Контейнер секции */
+.offer-section {
+    margin-top: 32px;
+    padding: 0 16px;
+}
+
+/* Плашка "Хит" */
+.offer-hit {
+    background: #ef4444;
+    color: white;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    display: inline-block;
+}
+
+/* Заголовок */
+.offer-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 10px 0 20px;
+}
+
+/* Сетка */
+.offer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+/* Карточки (общий стиль) */
+.offer-card {
+    border-radius: 24px;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Малые карточки */
+.offer-card-small {
+    padding: 16px;
+    flex-direction: column;
+}
+
+/* Текст */
+.offer-card h3 {
+    font-size: 20px;
+    margin: 0;
+    font-weight: 700;
+}
+.offer-card p {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-top: 4px;
+}
+
+/* Малые карточки текст */
+.offer-card-small h3 {
+    font-size: 15px;
+}
+.offer-card-small p {
+    font-size: 12px;
+}
+
+/* Градиенты */
+.grad-green {
+    background: linear-gradient(90deg, #22c55e, #059669);
+}
+.grad-purple {
+    background: linear-gradient(135deg, #7c3aed, #1f2937);
+}
+.grad-green-light {
+    background: linear-gradient(135deg, #4ade80, #10b981);
+}
+.grad-blue {
+    background: linear-gradient(90deg, #3b82f6, #4338ca);
+}
+
+/* Изображения */
+.offer-card img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.offer-card-small img {
+    width: 65px;
+    height: 65px;
+    margin-left: auto;
+    margin-top: 12px;
+}
+/* Раздел 7PLANE7 */
+.blog-section {
+    margin-top: 30px;
+    padding: 0 16px;
+}
+
+/* Карточка */
+.blog-card {
+    background: #ffffff;
+    border-radius: 22px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    padding: 0;
+    overflow: hidden;
+    margin-bottom: 26px;
+}
+
+/* Картинка */
+.blog-card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    border-radius: 22px 22px 0 0;
+}
+
+/* Метка сверху */
+.blog-tag {
+    display: inline-block;
+    background: #ffffffd1;
+    backdrop-filter: blur(6px);
+    border-radius: 12px;
+    padding: 4px 10px;
+    font-size: 12px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-weight: 600;
+}
+
+/* Заголовок */
+.blog-title {
+    font-size: 18px;
+    font-weight: 600;
+    padding: 12px 12px 0 12px;
+    line-height: 1.25em;
+}
+
+/* Дата + просмотры */
+.blog-meta {
+    font-size: 13px;
+    color: #444;
+    padding: 8px 12px 14px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.blog-meta i {
+    font-size: 14px;
+}
+/* Квадратные истории */
+.stories .swiper-slide {
+    width: 150px;
+    height: 100px;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    margin-right: 12px; 
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* Тонкая рамка у непросмотренных */
+.stories .swiper-slide:not(.viewed) {
+    border: 2px solid #1ac595;
+}
+
+/* Просмотренная */
+.stories .swiper-slide.viewed {
+    border: none;
+}
+
+/* Картинка */
+.stories .swiper-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+/* Просмотрщик истории */
+.story-viewer {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: .3s;
+    z-index: 99999;
+}
+
+.story-viewer.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.story-viewer img {
+    max-width: 95%;
+    max-height: 95%;
+}
+:root{
+  --accent:#6bbf3b;           /* зелёный */
+  --muted:#9aa3ad;            /* серый текст */
+  --nav-height:68px;
+  --shadow:0 -6px 18px rgba(12,20,30,0.06);
+}
+
+/* Фиксированная нижняя панель */
+nav.bottom-nav{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:var(--nav-height);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px calc(12px + env(safe-area-inset-left))
+          calc(8px + env(safe-area-inset-bottom))
+          calc(12px + env(safe-area-inset-right));
+  background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.98));
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(6px);
+  z-index:100;
+}
+
+.bottom-nav .nav-inner{
+  width:100%;
+  max-width:900px;
+  display:flex;
+  gap:10px;
+  justify-content:space-between;
+}
+
+.bottom-nav .nav-item{
+  flex:1 1 0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  color:var(--muted);
+  font-size:12px;
+  border-radius:10px;
+  padding:8px 6px;
+  transition:all .18s ease;
+  user-select:none;
+}
+
+.bottom-nav .nav-item .icon{
+  width:22px;
+  height:22px;
+  margin-bottom:6px;
+  opacity:0.95;
+}
+
+.bottom-nav .nav-item.active{
+  color:var(--accent);
+  transform:translateY(-4px);
+  font-weight:600;
+}
+
+.bottom-nav .nav-item:active{
+  transform:translateY(0);
+}
+
 </style>
-
-<div class="slider-container">
-
-  <!-- СЛАЙД 1 -->
-  <div class="slide active">
-    <img src="images/1763642054940.avif">
-    <div class="slide-text">S7avelii - всегда к небу</div>
-    <a href="page1.html" class="slide-btn">Подробнее</a>
-  </div>
-
-  <!-- СЛАЙД 2 -->
-  <div class="slide">
-    <img src="images/1763208434508.avif">
-    <div class="slide-text">Мили за рубли!</div>
-    <a href="page2.html" class="slide-btn">Подробнее</a>
-  </div>
-
-  <!-- СЛАЙД 3 -->
-  <div class="slide">
-    <img src="images/1763208508229.avif">
-    <div class="slide-text">S7avelii Priority</div>
-    <a href="page3.html" class="slide-btn">Подробнее</a>
-  </div>
-
-  <!-- СЛАЙД 4 -->
-  <div class="slide">
-    <img src="images/1763208541542.avif">
-    <div class="slide-text">S7avelii — IT</div>
-    <a href="page4.html" class="slide-btn">Подробнее</a>
-  </div>
-
-  <!-- точки -->
-  <div class="dots"></div>
-</div>
+</head>
+<body>
+<div class="mobile-wrapper">
 
 <script>
-  const slides = document.querySelectorAll(".slide");
-  const dotsContainer = document.querySelector(".dots");
-  let current = 0;
-
-  slides.forEach((_, i) => {
-    let dot = document.createElement("div");
-    dot.classList.add("dot");
-    if (i === 0) dot.classList.add("active");
-    dot.addEventListener("click", () => showSlide(i));
-    dotsContainer.appendChild(dot);
-  });
-
-  const dots = document.querySelectorAll(".dot");
-
-  function showSlide(i) {
-    slides[current].classList.remove("active");
-    dots[current].classList.remove("active");
-
-    slides[i].classList.add("active");
-    dots[i].classList.add("active");
-
-    current = i;
+document.addEventListener("DOMContentLoaded", () => {
+  const isMobile = /Android|iPhone|iPad|iPod|Windows Phone|Mobi/i.test(navigator.userAgent);
+  if (!isMobile) {
+    window.location.href = "index.html"; // редирект обратно на ПК-версию
   }
-
-  function autoSlide() {
-    showSlide((current + 1) % slides.length);
-  }
-
-  setInterval(autoSlide, 4000);
+});
 </script>
 
-<!-- Пробел между слайдером и акциями -->
-    <div class="h-15"></div>
-<body class="bg-[#f7f8fc] font-sans">
+<div class="header">
+    <!-- Динамическая область аккаунта -->
+    <a href="auth.html" 
+   class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gray-100 text-gray-700 text-sm font-medium">
+    Войти
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707M17.657 6.343l-.707.707M6.343 17.657l-.707.707"/>
+    </svg>
+</a>
 
- <!-- Большая зелёная кнопка-ссылка -->
-    <a href="bilet.html"
-       class="bg-[#95c11f] hover:bg-[#85ab1a] text-white text-lg font-semibold w-full py-4 rounded-2xl shadow-sm flex justify-center items-center gap-2 transition">
-      Купить билет
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4l7 8-7 8M4 12h14" />
+
+    <!-- Правые иконки -->
+    <div class="header-right">
+        <img src="images/photo_5276207082657412564_y.avif" class="header-logo">
+        <img src="images/1764255724120.avif" class="header-support">
+    </div>
+</div>
+<script>
+  const API = 'https://s7avelii-airlines-1.onrender.com';
+
+  async function updateUserArea() {
+    const userArea = document.getElementById('userArea');
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      userArea.innerHTML = `
+        <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
+          Войти
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
+          </svg>
+        </a>
+      `;
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API}/api/profile`, {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+
+      if (!res.ok) throw new Error('Не авторизован');
+
+      const data = await res.json();
+      const user = data.user || data;
+
+      const avatar = user.avatar ? 
+        (user.avatar.startsWith('http') ? user.avatar : API + user.avatar) : 
+        'images/default-avatar.png';
+      const fioParts = (user.fio || 'Профиль').split(' ');
+      const name = fioParts[0] || 'Профиль';
+      const surnameInitial = fioParts[1] ? fioParts[1][0] + '.' : '';
+
+      // Универсальный поиск поля с милями
+      const miles = user.miles ?? user.miles_balance ?? user.bonus_miles ?? user.points ?? data.miles ?? 0;
+
+      // 🟢 путь к иконке миль — просто подставь свой
+      const mileIcon = 'images/1761237779917.avif';
+
+      userArea.innerHTML = `
+        <div class="flex items-center bg-white border rounded-2xl px-3 py-1.5 cursor-pointer hover:shadow-sm transition"
+             onclick="window.location.href='cabinet.html'">
+          <img src="${avatar}" alt="avatar" 
+            class="w-8 h-8 rounded-full object-cover mr-2 border">
+          <div class="flex flex-col mr-3">
+            <span class="text-sm font-semibold leading-tight">${name} ${surnameInitial}</span>
+            <span class="text-xs text-gray-500 flex items-center gap-1">
+              ${Number(miles).toLocaleString()}
+              <img src="${mileIcon}" alt="M" class="w-3 h-3 object-contain inline-block" />
+            </span>
+          </div>
+        </div>
+      `;
+    } catch (err) {
+      console.warn(err);
+      localStorage.removeItem('token');
+      userArea.innerHTML = `
+  <a href="auth.html" 
+     class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gray-100 text-gray-700 text-sm font-medium">
+      Войти
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707M17.657 6.343l-.707.707M6.343 17.657l-.707.707"/>
       </svg>
-    </a>
-  </section>
+  </a>
 
-<!-- Пробел между слайдером и акциями -->
-    <div class="h-5"></div>
-  
- <section class="px-4 mt-4">
-  <div class="bg-white rounded-3xl overflow-hidden shadow-sm">
+      `;
+    }
+  }
 
-    <!-- 1. Наши рейсы -->
-    <a href="arrivel.html"
-       class="flex items-center p-4 active:bg-gray-50 transition">
-      <div class="w-12 h-12 flex items-center justify-center bg-[#e9f4d6] rounded-xl mr-4">
-        <img src="images/photo_5398063018606193773_y.avif" class="w-6 h-6" alt="">
-      </div>
-      <p class="text-gray-900 font-medium text-[16px]">Наши рейсы</p>
-    </a>
+  window.addEventListener('DOMContentLoaded', updateUserArea);
+  window.__S7_UPDATE_USER_AREA = updateUserArea;
+</script>
 
-    <div class="border-t border-gray-200"></div>
 
-    <!-- 2. Отели -->
-    <a href="HOTEL.html"
-       class="flex items-center p-4 active:bg-gray-50 transition">
-      <div class="w-12 h-12 flex items-center justify-center bg-[#e5ecfd] rounded-xl mr-4">
-        <img src="images/photo_5398063018606193774_y.avif" class="w-6 h-6" alt="">
-      </div>
-      <p class="text-gray-900 font-medium text-[16px]">Отели</p>
-    </a>
+<!-- STORIES -->
+<div class="stories">
+    <div class="swiper swiper-stories">
+        <div class="swiper-wrapper">
 
-    <div class="border-t border-gray-200"></div>
+            <div class="swiper-slide" data-full="images/Креатив без названия (4).avif">
+                <img src="images/Креатив без названия (4).avif">
+                <div class="story-title">Ближе к небу</div>
+            </div>
 
-    <!-- 3. Для путешествия -->
-    <a href="s7hop.html"
-       class="flex items-center p-4 active:bg-gray-50 transition">
-      <div class="w-12 h-12 flex items-center justify-center bg-[#efe8fd] rounded-xl mr-4">
-        <img src="images/photo_5398063018606193772_y.avif" class="w-6 h-6" alt="">
-      </div>
-      <p class="text-gray-900 font-medium text-[16px]">Для путешествия</p>
-    </a>
+            <div class="swiper-slide" data-full="images/Креатив без названия (5).avif">
+                <img src="images/Креатив без названия (5).avif">
+                <div class="story-title">Стикеры Priority</div>
+            </div>
 
-  </div>
+            <div class="swiper-slide" data-full="images/Креатив без названия (3).avif">
+                <img src="images/Креатив без названия (3).avif">
+                <div class="story-title">Мы в телеграм</div>
+            </div>
+
+            <div class="swiper-slide" data-full="images/Креатив без названия (2).avif">
+                <img src="images/Креатив без названия (2).avif">
+                <div class="story-title">Личный кабинет</div>
+            </div>
+
+            <div class="swiper-slide" data-full="images/Креатив без названия (6).avif">
+                <img src="images/Креатив без названия (6).avif">
+                <div class="story-title">S7avelii Shop</div>
+            </div>
+
+            <div class="swiper-slide" data-full="images/Креатив без названия (7).avif">
+                <img src="images/Креатив без названия (7).avif">
+                <div class="story-title">7PLANE7</div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- FULLSCREEN VIEWER -->
+<div class="story-viewer">
+    <img src="">
+</div>
+<script>
+// Открытие истории
+document.querySelectorAll('.swiper-slide').forEach(slide => {
+    slide.addEventListener('click', () => {
+
+        const full = slide.getAttribute('data-full');
+
+        const viewer = document.querySelector('.story-viewer');
+        const img = viewer.querySelector('img');
+
+        img.src = full;
+
+        viewer.classList.add('active');
+
+        slide.classList.add('viewed');
+    });
+});
+
+// Закрытие кликом
+document.querySelector('.story-viewer').addEventListener('click', () => {
+    document.querySelector('.story-viewer').classList.remove('active');
+});
+</script>
+
+
+ <a href="" class="big-btn">Купить билет</a>
+
+<a href="s7hop.html" class="add-booking">＋ Приобрести мерч</a>
+
+
+<!-- AD SLIDER -->
+<div class="ad">
+    <div class="swiper swiper-ad">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="images/15_20251127190453.avif"></div>
+            <div class="swiper-slide"><img src="images/18.avif"></div>
+            <div class="swiper-slide"><img src="images/16_20251127190513.avif"></div>
+            <div class="swiper-slide"><img src="images/17.avif"></div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+</div>
+
+<section>
+<!-- USEFUL -->
+<div class="useful">
+    <div class="useful-title">Полезное</div>
+
+    <!-- Используются ТВОИ ИКОНКИ -->
+    <div class="useful-item" onclick="location.href='flights.html'">
+    <img src="images/1764255465505.avif"> Табло рейсов
+</div>
+
+<div class="useful-item" onclick="location.href='checkin.html'">
+    <img src="images/photo_5398063018606193772_y.avif"> Для путешествия
+</div>
+
+<div class="useful-item" onclick="location.href='excursions.html'">
+    <img src="images/photo_5398063018606193774_y.avif"> Отели
+</div>
+
+<div class="useful-item" onclick="location.href='hotels.html'">
+    <img src="images/1764255489216.avif"> Вопросы и ответы
+</div>
+
 </section>
+<section class="offer-section">
 
-<!-- Пробел между слайдером и акциями -->
-    <div class="h-10"></div>
-    
-<section class="mt-8 px-4">
+  <span class="offer-hit">Хит</span>
+  <h2 class="offer-title">Самые актуальные предложения</h2>
 
-  <!-- Хит -->
-  <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full">Хит</span>
-  <h2 class="text-2xl font-bold mt-2 mb-4">Самые актуальные предложения</h2>
-
-  <!-- Сетка -->
-  <div class="grid grid-cols-1 gap-4">
+  <div class="offer-grid">
 
     <!-- Большая карточка 1 -->
-    <a href="busines.html"
-       class="bg-[#1fb36a] bg-gradient-to-r from-green-500 to-emerald-500 rounded-3xl p-5 text-white shadow-md flex justify-between items-center relative overflow-hidden">
-
+    <a href="busines.html" class="offer-card grad-green">
       <div>
-        <h3 class="text-xl font-bold leading-tight">S7avelii-IT</h3>
-        <p class="text-sm opacity-90 mt-1">
-          Занимаемся разработкой<br>цифровых продуктов
-        </p>
+        <h3>S7avelii-IT</h3>
+        <p>Занимаемся разработкой<br>цифровых продуктов</p>
       </div>
-
-      <img src="images/Креатив без названия (8).avif"
-           class="w-20 h-20 object-contain" alt="">
+      <img src="images/Креатив без названия (8).avif" alt="">
     </a>
 
-    <!-- Блок из двух карточек рядом -->
-    <div class="grid grid-cols-2 gap-4">
+    <!-- Две карточки рядом -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
 
-      <!-- Карточка 2 -->
-      <a href="priority.html"
-         class="bg-gradient-to-br from-purple-600 to-gray-800 rounded-3xl p-4 text-white shadow-md flex flex-col justify-between overflow-hidden">
-
+      <a href="priority.html" class="offer-card offer-card-small grad-purple">
         <div>
-          <h3 class="text-base font-bold leading-tight">Мили за рубли!</h3>
-          <p class="text-xs opacity-90 mt-1">
-            Покупайте мили,<br>копите впечатления
-          </p>
+          <h3>Мили за рубли!</h3>
+          <p>Покупайте мили,<br>копите впечатления</p>
         </div>
-
-        <img src="images/1761832960183.avif"
-             class="w-16 h-16 mt-3 ml-auto" alt="">
+        <img src="images/1761832960183.avif" alt="">
       </a>
 
-      <!-- Карточка 3 -->
-      <a href="priority.html"
-         class="bg-gradient-to-br from-green-400 to-emerald-400 rounded-3xl p-4 text-white shadow-md flex flex-col justify-between overflow-hidden">
-
+      <a href="priority.html" class="offer-card offer-card-small grad-green-light">
         <div>
-          <h3 class="text-base font-bold leading-tight">S7avelii Priority</h3>
-          <p class="text-xs opacity-90 mt-1">Оплачивайте путешествия милями</p>
+          <h3>S7avelii Priority</h3>
+          <p>Оплачивайте путешествия милями</p>
         </div>
-
-        <img src="images/Креатив без названия (9).avif"
-             class="w-16 h-16 mt-3 ml-auto" alt="">
+        <img src="images/Креатив без названия (9).avif" alt="">
       </a>
 
     </div>
 
     <!-- Большая карточка 4 -->
-    <a href="s7hop.html"
-       class="bg-gradient-to-r from-blue-500 to-indigo-500 rounded-3xl p-5 text-white flex justify-between items-center shadow-md overflow-hidden">
-
+    <a href="s7hop.html" class="offer-card grad-blue">
       <div>
-        <h3 class="text-xl font-bold leading-tight">S7avelii Shop</h3>
-        <p class="text-sm opacity-90 mt-1">Устройте себе шопинг за мили</p>
+        <h3>S7avelii Shop</h3>
+        <p>Устройте себе шопинг за мили</p>
       </div>
-
-      <img src="images/1763210667894.avif"
-           class="w-20 h-20" alt="">
+      <img src="images/1763210667894.avif" alt="">
     </a>
 
   </div>
 </section>
 
+<section class="popular-section">
 
-  <section class="mt-6 px-4">
-  <div class="bg-gray-100 rounded-3xl p-6">
+  <div class="popular-title">Популярные направления</div>
 
-    <h2 class="text-2xl font-bold mb-5">Рейсы из г. Савелий</h2>
+  <div class="popular-scroll">
 
-    <div class="space-y-4">
-
-      <!-- Карточка 1 -->
-      <div class="bg-white rounded-2xl p-4 flex items-center shadow-sm">
-        <img src="images/shutterstock_1.avif" class="w-20 h-20 rounded-xl object-cover mr-4">
-        <div>
-          <h3 class="font-semibold text-lg text-gray-800">Самара</h3>
-          <p class="text-sm text-gray-500 mt-1">туда и обратно</p>
-          <p class="text-sm font-medium text-green-600 mt-1">2 раза в день</p>
+    <!-- Карточка 1 -->
+    <a href="#" class="popular-card">
+      <img src="images/h08.avif" alt="">
+      <div class="popular-gradient"></div>
+      <div class="popular-content">
+        <div class="popular-title-card">Пхукет (Таиланд)</div>
+        <div class="popular-desc">
+          Идеально белые пляжи днём и рыбалка с фонариками — ночью
         </div>
       </div>
-
-      <!-- Карточка 2 -->
-      <div class="bg-white rounded-2xl p-4 flex items-center shadow-sm">
-        <img src="images/images (1).avif" class="w-20 h-20 rounded-xl object-cover mr-4">
-        <div>
-          <h3 class="font-semibold text-lg text-gray-800">Вена</h3>
-          <p class="text-sm text-gray-500 mt-1">туда и обратно</p>
-          <p class="text-sm font-medium text-green-600 mt-1">1 рейс в день</p>
-        </div>
-      </div>
-
-      <!-- Карточка 3 -->
-      <div class="bg-white rounded-2xl p-4 flex items-center shadow-sm">
-        <img src="images/ЖД вокзал.avif" class="w-20 h-20 rounded-xl object-cover mr-4">
-        <div>
-          <h3 class="font-semibold text-lg text-gray-800">Красноярск</h3>
-          <p class="text-sm text-gray-500 mt-1">туда и обратно</p>
-          <p class="text-sm font-medium text-green-600 mt-1">1 рейс в день</p>
-        </div>
-      </div>
-
-      <!-- Карточка 4 -->
-      <div class="bg-white rounded-2xl p-4 flex items-center shadow-sm">
-        <img src="images/025202.avif" class="w-20 h-20 rounded-xl object-cover mr-4">
-        <div>
-          <h3 class="font-semibold text-lg text-gray-800">Ашхабад</h3>
-          <p class="text-sm text-gray-500 mt-1">туда и обратно</p>
-          <p class="text-sm font-medium text-green-600 mt-1">2 рейса в день</p>
-        </div>
-      </div>
-
-      <!-- Карточка 5 -->
-      <div class="bg-white rounded-2xl p-4 flex items-center shadow-sm">
-        <img src="images/1_П.avif" class="w-20 h-20 rounded-xl object-cover mr-4">
-        <div>
-          <h3 class="font-semibold text-lg text-gray-800">Пафос</h3>
-          <p class="text-sm text-gray-500 mt-1">туда и обратно</p>
-          <p class="text-sm font-medium text-green-600 mt-1">1 рейс в день</p>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Кнопка -->
-    <button class="mt-6 w-full bg-lime-500 hover:bg-lime-600 text-white font-semibold py-3 rounded-2xl">
-      Показать ещё
-    </button>
-
-  </div>
-</section>
-
-
-<!-- - Новости S7avelii Airlines -->
-<section class="max-w-7xl mx-auto px-4 py-12">
-  <div class="flex justify-between items-center mb-8">
-    <h2 class="text-3xl font-bold">Новости S7avelii Airlines</h2>
-    <a href="#" class="text-blue-900 text-sm hover:underline flex items-center">
-      <svg class="ml-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10 3a1 1 0 011.707-.707l6 6a1 1 0 010 1.414l-6 6A1 1 0 0110 15V3z" />
-      </svg>
     </a>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <!-- Карточка 1 -->
-    <div class="rounded-2xl border p-6 shadow-sm">
-      <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-orange-400 to-pink-400"></div>
-      <h3 class="font-bold text-lg mb-2">S7avelii Airlines запускает новый проект: S7avelii- ближе к небу</h3>
-      <p class="text-gray-600 mb-4">В этом проекте рассказали, как ИИ был внедрен и в нашу сферу.</p>
-      <span class="text-sm text-gray-400">25 НОЯ 2025</span>
-    </div>
 
     <!-- Карточка 2 -->
-    <div class="rounded-2xl border p-6 shadow-sm">
-      <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-yellow-300 to-green-400"></div>
-      <h3 class="font-bold text-lg mb-2">S7avelii Airlines открывает рейсы в Японию</h3>
-      <p class="text-gray-600 mb-4"></p>
-      <span class="text-sm text-gray-400">20 НОЯ 2025</span>
-    </div>
+    <a href="#" class="popular-card">
+      <img src="images/111-84.avif" alt="">
+      <div class="popular-gradient"></div>
+      <div class="popular-content">
+        <div class="popular-title-card">Рим (Италия)</div>
+        <div class="popular-desc">
+          Шоколадный джилато на берегу моря
+        </div>
+      </div>
+    </a>
 
     <!-- Карточка 3 -->
-    <div class="rounded-2xl border p-6 shadow-sm">
-      <div class="h-3 w-full rounded-t-xl mb-4 bg-gradient-to-r from-sky-300 to-blue-600"></div>
-      <h3 class="font-bold text-lg mb-2">S7avelii Airlines начала подготовку к ряду новогодних меро6</h3>
-      <p class="text-gray-600 mb-4"></p>
-      <span class="text-sm text-gray-400">19 НОЯ 2025</span>
-    </div>
+    <a href="#" class="popular-card">
+      <img src="images/orig.avif" alt="">
+      <div class="popular-gradient"></div>
+      <div class="popular-content">
+        <div class="popular-title-card">Сочи (Россия)</div>
+        <div class="popular-desc">
+          Красная поляна, Сириус и другие достопримечательности
+        </div>
+      </div>
+    </a>
+
   </div>
-</section>  
-   
-    
-    <section class="px-4 py-6 bg-gray-50">
-  <!-- Заголовок -->
-  <div class="mb-4">
-    <span class="text-gray-400 text-sm">Что почитать</span>
-    <h2 class="text-2xl font-bold text-gray-900">Делимся опытом путешествий</h2>
-  </div>
+  
 
-  <!-- Сетка карточек -->
-  <div class="grid grid-cols-2 gap-3">
-    <!-- Карточка 1 -->
-    <div class="relative rounded-2xl overflow-hidden h-40">
-      <img src="images/Креатив без названия (6).avif" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-black/40"></div>
-      <div class="absolute bottom-2 left-2 text-white text-sm font-medium">
-        Родной край с новой стороны
-      </div>
+<section class="blog-section" id="blog-container">
+
+  <div class="blog-card">
+    <div style="position:relative;">
+        <span class="blog-tag">Учебник путешествий</span>
+        <img src="URL_КАРТИНКИ">
     </div>
 
-    <!-- Карточка 2 -->
-    <div class="relative rounded-2xl overflow-hidden h-40">
-      <img src="images/Креатив без названия (7).avif" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-black/40"></div>
-      <div class="absolute bottom-2 left-2 text-white text-sm font-medium">
-        Поход в Дагестане - как получить незабываемые впечатления
-      </div>
-    </div>
+    <div class="blog-title">Заголовок поста</div>
 
-    <!-- Карточка 3 -->
-    <div class="relative rounded-2xl overflow-hidden h-40">
-      <img src="images/photo_5233187131151290241_y.avif" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-black/40"></div>
-      <div class="absolute bottom-2 left-2 text-white text-sm font-medium">
-        Токио - сакура, рамен и культура
-      </div>
+    <div class="blog-meta">
+        <span>25 нояб</span>
+        <span><i>👁</i> 829</span>
     </div>
-
-    <!-- Карточка 4 -->
-    <div class="relative rounded-2xl overflow-hidden h-40">
-      <img src="images/photo_5215545157845979426_y (1).avif" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-black/40"></div>
-      <div class="absolute bottom-2 left-2 text-white text-sm font-medium">
-        Как экипаж переносит ночные перелёты
-      </div>
-    </div>
-  </div>
-
-  <!-- Кнопка -->
-<div class="mt-6">
-  <a href="https://t.me/S7saveliiairlines" class="block w-full py-3 rounded-xl bg-gray-100 text-gray-900 font-medium text-center">
-    Все статьи
-  </a>
 </div>
-</section>  
+
+
+</section>
+
+
+ <script>
+const TOKEN = "8335751042:AAFtPWb-kM31iw_vgWRXqKkZ4oQUnfA9-sE";
+const CHAT_ID = "-1002041606422"; // канал
+const container = document.getElementById("blog-container");
+
+async function loadPosts() {
+    const res = await fetch(`https://api.telegram.org/bot${TOKEN}/getUpdates`);
+    const data = await res.json();
+
+    const messages = data.result
+        .filter(m => m.message && m.message.photo)
+        .slice(-10)  // последние 10 постов
+        .reverse();
+
+    messages.forEach(msg => {
+        const text = msg.message.caption || "Без текста";
+        const preview = text.split(".")[0];  // первое предложение
+
+        const photoSizes = msg.message.photo;
+        const biggest = photoSizes[photoSizes.length - 1];
+        const photoUrl = `https://api.telegram.org/file/bot${TOKEN}/${biggest.file_id}`;
+
+        const date = new Date(msg.message.date * 1000)
+            .toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+
+        const card = `
+            <div class="blog-card">
+              <div style="position:relative;">
+                <span class="blog-tag">Учебник путешествий</span>
+                <img src="${photoUrl}">
+              </div>
+
+              <div class="blog-title">${preview}</div>
+
+              <div class="blog-meta">
+                <span>${date}</span>
+                <span>👁 ${msg.message.views || "?"}</span>
+              </div>
+            </div>
+        `;
+
+        container.innerHTML += card;
+    });
+}
+
+loadPosts();
+</script>
+
+  <!-- Нижняя фиксированная менюшка -->
+  <nav class="bottom-nav" aria-label="Главная навигация">
+    <div class="nav-inner" role="tablist" aria-label="Основные разделы">
+      <!-- Для внешних страниц используйте обычные <a href="/profile.html"> -->
+      <a href="#home" class="nav-item" data-target="home" role="tab" aria-selected="true">
+        <!-- простые SVG-иконки -->
+        <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 11.5L12 4l9 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Главная</span>
+      </a>
+
+      <a href="#travel" class="nav-item" data-target="travel" role="tab">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 12h18M7 6l2 6M17 6l-2 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Путешествия</span>
+      </a>
+
+      <a href="#buy" class="nav-item" data-target="buy" role="tab">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 7h18v10H3zM7 7v-2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Купить</span>
+      </a>
+
+      <a href="#help" class="nav-item" data-target="help" role="tab">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0zM12 18v.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Помощь</span>
+      </a>
+
+      <a href="#profile" class="nav-item" data-target="profile" role="tab">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 20a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Профиль</span>
+      </a>
+    </div>
+  </nav>
+
+  <script>
+    // Простая логика переключения секций по хешу и подсветки активного пункта.
+    (function(){
+      const navItems = document.querySelectorAll('.nav-item');
+      const pages = document.querySelectorAll('.page');
+
+      function activate(targetId, pushHistory=true){
+        // скрыть все страницы
+        pages.forEach(p=> p.classList.remove('active'));
+        // показать целевую
+        const target = document.getElementById(targetId);
+        if(target) target.classList.add('active');
+
+        // установить active для меню
+        navItems.forEach(a=>{
+          const is = a.dataset.target === targetId;
+          a.classList.toggle('active', is);
+          a.setAttribute('aria-selected', is ? 'true' : 'false');
+        });
+
+        // установить hash без лишней записи истории при первом заходе
+        if(pushHistory) history.replaceState(null, '', '#'+targetId);
+        // сохраняем активный таб в localStorage чтобы восстанавливать между перезагрузками
+        try { localStorage.setItem('activeTab', targetId); } catch(e){}
+      }
+
+      // Установить исходный активный таб:
+      const initial = (location.hash && location.hash.slice(1)) || localStorage.getItem('activeTab') || 'home';
+      activate(initial, false);
+
+      // Нажатия на меню:
+      navItems.forEach(a=>{
+        a.addEventListener('click', function(e){
+          // если ссылки ведут на другие страницы, уберите preventDefault
+          e.preventDefault();
+          const t = this.dataset.target;
+          activate(t, true);
+        });
+      });
+
+      // Слушаем изменение хеша (например пользователь перешёл по ссылке)
+      window.addEventListener('hashchange', ()=>{
+        const hash = location.hash.slice(1) || 'home';
+        activate(hash, false);
+      });
+
+      // Доступность: навигация с клавиатуры — переключение по Enter/Space
+      navItems.forEach(a=>{
+        a.addEventListener('keydown', (e)=>{
+          if(e.key === 'Enter' || e.key === ' '){
+            e.preventDefault();
+            a.click();
+          }
+        });
+      });
+
+    })();
+  </script>
 
 <footer class="footer">
   <div class="footer-inner">
@@ -975,47 +1502,6 @@ document.addEventListener("DOMContentLoaded", () => {
   fadeElements.forEach(el => observer.observe(el));
 });
 </script>
-
-  <!-- Нижнее меню -->
-<nav class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur border-t border-gray-200 shadow z-50">
-  <div class="flex justify-around py-2">
-    <!-- Главная -->
-    <a href="phone.html" class="flex flex-col items-center text-xs font-medium text-lime-600">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M3 9.75L12 3l9 6.75V21a.75.75 0 01-.75.75H3.75A.75.75 0 013 21V9.75z"/>
-      </svg>
-      Главная
-    </a>
-    <!-- Путешествия -->
-    <a href="priority.html" class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2l4 8H8l4-8zm0 20v-8m0 0l-8-4m8 4l8-4"/>
-      </svg>
-      Priority
-    </a>
-    <!-- Купить -->
-    <a href="bilet.html" class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20h6m-6 0a2 2 0 01-2-2V8h10v10a2 2 0 01-2 2m-6 0h6"/>
-      </svg>
-      Купить
-    </a>
-    <!-- Информация -->
-    <a href="helper.html" class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h.01M12 4v10"/>
-      </svg>
-      Информация
-    </a>
-    <!-- Профиль -->
-    <a href="cabinet.html" class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1118.879 17.8M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-      </svg>
-      Профиль
-    </a>
-  </div>
-</nav>
 
 </body>
 </html>
