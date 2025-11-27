@@ -967,47 +967,27 @@ window.__S7_UPDATE_USER_AREA = updateUserArea;
     <img src="">
 </div>
 <script>
-// Открытие истории
-document.querySelectorAll('.swiper-slide').forEach(slide => {
-    slide.addEventListener('click', () => {
-
-        const full = slide.getAttribute('data-full');
-
-        const viewer = document.querySelector('.story-viewer');
-        const img = viewer.querySelector('img');
-
-        img.src = full;
-
-        viewer.classList.add('active');
-
-        slide.classList.add('viewed');
-    });
+// ИСТОРИИ
+new Swiper(".swiper-stories", {
+    slidesPerView: 4.5,
+    spaceBetween: 10,
+    freeMode: true,
+    grabCursor: true,
 });
 
-// Закрытие кликом
-document.querySelector('.story-viewer').addEventListener('click', () => {
-    document.querySelector('.story-viewer').classList.remove('active');
+// РЕКЛАМНЫЙ СЛАЙДЕР
+new Swiper(".swiper-ad", {
+    loop: true,
+    autoplay: {
+        delay: 3000,
+    },
+    pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+    },
 });
- // STORIES SLIDER
-    const storySwiper = new Swiper('.swiper-stories', {
-        slidesPerView: 4.5,
-        spaceBetween: 10,
-        freeMode: true,
-        grabCursor: true,
-    });
-
-    // AD SLIDER
-    const adSwiper = new Swiper('.swiper-ad', {
-        loop: true,
-        autoplay: {
-            delay: 3000,
-        },
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        }
-    });
 </script>
+
 
 
  <a href="" class="big-btn">Купить билет</a>
