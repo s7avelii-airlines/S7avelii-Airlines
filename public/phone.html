@@ -683,29 +683,82 @@ nav.bottom-nav{
   transform:translateY(0);
 }
 .login-btn {
-    all: unset !important; /* УДАЛЯЕМ ВСЁ ДЕРЬМО, ЧТО ПОДМЕШАЛОСЬ */
-    display: flex !important;
-    align-items: center !important;
-    gap: 4px !important;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 
-    background: #f2f2f2 !important;
-    color: #333 !important;
+  background: #e5e5e5;
+  color: #333;
 
-    padding: 4px 10px !important;
-    border-radius: 8px !important;
-    border: 1px solid #dcdcdc !important;
+  padding: 6px 12px;
+  border-radius: 8px;
 
-    font-size: 14px !important;
-    font-weight: 500 !important;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
 
-    height: 30px !important;
-    cursor: pointer !important;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
-.login-btn svg {
-    width: 16px !important;
-    height: 16px !important;
+.login-btn:hover {
+  background: #d8d8d8;
 }
+
+.login-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Пользовательская мини-карточка */
+.user-mini {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.user-mini:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+}
+
+.user-mini-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  margin-right: 8px;
+}
+
+.user-mini-info {
+  display: flex;
+  flex-direction: column;
+  margin-right: 4px;
+}
+
+.user-mini-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.user-mini-miles {
+  font-size: 12px;
+  color: #777;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.user-mini-mile-icon {
+  width: 12px;
+  height: 12px;
+}
+
 </style>
 </head>
 <body>
