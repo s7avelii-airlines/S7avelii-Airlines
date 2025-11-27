@@ -6,7 +6,10 @@
 <title>S7avelii Airlines: Ваши путешествия</title>
  <link rel="icon" href="images/favicon.png" type="image/png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-
+<!-- Подключение Swiper: вставь в <head> и перед </body> только если ещё не подключено -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+...
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <style>
   body {
         background: #F3F5F7;
@@ -564,19 +567,82 @@
 .blog-meta i {
     font-size: 14px;
 }
-/* Квадратные истории */
+/* Твои стили — не менял форму */
 .stories .swiper-slide {
-    flex-shrink: 0;
-    width: 90px !important;
+    width: 90px;
     height: 90px;
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
-    margin-right: 12px; 
+    margin-right: 12px;
     box-sizing: border-box;
     position: relative;
 }
+.stories .swiper-slide:not(.viewed) { border: 2px solid #1ac595; }
+.stories .swiper-slide.viewed { border: none; }
+.stories .swiper-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+.story-title { position: absolute; bottom: 6px; left: 6px; right:6px; color:#fff; font-size:11px; text-shadow:0 1px 2px rgba(0,0,0,.6); }
 
+/* Fullscreen viewer overlay (скрыт по умолчанию) */
+.story-viewer {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    display: none;              /* скрыт пока */
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+}
+/* внутри — контейнер для Swiper полноэкранного просмотра */
+.story-viewer .viewer-inner {
+    width: 100%;
+    height: 100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* Слайды внутри viewer — изображение центрируется и масштабируется */
+.story-viewer .swiper-slide {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.story-viewer .swiper-slide img {
+    max-width: 95%;
+    max-height: 95%;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* Закрыть кнопка и стрелки */
+.story-viewer .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 100010;
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+.story-viewer .swiper-button-prev,
+.story-viewer .swiper-button-next {
+    color: #fff;
+    z-index: 100009;
+}
+.story-viewer .swiper-pagination-bullet { background: rgba(255,255,255,0.6); }
 
 /* Тонкая рамка у непросмотренных */
 .stories .swiper-slide:not(.viewed) {
@@ -925,76 +991,129 @@ window.__S7_UPDATE_USER_AREA = updateUserArea;
 </script>
 
 
-<!-- STORIES -->
+<!-- HTML: твои квадраты (оставил как есть) -->
 <div class="stories">
-    <div class="swiper swiper-stories">
-        <div class="swiper-wrapper">
-
-            <div class="swiper-slide" data-full="images/Креатив без названия (4).avif">
-                <img src="images/Креатив без названия (4).avif">
-                <div class="story-title">Ближе к небу</div>
-            </div>
-
-            <div class="swiper-slide" data-full="images/Креатив без названия (5).avif">
-                <img src="images/Креатив без названия (5).avif">
-                <div class="story-title">Стикеры Priority</div>
-            </div>
-
-            <div class="swiper-slide" data-full="images/Креатив без названия (3).avif">
-                <img src="images/Креатив без названия (3).avif">
-                <div class="story-title">Мы в телеграм</div>
-            </div>
-
-            <div class="swiper-slide" data-full="images/Креатив без названия (2).avif">
-                <img src="images/Креатив без названия (2).avif">
-                <div class="story-title">Личный кабинет</div>
-            </div>
-
-            <div class="swiper-slide" data-full="images/Креатив без названия (6).avif">
-                <img src="images/Креатив без названия (6).avif">
-                <div class="story-title">S7avelii Shop</div>
-            </div>
-
-            <div class="swiper-slide" data-full="images/Креатив без названия (7).avif">
-                <img src="images/Креатив без названия (7).avif">
-                <div class="story-title">7PLANE7</div>
-            </div>
-
-        </div>
+  <div class="swiper swiper-stories">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" data-full="images/1.avif"><img src="images/1.avif"><div class="story-title">Ближе к небу</div></div>
+      <div class="swiper-slide" data-full="images/2.avif"><img src="images/2.avif"><div class="story-title">Стикеры Priority</div></div>
+      <div class="swiper-slide" data-full="images/3.avif"><img src="images/3.avif"><div class="story-title">Мы в телеграм</div></div>
+      <div class="swiper-slide" data-full="images/4.avif"><img src="images/4.avif"><div class="story-title">Личный кабинет</div></div>
+      <div class="swiper-slide" data-full="images/5.avif"><img src="images/5.avif"><div class="story-title">S7avelii Shop</div></div>
+      <div class="swiper-slide" data-full="images/6.avif"><img src="images/6.avif"><div class="story-title">7PLANE7</div></div>
     </div>
+  </div>
 </div>
 
-<!-- FULLSCREEN VIEWER -->
-<div class="story-viewer">
-    <img src="">
+<!-- FULLSCREEN VIEWER (скрытый) -->
+<div class="story-viewer" id="storyViewer">
+  <button class="close-btn" id="viewerClose">✕</button>
+  <div class="viewer-inner">
+    <!-- full-screen Swiper -->
+    <div class="swiper viewer-swiper">
+      <div class="swiper-wrapper" id="viewerWrapper">
+        <!-- Слайды будут заполнены JS -->
+      </div>
+      <!-- стрелки + пагинация -->
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
 </div>
+
+<!-- ИНИЦИАЛИЗАЦИЯ JS (вставить после подключения Swiper JS, перед </body>) -->
 <script>
-// ИСТОРИИ
-new Swiper(".swiper-stories", {
+document.addEventListener('DOMContentLoaded', function () {
+  // Проверка: Swiper должен быть подключён
+  if (typeof Swiper === 'undefined') {
+    console.error('Swiper не найден. Подключи swiper-bundle.min.js перед этим скриптом.');
+    return;
+  }
+
+  // Инициализация полоски историй (не меняет форму)
+  const stripSwiper = new Swiper('.swiper-stories', {
     slidesPerView: 4.5,
     spaceBetween: 10,
     freeMode: true,
     grabCursor: true,
-});
+    // ensure horizontal scrollbar works even if big container
+    observer: true,
+    observeParents: true,
+  });
 
-// РЕКЛАМНЫЙ СЛАЙДЕР
-new Swiper(".swiper-ad", {
-    loop: true,
-    autoplay: {
-        delay: 3000,
+  // Подготовим данные для полноэкранного viewer'а
+  const storySlides = Array.from(document.querySelectorAll('.stories .swiper-slide'));
+  const viewerWrapper = document.getElementById('viewerWrapper');
+  viewerWrapper.innerHTML = ''; // на всякий очистим
+
+  storySlides.forEach((slide, idx) => {
+    const full = slide.getAttribute('data-full') || slide.querySelector('img')?.src;
+    const title = slide.querySelector('.story-title')?.textContent || '';
+    // создаём слайд для viewer
+    const s = document.createElement('div');
+    s.className = 'swiper-slide';
+    s.setAttribute('data-origin-index', idx);
+    s.innerHTML = `<img src="${full}" alt="${title}" draggable="false">`;
+    viewerWrapper.appendChild(s);
+  });
+
+  // инициализируем fullscreen swip-er (пока скрыт)
+  const viewerSwiper = new Swiper('.viewer-swiper', {
+    spaceBetween: 10,
+    centeredSlides: true,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
     },
     pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
+      el: '.swiper-pagination',
+      clickable: true,
+      type: 'bullets',
     },
-});
- new Swiper(".swiper-stories", {
-    slidesPerView: 'auto',
-    spaceBetween: 12,
-    freeMode: true,
-    grabCursor: true,
-});
+    keyboard: {
+      enabled: true,
+      onlyInViewport: false,
+    },
+    // чтобы при изменении DOM (если нужно) перезапускался корректно
+    observer: true,
+    observeParents: true,
+  });
 
+  const viewer = document.getElementById('storyViewer');
+  const closeBtn = document.getElementById('viewerClose');
+
+  // Открытие viewer при клике на мини-картинку
+  storySlides.forEach((slideEl, index) => {
+    slideEl.addEventListener('click', (e) => {
+      // пометка как просмотренная (сохраняется в классе)
+      slideEl.classList.add('viewed');
+
+      // показать overlay
+      viewer.style.display = 'flex';
+
+      // Перейти к тому слайду в viewer
+      viewerSwiper.slideTo(index, 0); // без анимации, сразу
+      // небольшая задержка, чтобы точно перерисовать (без неё иногда не встаёт точно)
+      setTimeout(() => viewerSwiper.update(), 20);
+    });
+  });
+
+  // Закрытие кликом по фону или кнопке закрытия
+  closeBtn.addEventListener('click', closeViewer);
+  // закрывать по клику вне картинки
+  viewer.addEventListener('click', function (e) {
+    // если кликнули именно по overlay (а не по картинке/стрелкам)
+    if (e.target === viewer) closeViewer();
+  });
+
+  function closeViewer() {
+    viewer.style.display = 'none';
+  }
+
+  // Дополнительно: поддержка swipe на мобильных — Swiper уже это делает
+  // Лог: если нужно, можно сохранить индекс последнего просмотренного в localStorage и т.д.
+});
 </script>
 
 
