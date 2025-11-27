@@ -786,80 +786,142 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </div>
 <script>
-  const API = 'https://s7avelii-airlines-1.onrender.com';
+const API = 'https://s7avelii-airlines-1.onrender.com';
 
-  async function updateUserArea() {
-    const userArea = document.getElementById('userArea');
-    const token = localStorage.getItem('token');
+function createLoginButton() {
+  // создаём <a class="login-btn">Войти <svg/></a> через DOM и ставим inline-стили
+  const a = document.createElement('a');
+  a.setAttribute('href', 'auth.html');
+  a.className = 'login-btn';
+  a.setAttribute('aria-label', 'Войти');
 
-    if (!token) {
-      userArea.innerHTML = `
-        <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
-          Войти
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-            d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
-          </svg>
-        </a>
-      `;
+  // текст
+  const text = document.createTextNode('Войти ');
+  a.appendChild(text);
+
+  // svg иконка (вставляем через innerHTML только svg, это безопасно)
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('fill', 'none');
+  svg.setAttribute('stroke', 'currentColor');
+  svg.setAttribute('width', '16');
+  svg.setAttribute('height', '16');
+  svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707M17.657 6.343l-.707.707M6.343 17.657l-.707.707"/>';
+
+  a.appendChild(svg);
+
+  // inline-стили — эти стили не перебьёт Tailwind
+  a.style.cssText = [
+    'display:flex',
+    'align-items:center',
+    'gap:6px',
+    'padding:6px 12px',
+    'background:#e5e5e5',
+    'color:#222',
+    'border-radius:8px',
+    'border:1px solid #d0d0d0',
+    'font-size:14px',
+    'font-weight:600',
+    'height:30px',
+    'line-height:1',
+    'text-decoration:none',
+    'cursor:pointer',
+    'box-sizing:border-box'
+  ].join(';');
+
+  // защита: если кто-то позже попытается перебить — ставим атрибут data-forced-style
+  a.setAttribute('data-forced-style', 'true');
+
+  return a;
+}
+
+async function updateUserArea() {
+  const userArea = document.getElementById('userArea');
+  if (!userArea) {
+    console.warn('updateUserArea: #userArea not found in DOM');
+    return;
+  }
+
+  const token = localStorage.getItem('token');
+
+  // сначала очищаем контейнер
+  userArea.innerHTML = '';
+
+  if (!token) {
+    // Вставляем созданную через DOM кнопку (с inline-стилями)
+    const btn = createLoginButton();
+    userArea.appendChild(btn);
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/api/profile`, {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+
+    if (res.status === 401) {
+      // если не авторизован, удаляем токен и показываем кнопку
+      localStorage.removeItem('token');
+      const btn = createLoginButton();
+      userArea.appendChild(btn);
       return;
     }
 
-    try {
-      const res = await fetch(`${API}/api/profile`, {
-        headers: { 'Authorization': 'Bearer ' + token }
-      });
+    if (!res.ok) throw new Error('Fetch error: ' + res.status);
 
-      if (!res.ok) throw new Error('Не авторизован');
+    const data = await res.json();
+    const user = data.user ?? data;
 
-      const data = await res.json();
-      const user = data.user || data;
+    // собираем профильный блок (через DOM)
+    const wrapper = document.createElement('div');
+    wrapper.className = 'user-mini';
+    wrapper.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 10px;border-radius:14px;background:#fff;border:1px solid #e6e6e6;';
+    wrapper.addEventListener('click', () => window.location.href = 'cabinet.html');
 
-      const avatar = user.avatar ? 
-        (user.avatar.startsWith('http') ? user.avatar : API + user.avatar) : 
-        'images/default-avatar.png';
-      const fioParts = (user.fio || 'Профиль').split(' ');
-      const name = fioParts[0] || 'Профиль';
-      const surnameInitial = fioParts[1] ? fioParts[1][0] + '.' : '';
+    const avatar = document.createElement('img');
+    const avatarUrl = user.avatar ? (user.avatar.startsWith('http') ? user.avatar : API.replace(/\/$/, '') + '/' + user.avatar.replace(/^\//, '')) : 'images/default-avatar.png';
+    avatar.setAttribute('src', avatarUrl);
+    avatar.setAttribute('alt', 'avatar');
+    avatar.style.cssText = 'width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid #ccc;';
 
-      // Универсальный поиск поля с милями
-      const miles = user.miles ?? user.miles_balance ?? user.bonus_miles ?? user.points ?? data.miles ?? 0;
+    const info = document.createElement('div');
+    info.style.cssText = 'display:flex;flex-direction:column;gap:2px;';
 
-      // 🟢 путь к иконке миль — просто подставь свой
-      const mileIcon = 'images/1761237779917.avif';
+    const fioParts = (user.fio || 'Профиль').trim().split(/\s+/);
+    const name = fioParts[0] || 'Профиль';
+    const surnameInitial = fioParts[1] ? fioParts[1][0] + '.' : '';
 
-      userArea.innerHTML = `
-        <div class="flex items-center bg-white border rounded-2xl px-3 py-1.5 cursor-pointer hover:shadow-sm transition"
-             onclick="window.location.href='cabinet.html'">
-          <img src="${avatar}" alt="avatar" 
-            class="w-8 h-8 rounded-full object-cover mr-2 border">
-          <div class="flex flex-col mr-3">
-            <span class="text-sm font-semibold leading-tight">${name} ${surnameInitial}</span>
-            <span class="text-xs text-gray-500 flex items-center gap-1">
-              ${Number(miles).toLocaleString()}
-              <img src="${mileIcon}" alt="M" class="w-3 h-3 object-contain inline-block" />
-            </span>
-          </div>
-        </div>
-      `;
-    } catch (err) {
-      console.warn(err);
-      localStorage.removeItem('token');
-      userArea.innerHTML = `
-        <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
-          Войти
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-            d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
-          </svg>
-        </a>
-      `;
-    }
+    const nameEl = document.createElement('span');
+    nameEl.textContent = `${name} ${surnameInitial}`;
+    nameEl.style.cssText = 'font-size:14px;font-weight:600;color:#222;line-height:1;';
+
+    const milesVal = user.miles ?? user.miles_balance ?? user.bonus_miles ?? user.points ?? data.miles ?? 0;
+    const milesEl = document.createElement('span');
+    milesEl.style.cssText = 'font-size:12px;color:#666;display:flex;align-items:center;gap:6px;';
+
+    milesEl.innerHTML = `${Number(milesVal).toLocaleString()} <img src="images/1761237779917.avif" alt="M" style="width:12px;height:12px;display:inline-block;margin-left:4px;">`;
+
+    info.appendChild(nameEl);
+    info.appendChild(milesEl);
+
+    wrapper.appendChild(avatar);
+    wrapper.appendChild(info);
+
+    userArea.appendChild(wrapper);
+
+  } catch (err) {
+    console.warn('updateUserArea error', err);
+    localStorage.removeItem('token');
+    const btn = createLoginButton();
+    userArea.appendChild(btn);
   }
+}
 
-  window.addEventListener('DOMContentLoaded', updateUserArea);
-  window.__S7_UPDATE_USER_AREA = updateUserArea;
+// запуск
+window.addEventListener('DOMContentLoaded', updateUserArea);
+window.__S7_UPDATE_USER_AREA = updateUserArea;
 </script>
+
 
 <!-- STORIES -->
 <div class="stories">
@@ -926,6 +988,25 @@ document.querySelectorAll('.swiper-slide').forEach(slide => {
 document.querySelector('.story-viewer').addEventListener('click', () => {
     document.querySelector('.story-viewer').classList.remove('active');
 });
+ // STORIES SLIDER
+    const storySwiper = new Swiper('.swiper-stories', {
+        slidesPerView: 4.5,
+        spaceBetween: 10,
+        freeMode: true,
+        grabCursor: true,
+    });
+
+    // AD SLIDER
+    const adSwiper = new Swiper('.swiper-ad', {
+        loop: true,
+        autoplay: {
+            delay: 3000,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        }
+    });
 </script>
 
 
