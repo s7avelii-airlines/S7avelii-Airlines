@@ -8,7 +8,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 <!-- Подключение Swiper: вставь в <head> и перед </body> только если ещё не подключено -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-...
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <style>
   body {
@@ -826,6 +825,21 @@ nav.bottom-nav{
   width: 12px;
   height: 12px;
 }
+.ad {
+    width: 100%; /* можешь поставить 500px, 300px — любое */
+    max-width: 100%;
+}
+
+.swiper-ad {
+    width: 100%;
+    height: 200px; /* ТЫ МОЖЕШЬ изменить высоту КАК ХОЧЕШЬ */
+}
+
+.swiper-ad .swiper-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* картинка заполняет как надо */
+}
 
 </style>
 </head>
@@ -995,12 +1009,12 @@ window.__S7_UPDATE_USER_AREA = updateUserArea;
 <div class="stories">
   <div class="swiper swiper-stories">
     <div class="swiper-wrapper">
-      <div class="swiper-slide" data-full="images/1.avif"><img src="images/1.avif"><div class="story-title">Ближе к небу</div></div>
+      <div class="swiper-slide" data-full="images/Креатив без названия (4).avif"><img src="images/Креатив без названия (4).avif"><div class="story-title">Ближе к небу</div></div>
       <div class="swiper-slide" data-full="images/2.avif"><img src="images/2.avif"><div class="story-title">Стикеры Priority</div></div>
-      <div class="swiper-slide" data-full="images/3.avif"><img src="images/3.avif"><div class="story-title">Мы в телеграм</div></div>
-      <div class="swiper-slide" data-full="images/4.avif"><img src="images/4.avif"><div class="story-title">Личный кабинет</div></div>
-      <div class="swiper-slide" data-full="images/5.avif"><img src="images/5.avif"><div class="story-title">S7avelii Shop</div></div>
-      <div class="swiper-slide" data-full="images/6.avif"><img src="images/6.avif"><div class="story-title">7PLANE7</div></div>
+      <div class="swiper-slide" data-full="images/Креатив без названия (3).avif"><img src="images/Креатив без названия (3).avif"><div class="story-title">Мы в телеграм</div></div>
+      <div class="swiper-slide" data-full="images/Креатив без названия (2).avif"><img src="images/Креатив без названия (2).avif"><div class="story-title">Личный кабинет</div></div>
+      <div class="swiper-slide" data-full="images/Креатив без названия (6).avif"><img src="images/Креатив без названия (6).avif"><div class="story-title">S7avelii Shop</div></div>
+      <div class="swiper-slide" data-full="images/Креатив без названия (7).avif"><img src="images/Креатив без названия (7).avif"><div class="story-title">7PLANE7</div></div>
     </div>
   </div>
 </div>
@@ -1135,6 +1149,19 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="swiper-pagination"></div>
     </div>
 </div>
+<script>
+new Swiper(".swiper-ad", {
+    loop: true,
+    autoplay: {
+        delay: 2500,
+    },
+    speed: 600,
+    pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+    }
+});
+</script>
 
 <section>
 <!-- USEFUL -->
