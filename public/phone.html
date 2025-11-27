@@ -182,33 +182,58 @@
         height: 26px;
     }
     .nav-item.active { color: #7AC943; }
-    .header {
-    background: white;
-    padding: 20px 16px 10px;
+  /* Выровнять всё в одну линию */
+.header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 6px 12px;
 }
 
-.header-right {
+/* Контейнер для блока пользователя */
+.header-userarea {
     display: flex;
     align-items: center;
-    gap: 14px;
 }
 
+/* ЖЁСТКИЙ стиль кнопки, хватающий любое говно */
+.login-btn {
+    all: unset !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding: 4px 10px !important;
+
+    background: #f2f2f2 !important;
+    color: #333 !important;
+    border-radius: 8px !important;
+    border: 1px solid #dcdcdc !important;
+
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    height: 30px !important;
+    cursor: pointer !important;
+
+    line-height: 1 !important;
+}
+
+.login-icon {
+    width: 16px !important;
+    height: 16px !important;
+}
+
+/* Правые иконки */
 .header-logo {
-    width: 26px;
-    height: 26px;
-    object-fit: contain;
-    cursor: pointer;
+    width: 32px;
+    height: auto;
 }
 
 .header-support {
     width: 28px;
-    height: 28px;
-    object-fit: contain;
+    height: auto;
     cursor: pointer;
 }
+
 .big-btn {
     background: #8ccf20;
     color: white;
@@ -541,8 +566,8 @@
 }
 /* Квадратные истории */
 .stories .swiper-slide {
-    width: 150px;
-    height: 100px;
+    width: 90px;
+    height: 90px;
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
@@ -696,132 +721,79 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <div class="header">
-    
-    <!-- Динамическая область аккаунта -->
-    <div id="userArea" class="header-userarea">
-        <a href="auth.html" class="login-btn">
-            Войти
-            <svg xmlns="http://www.w3.org/2000/svg" class="login-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707M17.657 6.343l-.707.707M6.343 17.657l-.707.707"/>
-            </svg>
-        </a>
 
-        <!-- Правые иконки -->
-        <div class="header-right">
-            <img src="images/photo_5276207082657412564_y.avif" class="header-logo">
-            <img src="images/1764255724120.avif" class="header-support">
-        </div>
+    <div id="userArea" class="header-userarea">
+        <!-- сюда всё вставляет JS -->
+    </div>
+
+    <div class="header-right">
+        <img src="images/photo_5276207082657412564_y.avif" class="header-logo">
+        <img src="images/1764255724120.avif" class="header-support">
     </div>
 
 </div>
 
-           <script>
-  const API = 'https://s7avelii-airlines-1.onrender.com';
 
-  async function updateUserArea() {
+        <script>
+const API = 'https://s7avelii-airlines-1.onrender.com';
+
+async function updateUserArea() {
     const userArea = document.getElementById('userArea');
-    if (!userArea) {
-      console.warn('updateUserArea: #userArea not found in DOM');
-      return;
-    }
-
     const token = localStorage.getItem('token');
 
-    // Если нет токена — показываем ссылку "Войти"
+    // Если нет токена — показываем кнопку Войти
     if (!token) {
-      userArea.innerHTML = `
-        <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
-          Войти
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                  d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
-          </svg>
-        </a>
-      `;
-      return;
+        userArea.innerHTML = `
+            <a href="auth.html" class="login-btn">
+                Войти
+                <svg xmlns="http://www.w3.org/2000/svg" class="login-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707M17.657 6.343l-.707.707M6.343 17.657l-.707.707"/>
+                </svg>
+            </a>
+        `;
+        return;
     }
 
     try {
-      const res = await fetch(`${API}/api/profile`, {
-        headers: { 'Authorization': 'Bearer ' + token }
-      });
+        const res = await fetch(`${API}/api/profile`, {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
 
-      // Если не авторизован — удаляем токен и показываем "Войти"
-      if (res.status === 401) {
-        localStorage.removeItem('token');
-        userArea.innerHTML = `
-          <a href="auth.html" class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gray-100 text-gray-700 text-sm font-medium">
-            Войти
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707M17.657 6.343l-.707.707M6.343 17.657l-.707.707"/>
-            </svg>
-          </a>`;
-        return;
-      }
-
-      if (!res.ok) throw new Error('Fetch error: ' + res.status);
-
-      const data = await res.json();
-      const user = data.user ?? data;
-
-      // Надёжный путь к аватару: если относительный — приклеиваем базу API
-      let avatar = user.avatar || '';
-      if (avatar) {
-        try {
-          // если avatar — абсолютный URL, new URL не выбросит
-          avatar = new URL(avatar).href;
-        } catch (e) {
-          // относительный путь — объединяем с API
-          avatar = (API.replace(/\/$/, '')) + '/' + avatar.replace(/^\//, '');
+        if (res.status === 401) {
+            localStorage.removeItem('token');
+            updateUserArea();
+            return;
         }
-      } else {
-        avatar = 'images/default-avatar.png';
-      }
 
-      const fio = (user.fio || 'Профиль').trim();
-      const fioParts = fio.split(/\s+/);
-      const name = fioParts[0] || 'Профиль';
-      const surnameInitial = fioParts[1] ? fioParts[1][0] + '.' : '';
+        const data = await res.json();
+        const user = data.user ?? data;
 
-      // Универсальный поиск поля с милями
-      const miles = user.miles ?? user.miles_balance ?? user.bonus_miles ?? user.points ?? data.miles ?? 0;
+        const avatar = user.avatar
+            ? (user.avatar.startsWith('http') ? user.avatar : API + user.avatar)
+            : 'images/default-avatar.png';
 
-      const mileIcon = 'images/1761237779917.avif';
+        const fio = user.fio ?? 'Профиль';
+        const miles = user.miles ?? user.points ?? 0;
 
-      userArea.innerHTML = `
-        <div class="flex items-center bg-white border rounded-2xl px-3 py-1.5 cursor-pointer hover:shadow-sm transition"
-             onclick="window.location.href='cabinet.html'">
-          <img src="${avatar}" alt="avatar" 
-               class="w-8 h-8 rounded-full object-cover mr-2 border" onerror="this.src='images/default-avatar.png'">
-          <div class="flex flex-col mr-3">
-            <span class="text-sm font-semibold leading-tight">${name} ${surnameInitial}</span>
-            <span class="text-xs text-gray-500 flex items-center gap-1">
-              ${Number(miles).toLocaleString()}
-              <img src="${mileIcon}" alt="M" class="w-3 h-3 object-contain inline-block" />
-            </span>
-          </div>
-        </div>
-      `;
-    } catch (err) {
-      console.warn('updateUserArea error', err);
-      // В случае ошибки (CORS, network, parse и т.д.) — удаляем токен и показываем "Войти"
-      localStorage.removeItem('token');
-      userArea.innerHTML = `
-        <a href="auth.html" class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gray-100 text-gray-700 text-sm font-medium">
-          Войти
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707M17.657 6.343l-.707.707M6.343 17.657l-.707.707"/>
-          </svg>
-        </a>`;
+        userArea.innerHTML = `
+            <div class="profile-mini" style="
+                display:flex; align-items:center; gap:8px; cursor:pointer;
+            " onclick="window.location.href='cabinet.html'">
+                <img src="${avatar}" style="
+                    width:30px; height:30px; border-radius:50%; object-cover:cover; border:1px solid #ccc;
+                ">
+                <span style="font-size:14px; color:#333;">${fio.split(' ')[0]}</span>
+            </div>
+        `;
+    } catch {
+        localStorage.removeItem('token');
+        updateUserArea();
     }
-  }
+}
 
-  window.addEventListener('DOMContentLoaded', updateUserArea);
-  window.__S7_UPDATE_USER_AREA = updateUserArea;
-           </script>
+window.addEventListener('DOMContentLoaded', updateUserArea);
+</script>
 
 <!-- STORIES -->
 <div class="stories">
