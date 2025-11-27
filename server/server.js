@@ -282,3 +282,151 @@ app.use(express.static('public'));
 
 // Start
 app.listen(PORT, () => console.log(`✅ Server started on ${PORT}`));
+const express = require('express');
+const mysql = require('mysql2/promise');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const jwt = require('jsonwebtoken'); // опционально, если используешь JWT
+
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+
+// Настройки - берём из env (Render: задаёшь в UI)
+const {
+  DB_HOST,
+  DB_PORT = 3306,
+  DB_USER,
+  DB_PASSWORD,
+  DB_NAME,
+  JWT_SECRET // если используешь JWT
+} = process.env;
+
+// Создаём pool
+const pool = mysql.createPool({
+  host: DB_HOST,
+  port: DB_PORT,
+  user: DB_USER,
+  password: DB_PASSWORD,
+  database: DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
+
+/*
+  AUTH MIDDLEWARE
+  - В демонстрации: пытается достать userId из JWT токена в Authorization: Bearer <token>
+  - Если JWT_SECRET не задан, попробуем header 'x-user-id' для упрощённой разработки.
+  Замените на вашу реальную аутентификацию.
+*/
+async function authMiddleware(req, res, next) {
+  try {
+    const auth = req.headers.authorization;
+    if (auth && auth.startsWith('Bearer ') && JWT_SECRET) {
+      const token = auth.split(' ')[1];
+      const payload = jwt.verify(token, JWT_SECRET);
+      // предполагается, что payload содержит userId
+      req.userId = payload.userId || payload.id || null;
+    } else if (req.headers['x-user-id']) {
+      req.userId = req.headers['x-user-id'];
+    } else {
+      req.userId = null;
+    }
+
+    if (!req.userId) {
+      return res.status(401).json({ error: 'Unauthorized: user id not provided' });
+    }
+    next();
+  } catch (err) {
+    console.error('auth error', err);
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+}
+
+/* ---------- API Endpoints ---------- */
+
+/**
+ * GET /notifications/unread-count
+ * Возвращает число непрочитанных уведомлений для текущего пользователя
+ */
+app.get('/notifications/unread-count', authMiddleware, async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      'SELECT COUNT(*) AS cnt FROM notifications WHERE user_id = ? AND is_read = 0',
+      [req.userId]
+    );
+    res.json({ unread: rows[0].cnt });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'db error' });
+  }
+});
+
+/**
+ * GET /notifications
+ * Параметры: ?limit=20&offset=0
+ * Возвращает список уведомлений (по убыванию времени)
+ */
+app.get('/notifications', authMiddleware, async (req, res) => {
+  try {
+    const limit = Math.min(parseInt(req.query.limit || '20'), 100);
+    const offset = parseInt(req.query.offset || '0');
+    const [rows] = await pool.query(
+      'SELECT id, type, title, message, data, is_read, created_at FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?',
+      [req.userId, limit, offset]
+    );
+    res.json({ items: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'db error' });
+  }
+});
+
+/**
+ * POST /notifications/mark-read
+ * body: { ids: [1,2,3] }  - пометить указанные уведомления прочитанными
+ */
+app.post('/notifications/mark-read', authMiddleware, async (req, res) => {
+  try {
+    const ids = req.body.ids;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ error: 'ids required' });
+    }
+    // безопасно: передаем массив в набор
+    const placeholders = ids.map(()=>'?').join(',');
+    const sql = `UPDATE notifications SET is_read = 1 WHERE user_id = ? AND id IN (${placeholders})`;
+    await pool.query(sql, [req.userId, ...ids]);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'db error' });
+  }
+});
+
+/**
+ * POST /notifications/add
+ * body: { user_id, title, message, type?, data? } - только для серверной части (можно защитить)
+ */
+app.post('/notifications/add', async (req, res) => {
+  try {
+    // В проде защищай этот endpoint (только серверные вызовы)
+    const { user_id, title, message, type = null, data = null } = req.body;
+    if (!user_id || !title) return res.status(400).json({ error: 'user_id and title required' });
+    await pool.query('INSERT INTO notifications (user_id, type, title, message, data) VALUES (?, ?, ?, ?, ?)', [
+      user_id, type, title, message, data ? JSON.stringify(data) : null
+    ]);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'db error' });
+  }
+});
+
+/* простой health */
+app.get('/health', (req, res) => res.json({ ok: true }));
+
+/* запуск */
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, ()=> console.log(`Notifications API running on ${PORT}`));
+
