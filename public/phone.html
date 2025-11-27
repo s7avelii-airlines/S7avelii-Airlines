@@ -657,6 +657,54 @@ nav.bottom-nav{
 .bottom-nav .nav-item:active{
   transform:translateY(0);
 }
+/* Контейнер, чтобы всё выстроилось в один ряд */
+.header-userarea {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Кнопка "Войти" — СВОЙ СОБСТВЕННЫЙ СТИЛЬ */
+.login-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+
+    background: #f2f2f2;
+    color: #333;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    border-radius: 8px;
+    border: 1px solid #dcdcdc;
+
+    height: 30px; /* подгоняем под логотип */
+    cursor: pointer;
+
+    transition: background 0.2s;
+}
+.login-btn:hover {
+    background: #e5e5e5;
+}
+
+/* Иконка внутри */
+.login-icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* Твои иконки справа */
+.header-logo {
+    height: 32px;
+    width: auto;
+}
+.header-support {
+    height: 28px;
+    width: auto;
+    cursor: pointer;
+}
 
 </style>
 </head>
