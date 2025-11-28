@@ -963,6 +963,47 @@ font-weight: 600;
 .feed-wrapper::-webkit-scrollbar {
 display: none;
 }
+ .feed-wrapper {
+}
+
+
+.news-text {
+font-size: 14px;
+color: #4b5563;
+margin-top: 6px;
+}
+
+
+.views {
+margin-top: 10px;
+font-size: 13px;
+color: #16a34a;
+font-weight: 600;
+}
+
+
+.feed-wrapper::-webkit-scrollbar {
+display: none;
+}
+.color-bar {
+height: 6px;
+width: 100%;
+border-radius: 6px;
+margin-bottom: 10px;
+background: linear-gradient(90deg, #ff6b6b, #feca57);
+}
+
+
+/* Раскрашиваем каждую новость индивидуально */
+.news-card:nth-child(1) .color-bar {
+background: linear-gradient(90deg, #ff6b6b, #feca57);
+}
+.news-card:nth-child(2) .color-bar {
+background: linear-gradient(90deg, #48dbfb, #1dd1a1);
+}
+.news-card:nth-child(3) .color-bar {
+background: linear-gradient(90deg, #a29bfe, #6c5ce7);
+}
 </style>
 </head>
 <body>
@@ -1458,23 +1499,28 @@ new Swiper(".swiper-ad", {
     </a>
 
   </div>
-  
+<h2 style="font-size:24px;font-weight:700;margin-bottom:16px;color:#1f2937;">Новости</h2>
+
+
 <div class="feed-wrapper" id="newsFeed">
-<div class="news-card" data-id="1">
+<div class="news-card">
+<div class="color-bar"></div data-id="1">
 <div class="news-title">Открытие нового аэропорта</div>
 <div class="news-text">Сегодня состоялось торжественное открытие нового аэропорта в г. Савелий.</div>
 <div class="views">Просмотры: <span class="count">0</span></div>
 </div>
 
 
-<div class="news-card" data-id="2">
+<div class="news-card">
+<div class="color-bar"></div data-id="2">
 <div class="news-title">Запуск дополнительных рейсов</div>
 <div class="news-text">Добавлены новые рейсы в Пафос, Ашхабад и Красноярск.</div>
 <div class="views">Просмотры: <span class="count">0</span></div>
 </div>
 
 
-<div class="news-card" data-id="3">
+<div class="news-card">
+<div class="color-bar"></div data-id="3">
 <div class="news-title">Акция на билеты</div>
 <div class="news-text">Скидки до 30% на перелёты в Вeну и Самару.</div>
 <div class="views">Просмотры: <span class="count">0</span></div>
@@ -1515,7 +1561,7 @@ localStorage.setItem('views', JSON.stringify(savedViews));
 observer.observe(card);
 });
 </script>
- 
+
 <section class="blog-section" id="blog-container">
 
   <div class="blog-card">
