@@ -1004,6 +1004,56 @@ background: linear-gradient(90deg, #48dbfb, #1dd1a1);
 .news-card:nth-child(3) .color-bar {
 background: linear-gradient(90deg, #a29bfe, #6c5ce7);
 }
+ .feed-wrapper {
+}
+
+
+.plane-img {
+width: 100%;
+height: 180px;
+object-fit: cover;
+border-radius: 16px;
+margin-bottom: 10px;
+}
+
+
+.plane-tag {
+display: inline-block;
+background: #ffdda5;
+padding: 4px 10px;
+border-radius: 10px;
+font-size: 13px;
+color: #7a4e00;
+margin-bottom: 8px;
+font-weight: 600;
+}
+
+
+.plane-tag.purple {
+background: #e7d4ff;
+color: #4b277c;
+}
+
+
+.plane-tag.green {
+background: #d6ffe0;
+color: #136b2c;
+}
+
+
+.plane-title {
+font-size: 18px;
+font-weight: 700;
+color: #1f2937;
+margin-bottom: 8px;
+}
+
+
+.plane-views {
+font-size: 14px;
+font-weight: 600;
+color: #16a34a;
+}
 </style>
 </head>
 <body>
@@ -1562,100 +1612,94 @@ observer.observe(card);
 });
 </script>
 
-<section class="blog-section" id="blog-container">
+<h2 style="font-size:24px;font-weight:700;margin-bottom:16px;color:#1f2937;">7PLANE7 — Лента</h2>
 
-  <div class="blog-card">
-    <div style="position:relative;">
-        <span class="blog-tag">Учебник путешествий</span>
-        <img src="URL_КАРТИНКИ">
-    </div>
 
-    <div class="blog-title">Заголовок поста</div>
+<h2 style="font-size:24px;font-weight:700;margin-bottom:16px;color:#1f2937;"></h2>
 
-    <div class="blog-meta">
-        <span>25 нояб</span>
-        <span><i>👁</i> 829</span>
-    </div>
+
+<div class="vertical-feed" id="planeFeed">
+
+
+<div class="plane-card" data-id="p1">
+<img src="images/plane1.jpg" class="plane-img" />
+<div class="plane-tag">Самолёты</div>
+<div class="plane-title">История развития авиалайнеров за 50 лет</div>
+<div class="plane-views">Просмотры: <span class="count">0</span></div>
 </div>
 
 
-</section>
+<div class="plane-card" data-id="p2">
+<img src="images/plane2.jpg" class="plane-img" />
+<div class="plane-tag purple">Авиастиль</div>
+<div class="plane-title">Как менялись интерьеры салонов с 1980-х</div>
+<div class="plane-views">Просмотры: <span class="count">0</span></div>
+</div>
 
 
- <script>
-const TOKEN = "8335751042:AAFtPWb-kM31iw_vgWRXqKkZ4oQUnfA9-sE";
-const CHAT_ID = "-1002041606422"; // канал
-const container = document.getElementById("blog-container");
+<div class="plane-card" data-id="p3">
+<img src="images/plane3.jpg" class="plane-img" />
+<div class="plane-tag green">Технологии</div>
+<div class="plane-title">Будущее авиадвигателей: тише, экономичнее, быстрее</div>
+<div class="plane-views">Просмотры: <span class="count">0</span></div>
+</div>
 
-async function loadPosts() {
-    const res = await fetch(`https://api.telegram.org/bot${TOKEN}/getUpdates`);
-    const data = await res.json();
 
-    const messages = data.result
-        .filter(m => m.message && m.message.photo)
-        .slice(-10)  // последние 10 постов
-        .reverse();
+</div>
 
-    messages.forEach(msg => {
-        const text = msg.message.caption || "Без текста";
-        const preview = text.split(".")[0];  // первое предложение
 
-        const photoSizes = msg.message.photo;
-        const biggest = photoSizes[photoSizes.length - 1];
-        const photoUrl = `https://api.telegram.org/file/bot${TOKEN}/${biggest.file_id}`;
+<script>
+const planeCards = document.querySelectorAll('.plane-card');
+const savedPlaneViews = JSON.parse(localStorage.getItem('planeViews') || '{}');
 
-        const date = new Date(msg.message.date * 1000)
-            .toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
 
-        const card = `
-            <div class="blog-card">
-              <div style="position:relative;">
-                <span class="blog-tag">Учебник путешествий</span>
-                <img src="${photoUrl}">
-              </div>
+planeCards.forEach(card => {
+const id = card.dataset.id;
+const countEl = card.querySelector('.count');
+const initial = savedPlaneViews[id] || 0;
+countEl.textContent = initial;
 
-              <div class="blog-title">${preview}</div>
 
-              <div class="blog-meta">
-                <span>${date}</span>
-                <span>👁 ${msg.message.views || "?"}</span>
-              </div>
-            </div>
-        `;
-
-        container.innerHTML += card;
-    });
+const observer = new IntersectionObserver(entries => {
+if (entries[0].isIntersecting) {
+let current = +countEl.textContent;
+current++;
+countEl.textContent = current;
+savedPlaneViews[id] = current;
+localStorage.setItem('planeViews', JSON.stringify(savedPlaneViews));
 }
+}, { threshold: 0.6 });
 
-loadPosts();
+
+observer.observe(card);
+});
 </script>
-
   <!-- Нижняя фиксированная менюшка -->
   <nav class="bottom-nav" aria-label="Главная навигация">
     <div class="nav-inner" role="tablist" aria-label="Основные разделы">
       <!-- Для внешних страниц используйте обычные <a href="/profile.html"> -->
-      <a href="#home" class="nav-item" data-target="home" role="tab" aria-selected="true">
+      <a href="phone.html" class="nav-item" data-target="home" role="tab" aria-selected="true">
         <!-- простые SVG-иконки -->
         <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 11.5L12 4l9 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span>Главная</span>
       </a>
 
-      <a href="#travel" class="nav-item" data-target="travel" role="tab">
+      <a href="priority.html" class="nav-item" data-target="travel" role="tab">
         <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 12h18M7 6l2 6M17 6l-2 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span>Путешествия</span>
+        <span>Priority</span>
       </a>
 
-      <a href="#buy" class="nav-item" data-target="buy" role="tab">
+      <a href="s7hop.html" class="nav-item" data-target="buy" role="tab">
         <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 7h18v10H3zM7 7v-2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span>Купить</span>
       </a>
 
-      <a href="#help" class="nav-item" data-target="help" role="tab">
+      <a href="helper.html" class="nav-item" data-target="help" role="tab">
         <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0zM12 18v.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span>Помощь</span>
       </a>
 
-      <a href="#profile" class="nav-item" data-target="profile" role="tab">
+      <a href="cabinet.html" class="nav-item" data-target="profile" role="tab">
         <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 20a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span>Профиль</span>
       </a>
