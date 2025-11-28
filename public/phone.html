@@ -909,7 +909,60 @@ section {
 .show-more-btn:hover {
   background: #65a30d;
 }
+body {
+font-family: Arial, sans-serif;
+background: #f3f4f6;
+margin: 0;
+padding: 20px;
+}
 
+
+.feed-wrapper {
+display: flex;
+overflow-x: auto;
+gap: 16px;
+padding-bottom: 10px;
+scroll-snap-type: x mandatory;
+}
+
+
+.news-card {
+min-width: 280px;
+max-width: 280px;
+background: white;
+border-radius: 20px;
+padding: 16px;
+box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+scroll-snap-align: start;
+flex-shrink: 0;
+}
+
+
+.news-title {
+font-size: 18px;
+font-weight: bold;
+color: #1f2937;
+}
+
+
+.news-text {
+font-size: 14px;
+color: #4b5563;
+margin-top: 6px;
+}
+
+
+.views {
+margin-top: 10px;
+font-size: 13px;
+color: #16a34a;
+font-weight: 600;
+}
+
+
+.feed-wrapper::-webkit-scrollbar {
+display: none;
+}
 </style>
 </head>
 <body>
@@ -1406,7 +1459,63 @@ new Swiper(".swiper-ad", {
 
   </div>
   
+<div class="feed-wrapper" id="newsFeed">
+<div class="news-card" data-id="1">
+<div class="news-title">Открытие нового аэропорта</div>
+<div class="news-text">Сегодня состоялось торжественное открытие нового аэропорта в г. Савелий.</div>
+<div class="views">Просмотры: <span class="count">0</span></div>
+</div>
 
+
+<div class="news-card" data-id="2">
+<div class="news-title">Запуск дополнительных рейсов</div>
+<div class="news-text">Добавлены новые рейсы в Пафос, Ашхабад и Красноярск.</div>
+<div class="views">Просмотры: <span class="count">0</span></div>
+</div>
+
+
+<div class="news-card" data-id="3">
+<div class="news-title">Акция на билеты</div>
+<div class="news-text">Скидки до 30% на перелёты в Вeну и Самару.</div>
+<div class="views">Просмотры: <span class="count">0</span></div>
+</div>
+</div>
+
+
+<script>
+const cards = document.querySelectorAll('.news-card');
+
+
+// Загрузка сохранённых просмотров
+const savedViews = JSON.parse(localStorage.getItem('views') || '{}');
+
+
+cards.forEach(card => {
+const id = card.dataset.id;
+const countEl = card.querySelector('.count');
+
+
+// Установить сохранённое значение
+const initial = savedViews[id] || 0;
+countEl.textContent = initial;
+
+
+// Считать просмотр при появлении
+const observer = new IntersectionObserver(entries => {
+if (entries[0].isIntersecting) {
+let current = +countEl.textContent;
+current++;
+countEl.textContent = current;
+savedViews[id] = current;
+localStorage.setItem('views', JSON.stringify(savedViews));
+}
+}, { threshold: 0.6 });
+
+
+observer.observe(card);
+});
+</script>
+ 
 <section class="blog-section" id="blog-container">
 
   <div class="blog-card">
