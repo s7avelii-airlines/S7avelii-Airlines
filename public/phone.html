@@ -840,6 +840,75 @@ nav.bottom-nav{
     height: 100%;
     object-fit: cover; /* картинка заполняет как надо */
 }
+section {
+  margin-top: 24px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.container-box {
+  background: #f3f4f6;
+  border-radius: 24px;
+  padding: 24px;
+}
+
+.container-box h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  margin-bottom: 16px;
+}
+
+.card img {
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  object-fit: cover;
+  margin-right: 16px;
+}
+
+.card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.card p {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.card p.green {
+  font-weight: 500;
+  color: #16a34a; /* зелёный */
+}
+
+.show-more-btn {
+  margin-top: 24px;
+  width: 100%;
+  background: #84cc16;
+  color: white;
+  font-weight: 600;
+  padding: 12px 0;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.show-more-btn:hover {
+  background: #65a30d;
+}
 
 </style>
 </head>
@@ -1231,6 +1300,64 @@ new Swiper(".swiper-ad", {
       </div>
       <img src="images/1763210667894.avif" alt="">
     </a>
+
+  </div>
+</section>
+<section>
+  <div class="container-box">
+
+    <h2>Рейсы из г. Савелий</h2>
+
+    <div>
+
+      <div class="card">
+        <img src="images/shutterstock_1.avif">
+        <div>
+          <h3>Самара</h3>
+          <p>туда и обратно</p>
+          <p class="green">2 раза в день</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="images/images (1).avif">
+        <div>
+          <h3>Вена</h3>
+          <p>туда и обратно</p>
+          <p class="green">1 рейс в день</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="images/ЖД вокзал.avif">
+        <div>
+          <h3>Красноярск</h3>
+          <p>туда и обратно</p>
+          <p class="green">1 рейс в день</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="images/025202.avif">
+        <div>
+          <h3>Ашхабад</h3>
+          <p>туда и обратно</p>
+          <p class="green">2 рейса в день</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="images/1_П.avif">
+        <div>
+          <h3>Пафос</h3>
+          <p>туда и обратно</p>
+          <p class="green">1 рейс в день</p>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="show-more-btn">Показать ещё</button>
 
   </div>
 </section>
