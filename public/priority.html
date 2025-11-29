@@ -797,8 +797,6 @@ h1 {font-size: 36px; margin-bottom: 40px;}
 }
 </style>
 </head>
-
-
 <style>
         body {
             font-family: Arial;
@@ -806,7 +804,7 @@ h1 {font-size: 36px; margin-bottom: 40px;}
             padding: 40px;
         }
         .form-box {
-            max-width: 420px;
+            max-width: 460px;
             margin: auto;
             background: white;
             padding: 30px;
@@ -816,13 +814,14 @@ h1 {font-size: 36px; margin-bottom: 40px;}
         h2 {
             text-align: center;
             color: #343b40;
+            margin-bottom: 20px;
         }
         label {
             font-weight: bold;
-            margin-top: 15px;
+            margin-top: 12px;
             display: block;
         }
-        input, textarea {
+        input, textarea, select {
             width: 100%;
             padding: 12px;
             margin-top: 7px;
@@ -846,23 +845,60 @@ h1 {font-size: 36px; margin-bottom: 40px;}
         button:hover {
             background: #b5d93f;
         }
+        .card-preview {
+            width: 100%;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+        }
     </style>
+
+    <script>
+        function updateCardImage() {
+            const type = document.getElementById("type").value;
+            const img = document.getElementById("cardImage");
+
+            if (type === "VIP") img.src = "vip-card.jpg";      // замените на вашу картинку
+            if (type === "Classic") img.src = "classic-card.jpg";
+            if (type === "Sticker") img.src = "sticker-card.jpg";
+        }
+
+        function resetFormAfterSubmit() {
+            setTimeout(() => {
+                document.getElementById("orderForm").reset();
+                updateCardImage();
+            }, 500);
+        }
+    </script>
+
 </head>
 <body>
 
 <div class="form-box">
     <h2>Заказ карты Priority</h2>
 
-    <form action="https://api.web3forms.com/submit" method="POST">
+    <!-- Превью карты -->
+    <img id="cardImage" class="card-preview" src="classic-card.jpg" alt="card">
+
+    <form id="orderForm"
+          action="https://api.web3forms.com/submit"
+          method="POST"
+          onsubmit="resetFormAfterSubmit()">
 
         <!-- Ваш ключ Web3Forms -->
-        <input type="hidden" name="access_key" value="a0ab6e98-b50e-431f-a703-a29e53a698e0">
+        <input type="hidden" name="access_key" value="ВАШ_ACCESS_KEY">
 
-        <!-- Чтобы сообщения приходили в Telegram -->
         <input type="hidden" name="from_name" value="Заказ с сайта">
-        <input type="hidden" name="subject" value="Новый заказ карты Priority">
+        <input type="hidden" name="subject" value="Новая заявка Priority">
 
-        <label>Ваше имя</label>
+        <label>Тип карты</label>
+        <select name="Тип карты" id="type" onchange="updateCardImage()" required>
+            <option value="Classic">Classic</option>
+            <option value="VIP">VIP</option>
+            <option value="Sticker">Стикер</option>
+        </select>
+
+        <label>ФИО</label>
         <input type="text" name="Имя" required>
 
         <label>Телефон</label>
@@ -871,14 +907,15 @@ h1 {font-size: 36px; margin-bottom: 40px;}
         <label>Email</label>
         <input type="email" name="Email" required>
 
+        <label>Адрес доставки</label>
+        <textarea name="Адрес доставки" rows="3" required></textarea>
+
         <label>Комментарий</label>
-        <textarea name="Комментарий" rows="4"></textarea>
+        <textarea name="Комментарий" rows="3"></textarea>
 
         <button type="submit">Отправить заказ</button>
     </form>
 </div>
-
-
   
 <footer class="footer">
   <div class="footer-inner">
