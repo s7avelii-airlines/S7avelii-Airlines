@@ -798,7 +798,88 @@ h1 {font-size: 36px; margin-bottom: 40px;}
 </style>
 </head>
 
- 
+
+<style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            padding: 40px;
+        }
+        .form-box {
+            max-width: 420px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #343b40;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 15px;
+            display: block;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 7px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 14px;
+            background: #c7ea46;
+            color: #343b40;
+            border: none;
+            font-size: 17px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #b5d93f;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-box">
+    <h2>Заказ карты Priority</h2>
+
+    <form action="https://api.web3forms.com/submit" method="POST">
+
+        <!-- Ваш ключ Web3Forms -->
+        <input type="hidden" name="access_key" value="a0ab6e98-b50e-431f-a703-a29e53a698e0">
+
+        <!-- Чтобы сообщения приходили в Telegram -->
+        <input type="hidden" name="from_name" value="Заказ с сайта">
+        <input type="hidden" name="subject" value="Новый заказ карты Priority">
+
+        <label>Ваше имя</label>
+        <input type="text" name="Имя" required>
+
+        <label>Телефон</label>
+        <input type="text" name="Телефон" required>
+
+        <label>Email</label>
+        <input type="email" name="Email" required>
+
+        <label>Комментарий</label>
+        <textarea name="Комментарий" rows="4"></textarea>
+
+        <button type="submit">Отправить заказ</button>
+    </form>
+</div>
+
+
+  
 <footer class="footer">
   <div class="footer-inner">
     <!-- Верхнее меню -->
