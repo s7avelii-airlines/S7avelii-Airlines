@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>S7avelii Airlines — Магазин</title>
-
+  <title>S7avelii Shop</title>
+<link rel="icon" href="images/favicon.png" type="image/png">
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -187,12 +187,12 @@
 <script>
 /* ===== ПРОДУКТЫ, КОРЗИНА, МОДАЛКИ (ВСЕ ИСХОДНОЕ) ===== */
 const PRODUCTS = [
-  {id:'plt01', title:'Фирменная футболка S7avelii Airlines - ближе к небу', price:2590, desc:'Мягкий флисовый плед в фирменных цветах, компактный для полётов.', img:'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=60', specs:{Материал:'Хлопок',Размер:'L, M, S, XL/XXL',Вес:'320 г',Уход:''}},
-  {id:'pk02', title:'Дорожный набор «Комфорт»', price:4990, desc:'Набор для путешествия: пауэрбанк, блокнот, футболка с длинным рукавом', img:'https://images.unsplash.com/photo-1520975919214-1a6b7f6d7b3c?auto=format&fit=crop&w=1200&q=60', specs:{Состав:'Маска, беруши, подушка',Вес:'250 г'}},
-  {id:'hd03', title:'Пауэрбанк S7avelii', price:2490, desc:'Современный пауэрбанк, зарядит ваш телефон для приключения', img:'https://images.unsplash.com/photo-1518444023646-93c3a3f49a5d?auto=format&fit=crop&w=1200&q=60', specs:{Цвет:'белый'}},
-  {id:'bag04', title:'Фирменная футболка с длинным рукавом S7avelii Airlines - ближе к небу', price:3290, desc:'Водостойкая косметичка с отделениями для путешествий.', img:'https://images.unsplash.com/photo-1508581701063-9b6161d6b8b3?auto=format&fit=crop&w=1200&q=60', specs:{Материал:'хлопок',Размеры:'S, M, L, XL'}},
-  {id:'cup05', title:'Блокнот S7avelii', price:1190, desc:'Блокнот в премиум стиле s7avelii Airlines', img:'https://images.unsplash.com/photo-1483389127110-1b5f7f0e2d5f?auto=format&fit=crop&w=1200&q=60', specs:{Объём:'24 листа',Разлиновка:'клеточка'}},
-  {id:'set06', title:'Подарочный набор «Путешественник»', price:2800, desc:'Футболка с коротким рукавом, блокнот ', img:'https://images.unsplash.com/photo-1542293787938-c9e299b88024?auto=format&fit=crop&w=1200&q=60', specs:{Комплектация:'блокнот и футболка',Подарочный:'для любителей авиации'}}
+  {id:'plt01', title:'Фирменная футболка S7avelii Airlines - ближе к небу', price:2590, desc:'Мягкий флисовый плед в фирменных цветах, компактный для полётов.', img:'images/photo_5294320566066154454_y.avif', specs:{Материал:'Хлопок',Размер:'L, M, S, XL/XXL',Вес:'320 г',Уход:''}},
+  {id:'pk02', title:'Дорожный набор «Комфорт»', price:4990, desc:'Набор для путешествия: пауэрбанк, блокнот, футболка с длинным рукавом', img:'images/photo_5294320566066155493_y.avif', specs:{Состав:'Маска, беруши, подушка',Вес:'250 г'}},
+  {id:'hd03', title:'Пауэрбанк S7avelii', price:2490, desc:'Современный пауэрбанк, зарядит ваш телефон для приключения', img:'images/photo_5294320566066155491_y.avif', specs:{Цвет:'белый'}},
+  {id:'bag04', title:'Фирменная футболка с длинным рукавом S7avelii Airlines - ближе к небу', price:3290, desc:'Водостойкая косметичка с отделениями для путешествий.', img:'images/photo_5294320566066154455_y.avif', specs:{Материал:'хлопок',Размеры:'S, M, L, XL'}},
+  {id:'cup05', title:'Блокнот S7avelii', price:500, desc:'Блокнот в премиум стиле s7avelii Airlines', img:'images/photo_5294320566066155493_y.avif', specs:{Объём:'24 листа',Разлиновка:'клеточка'}},
+  {id:'set06', title:'Подарочный набор «Путешественник»', price:2800, desc:'Футболка с коротким рукавом, блокнот ', img:'images/photo_5294320566066155490_y.avif', specs:{Комплектация:'блокнот и футболка',Подарочный:'для любителей авиации'}}
 ];
 
 const productsGrid = document.getElementById('productsGrid');
@@ -226,7 +226,7 @@ function renderProducts(){
     div.innerHTML=`<div class="card-media"><img src="${p.img}" alt="${p.title}"></div>
       <h4>${p.title}</h4>
       <div class="price-row"><span class="muted small">${formatPrice(p.price)}</span></div>
-      <div class="actions"><button class="btn" data-add="${p.id}" data-href="checkout.html">Добавить в корзину</button></div>`;
+      <div class="actions"><button class="btn" data-add="${p.id}" data-href="https://t.me/s7aveliishop">Купить</button></div>`;
     productsGrid.appendChild(div);
   });
 }
