@@ -74,6 +74,37 @@
     .swiper-pagination-bullet-active {
         background: #7AC943;
     }
+  /* USEFUL */
+    .useful {
+        background: white;
+        border-radius: 20px;
+        margin: 0 16px 100px;
+        padding: 16px;
+    }
+    .useful-title {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    .useful-item {
+        display: flex;
+        align-items: center;
+        padding: 16px 0;
+        border-bottom: 1px solid #F0F0F0;
+        font-size: 17px;
+        font-weight: 500;
+        gap: 12px;
+        cursor: pointer;
+    }
+    .useful-item:last-child { border-bottom: none; }
+
+    .useful-item img {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
   </style>
 </head>
 
@@ -597,81 +628,28 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
 <!-- Пробел между слайдером и акциями -->
     <div class="h-10"></div>
-    
-<section class="mt-8 px-4">
+  <!-- USEFUL -->
+<div class="useful">
+    <div class="useful-title">Полезное</div>
 
-  <!-- Хит -->
-  <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full">Хит</span>
-  <h2 class="text-2xl font-bold mt-2 mb-4">Самые актуальные предложения</h2>
+    <!-- Используются ТВОИ ИКОНКИ -->
+    <div class="useful-item" onclick="location.href='flights.html'">
+    <img src="images/1764255465505.avif"> Табло рейсов
+</div>
 
-  <!-- Сетка -->
-  <div class="grid grid-cols-1 gap-4">
+<div class="useful-item" onclick="location.href='checkin.html'">
+    <img src="images/photo_5398063018606193772_y.avif"> Для путешествия
+</div>
 
-    <!-- Большая карточка 1 -->
-    <a href="busines.html"
-       class="bg-[#1fb36a] bg-gradient-to-r from-green-500 to-emerald-500 rounded-3xl p-5 text-white shadow-md flex justify-between items-center relative overflow-hidden">
+<div class="useful-item" onclick="location.href='excursions.html'">
+    <img src="images/photo_5398063018606193774_y.avif"> Отели
+</div>
 
-      <div>
-        <h3 class="text-xl font-bold leading-tight">S7avelii-IT</h3>
-        <p class="text-sm opacity-90 mt-1">
-          Занимаемся разработкой<br>цифровых продуктов
-        </p>
-      </div>
+<div class="useful-item" onclick="location.href='hotels.html'">
+    <img src="images/1764255489216.avif"> Вопросы и ответы
+</div>
 
-      <img src="images/Креатив без названия (8).avif"
-           class="w-20 h-20 object-contain" alt="">
-    </a>
-
-    <!-- Блок из двух карточек рядом -->
-    <div class="grid grid-cols-2 gap-4">
-
-      <!-- Карточка 2 -->
-      <a href="priority.html"
-         class="bg-gradient-to-br from-purple-600 to-gray-800 rounded-3xl p-4 text-white shadow-md flex flex-col justify-between overflow-hidden">
-
-        <div>
-          <h3 class="text-base font-bold leading-tight">Мили за рубли!</h3>
-          <p class="text-xs opacity-90 mt-1">
-            Покупайте мили,<br>копите впечатления
-          </p>
-        </div>
-
-        <img src="images/1761832960183.avif"
-             class="w-16 h-16 mt-3 ml-auto" alt="">
-      </a>
-
-      <!-- Карточка 3 -->
-      <a href="priority.html"
-         class="bg-gradient-to-br from-green-400 to-emerald-400 rounded-3xl p-4 text-white shadow-md flex flex-col justify-between overflow-hidden">
-
-        <div>
-          <h3 class="text-base font-bold leading-tight">S7avelii Priority</h3>
-          <p class="text-xs opacity-90 mt-1">Оплачивайте путешествия милями</p>
-        </div>
-
-        <img src="images/Креатив без названия (9).avif"
-             class="w-16 h-16 mt-3 ml-auto" alt="">
-      </a>
-
-    </div>
-
-    <!-- Большая карточка 4 -->
-    <a href="s7hop.html"
-       class="bg-gradient-to-r from-blue-500 to-indigo-500 rounded-3xl p-5 text-white flex justify-between items-center shadow-md overflow-hidden">
-
-      <div>
-        <h3 class="text-xl font-bold leading-tight">S7avelii Shop</h3>
-        <p class="text-sm opacity-90 mt-1">Устройте себе шопинг за мили</p>
-      </div>
-
-      <img src="images/1763210667894.avif"
-           class="w-20 h-20" alt="">
-    </a>
-
-  </div>
 </section>
-
-
   <section class="mt-6 px-4">
   <div class="bg-gray-100 rounded-3xl p-6">
 
