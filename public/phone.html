@@ -1054,6 +1054,85 @@ font-size: 14px;
 font-weight: 600;
 color: #16a34a;
 }
+ .slider-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 370px;
+    overflow: hidden;
+    border-radius: 16px;
+    margin: 20px auto;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s;
+  }
+
+  .slide.active {
+    opacity: 1;
+  }
+
+  .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .slide-text {
+    position: absolute;
+    bottom: 60px;
+    left: 20px;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  }
+
+  .slide-btn {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background: rgba(0,0,0,0.55);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-decoration: none;
+    backdrop-filter: blur(4px);
+    transition: background .3s;
+  }
+
+  .slide-btn:hover {
+    background: rgba(0,0,0,0.75);
+  }
+
+  .dots {
+    position: absolute;
+    bottom: 12px;
+    right: 15px;
+    display: flex;
+    gap: 6px;
+    z-index: 10;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    background: white;
+    opacity: 0.4;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: opacity 0.3s;
+  }
+
+  .dot.active {
+    opacity: 1;
+  }
 </style>
 </head>
 <body>
@@ -1218,130 +1297,72 @@ window.__S7_UPDATE_USER_AREA = updateUserArea;
 </script>
 
 
-<!-- HTML: твои квадраты (оставил как есть) -->
-<div class="stories">
-  <div class="swiper swiper-stories">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide" data-full="images/Креатив без названия (2).avif"><img src="images/Креатив без названия (2).avif"><div class="story-title">Мы в телеграм</div></div>
-      <div class="swiper-slide" data-full="images/IMG_20251128_101906.avif"><img src="images/IMG_20251128_101906.avif"><div class="story-title">S7avelii - ближе к небу</div></div>
-      <div class="swiper-slide" data-full="images/Без названия36_20251127234809.avif"><img src="images/Без названия36_20251127234809.avif"><div class="story-title">Стикеры S7avelii Priority</div></div>
-      <div class="swiper-slide" data-full="images/images/Креатив без названия (1).avif"><img src="images/Креатив без названия (1).avif"><div class="story-title">МИЛИ ЗА РУБЛИ </div></div>
-      <div class="swiper-slide" data-full="images/Креатив без названия (6).avif"><img src="images/1764311187244.avif"><div class="story-title">S7avelii Shop</div></div>
-      <div class="swiper-slide" data-full="images/Креатив без названия (7).avif"><img src="images/Креатив без названия (7).avif"><div class="story-title">7PLANE7</div></div>
-    </div>
+<div class="slider-container">
+
+  <!-- СЛАЙД 1 -->
+  <div class="slide active">
+    <img src="images/1763642054940.avif">
+    <div class="slide-text">S7avelii - всегда к небу</div>
+    <a href="page1.html" class="slide-btn">Подробнее</a>
   </div>
+
+  <!-- СЛАЙД 2 -->
+  <div class="slide">
+    <img src="images/1763208434508.avif">
+    <div class="slide-text">Мили за рубли!</div>
+    <a href="page2.html" class="slide-btn">Подробнее</a>
+  </div>
+
+  <!-- СЛАЙД 3 -->
+  <div class="slide">
+    <img src="images/1763208508229.avif">
+    <div class="slide-text">S7avelii Priority</div>
+    <a href="page3.html" class="slide-btn">Подробнее</a>
+  </div>
+
+  <!-- СЛАЙД 4 -->
+  <div class="slide">
+    <img src="images/1763208541542.avif">
+    <div class="slide-text">S7avelii — IT</div>
+    <a href="page4.html" class="slide-btn">Подробнее</a>
+  </div>
+
+  <!-- точки -->
+  <div class="dots"></div>
 </div>
 
-<!-- FULLSCREEN VIEWER (скрытый) -->
-<div class="story-viewer" id="storyViewer">
-  <button class="close-btn" id="viewerClose">✕</button>
-  <div class="viewer-inner">
-    <!-- full-screen Swiper -->
-    <div class="swiper viewer-swiper">
-      <div class="swiper-wrapper" id="viewerWrapper">
-        <!-- Слайды будут заполнены JS -->
-      </div>
-      <!-- стрелки + пагинация -->
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
-      <div class="swiper-pagination"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ИНИЦИАЛИЗАЦИЯ JS (вставить после подключения Swiper JS, перед </body>) -->
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  // Проверка: Swiper должен быть подключён
-  if (typeof Swiper === 'undefined') {
-    console.error('Swiper не найден. Подключи swiper-bundle.min.js перед этим скриптом.');
-    return;
+  const slides = document.querySelectorAll(".slide");
+  const dotsContainer = document.querySelector(".dots");
+  let current = 0;
+
+  slides.forEach((_, i) => {
+    let dot = document.createElement("div");
+    dot.classList.add("dot");
+    if (i === 0) dot.classList.add("active");
+    dot.addEventListener("click", () => showSlide(i));
+    dotsContainer.appendChild(dot);
+  });
+
+  const dots = document.querySelectorAll(".dot");
+
+  function showSlide(i) {
+    slides[current].classList.remove("active");
+    dots[current].classList.remove("active");
+
+    slides[i].classList.add("active");
+    dots[i].classList.add("active");
+
+    current = i;
   }
 
-  // Инициализация полоски историй (не меняет форму)
-  const stripSwiper = new Swiper('.swiper-stories', {
-    slidesPerView: 4.5,
-    spaceBetween: 10,
-    freeMode: true,
-    grabCursor: true,
-    // ensure horizontal scrollbar works even if big container
-    observer: true,
-    observeParents: true,
-  });
-
-  // Подготовим данные для полноэкранного viewer'а
-  const storySlides = Array.from(document.querySelectorAll('.stories .swiper-slide'));
-  const viewerWrapper = document.getElementById('viewerWrapper');
-  viewerWrapper.innerHTML = ''; // на всякий очистим
-
-  storySlides.forEach((slide, idx) => {
-    const full = slide.getAttribute('data-full') || slide.querySelector('img')?.src;
-    const title = slide.querySelector('.story-title')?.textContent || '';
-    // создаём слайд для viewer
-    const s = document.createElement('div');
-    s.className = 'swiper-slide';
-    s.setAttribute('data-origin-index', idx);
-    s.innerHTML = `<img src="${full}" alt="${title}" draggable="false">`;
-    viewerWrapper.appendChild(s);
-  });
-
-  // инициализируем fullscreen swip-er (пока скрыт)
-  const viewerSwiper = new Swiper('.viewer-swiper', {
-    spaceBetween: 10,
-    centeredSlides: true,
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-      type: 'bullets',
-    },
-    keyboard: {
-      enabled: true,
-      onlyInViewport: false,
-    },
-    // чтобы при изменении DOM (если нужно) перезапускался корректно
-    observer: true,
-    observeParents: true,
-  });
-
-  const viewer = document.getElementById('storyViewer');
-  const closeBtn = document.getElementById('viewerClose');
-
-  // Открытие viewer при клике на мини-картинку
-  storySlides.forEach((slideEl, index) => {
-    slideEl.addEventListener('click', (e) => {
-      // пометка как просмотренная (сохраняется в классе)
-      slideEl.classList.add('viewed');
-
-      // показать overlay
-      viewer.style.display = 'flex';
-
-      // Перейти к тому слайду в viewer
-      viewerSwiper.slideTo(index, 0); // без анимации, сразу
-      // небольшая задержка, чтобы точно перерисовать (без неё иногда не встаёт точно)
-      setTimeout(() => viewerSwiper.update(), 20);
-    });
-  });
-
-  // Закрытие кликом по фону или кнопке закрытия
-  closeBtn.addEventListener('click', closeViewer);
-  // закрывать по клику вне картинки
-  viewer.addEventListener('click', function (e) {
-    // если кликнули именно по overlay (а не по картинке/стрелкам)
-    if (e.target === viewer) closeViewer();
-  });
-
-  function closeViewer() {
-    viewer.style.display = 'none';
+  function autoSlide() {
+    showSlide((current + 1) % slides.length);
   }
 
-  // Дополнительно: поддержка swipe на мобильных — Swiper уже это делает
-  // Лог: если нужно, можно сохранить индекс последнего просмотренного в localStorage и т.д.
-});
+  setInterval(autoSlide, 4000);
 </script>
+
 
 
 
