@@ -329,43 +329,225 @@ document.addEventListener("DOMContentLoaded", () => {
 <!-- Пробел между слайдером и акциями -->
     <div class="h-5"></div>
   
- <section class="px-4 mt-4">
-  <div class="bg-white rounded-3xl overflow-hidden shadow-sm">
+ <style>
+  :root{
+    --bg: #f6f7f8;
+    --card-bg: #fff;
+    --muted: #6b6f73;
+    --accent: #e31c27; /* красный */
+    --radius: 18px;
+    --shadow: 0 6px 18px rgba(25,25,25,0.06);
+    --pad: 20px;
+  }
 
-    <!-- 1. Наши рейсы -->
-    <a href="arrivel.html"
-       class="flex items-center p-4 active:bg-gray-50 transition">
-      <div class="w-12 h-12 flex items-center justify-center bg-[#e9f4d6] rounded-xl mr-4">
-        <img src="images/photo_5398063018606193773_y.avif" class="w-6 h-6" alt="">
+  html,body{
+    height:100%;
+    margin:0;
+    font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(#fafafa,#f4f5f6);
+    color: #222;
+  }
+
+  .container{
+    max-width:420px; /* под мобильный скрин (как у вас) */
+    margin:24px auto;
+    padding:18px;
+  }
+
+  h1.app-title{
+    font-size:26px;
+    margin:6px 0 18px 6px;
+    color: #3a3d40;
+    font-weight:600;
+  }
+
+  /* большая карточка с чемоданами */
+  .big-card{
+    background: var(--card-bg);
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: visible;
+    display:flex;
+    gap: 12px;
+    align-items: center;
+    min-height: 180px;
+  }
+
+  .big-card .left{
+    flex:1;
+    padding-right:8px;
+  }
+
+  .big-card .title{
+    font-size:20px;
+    font-weight:700;
+    margin:6px 0;
+    color: #2f3336;
+  }
+  .big-card .subtitle{
+    font-size:14px;
+    color: var(--muted);
+    margin-top:6px;
+  }
+
+  /* правый блок с картинкой и фоновым % */
+  .big-card .right{
+    width: 46%;
+    min-width:120px;
+    position: relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* большой полупрозрачный знак % позади */
+  .big-card .right::after{
+    content: "%";
+    font-size:120px;
+    color:#e6e7e8;
+    position:absolute;
+    right:-8px;
+    top:-12px;
+    font-weight:800;
+    opacity:0.6;
+    pointer-events:none;
+    transform: rotate(0deg);
+    z-index:0;
+    line-height:1;
+  }
+
+  .suitcase{
+    width:100%;
+    max-width:180px;
+    height:auto;
+    z-index:2;
+    display:block;
+    border-radius:8px;
+    /* небольшой эффект "плавающей" картинки */
+    transform: translateY(2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  }
+
+  /* сетка маленьких карточек */
+  .features{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 18px;
+  }
+
+  .feature{
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: var(--shadow);
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    min-height:82px;
+  }
+
+  .icon-wrap{
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    background: var(--accent);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+
+  .icon-wrap img{
+    width:22px;
+    height:22px;
+    display:block;
+    filter: brightness(0) invert(1); /* если у иконок темный контур — станет белым */
+  }
+
+  .feature .f-text{
+    font-size:14px;
+    color: #333;
+    line-height:1.25;
+  }
+
+  .feature .f-text small{
+    display:block;
+    margin-top:6px;
+    color:var(--muted);
+    font-weight:400;
+    font-size:13px;
+  }
+
+  /* адаптив: на очень узких экранах */
+  @media (max-width:380px){
+    .big-card{ padding:14px; }
+    .big-card .right::after{ font-size:96px; right:-18px; top:-6px; }
+    .suitcase{ max-width:150px; }
+  }
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="app-title">Полный контроль над бронированием</h1>
+
+    <div class="big-card" role="region" aria-label="Больше места для багажа">
+      <div class="left">
+        <div class="title">Нужно больше места для багажа?</div>
+        <div class="subtitle">Выгоднее оформлять заранее</div>
       </div>
-      <p class="text-gray-900 font-medium text-[16px]">Наши рейсы</p>
-    </a>
 
-    <div class="border-t border-gray-200"></div>
-
-    <!-- 2. Отели -->
-    <a href="HOTEL.html"
-       class="flex items-center p-4 active:bg-gray-50 transition">
-      <div class="w-12 h-12 flex items-center justify-center bg-[#e5ecfd] rounded-xl mr-4">
-        <img src="images/photo_5398063018606193774_y.avif" class="w-6 h-6" alt="">
+      <div class="right">
+        <!-- Замените путь на своё фото чемодана -->
+        <img src="suitcase.jpg" alt="Чемоданы" class="suitcase">
       </div>
-      <p class="text-gray-900 font-medium text-[16px]">Отели</p>
-    </a>
+    </div>
 
-    <div class="border-t border-gray-200"></div>
-
-    <!-- 3. Для путешествия -->
-    <a href="s7hop.html"
-       class="flex items-center p-4 active:bg-gray-50 transition">
-      <div class="w-12 h-12 flex items-center justify-center bg-[#efe8fd] rounded-xl mr-4">
-        <img src="images/photo_5398063018606193772_y.avif" class="w-6 h-6" alt="">
+    <div class="features">
+      <div class="feature">
+        <div class="icon-wrap">
+          <!-- замените на ваш svg/png (иконка возврат/обмен) -->
+          <img src="icon-return.svg" alt="">
+        </div>
+        <div class="f-text">
+          Возврат и обмен билета — это просто
+        </div>
       </div>
-      <p class="text-gray-900 font-medium text-[16px]">Для путешествия</p>
-    </a>
 
+      <div class="feature">
+        <div class="icon-wrap">
+          <!-- замените на ваш svg/png (иконка страхование) -->
+          <img src="icon-insurance.svg" alt="">
+        </div>
+        <div class="f-text">
+          Страхование на время перелёта
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="icon-wrap">
+          <!-- замените на ваш svg/png (иконка мобильное приложение) -->
+          <img src="icon-mobile.svg" alt="">
+        </div>
+        <div class="f-text">
+          Мобильное приложение
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="icon-wrap">
+          <!-- замените на ваш svg/png (иконка выбор места) -->
+          <img src="icon-seat.svg" alt="">
+        </div>
+        <div class="f-text">
+          Выбор места на борту
+        </div>
+      </div>
+    </div>
   </div>
-</section>
-
 <!-- Пробел между слайдером и акциями -->
     <div class="h-10"></div>
     
