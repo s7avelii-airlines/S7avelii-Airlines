@@ -1,35 +1,99 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>S7avelii-IT</title>
-  <link rel="icon" href="images/favicon.png" type="image/png">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>S7avelii-IT — Заказы сайтов</title>
+  <meta name="description" content="S7avelii-IT — ультра-современная студия разработки сайтов. Закажите сайт, лендинг, интернет-магазин или веб-приложение." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      overflow-x: hidden;
-      background: #fff;
+    :root{
+      --bg: #ffffff; /* белый фон по запросу */
+      --text: #0b1220; /* темный текст */
+      --muted: #5b6770;
+      --accent: #BED600; /* S7 green - найденный брендовый цвет */
+      --accent-strong: #9bb000;
+      --glass: rgba(11,18,32,0.04);
+      --card: #fbfdfb;
+      --radius: 14px;
     }
-    .dropdown-menu {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: white;
-      border: 1px solid #ccc;
-      border-radius: 0.25rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      z-index: 50;
-      min-width: 160px;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:48px;
+      overflow-y:auto;
     }
-    .group:hover .dropdown-menu {
-      display: block;
+    .wrap{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:32px}
+
+    header{display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{
+      width:64px;height:64px;border-radius:12px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--accent-strong),var(--accent));
+      box-shadow:0 8px 30px rgba(190,214,0,0.12);
     }
+    .logo svg{filter:drop-shadow(0 6px 18px rgba(0,0,0,0.06));}
+    .title{line-height:1}
+    .title h1{margin:0;font-weight:800;letter-spacing:-0.02em;font-family:'Space Grotesk';font-size:20px}
+    .title p{margin:0;font-size:12px;color:var(--muted)}
+
+    nav{display:flex;gap:12px;align-items:center}
+    .btn{padding:10px 16px;border-radius:12px;border:1px solid var(--glass);background:transparent;cursor:pointer;font-weight:600}
+    .btn.primary{background:var(--accent);color:#08201a;border:none;box-shadow:0 8px 24px rgba(190,214,0,0.12)}
+
+    .hero{display:grid;grid-template-columns:1fr 460px;gap:28px;align-items:center}
+    .hero-card{background:var(--card);border-radius:18px;padding:36px;border:1px solid var(--glass);box-shadow:0 8px 40px rgba(11,18,32,0.04)}
+    .hero h2{font-size:34px;margin:0 0 10px 0;font-family:'Space Grotesk'}
+    .hero p{margin:0 0 20px 0;color:var(--muted);line-height:1.55}
+    .features{display:flex;gap:14px;flex-wrap:wrap}
+    .feature{padding:10px 12px;border-radius:12px;background:transparent;border:1px solid rgba(11,18,32,0.04);font-size:13px}
+
+    .device{
+      width:420px;height:560px;border-radius:28px;padding:18px;background:linear-gradient(180deg,#fff,#fbffef);border:1px solid rgba(11,18,32,0.04);position:relative;overflow:hidden;transform-style:preserve-3d;
+    }
+    .screen{width:100%;height:100%;border-radius:18px;background:linear-gradient(180deg,#ffffff,#f7f9f7);display:flex;flex-direction:column;padding:18px;gap:12px;border:1px solid rgba(11,18,32,0.03)}
+    .mock-row{display:flex;gap:8px;align-items:center}
+    .pill{height:12px;border-radius:99px;background:var(--accent);flex:1}
+
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{padding:20px;border-radius:14px;background:linear-gradient(180deg,#fff, #fbfcfb);border:1px solid rgba(11,18,32,0.04)}
+    .card h3{margin:0 0 8px 0}
+    .muted{color:var(--muted);font-size:14px}
+
+    .pricing{display:flex;gap:16px;align-items:stretch}
+    .price{flex:1;padding:22px;border-radius:14px;border:1px solid rgba(11,18,32,0.04);background:linear-gradient(180deg,#ffffff,#fbfff2)}
+    .price h4{margin:4px 0 12px}
+
+    footer{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid rgba(11,18,32,0.04)}
+
+    @media(max-width:980px){
+      .hero{grid-template-columns:1fr}
+      .device{width:100%;height:420px}
+      .grid3{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:640px){
+      body{padding:20px}
+      .grid3{grid-template-columns:1fr}
+    }
+
+    .glow{transition:transform .35s ease;will-change:transform}
+    .glow:hover{transform:translateY(-6px)}
+
+    .reveal{opacity:0;transform:translateY(8px);animation:reveal .6s forwards}
+    .reveal.delay-1{animation-delay:.06s}
+    .reveal.delay-2{animation-delay:.12s}
+    .reveal.delay-3{animation-delay:.18s}
+    @keyframes reveal{to{opacity:1;transform:none}}
   </style>
 </head>
-
-<header>
+<body>
+    <header>
   <div class="logo">
     <a href="index.html">
       <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
@@ -312,6 +376,51 @@ nav li:hover .dropdown {
     transform: rotate(-45deg) translateY(-8px);
   }
 }
+.styled-form {
+max-width: 520px;
+margin-top: 24px;
+display: grid;
+gap: 16px;
+}
+.styled-form .field input,
+.styled-form .field textarea {
+width: 100%;
+padding: 14px 18px;
+border-radius: 14px;
+border: 2px solid #e1e1e1;
+font-size: 16px;
+transition: 0.3s;
+background: #fafafa;
+}
+.styled-form .field input:focus,
+.styled-form .field textarea:focus {
+border-color: #bed600;
+background: white;
+box-shadow: 0 0 10px rgba(190,214,0,0.25);
+}
+.fancy-btn {
+background: linear-gradient(135deg, #bed600, #a5c400);
+padding: 16px;
+font-size: 18px;
+color: #000;
+border-radius: 16px;
+border: none;
+cursor: pointer;
+transition: 0.25s;
+font-weight: 600;
+letter-spacing: 0.4px;
+}
+.fancy-btn:hover {
+transform: translateY(-2px);
+box-shadow: 0 8px 20px rgba(190,214,0,0.35);
+}
+.result-box {
+padding: 14px;
+background: #f4ffe6;
+border-radius: 12px;
+font-size: 16px;
+margin-top: 12px;
+}
 </style>
 
 <script>
@@ -375,218 +484,138 @@ async function updateUserArea() {
 
 window.addEventListener('DOMContentLoaded', updateUserArea);
 </script>
-  <!-- Баннер -->
-  <img src="images/Airbrush-Image-Enhancer-1757149612827 (1).avif" alt="Header Banner" class="w-full h-auto">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>S7avelii-IT - Программа лояльности</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f3f7fb;
-      margin: 0;
-      padding: 0;
-      color: #1f2d3d;
-    }
-    .container {
-      width: 90%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px 0;
-    }
-    h1 {
-      font-size: 32px;
-      font-weight: bold;
-      margin: 0;
-    }
-    h1 span {
-      color: #fbfbfb;
-    }
-    .btn {
-      background-color: #eeefef;
-      color: #fff;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 20px;
-      display: inline-block;
-    }
-    .features {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 60px;
-    }
-    .feature-card {
-      background: #fff;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-      width: 30%;
-      text-align: left;
-    }
-    .feature-card h3 {
-      margin-top: 0;
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
-    .feature-card p {
-      font-size: 14px;
-      line-height: 1.5;
-      color: #555;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1><span>S7avelii-IT </span><br>Программа для бизнеса</h1>
-    <button class="btn">Сайты на заказ</button>
-    <a href="https://t.me/s7aveliibusiness" style="margin-left: 15px; font-size: 14px; text-decoration:none; color:#1f2d3d;">
-      Сделаем сайты для каждого
-    </a>
+    <section class="hero reveal delay-1">
+      <div class="hero-card">
+        <h2>Сайт в фирменных стилях S7avelii Airlines — узнаваемо, ярко, качественно</h2>
+        <p>Ваши дизайны, пожелания — всё учтём, чтобы ваши проекты были индивидуальны.</p>
 
-    <div class="features">
-      <div class="feature-card">
-        <h3>Привилегии для партнеров</h3>
-        <p>Статусные и бонусные мили S7avelii Priority на личном счете — начисляем на 5% больше бонусных миль, чем обычно за заказ сайта</p>
-      </div>
-      <div class="feature-card">
-        <h3>Сервис и поддержка</h3>
-        <p>Будем на связи и поможем контролировать сайт</p>
-      </div>
-      <div class="feature-card">
-        <h3>Экономия времени</h3>
-        <p>Сделаем сайт от 1 до 3 недель, а также сделаем скидку в других наших серверах</p>
-      </div>
-    </div>
-  </div>
-</body>
+        <div class="features">
+          <div class="feature">Фирменный стиль S7avelii Airlines</div>
+          <div class="feature">Высокий контраст и читаемость</div>
+          <div class="feature">Адаптивность</div>
+          <div class="feature">База данных</div>
+        </div>
 
-  <meta charset="UTF-8">
-  <title>Хотите заказать сайт?</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f5fa;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      background: linear-gradient(to bottom right, #22c27d, #9ecc07);
-      border-radius: 20px;
-      color: white;
-      padding: 30px;
-      max-width: 1100px;
-      margin: 40px auto;
-    }
-    .container h1 {
-      margin: 0 0 30px 0;
-      font-size: 32px;
-    }
-    .steps {
-      display: flex;
-      gap: 20px;
-    }
-    .step {
-      background: white;
-      color: #333;
-      flex: 1;
-      padding: 20px;
-      border-radius: 20px;
-      position: relative;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-    }
-    .step-number {
-      position: absolute;
-      top: -20px;
-      left: 20px;
-      background: #b8df09;
-      color: white;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 18px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-    .step h2 {
-      margin-top: 20px;
-      font-size: 20px;
-    }
-    .step p {
-      font-size: 15px;
-      margin: 10px 0;
-      line-height: 1.4;
-    }
-    .bonus {
-      font-size: 24px;
-      color: #a0d00f;
-      font-weight: bold;
-      margin: 15px 0;
-    }
-    .btn {
-      display: inline-block;
-      background: #9cd306;
-      color: white;
-      text-decoration: none;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-    .icon {
-      position: absolute;
-      bottom: 15px;
-      right: 15px;
-      opacity: 0.9;
-    }
-    .icon img {
-      width: 60px;
-    }
-  </style>
-</head>
-<body>
+        <div style="height:18px"></div>
+        <div class="cta">
+          <button class="btn primary glow" onclick="scrollToSection('contact')">Получить предложение</button>
+          <button class="btn" onclick="copyEmail()">написать нам</button>
+        </div>
+      </div>
 
-  <div class="container">
-    <h1>Хотите заказать сайт</h1>
-    <div class="steps">
-      
-      <div class="step">
-        <div class="step-number">1</div>
-        <h2>Свяжитесь с нами</h2>
-        <p>Бесплатно и быстро — можно сразу оформить<br>
-        накидать эскизы под сайт и мы начнём делать</p>
-        <div class="bonus">+50 Б</div>
-        <a href="https://t.me/s7aveliibusiness" class="btn">Стать участником S7avelii-IT</a>
+      <div class="device reveal delay-2" id="device" aria-hidden>
+        <div class="screen" id="screen">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-size:12px;color:var(--muted);">S7avelii-business</div>
+            <div style="font-size:12px;color:var(--muted);">17:17</div>
+          </div>
+
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px">
+            <div style="font-weight:700;font-size:18px">Ваш сайт от компании S7avelii Airlines</div>
+            <div style="color:var(--muted);font-size:13px">Чистая структура, фирменный дизайн,узнаваемость.</div>
+
+            <div style="height:12px"></div>
+            <div class="mock-row"><div class="pill"></div></div>
+
+            <div style="display:flex;gap:10px;align-items:center">
+              <div style="width:52px;height:52px;border-radius:12px;background:linear-gradient(90deg,var(--accent-strong),var(--accent));display:grid;place-items:center;font-weight:700;color:#07251f">S7</div>
+              <div>
+                <div style="font-size:13px;font-weight:700">S7avelii-business</div>
+                <div style="color:var(--muted);font-size:12px">Лендинг · Магазин </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted)">
+            <div>Готово за 7–21 дней</div>
+            <div>От 37 999 ₽</div>
+          </div>
+        </div>
       </div>
-      
-      <div class="step">
-        <div class="step-number">2</div>
-        <h2>Приложите заявку<br>о создании сайта</h2>
-        <p>Оформлять сайты можно легко —<br>
-        если оформить карту Priority, ещё и дешевле<br>
-        получите баллы или  скидкой</p>
-        <div class="icon"><img src="https://img.icons8.com/ios-filled/100/0097a7/document.png" alt="Документ"></div>
+    </section>
+
+    <section id="services" class="reveal delay-3">
+      <h3 style="margin:0 0 8px 0">Услуги</h3>
+      <p class="muted">Что мы предлагаем:</p>
+
+      <div class="grid3" style="margin-top:16px">
+        <div class="card">
+          <h3>Лендинг / Корпоративный сайт</h3>
+          <p class="muted">Чистый дизайн, высокая конверсия, быстрый запуск.</p>
+        </div>
+        <div class="card">
+          <h3>Интернет‑магазин</h3>
+          <p class="muted">Полный e‑commerce функционал.</p>
+        </div>
+        <div class="card">
+          <h3>Сложный сайт с базой данных</h3>
+          <p class="muted">Современные дизайны, база данных, гарантия.</p>
+        </div>
       </div>
-      
-      <div class="step">
-        <div class="step-number">3</div>
-        <h2>Редизайн сайта</h2>
-        <p>Хотите обновить сайт? Не проблема:<br>
-        сделаем современно, красиво и в вашем стиле<br>
-        получите бонусы и гарантию</p>
-        <div class="icon"><img src="https://img.icons8.com/ios-filled/100/0097a7/suitcase.png" alt="Чемодан"></div>
+    </section>
+
+    <section id="pricing" style="margin-top:18px">
+      <h3 style="margin:0 0 8px 0">S7avelii Business — базовые пакеты</h3>
+      <p class="muted">Цены ориентировочные. Точное предложение пришлём после бриф‑заявки.</p>
+
+      <div class="pricing" style="margin-top:16px">
+        <div class="price">
+          <h4>S7avelii-Start</h4>
+          <div class="muted">Лендинг</div>
+          <div style="font-size:20px;font-weight:800;margin:12px 0">10 000 ₽</div>
+        </div>
+        <div class="price">
+          <h4>S7avelii -business</h4>
+          <div class="muted">Интернет‑магазин</div>
+          <div style="font-size:20px;font-weight:800;margin:12px 0">49 000 ₽</div>
+        </div>
+        <div class="price">
+          <h4>S7avelii-Pro</h4>
+          <div class="muted">Сложный сайт с базой данной</div>
+          <div style="font-size:20px;font-weight:800;margin:12px 0">от 100 000 ₽</div>
+        </div>
       </div>
-      
-    </div>
-  </div>
-<footer class="footer">
+    </section>
+
+    <section class="section" id="contact">
+<h2>Оставить заявку</h2>
+<form action="https://api.web3forms.com/submit" method="POST" class="styled-form">
+<input type="hidden" name="access_key" value="ae410ba6-86e9-46f3-8145-c68b9eda1428" />
+
+
+<div class="field"><input name="name" placeholder="Ваше имя" required></div>
+<div class="field"><input name="email" type="email" placeholder="E-mail" required></div>
+<div class="field"><input name="phone" placeholder="Телефон"></div>
+<div class="field"><textarea name="brief" rows="4" placeholder="Краткое техническое задание"></textarea></div>
+
+
+<button class="submit fancy-btn">Отправить заявку</button>
+</form>
+
+
+<div id="result" class="result-box" style="display:none;">Заявка успешно отправлена!</div>
+
+    </section>
+
+<script>
+function scrollToId(id) {
+const el = document.getElementById(id);
+if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+
+
+function submitForm(e) {
+e.preventDefault();
+const data = Object.fromEntries(new FormData(e.target).entries());
+const box = document.getElementById('result');
+box.style.display = 'block';
+box.textContent = `Спасибо, ${data.name}! Мы свяжемся с вами на ${data.email}.`;
+e.target.reset();
+}
+</script>
+
+    <footer class="footer">
   <div class="footer-inner">
     <!-- Верхнее меню -->
     <div class="footer-menu fade-in">
@@ -596,7 +625,7 @@ window.addEventListener('DOMContentLoaded', updateUserArea);
           <li><a href="body.html">О компании</a></li>
           <li><a href="https://t.me/s7aveliihelper">Партнеры</a></li>
           <li><a href="https://t.me/s7aveliihelper">Контакты</a></li>
-          <li><a href="#">Вакансии</a></li>
+          <li><a href="# ">Вакансии</a></li>
         </ul>
       </div>
       <div class="footer-column">
@@ -622,7 +651,7 @@ window.addEventListener('DOMContentLoaded', updateUserArea);
       </div>
     </div>
 
-    <hr>
+     <hr>
 
     <!-- Верх футера -->
     <div class="footer-top fade-in">
@@ -662,7 +691,7 @@ window.addEventListener('DOMContentLoaded', updateUserArea);
     </div>
   </div>
 </footer>
-
+</div>
 <style>
 /* === Убираем горизонтальный скролл и белые полосы === */
 html, body {
@@ -958,27 +987,39 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<script>
-  // мобильное меню
-  document.getElementById("menuBtn").addEventListener("click", () => {
-    document.getElementById("mobileMenu").classList.toggle("hidden");
-  });
-
-  // auth блок
-  const userArea = document.getElementById("userArea");
-  const fio = localStorage.getItem("fio");
-  const avatar = localStorage.getItem("avatar");
-  const username = localStorage.getItem("username");
-
-  if (fio && localStorage.getItem("phone")) {
-    if (avatar) {
-      userArea.innerHTML = `<img src="${avatar}" class="w-8 h-8 rounded-full cursor-pointer object-cover" onclick="location.href='cabinet.html'">`;
-    } else {
-      userArea.innerHTML = `<span class="cursor-pointer text-blue-500 font-medium" onclick="location.href='cabinet.html'">${username || fio.split(" ")[0]}</span>`;
+  <script>
+    function scrollToSection(id){
+      const el = document.getElementById(id);
+      if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
     }
-  } else {
-    userArea.innerHTML = `<a href="auth.html" class="px-3 py-1 border border-blue-500 rounded text-blue-500">Вход</a>`;
-  }
-</script>
+    function copyEmail(){
+      navigator.clipboard && navigator.clipboard.writeText('hello@s7avelii-it.example')
+        .then(()=>alert('Email скопирован'))
+        .catch(()=>prompt('Скопируйте e‑mail','hello@s7avelii-it.example'))
+    }
+    function submitForm(e){
+      e.preventDefault();
+      const f = e.target;
+      const data = Object.fromEntries(new FormData(f).entries());
+      const res = document.getElementById('formResult');
+      res.style.display='block';
+      res.textContent = 'Заявка отправлена. Спасибо, ' + (data.name || 'друг') + '! Мы свяжемся по ' + (data.email || 'e‑mail') + '.';
+      f.reset();
+    }
+    (function(){
+      const d = document.getElementById('device');
+      if(!d) return;
+      d.addEventListener('mousemove', e => {
+        const r = d.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        d.style.transform = `perspective(900px) rotateX(${(-y*6).toFixed(2)}deg) rotateY(${(x*6).toFixed(2)}deg)`;
+      });
+      d.addEventListener('mouseleave', ()=> d.style.transform='');
+    })();
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      document.querySelectorAll('.reveal').forEach(n=>{n.style.animation='none';n.style.opacity=1;});
+    }
+  </script>
 </body>
 </html>
