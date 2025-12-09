@@ -863,20 +863,30 @@ function addMessage(text, role) {
 }
 
 async function sendMessage() {
-    const text = input.value.trim();
+    const text = chatInput.value.trim();
     if (!text) return;
 
     addMessage(text, "user");
-    input.value = "";
+    chatInput.value = "";
 
-    // Когда подключим fine-tuning — заменим этот блок
-    setTimeout(() => {
-        addMessage("ИИ-помощник скоро будет говорить на основе твоей собственной модели 😊", "bot");
-    }, 300);
+    let response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ВАШ_API_КЛЮЧ"
+        },
+        body: JSON.stringify({
+            model: "gpt-4o-mini",
+            messages: [
+                { role: "system", content: "Ты дружелюбный помощник сайта в стиле S7." },
+                { role: "user", content: text }
+            ]
+        })
+    });
+
+    let data = await response.json();
+    addMessage(data.choices[0].message.content, "bot");
 }
-
-sendBtn.onclick = sendMessage;
-input.onkeydown = e => (e.key === "Enter" ? sendMessage() : null);
 </script>
 <!-- ===== END CHAT WIDGET ===== -->
 
