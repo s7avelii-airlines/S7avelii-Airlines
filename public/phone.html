@@ -856,7 +856,7 @@ body {
 
     <div class="chat-header">
         <div class="avatar-group">
-            <img src="images/assistant.png" class="avatar-header">
+            <img src="images/2025-12-10_17-18-13.avif" class="avatar-header">
             <div>
                 <b>S7avelii SynAir</b><br>
                 <small>Онлайн</small>
@@ -928,36 +928,66 @@ const knowledge = [
         answer: "Перейдите в раздел S7avelii Shop, выберите товар, нажмите «Купить» — и с вами свяжется менеджер."
     },
     {
-        key: ["зарегистрироваться", "сайт"],
+        key: ["зарегистрироваться", "личный кабинет"],
         answer: "Нажмите «Вход» → «Зарегистрироваться». Нужно состоять в программе S7avelii Priority."
     },
     {
         key: ["сколько", "самолет", "флот", "направления", "маршруты"],
-        answer: "Флот S7avelii Airlines насчитывает 12 миниатюрных самолетов. Мы совершаем рейсы как внутри России, так и за её пределы.(Европа, Азия)"
+        answer: "Флот S7avelii Airlines насчитывает 12 миниатюрных самолетов. Мы совершаем рейсы внутри России и за её пределы."
     },
     {
-        key: ["сайт", "заказать", "тариф", "бизнес", "S7avelii-IT", "S7avelii Business"],
+        key: ["сайт", "заказать", "тариф", "бизнес"],
         answer: "Перейдите в раздел «Для бизнеса», выберите тариф — менеджер свяжется с вами."
     },
     {
-        key: ["Как заказать питание", "питание", "еда", "кушать",],
-        answer: "Питание на борт можно заказать заранее, за 48 часов до рейса"
+        key: ["питание", "еда", "кушать"],
+        answer: "Питание на борт можно заказать заранее, за 48 часов до рейса."
     },
     {
-        key: ["отели", "забронировать отель", "путешествие", "гостиница"],
-        answer: "Перейдите в раздел «ОТЕЛИ», будьте внимательны, мы миниатюрная авиакомпания и сейчас забронировать настоящий билет нельзя. Приносим свои извинения."
-    },
-    {
-        key: ["отели", "забронировать отель", "путешествие", "гостиница"],
-        answer: "Перейдите в раздел «ОТЕЛИ», будьте внимательны, мы миниатюрная авиакомпания и сейчас забронировать настоящий билет нельзя. Приносим свои извинения."
-    },
-    {
-        key: ["отели", "забронировать отель", "путешествие", "гостиница"],
-        answer: "Перейдите в раздел «ОТЕЛИ», будьте внимательны, мы миниатюрная авиакомпания и сейчас забронировать настоящий билет нельзя. Приносим свои извинения."
+        key: ["отели", "гостиница"],
+        answer: "Перейдите в раздел «ОТЕЛИ». Сейчас забронировать настоящий отель нельзя, мы миниатюрная авиакомпания."
     },
 ];
 
-/* ------------------ miniGPT v3.0 ------------------ */
+/* ------------------ САМОРАЗВИТИЕ ------------------ */
+
+let learnedDB = JSON.parse(localStorage.getItem("ai_memory") || "{}");
+
+function saveLearning(question, answer) {
+    learnedDB[question.toLowerCase()] = answer;
+    localStorage.setItem("ai_memory", JSON.stringify(learnedDB));
+}
+
+function searchLearning(question) {
+    const q = question.toLowerCase();
+    for (const key in learnedDB) {
+        if (similarity(q, key) > 0.6) {
+            return learnedDB[key];
+        }
+    }
+    return null;
+}
+
+/* ------------------ ПОГОДА ------------------ */
+
+const WEATHER_KEY = "ВСТАВЬ_СВОЙ_API_KEY"; // ← сюда ключ openweathermap
+
+async function getWeather(city) {
+    try {
+        const url = 
+        `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${WEATHER_KEY}&lang=ru&units=metric`;
+
+        const res = await fetch(url);
+        if (!res.ok) return null;
+
+        const d = await res.json();
+        return `Погода в ${d.name}: ${d.weather[0].description}, ${d.main.temp}°C`;
+    } catch {
+        return null;
+    }
+}
+
+/* ------------------ ФУНКЦИИ miniGPT ------------------ */
 
 let memory = [];
 
@@ -975,47 +1005,75 @@ function generateContextAnswer(q) {
     return "Продолжаю по вашему вопросу: «" + q + "». Могу уточнить детали, если нужно.";
 }
 
-function miniGPT(question) {
+async function miniGPT(question) {
     const q = question.toLowerCase().trim();
+
     memory.push(q);
     if (memory.length > 10) memory.shift();
 
-    // 1. Точное совпадение
+    // ——— 0. Проверка знаний из обучения ———
+    const learned = searchLearning(q);
+    if (learned) return learned;
+
+    // ——— 1. Погода ———
+    if (q.includes("погода") || q.includes("температура")) {
+        const city = q.replace(/.*погода|температура|в|в городе/gi, "").trim();
+        if (city.length > 1) {
+            const w = await getWeather(city);
+            if (w) return w;
+            return "Не удалось найти погоду в указанном городе.";
+        }
+        return "Уточните город, например: «Погода в Москве».";
+    }
+
+    // ——— 2. Точное совпадение ———
     for (const item of knowledge) {
         let match = true;
         for (const k of item.key) {
             if (!q.includes(k)) { match = false; break; }
         }
-        if (match) return item.answer;
+        if (match) {
+            saveLearning(q, item.answer);
+            return item.answer;
+        }
     }
 
-    // 2. Частичное совпадение
+    // ——— 3. Частичное совпадение ———
     for (const item of knowledge) {
         let count = 0;
         for (const k of item.key) if (q.includes(k)) count++;
-        if (count >= 1) return item.answer;
+        if (count >= 1) {
+            saveLearning(q, item.answer);
+            return item.answer;
+        }
     }
 
-    // 3. Контекст
+    // ——— 4. Контекст ———
     if (memory.length >= 2) {
         const last = memory[memory.length - 2];
-        if (similarity(q, last) > 0.55) return generateContextAnswer(question);
+        if (similarity(q, last) > 0.55) {
+            const ans = generateContextAnswer(question);
+            saveLearning(q, ans);
+            return ans;
+        }
     }
 
-    // 4. fallback
-    return "Я могу уточнить: что именно вас интересует по теме «" + question + "»?";
+    // ——— 5. fallback ———
+    const fallback = "Я могу уточнить: что именно вас интересует по теме «" + question + "»?";
+    saveLearning(q, fallback);
+    return fallback;
 }
 
 /* ------------------ ОТПРАВКА ------------------ */
 
-function sendMessage() {
+async function sendMessage() {
     const text = document.getElementById("chat-text").value.trim();
     if (!text) return;
 
     addUser(text);
 
-    const ai = miniGPT(text);
-    setTimeout(() => addAI(ai), 200);
+    const ai = await miniGPT(text);
+    setTimeout(() => addAI(ai), 100);
 
     document.getElementById("chat-text").value = "";
 }
