@@ -715,252 +715,265 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
 </section>
 
-<!-- ==== ПЛАВАЮЩАЯ КНОПКА ЧАТА ==== -->
-<div id="chat-button" class="chat-button">
-    <!-- SVG ИКОНКА НОРМАЛЬНОГО ЧАТА -->
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
-        <path d="M12 3C6.48 3 2 6.94 2 12c0 2.07.79 3.97 2.11 5.5L2 22l4.85-1.97C8.08 20.67 9.99 21 12 21c5.52 0 10-3.94 10-9s-4.48-9-10-9zm0 16c-1.82 0-3.53-.44-5.05-1.27l-.36-.2-2.87 1.16 1.07-2.63-.29-.31A7.44 7.44 0 0 1 4.5 12c0-4.14 3.59-7.5 7.5-7.5s7.5 3.36 7.5 7.5-3.59 7.5-7.5 7.5z"/>
-    </svg>
-</div>
-
-<!-- ==== ОКНО ЧАТА ==== -->
-<div id="chat-window" class="chat-window hidden">
-    <div class="chat-header">
-        <img src="https://i.imgur.com/ZLJZVQZ.png" class="avatar-header">
-        <span>AeroHelper - S7avelii Airlines</span>
-        <button id="chat-close">✖</button>
-    </div>
-
-    <div id="chat-messages" class="chat-messages"></div>
-
-    <div class="chat-input-container">
-        <input type="text" id="chat-input" placeholder="Что вас интересует? Отвечу на ваш вопрос">
-        <button id="voice-btn">🎤</button>
-        <button id="chat-send">➤</button>
-    </div>
-</div>
-
-<!-- ==== СТИЛИ ==== -->
 <style>
+/* ------------------ СТИЛИ ------------------ */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* ——— Кнопка чата ——— */
 .chat-button {
     position: fixed;
-    bottom: 22px;
-    right: 22px;
-    background: #acd40a;
+    right: 25px;
+    bottom: 25px;
     width: 60px;
     height: 60px;
+    background: #8bca0e;
     border-radius: 50%;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
     z-index: 9999;
-    transition: 0.2s;
+    transition: 0.3s;
 }
-.chat-button:hover { transform: scale(1.1); }
+.chat-button:hover {
+    transform: scale(1.1);
+}
+.chat-icon {
+    width: 34px;
+    height: 34px;
+}
 
-.chat-window {
+/* ——— Окно чата ——— */
+#chat-window {
     position: fixed;
     bottom: 100px;
-    right: 22px;
-    width: 380px;
-    height: 520px;
-    background: #ffffff;
+    right: 25px;
+    width: 350px;
+    height: 500px;
+    background: white;
     border-radius: 18px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-    display: flex;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+    display: none;
     flex-direction: column;
     overflow: hidden;
     z-index: 9999;
 }
 
-.hidden { display: none; }
-
+/* ——— Шапка ——— */
 .chat-header {
-    background: #96cd09;
+    background: #77d00b;
+    padding: 15px;
     color: white;
-    padding: 12px;
     display: flex;
-    gap: 10px;
     align-items: center;
-    font-size: 18px;
-    font-weight: bold;
+    gap: 12px;
 }
-
 .avatar-header {
-    width: 34px;
-    height: 34px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
 }
 
-.chat-messages {
+/* ——— Сообщения ——— */
+.chat-body {
     flex: 1;
-    padding: 12px;
     overflow-y: auto;
-    font-family: sans-serif;
-    font-size: 15px;
+    padding: 12px;
+    background: #f1f4f8;
 }
-
 .msg {
-    display: flex;
-    align-items: flex-start;
-    margin: 8px 0;
-    gap: 8px;
-}
-
-.msg-user { justify-content: flex-end; }
-.msg-ai   { justify-content: flex-start; }
-
-.avatar {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-}
-
-.msg-bubble {
+    background: #fff;
     padding: 10px 14px;
-    border-radius: 12px;
-    max-width: 70%;
-    line-height: 1.3;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    max-width: 80%;
+    display: inline-block;
+}
+.msg.user {
+    background: #c2ed9b;
+    margin-left: auto;
 }
 
-.msg-user .msg-bubble {
-    background: #dcfaff;
-}
-
-.msg-ai .msg-bubble {
-    background: #f2f2f2;
-}
-
-.chat-input-container {
+/* ——— Поле ввода ——— */
+.chat-input {
     display: flex;
     padding: 10px;
-    gap: 6px;
-    border-top: 1px solid #ddd;
+    gap: 10px;
+    background: white;
 }
-
-#chat-input {
+.chat-input input {
     flex: 1;
     padding: 10px;
     border-radius: 10px;
-    border: 1px solid #bbb;
+    border: 1px solid #ddd;
+}
+.chat-input button {
+    background: #89cc0d;
+    padding: 0 16px;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
 }
 
-#chat-send,
+/* ——— Микрофон ——— */
+.mic-icon {
+    width: 22px;
+    height: 22px;
+}
 #voice-btn {
-    background: #00aaff;
-    color: white;
+    background: #abd409;
+    padding: 10px;
     border: none;
     border-radius: 10px;
-    padding: 0 14px;
     cursor: pointer;
-    font-size: 18px;
 }
 </style>
+</head>
+<body>
 
-<!-- ==== ЛОКАЛЬНЫЙ ИИ ==== -->
-<script src="https://unpkg.com/@mlc-ai/web-llm/dist/webllm.min.js"></script>
+<!-- ——— Кнопка открытия ——— -->
+<div id="chat-button" class="chat-button">
+    <img src="images/free-icon-font-chat-notification.avif" class="chat-icon">
+</div>
+
+<!-- ——— Окно чата ——— -->
+<div id="chat-window">
+
+    <div class="chat-header">
+        <img src="images/assistant.png" class="avatar-header">
+        <div>
+            <b>S7avelii SynAir</b><br>
+            <small>Онлайн</small>
+        </div>
+    </div>
+
+    <div id="chat-body" class="chat-body"></div>
+
+    <div class="chat-input">
+        <input id="chat-text" type="text" placeholder="Напишите сообщение…">
+        <button id="send-btn">➤</button>
+        <button id="voice-btn"><img src="images/free-icon-font-circle-microphone.avif" class="mic-icon"></button>
+    </div>
+
+</div>
+
 
 <script>
-let engine;
+/* ------------------ ЛОГИКА ЧАТА ------------------ */
 
-// ==== БАЗА УМНЫХ ОТВЕТОВ ==== (авиа FAQ)
-const KB = [
-    { q: "багаж", a: "Ручная кладь 10 кг включена в тариф. Багаж можно добавить при покупке билета или позже." },
-    { q: "регистрация", a: "Онлайн-регистрация открывается за 24 часа до вылета. Помочь?" },
-    { q: "документы", a: "Для внутренних рейсов — паспорт РФ. Для международных — загранпаспорт." },
-    { q: "питание", a: "Есть платное меню. Хочу покажу, что есть!" },
-    { q: "животные", a: "Мы перевозим питомцев в салоне и багаже. Главное — оформить заявку заранее!" }
-];
+/* ——— Показ/скрытие окна ——— */
+document.getElementById("chat-button").onclick = () => {
+    const w = document.getElementById("chat-window");
+    w.style.display = (w.style.display === "flex") ? "none" : "flex";
+};
 
-// ==== Поиск похожего вопроса ====
-function searchKB(msg) {
-    msg = msg.toLowerCase();
-    return KB.find(i => msg.includes(i.q))?.a || null;
-}
-
-// ==== Загрузка локальной модели ====
-async function loadModel() {
-    addAI("Привет! 👋 Я ваша стюардесса Алина. Сейчас загружу мой мозг… ✈️");
-    engine = await webllm.CreateMLCEngine(
-        "https://huggingface.co/mlc-ai/Llama-3-8B-Instruct-q4f32_1-MLC/raw/main/"
-    );
-    addAI("Готово! Спросите меня о перелётах ❤️");
-}
-loadModel();
-
-// ==== UI ====
-const wnd  = document.getElementById("chat-window");
-const btn  = document.getElementById("chat-button");
-const cls  = document.getElementById("chat-close");
-const inp  = document.getElementById("chat-input");
-const send = document.getElementById("chat-send");
-const mic  = document.getElementById("voice-btn");
-const box  = document.getElementById("chat-messages");
-
-btn.onclick = () => wnd.classList.remove("hidden");
-cls.onclick = () => wnd.classList.add("hidden");
-
-// ==== Вывод сообщений ====
+/* ——— Добавление сообщений ——— */
 function addUser(msg) {
-    box.innerHTML += `
-    <div class="msg msg-user">
-        <div class="msg-bubble">${msg}</div>
-    </div>`;
-    box.scrollTop = box.scrollHeight;
+    const div = document.createElement("div");
+    div.className = "msg user";
+    div.innerText = msg;
+    chatBody.appendChild(div);
+    chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-function addAI(msg) {
-    box.innerHTML += `
-    <div class="msg msg-ai">
-        <img class="avatar" src="https://i.imgur.com/ZLJZVQZ.png">
-        <div class="msg-bubble">${msg}</div>
-    </div>`;
-    box.scrollTop = box.scrollHeight;
+function addAI(msg, speak=true) {
+    const div = document.createElement("div");
+    div.className = "msg";
+    div.innerHTML = msg;
+    chatBody.appendChild(div);
+    chatBody.scrollTop = chatBody.scrollHeight;
 
-    // Озвучка ответа
-    speechSynthesis.speak(new SpeechSynthesisUtterance(msg));
+    if (speak) speakText(msg);
 }
 
-// ==== Логика ответа ====
-async function sendMessage() {
-    const text = inp.value.trim();
+/* ------------------ ЛОКАЛЬНАЯ МОДЕЛЬ AI (без сервера) ------------------ */
+/* Очень простая мини-ИИ логика (можно заменить на любую модель) */
+
+function getLocalAIResponse(q) {
+    q = q.toLowerCase();
+
+    if (q.includes("как купить билет?") || q.includes("самолет"))
+        return "В данный момент мы миниатюрная авиакомпания, и реальный билет пока что купить нельзя, но вы все же можете отправиться в миниатюрное путешествие, нажав на кнопку КУПИТЬ БИЛЕТ и заполнив форму";
+
+    if (q.includes("Как заказать карту S7avelii Priority"))
+        return "Карту оформить очень легко и просто! Нужно перейти в раздел S7avelii Priority, пролистать в самый низ и заполнить форму, с выбором типа ваши карты. ";
+
+    if (q.includes("Привет"))
+        return "Здравствуйте! Я ваш персональный авиа-ассистент. Чем помочь?";
+    if (q.includes("Как заказать продукцию в магазине?"))
+        return "Вы переходите в S7avelii Shop, он также обозначается как ДЛЯ ПУТЕШЕСТВИЯ, выбираете понравившийся вам товар и нажимаете на кнопку купить, переходите в группу, где уточняете какой товар вас интересует, дальше с вами свяжется менеджер";
+    if (q.includes("Как зарегестрироваться на сайте?"))
+        return "Нужно нажать на кнопку ВХОД, после чего ЗАРЕГЕСТРИРОВАТЬСЯ, важно! нужно состоять в программе лояльности s7avelii priority";
+    if (q.includes("Сколько самолётов в вашей авиакомпании?"))
+        return "Флот S7avelii Airlines насчитывает 12 миниатюрных воздушных судов";
+    if (q.includes("Как заказать сайт?"))
+        return "Нужно перейти в раздел ДЛЯ БИЗНЕСА и выбрать интересующий вас тариф, после чего, с вами свяжется менеджер";
+    return "Я уточню информацию. Напишите, пожалуйста, подробности.";
+}
+
+/* ——— Отправка сообщения ——— */
+const chatBody = document.getElementById("chat-body");
+
+function sendMessage() {
+    const text = document.getElementById("chat-text").value.trim();
     if (!text) return;
-    inp.value = "";
+
     addUser(text);
 
-    // 1. База знаний
-    const kb = searchKB(text);
-    if (kb) return addAI(kb);
+    const ai = getLocalAIResponse(text);
+    setTimeout(() => addAI(ai), 400);
 
-    // 2. Локальный ИИ
-    addAI("Секундочку… думаю ✈️");
-
-    const r = await engine.chat.completions.create({
-        messages: [{ role: "user", content: text }]
-    });
-
-    document.querySelector(".msg-ai:last-child .msg-bubble").textContent =
-        r.choices[0].message.content + " 😊";
+    document.getElementById("chat-text").value = "";
 }
 
-send.onclick = sendMessage;
-inp.onkeydown = e => e.key === "Enter" && sendMessage();
+document.getElementById("send-btn").onclick = sendMessage;
+document.getElementById("chat-text").onkeydown = e => {
+    if (e.key === "Enter") sendMessage();
+};
 
-// ==== Голосовой ввод ====
-let rec;
-if ("webkitSpeechRecognition" in window) {
-    rec = new webkitSpeechRecognition();
-    rec.lang = "ru-RU";
-    rec.onresult = e => {
-        inp.value = e.results[0][0].transcript;
+/* ------------------ ГОЛОСОВОЙ ОТВЕТ ------------------ */
+let voice;
+
+function loadVoices() {
+    const voices = speechSynthesis.getVoices();
+    voice = voices.find(v => v.lang === "ru-RU" && v.name.includes("Google"))
+          || voices.find(v => v.lang === "ru-RU")
+          || voices[0];
+}
+speechSynthesis.onvoiceschanged = loadVoices;
+
+function speakText(msg) {
+    const u = new SpeechSynthesisUtterance(msg);
+    u.voice = voice;
+    u.rate = 1;
+    u.pitch = 1.05;
+    speechSynthesis.speak(u);
+}
+
+/* ------------------ ГОЛОСОВОЙ ВВОД ------------------ */
+document.getElementById("voice-btn").onclick = () => {
+    const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!Rec) return alert("Ваш браузер не поддерживает голосовой ввод.");
+
+    let r = new Rec();
+    r.lang = "ru-RU";
+
+    r.onresult = e => {
+        const text = e.results[0][0].transcript;
+        document.getElementById("chat-text").value = text;
         sendMessage();
     };
-}
 
-mic.onclick = () => rec && rec.start();
+    r.start();
+};
 </script>
+
 
 <!-- Новости S7avelii Airlines -->
 <section class="max-w-7xl mx-auto px-4 py-12">
