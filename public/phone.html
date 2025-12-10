@@ -740,13 +740,8 @@ body {
     z-index: 9999;
     transition: 0.3s;
 }
-.chat-button:hover {
-    transform: scale(1.1);
-}
-.chat-icon {
-    width: 34px;
-    height: 34px;
-}
+.chat-button:hover { transform: scale(1.1); }
+.chat-icon { width: 34px; height: 34px; }
 
 /* ——— Окно чата ——— */
 #chat-window {
@@ -754,7 +749,7 @@ body {
     bottom: 100px;
     right: 25px;
     width: 350px;
-    height: 500px;
+    height: 520px;
     background: white;
     border-radius: 18px;
     box-shadow: 0 8px 28px rgba(0,0,0,0.35);
@@ -771,12 +766,24 @@ body {
     color: white;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+}
+
+.avatar-group {
+    display: flex;
+    align-items: center;
     gap: 12px;
 }
+
 .avatar-header {
     width: 38px;
     height: 38px;
     border-radius: 50%;
+}
+
+#close-chat {
+    font-size: 22px;
+    cursor: pointer;
 }
 
 /* ——— Сообщения ——— */
@@ -786,6 +793,7 @@ body {
     padding: 12px;
     background: #f1f4f8;
 }
+
 .msg {
     background: #fff;
     padding: 10px 14px;
@@ -794,10 +802,8 @@ body {
     max-width: 80%;
     display: inline-block;
 }
-.msg.user {
-    background: #c2ed9b;
-    margin-left: auto;
-}
+
+.msg.user { background: #c2ed9b; margin-left: auto; }
 
 /* ——— Поле ввода ——— */
 .chat-input {
@@ -806,12 +812,14 @@ body {
     gap: 10px;
     background: white;
 }
+
 .chat-input input {
     flex: 1;
     padding: 10px;
     border-radius: 10px;
     border: 1px solid #ddd;
 }
+
 .chat-input button {
     background: #89cc0d;
     padding: 0 16px;
@@ -826,6 +834,7 @@ body {
     width: 22px;
     height: 22px;
 }
+
 #voice-btn {
     background: #abd409;
     padding: 10px;
@@ -846,11 +855,14 @@ body {
 <div id="chat-window">
 
     <div class="chat-header">
-        <img src="images/assistant.png" class="avatar-header">
-        <div>
-            <b>S7avelii SynAir</b><br>
-            <small>Онлайн</small>
+        <div class="avatar-group">
+            <img src="images/assistant.png" class="avatar-header">
+            <div>
+                <b>S7avelii SynAir</b><br>
+                <small>Онлайн</small>
+            </div>
         </div>
+        <div id="close-chat">&times;</div>
     </div>
 
     <div id="chat-body" class="chat-body"></div>
@@ -858,22 +870,30 @@ body {
     <div class="chat-input">
         <input id="chat-text" type="text" placeholder="Напишите сообщение…">
         <button id="send-btn">➤</button>
-        <button id="voice-btn"><img src="images/free-icon-font-circle-microphone.avif" class="mic-icon"></button>
-    </div>
 
+        <button id="voice-btn">
+            <img src="images/free-icon-font-circle-microphone.avif" class="mic-icon">
+        </button>
+    </div>
 </div>
 
-
 <script>
-/* ------------------ ЛОГИКА ЧАТА ------------------ */
+/* ------------------ ОТКРЫТИЕ / ЗАКРЫТИЕ ОКНА ------------------ */
 
-/* ——— Показ/скрытие окна ——— */
+const chatWindow = document.getElementById("chat-window");
+
 document.getElementById("chat-button").onclick = () => {
-    const w = document.getElementById("chat-window");
-    w.style.display = (w.style.display === "flex") ? "none" : "flex";
+    chatWindow.style.display = "flex";
 };
 
-/* ——— Добавление сообщений ——— */
+document.getElementById("close-chat").onclick = () => {
+    chatWindow.style.display = "none";
+};
+
+/* ------------------ ВЫВОД СООБЩЕНИЙ ------------------ */
+
+const chatBody = document.getElementById("chat-body");
+
 function addUser(msg) {
     const div = document.createElement("div");
     div.className = "msg user";
@@ -882,7 +902,7 @@ function addUser(msg) {
     chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-function addAI(msg, speak=true) {
+function addAI(msg, speak = true) {
     const div = document.createElement("div");
     div.className = "msg";
     div.innerHTML = msg;
@@ -892,69 +912,101 @@ function addAI(msg, speak=true) {
     if (speak) speakText(msg);
 }
 
-/* ------------------ ЛОКАЛЬНАЯ МОДЕЛЬ AI (без сервера) ------------------ */
-/* Очень простая мини-ИИ логика (можно заменить на любую модель) */
+/* ------------------ БАЗА ЗНАНИЙ ------------------ */
 
-function getLocalAIResponse(question) {
-    question = question.toLowerCase();
+const knowledge = [
+    {
+        key: ["купить", "билет"],
+        answer: "Купить настоящий билет пока нельзя — мы миниатюрная авиакомпания. Но вы можете отправиться в виртуальное путешествие, нажав кнопку «Купить билет»."
+    },
+    {
+        key: ["карта", "priority"],
+        answer: "Чтобы оформить карту S7avelii Priority — перейдите в соответствующий раздел, пролистайте вниз и заполните форму."
+    },
+    {
+        key: ["магазин", "товар", "купить"],
+        answer: "Перейдите в раздел S7avelii Shop, выберите товар, нажмите «Купить» — и с вами свяжется менеджер."
+    },
+    {
+        key: ["зарегистрироваться", "сайт"],
+        answer: "Нажмите «Вход» → «Зарегистрироваться». Нужно состоять в программе S7avelii Priority."
+    },
+    {
+        key: ["сколько", "самолет", "флот", "направления", "маршруты"],
+        answer: "Флот S7avelii Airlines насчитывает 12 миниатюрных самолетов. Мы совершаем рейсы как внутри России, так и за её пределы.(Европа, Азия)"
+    },
+    {
+        key: ["сайт", "заказать", "тариф", "бизнес", "S7avelii-IT", "S7avelii Business"],
+        answer: "Перейдите в раздел «Для бизнеса», выберите тариф — менеджер свяжется с вами."
+    },
+    {
+        key: ["Как заказать питание", "питание", "еда", "кушать",],
+        answer: "Питание на борт можно заказать заранее, за 48 часов до рейса"
+    },
+    {
+        key: ["отели", "забронировать отель", "путешествие", "гостиница"],
+        answer: "Перейдите в раздел «ОТЕЛИ», будьте внимательны, мы миниатюрная авиакомпания и сейчас забронировать настоящий билет нельзя. Приносим свои извинения."
+    },
+    {
+        key: ["отели", "забронировать отель", "путешествие", "гостиница"],
+        answer: "Перейдите в раздел «ОТЕЛИ», будьте внимательны, мы миниатюрная авиакомпания и сейчас забронировать настоящий билет нельзя. Приносим свои извинения."
+    },
+    {
+        key: ["отели", "забронировать отель", "путешествие", "гостиница"],
+        answer: "Перейдите в раздел «ОТЕЛИ», будьте внимательны, мы миниатюрная авиакомпания и сейчас забронировать настоящий билет нельзя. Приносим свои извинения."
+    },
+];
 
-    // База знаний: каждая запись содержит набор ключевых слов и ответ
-    const knowledge = [
-        {
-            keywords: ["купить", "билет", "билеты", "путешествие", "полёт", "полет"],
-            answer: "В данный момент мы миниатюрная авиакомпания, и реальный билет пока что купить нельзя. Но можно попробовать наше мини-путешествие, нажав кнопку КУПИТЬ БИЛЕТ."
-        },
-        {
-            keywords: ["карта", "priority", "s7avelii", "заказать карту", "оформить карту"],
-            answer: "Карту оформить просто! Перейдите в раздел S7avelii Priority, пролистайте вниз и заполните форму."
-        },
-        {
-            keywords: ["магазин", "shop", "купить товар", "продукция", "товары"],
-            answer: "Перейдите в S7avelii Shop (раздел ДЛЯ ПУТЕШЕСТВИЯ), выберите товар и нажмите КУПИТЬ."
-        },
-        {
-            keywords: ["регистрация", "зарегистрироваться", "аккаунт", "вход"],
-            answer: "Нажмите ВХОД → ЗАРЕГИСТРИРОВАТЬСЯ. Нужно быть участником S7avelii Priority."
-        },
-        {
-            keywords: ["сколько", "самолет", "самолёт", "флот", "авиапарк"],
-            answer: "Флот S7avelii Airlines насчитывает 12 миниатюрных воздушных судов."
-        },
-        {
-            keywords: ["сайт", "заказать сайт", "веб", "для бизнеса"],
-            answer: "Перейдите в раздел ДЛЯ БИЗНЕСА, выберите тариф — с вами свяжется менеджер."
-        },
-        {
-            keywords: ["привет", "здравствуй", "добрый", "хай"],
-            answer: "Здравствуйте! Я ваш персональный авиа-ассистент. Чем могу помочь?"
-        }
-    ];
+/* ------------------ miniGPT v3.0 ------------------ */
 
-    // Алгоритм поиска лучшего ответа
-    let bestScore = 0;
-    let bestAnswer = null;
+let memory = [];
 
-    for (const entry of knowledge) {
-        let score = 0;
-
-        for (const word of entry.keywords) {
-            if (question.includes(word)) score++;
-        }
-
-        if (score > bestScore) {
-            bestScore = score;
-            bestAnswer = entry.answer;
-        }
+function similarity(a, b) {
+    const setA = new Set(a.split(" "));
+    const setB = new Set(b.split(" "));
+    let match = 0;
+    for (const word of setA) {
+        if (setB.has(word)) match++;
     }
-
-    // Если найдено совпадение хотя бы по одному ключевому слову
-    if (bestScore > 0) return bestAnswer;
-
-    return "Я уточню информацию. Напишите, пожалуйста, немного подробнее.";
+    return match / Math.max(setA.size, setB.size);
 }
 
-/* ——— Отправка сообщения ——— */
-const chatBody = document.getElementById("chat-body");
+function generateContextAnswer(q) {
+    return "Продолжаю по вашему вопросу: «" + q + "». Могу уточнить детали, если нужно.";
+}
+
+function miniGPT(question) {
+    const q = question.toLowerCase().trim();
+    memory.push(q);
+    if (memory.length > 10) memory.shift();
+
+    // 1. Точное совпадение
+    for (const item of knowledge) {
+        let match = true;
+        for (const k of item.key) {
+            if (!q.includes(k)) { match = false; break; }
+        }
+        if (match) return item.answer;
+    }
+
+    // 2. Частичное совпадение
+    for (const item of knowledge) {
+        let count = 0;
+        for (const k of item.key) if (q.includes(k)) count++;
+        if (count >= 1) return item.answer;
+    }
+
+    // 3. Контекст
+    if (memory.length >= 2) {
+        const last = memory[memory.length - 2];
+        if (similarity(q, last) > 0.55) return generateContextAnswer(question);
+    }
+
+    // 4. fallback
+    return "Я могу уточнить: что именно вас интересует по теме «" + question + "»?";
+}
+
+/* ------------------ ОТПРАВКА ------------------ */
 
 function sendMessage() {
     const text = document.getElementById("chat-text").value.trim();
@@ -962,8 +1014,8 @@ function sendMessage() {
 
     addUser(text);
 
-    const ai = getLocalAIResponse(text);
-    setTimeout(() => addAI(ai), 400);
+    const ai = miniGPT(text);
+    setTimeout(() => addAI(ai), 200);
 
     document.getElementById("chat-text").value = "";
 }
@@ -973,14 +1025,16 @@ document.getElementById("chat-text").onkeydown = e => {
     if (e.key === "Enter") sendMessage();
 };
 
-/* ------------------ ГОЛОСОВОЙ ОТВЕТ ------------------ */
+/* ------------------ ГОЛОСОВОЙ ВЫВОД ------------------ */
+
 let voice;
 
 function loadVoices() {
     const voices = speechSynthesis.getVoices();
-    voice = voices.find(v => v.lang === "ru-RU" && v.name.includes("Google"))
-          || voices.find(v => v.lang === "ru-RU")
-          || voices[0];
+    voice =
+        voices.find(v => v.lang === "ru-RU" && v.name.includes("Google")) ||
+        voices.find(v => v.lang === "ru-RU") ||
+        voices[0];
 }
 speechSynthesis.onvoiceschanged = loadVoices;
 
@@ -993,6 +1047,7 @@ function speakText(msg) {
 }
 
 /* ------------------ ГОЛОСОВОЙ ВВОД ------------------ */
+
 document.getElementById("voice-btn").onclick = () => {
     const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!Rec) return alert("Ваш браузер не поддерживает голосовой ввод.");
@@ -1009,7 +1064,6 @@ document.getElementById("voice-btn").onclick = () => {
     r.start();
 };
 </script>
-
 
 <!-- Новости S7avelii Airlines -->
 <section class="max-w-7xl mx-auto px-4 py-12">
