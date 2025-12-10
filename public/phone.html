@@ -876,7 +876,7 @@ body {
         </button>
     </div>
 </div>
-
+<!-- Вставь это вместо твоего текущего <script> (не трогай CSS/HTML выше) -->
 <script>
 /* ------------------ ОТКРЫТИЕ / ЗАКРЫТИЕ ОКНА ------------------ */
 
@@ -909,44 +909,37 @@ function addAI(msg, speak = true) {
     chatBody.appendChild(div);
     chatBody.scrollTop = chatBody.scrollHeight;
 
-    if (speak) speakText(msg);
+    if (speak) speakText(stripHtml(msg));
+}
+
+function addSystem(msg) {
+    const div = document.createElement("div");
+    div.className = "msg";
+    div.style.opacity = "0.8";
+    div.style.fontStyle = "italic";
+    div.innerText = msg;
+    chatBody.appendChild(div);
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+/* helper: убрать HTML для озвучки */
+function stripHtml(html) {
+    const tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
 }
 
 /* ------------------ БАЗА ЗНАНИЙ ------------------ */
 
 const knowledge = [
-    {
-        key: ["купить", "билет"],
-        answer: "Купить настоящий билет пока нельзя — мы миниатюрная авиакомпания. Но вы можете отправиться в виртуальное путешествие, нажав кнопку «Купить билет»."
-    },
-    {
-        key: ["карта", "priority"],
-        answer: "Чтобы оформить карту S7avelii Priority — перейдите в соответствующий раздел, пролистайте вниз и заполните форму."
-    },
-    {
-        key: ["магазин", "товар", "купить"],
-        answer: "Перейдите в раздел S7avelii Shop, выберите товар, нажмите «Купить» — и с вами свяжется менеджер."
-    },
-    {
-        key: ["зарегистрироваться", "личный кабинет"],
-        answer: "Нажмите «Вход» → «Зарегистрироваться». Нужно состоять в программе S7avelii Priority."
-    },
-    {
-        key: ["сколько", "самолет", "флот", "направления", "маршруты"],
-        answer: "Флот S7avelii Airlines насчитывает 12 миниатюрных самолетов. Мы совершаем рейсы внутри России и за её пределы."
-    },
-    {
-        key: ["сайт", "заказать", "тариф", "бизнес"],
-        answer: "Перейдите в раздел «Для бизнеса», выберите тариф — менеджер свяжется с вами."
-    },
-    {
-        key: ["питание", "еда", "кушать"],
-        answer: "Питание на борт можно заказать заранее, за 48 часов до рейса."
-    },
-    {
-        key: ["отели", "гостиница"],
-        answer: "Перейдите в раздел «ОТЕЛИ». Сейчас забронировать настоящий отель нельзя, мы миниатюрная авиакомпания."
-    },
+    { key: ["купить", "билет"], answer: "Купить настоящий билет пока нельзя — мы миниатюрная авиакомпания. Но вы можете отправиться в виртуальное путешествие, нажав кнопку «Купить билет»." },
+    { key: ["карта", "priority"], answer: "Чтобы оформить карту S7avelii Priority — перейдите в соответствующий раздел, пролистайте вниз и заполните форму." },
+    { key: ["магазин", "товар", "купить"], answer: "Перейдите в раздел S7avelii Shop, выберите товар, нажмите «Купить» — и с вами свяжется менеджер." },
+    { key: ["зарегистрироваться", "личный кабинет"], answer: "Нажмите «Вход» → «Зарегистрироваться». Нужно состоять в программе S7avelii Priority." },
+    { key: ["сколько", "самолет", "флот", "направления", "маршруты"], answer: "Флот S7avelii Airlines насчитывает 12 миниатюрных самолетов. Мы совершаем рейсы внутри России и за её пределы." },
+    { key: ["сайт", "заказать", "тариф", "бизнес"], answer: "Перейдите в раздел «Для бизнеса», выберите тариф — менеджер свяжется с вами." },
+    { key: ["питание", "еда", "кушать"], answer: "Питание на борт можно заказать заранее, за 48 часов до рейса." },
+    { key: ["отели", "гостиница"], answer: "Перейдите в раздел «ОТЕЛИ». Сейчас забронировать настоящий отель нельзя, мы миниатюрная авиакомпания." },
 ];
 
 /* ------------------ САМОРАЗВИТИЕ ------------------ */
@@ -968,22 +961,59 @@ function searchLearning(question) {
     return null;
 }
 
-/* ------------------ ПОГОДА ------------------ */
+/* ------------------ ПОГОДА (УСИЛЕННЫЙ getWeather) ------------------ */
 
-const WEATHER_KEY = "ВСТАВЬ_СВОЙ_API_KEY"; // ← сюда ключ openweathermap
+/*
+  ВАЖНО: вставь сюда свой ключ OpenWeatherMap.
+  Получить ключ: https://home.openweathermap.org/users/sign_up
+*/
+const WEATHER_KEY = "ВСТАВЬ_СВОЙ_API_KEY"; // <-- замени
 
 async function getWeather(city) {
+    console.log("[weather] запрос для города:", city);
+
+    if (!WEATHER_KEY || WEATHER_KEY === "ВСТАВЬ_СВОЙ_API_KEY") {
+        console.error("[weather] API ключ не задан");
+        return { ok: false, message: "API-ключ погоды не настроен. Вставьте ключ OpenWeatherMap в WEATHER_KEY." };
+    }
+
+    if (!city || city.trim().length === 0) {
+        return { ok: false, message: "Не задан город." };
+    }
+
+    const q = encodeURIComponent(city.trim());
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${q}&appid=${WEATHER_KEY}&lang=ru&units=metric`;
+
     try {
-        const url = 
-        `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${WEATHER_KEY}&lang=ru&units=metric`;
-
         const res = await fetch(url);
-        if (!res.ok) return null;
-
+        if (!res.ok) {
+            // подробная диагностика
+            const code = res.status;
+            const txt = await res.text().catch(()=>"");
+            console.warn("[weather] fetch не OK", code, txt);
+            if (code === 401) return { ok: false, message: "Неверный API-ключ (401 Unauthorized)." };
+            if (code === 404) return { ok: false, message: `Город «${city}» не найден (404).` };
+            return { ok: false, message: `Ошибка сети или сервера: ${code}.` };
+        }
         const d = await res.json();
-        return `Погода в ${d.name}: ${d.weather[0].description}, ${d.main.temp}°C`;
-    } catch {
-        return null;
+        if (d && d.weather && d.main) {
+            const descr = d.weather[0].description;
+            const temp = d.main.temp;
+            const feels = d.main.feels_like;
+            const humidity = d.main.humidity;
+            const wind = d.wind && d.wind.speed ? `${d.wind.speed} м/с` : "—";
+            const cityName = d.name || city;
+            const country = d.sys && d.sys.country ? `, ${d.sys.country}` : "";
+            const text = `Погода в ${cityName}${country}: ${descr}, ${temp}°C (ощущается как ${feels}°C). Влажность ${humidity}%. Ветер ${wind}.`;
+            console.log("[weather] ответ:", text);
+            return { ok: true, text };
+        } else {
+            console.warn("[weather] неожиданный формат ответа:", d);
+            return { ok: false, message: "Сервер вернул неожиданные данные о погоде." };
+        }
+    } catch (err) {
+        console.error("[weather] fetch ошибка:", err);
+        return { ok: false, message: "Сетевая ошибка при запросе погоды." };
     }
 }
 
@@ -992,41 +1022,73 @@ async function getWeather(city) {
 let memory = [];
 
 function similarity(a, b) {
-    const setA = new Set(a.split(" "));
-    const setB = new Set(b.split(" "));
+    const wa = a.split(/\s+/).filter(Boolean);
+    const wb = b.split(/\s+/).filter(Boolean);
+    const setA = new Set(wa);
+    const setB = new Set(wb);
     let match = 0;
-    for (const word of setA) {
-        if (setB.has(word)) match++;
-    }
-    return match / Math.max(setA.size, setB.size);
+    for (const w of setA) if (setB.has(w)) match++;
+    return match / Math.max(setA.length || 1, setB.length || 1);
 }
 
 function generateContextAnswer(q) {
     return "Продолжаю по вашему вопросу: «" + q + "». Могу уточнить детали, если нужно.";
 }
 
+/* Более надёжный парсер города из запроса */
+function parseCityFromQuestion(q) {
+    // пробуем шаблоны: "погода в городе name", "погода в name", "температура name"
+    // убираем вопросительные и служебные слова
+    let s = q.toLowerCase();
+    // удалим слово "погода" и "температура"
+    s = s.replace(/погода|температура/gi, "");
+    // ищем "в <город>" или "в городе <город>"
+    const m = s.match(/в\s+городе\s+([а-яёa-z\-\s\.]+)/i) || s.match(/в\s+([а-яёa-z\-\s\.]+)/i);
+    if (m && m[1]) return m[1].trim();
+    // если нет 'в', возможно написали просто "погода москва" или "москва погода"
+    const words = q.split(/\s+/).map(w => w.replace(/[^\p{L}\-\.]/gu, ""));
+    // возьмем первое слово, которое не является служебным
+    const stop = new Set(["погода","температура","в","весна","лето","зима","осень","какая","какой","сегодня","завтра","сейчас"]);
+    for (const w of words) {
+        const lw = w.toLowerCase();
+        if (!lw) continue;
+        if (!stop.has(lw) && lw.length > 1) {
+            // краткая эвристика: слово с буквой — город
+            return lw;
+        }
+    }
+    return "";
+}
+
 async function miniGPT(question) {
     const q = question.toLowerCase().trim();
-
     memory.push(q);
     if (memory.length > 10) memory.shift();
 
-    // ——— 0. Проверка знаний из обучения ———
+    // 0. Проверка в обученной базе
     const learned = searchLearning(q);
     if (learned) return learned;
 
-    // ——— 1. Погода ———
+    // 1. Запросы про погоду/температуру
     if (q.includes("погода") || q.includes("температура")) {
-        const city = q.replace(/.*погода|температура|в|в городе/gi, "").trim();
-        if (city.length > 1) {
-            const w = await getWeather(city);
-            if (w) return w;
-            return "Не удалось найти погоду в указанном городе.";
+        const city = parseCityFromQuestion(question);
+        console.log("[miniGPT] parsed city:", city);
+        if (!city) {
+            return "Уточните город, например: «Погода в Москве» или «Погода Санкт-Петербург».";
         }
-        return "Уточните город, например: «Погода в Москве».";
+        // покажем индикатор загрузки в чат
+        addSystem("Запрашиваю погоду для: " + city + " …");
+        const res = await getWeather(city);
+        if (res.ok) {
+            saveLearning(q, res.text);
+            return res.text;
+        } else {
+            // диагностическое сообщение, возвращаем человеку понятный текст
+            return `Не удалось получить погоду: ${res.message}`;
+        }
     }
 
-    // ——— 2. Точное совпадение ———
+    // 2. Точное совпадение в базе знаний
     for (const item of knowledge) {
         let match = true;
         for (const k of item.key) {
@@ -1038,7 +1100,7 @@ async function miniGPT(question) {
         }
     }
 
-    // ——— 3. Частичное совпадение ———
+    // 3. Частичное совпадение
     for (const item of knowledge) {
         let count = 0;
         for (const k of item.key) if (q.includes(k)) count++;
@@ -1048,7 +1110,7 @@ async function miniGPT(question) {
         }
     }
 
-    // ——— 4. Контекст ———
+    // 4. Контекст
     if (memory.length >= 2) {
         const last = memory[memory.length - 2];
         if (similarity(q, last) > 0.55) {
@@ -1058,7 +1120,7 @@ async function miniGPT(question) {
         }
     }
 
-    // ——— 5. fallback ———
+    // 5. fallback
     const fallback = "Я могу уточнить: что именно вас интересует по теме «" + question + "»?";
     saveLearning(q, fallback);
     return fallback;
@@ -1067,15 +1129,22 @@ async function miniGPT(question) {
 /* ------------------ ОТПРАВКА ------------------ */
 
 async function sendMessage() {
-    const text = document.getElementById("chat-text").value.trim();
+    const textInput = document.getElementById("chat-text");
+    const text = textInput.value.trim();
     if (!text) return;
 
     addUser(text);
+    textInput.value = "";
 
-    const ai = await miniGPT(text);
-    setTimeout(() => addAI(ai), 100);
-
-    document.getElementById("chat-text").value = "";
+    try {
+        const ai = await miniGPT(text);
+        // удали предыдущий индикатор системы, если он есть (опционально)
+        // (здесь просто выводим ответ)
+        setTimeout(() => addAI(ai), 100);
+    } catch (err) {
+        console.error("[sendMessage] ошибка:", err);
+        addAI("Ошибка при обработке запроса.");
+    }
 }
 
 document.getElementById("send-btn").onclick = sendMessage;
@@ -1090,13 +1159,14 @@ let voice;
 function loadVoices() {
     const voices = speechSynthesis.getVoices();
     voice =
-        voices.find(v => v.lang === "ru-RU" && v.name.includes("Google")) ||
+        voices.find(v => v.lang === "ru-RU" && v.name && v.name.includes("Google")) ||
         voices.find(v => v.lang === "ru-RU") ||
         voices[0];
 }
 speechSynthesis.onvoiceschanged = loadVoices;
 
 function speakText(msg) {
+    if (!msg) return;
     const u = new SpeechSynthesisUtterance(msg);
     u.voice = voice;
     u.rate = 1;
@@ -1117,6 +1187,11 @@ document.getElementById("voice-btn").onclick = () => {
         const text = e.results[0][0].transcript;
         document.getElementById("chat-text").value = text;
         sendMessage();
+    };
+
+    r.onerror = e => {
+        console.warn("SpeechRecognition error", e);
+        alert("Ошибка голосового ввода.");
     };
 
     r.start();
