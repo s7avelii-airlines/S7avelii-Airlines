@@ -2038,161 +2038,83 @@ function setDefaultCity(input){
         </svg>
     </div>
 
-    <div id="chat-window">
-        <div id="chat-header">
-            <span>Чат-помощник</span>
-            <button id="chat-close">×</button>
-        </div>
+    <style>
+    body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+    }
 
-        <div id="chat-messages"></div>
+    /* Обёртка */
+    #cookie-banner {
+        position: fixed;
+        bottom: 40px;
+        left: 40px;
+        background: #2D333D; /* тёмно-серый как на скрине */
+        color: white;
+        padding: 25px 30px;
+        border-radius: 14px;
+        max-width: 380px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        display: none; /* скрыт по умолчанию */
+        animation: fadeIn 0.4s ease-out;
+    }
 
-        <div id="chat-input-area">
-            <input type="text" id="chat-input" placeholder="Введите сообщение...">
-            <button id="chat-send">➤</button>
-        </div>
+    /* Текст ссылки */
+    #cookie-banner a {
+        color: #74b9ff;
+    }
+
+    /* Кнопка "Хорошо" */
+    #cookie-ok {
+        margin-top: 16px;
+        background: #3F4A57;
+        padding: 10px 25px;
+        border-radius: 30px;
+        display: inline-block;
+        cursor: pointer;
+        color: white;
+        border: none;
+        font-size: 16px;
+        transition: 0.2s;
+    }
+
+    #cookie-ok:hover {
+        background: #4d5969;
+    }
+
+    /* Анимация появления */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+</head>
+<body>
+
+<!-- Баннер -->
+<div id="cookie-banner">
+    <div>
+        Мы используем куки, чтобы путешествовать по сайту было удобно. 
+        <a href="#" target="_blank">Как это работает</a>
     </div>
+
+    <button id="cookie-ok">Хорошо</button>
 </div>
 
-<style>
-/* ===== Иконка-кнопка чата ===== */
-#chat-button {
-    position: fixed;
-    right: 30px;
-    bottom: 30px;
-    width: 65px;
-    height: 65px;
-    background: #8BC53F;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-    cursor: pointer;
-    transition: 0.25s;
-    z-index: 9999;
-}
-#chat-button:hover {
-    transform: scale(1.12);
-}
-
-/* ===== Окно чата ===== */
-#chat-window {
-    position: fixed;
-    right: 30px;
-    bottom: 110px;
-    width: 340px;
-    height: 450px;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.25);
-    display: none;
-    flex-direction: column;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-    z-index: 9999;
-}
-
-/* ===== Шапка ===== */
-#chat-header {
-    background: #8BC53F;
-    color: white;
-    padding: 16px;
-    font-size: 18px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-#chat-header button {
-    background: transparent;
-    border: none;
-    font-size: 26px;
-    cursor: pointer;
-    color: white;
-}
-
-/* ===== Сообщения ===== */
-#chat-messages {
-    flex: 1;
-    padding: 14px;
-    background: #f7f7f7;
-    overflow-y: auto;
-}
-
-.message {
-    padding: 10px 14px;
-    border-radius: 12px;
-    max-width: 80%;
-    margin: 8px 0;
-    line-height: 1.4em;
-}
-.message.user {
-    background: #d3f48c;
-    margin-left: auto;
-}
-.message.bot {
-    background: white;
-    margin-right: auto;
-}
-
-/* ===== Ввод ===== */
-#chat-input-area {
-    display: flex;
-    border-top: 1px solid #ddd;
-}
-#chat-input {
-    flex: 1;
-    border: none;
-    padding: 12px;
-}
-#chat-input:focus {
-    outline: none;
-}
-#chat-send {
-    background: #8BC53F;
-    border: none;
-    color: white;
-    padding: 0 18px;
-    font-size: 20px;
-    cursor: pointer;
-}
-</style>
 
 <script>
-const btn = document.getElementById("chat-button");
-const win = document.getElementById("chat-window");
-const closeBtn = document.getElementById("chat-close");
-const sendBtn = document.getElementById("chat-send");
-const input = document.getElementById("chat-input");
-const messages = document.getElementById("chat-messages");
+    // Если пользователь ещё не принял куки — показываем баннер
+    if (!localStorage.getItem("cookieAccepted")) {
+        document.getElementById("cookie-banner").style.display = "block";
+    }
 
-btn.onclick = () => win.style.display = "flex";
-closeBtn.onclick = () => win.style.display = "none";
-
-function addMessage(text, role) {
-    const div = document.createElement("div");
-    div.classList.add("message", role);
-    div.innerText = text;
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
-}
-
-async function sendMessage() {
-    const text = input.value.trim();
-    if (!text) return;
-
-    addMessage(text, "user");
-    input.value = "";
-
-    // Когда подключим fine-tuning — заменим этот блок
-    setTimeout(() => {
-        addMessage("ИИ-помощник скоро будет говорить на основе твоей собственной модели 😊", "bot");
-    }, 300);
-}
-
-sendBtn.onclick = sendMessage;
-input.onkeydown = e => (e.key === "Enter" ? sendMessage() : null);
+    // При нажатии кнопки — прячем и сохраняем согласие
+    document.getElementById("cookie-ok").onclick = function () {
+        localStorage.setItem("cookieAccepted", "true");
+        document.getElementById("cookie-banner").style.display = "none";
+    };
 </script>
-<!-- ===== END CHAT WIDGET ===== -->
+
 
    <div class="actions mt-[10px]"></div>
 <footer class="footer">
