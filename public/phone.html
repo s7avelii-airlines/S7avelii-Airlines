@@ -367,6 +367,84 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(autoSlide, 4000);
 </script>
 
+<style>
+    body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+    }
+
+    /* Обёртка */
+    #cookie-banner {
+        position: fixed;
+        bottom: 40px;
+        left: 40px;
+        background: #2D333D; /* тёмно-серый как на скрине */
+        color: white;
+        padding: 25px 30px;
+        border-radius: 14px;
+        max-width: 380px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        display: none; /* скрыт по умолчанию */
+        animation: fadeIn 0.4s ease-out;
+    }
+
+    /* Текст ссылки */
+    #cookie-banner a {
+        color: #74b9ff;
+    }
+
+    /* Кнопка "Хорошо" */
+    #cookie-ok {
+        margin-top: 16px;
+        background: #3F4A57;
+        padding: 10px 25px;
+        border-radius: 30px;
+        display: inline-block;
+        cursor: pointer;
+        color: white;
+        border: none;
+        font-size: 16px;
+        transition: 0.2s;
+    }
+
+    #cookie-ok:hover {
+        background: #4d5969;
+    }
+
+    /* Анимация появления */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+</head>
+<body>
+
+<!-- Баннер -->
+<div id="cookie-banner">
+    <div>
+        Мы используем куки, чтобы путешествовать по сайту было удобно. 
+        <a href="#" target="_blank">Как это работает</a>
+    </div>
+
+    <button id="cookie-ok">Хорошо</button>
+</div>
+
+
+<script>
+    // Если пользователь ещё не принял куки — показываем баннер
+    if (!localStorage.getItem("cookieAccepted")) {
+        document.getElementById("cookie-banner").style.display = "block";
+    }
+
+    // При нажатии кнопки — прячем и сохраняем согласие
+    document.getElementById("cookie-ok").onclick = function () {
+        localStorage.setItem("cookieAccepted", "true");
+        document.getElementById("cookie-banner").style.display = "none";
+    };
+</script>
+
+ 
 <!-- Пробел между слайдером и акциями -->
     <div class="h-15"></div>
 <body class="bg-[#f7f8fc] font-sans">
