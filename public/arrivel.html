@@ -405,78 +405,90 @@ window.addEventListener('DOMContentLoaded', updateUserArea);
 </script>
 
 <style>
-    body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-        background: #f6f7f8;
-        color: #1a1a1a;
-    }
+/* ===== НАСТРОЙКИ БАННЕРА ===== */
+:root {
+    --banner-width: 100%;
+    --banner-height: 100vh; /* 100vh | 80vh | 600px */
+}
 
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 40px 20px;
-    }
+/* ===== ОБЩИЕ СТИЛИ ===== */
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #f6f7f8;
+    color: #272a38;
+}
 
-    h1 {
-        font-size: 40px;
-        margin-bottom: 30px;
-        font-weight: 700;
-    }
+/* ===== БАННЕР ===== */
+.banner {
+    width: var(--banner-width);
+    height: var(--banner-height);
+    background-image: url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
 
-    h2 {
-        font-size: 28px;
-        margin: 50px 0 20px;
-        color: #00a651;
-    }
+/* ===== КОНТЕНТ ===== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
 
-    .letter-group {
-        margin-bottom: 30px;
-    }
+h1 {
+    font-size: 40px;
+    margin-bottom: 30px;
+}
 
-    .letter-title {
-        font-size: 22px;
-        font-weight: 600;
-        margin-bottom: 12px;
-        color: #00a651;
-    }
+h2 {
+    font-size: 28px;
+    margin: 50px 0 20px;
+    color: #86d411;
+}
 
-    .cities {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 10px 20px;
-    }
+.letter-group {
+    margin-bottom: 30px;
+}
 
-    .city {
-        padding: 8px 0;
-        border-bottom: 1px solid #e3e3e3;
-        cursor: pointer;
-        transition: color 0.2s ease;
-    }
+.letter {
+    font-size: 22px;
+    font-weight: 600;
+    color: #86d411;
+    margin-bottom: 10px;
+}
 
-    .city:hover {
-        color: #00a651;
-    }
+.cities {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px 20px;
+}
 
-    @media (max-width: 600px) {
-        h1 {
-            font-size: 30px;
-        }
-        h2 {
-            font-size: 24px;
-        }
-    }
+.city {
+    padding: 8px 0;
+    border-bottom: 1px solid #e3e3e3;
+    cursor: pointer;
+}
+
+.city:hover {
+    color: #00a651;
+}
 </style>
 </head>
+
 <body>
 
+<!-- ===== БАННЕР-КАРТИНКА ===== -->
+<div class="banner"></div>
+
+<!-- ===== НАПРАВЛЕНИЯ ===== -->
 <div class="container">
     <h1>Направления</h1>
 
     <h2>Россия</h2>
 
     <div class="letter-group">
-        <div class="letter-title">А</div>
+        <div class="letter">А</div>
         <div class="cities">
             <div class="city">Абакан</div>
             <div class="city">Анадырь</div>
@@ -487,7 +499,7 @@ window.addEventListener('DOMContentLoaded', updateUserArea);
     </div>
 
     <div class="letter-group">
-        <div class="letter-title">Б</div>
+        <div class="letter">Б</div>
         <div class="cities">
             <div class="city">Бабуля-Дедуля</div>
             <div class="city">Барнаул</div>
@@ -497,7 +509,7 @@ window.addEventListener('DOMContentLoaded', updateUserArea);
     </div>
 
     <div class="letter-group">
-        <div class="letter-title">В</div>
+        <div class="letter">В</div>
         <div class="cities">
             <div class="city">Владикавказ</div>
             <div class="city">Владивосток</div>
@@ -506,7 +518,7 @@ window.addEventListener('DOMContentLoaded', updateUserArea);
     </div>
 
     <div class="letter-group">
-        <div class="letter-title">Г</div>
+        <div class="letter">Г</div>
         <div class="cities">
             <div class="city">Геленджик</div>
             <div class="city">Грозный</div>
@@ -514,132 +526,61 @@ window.addEventListener('DOMContentLoaded', updateUserArea);
     </div>
 
     <div class="letter-group">
-        <div class="letter-title">Е</div>
+        <div class="letter">Е</div>
         <div class="cities">
             <div class="city">Екатеринбург</div>
         </div>
     </div>
 
     <div class="letter-group">
-        <div class="letter-title">И</div>
+        <div class="letter">И</div>
         <div class="cities">
             <div class="city">Иркутск</div>
         </div>
     </div>
 
     <div class="letter-group">
-        <div class="letter-title">К</div>
+        <div class="letter">К</div>
         <div class="cities">
             <div class="city">Казань</div>
             <div class="city">Калининград</div>
-            <div class="city">Комсомольск-на-Амуре</div>
             <div class="city">Краснодар</div>
             <div class="city">Красноярск</div>
         </div>
     </div>
 
     <div class="letter-group">
-        <div class="letter-title">М</div>
+        <div class="letter">М</div>
         <div class="cities">
-            <div class="city">Магадан</div>
-            <div class="city">Махачкала</div>
-            <div class="city">Минеральные Воды</div>
             <div class="city">Москва</div>
             <div class="city">Мурманск</div>
+            <div class="city">Магадан</div>
         </div>
     </div>
 
     <div class="letter-group">
-        <div class="letter-title">Н</div>
+        <div class="letter">Н</div>
         <div class="cities">
-            <div class="city">Нальчик</div>
-            <div class="city">Нижний Новгород</div>
             <div class="city">Новосибирск</div>
+            <div class="city">Нижний Новгород</div>
             <div class="city">Новый Уренгой</div>
         </div>
     </div>
 
     <div class="letter-group">
-        <div class="letter-title">О</div>
-        <div class="cities">
-            <div class="city">Омск</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">П</div>
-        <div class="cities">
-            <div class="city">Пенза</div>
-            <div class="city">Пермь</div>
-            <div class="city">Петрозаводск</div>
-            <div class="city">Петропавловск-Камчатский</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">Р</div>
-        <div class="cities">
-            <div class="city">Ростов-на-Дону</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">С</div>
+        <div class="letter">С</div>
         <div class="cities">
             <div class="city">Самара</div>
             <div class="city">Санкт-Петербург</div>
-            <div class="city">Саббета</div>
-            <div class="city">Симферополь</div>
             <div class="city">Сочи</div>
             <div class="city">Ставрополь</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">Т</div>
-        <div class="cities">
-            <div class="city">Томск</div>
-            <div class="city">Тюмень</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">У</div>
-        <div class="cities">
-            <div class="city">Улан-Удэ</div>
-            <div class="city">Ульяновск</div>
-            <div class="city">Уфа</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">Х</div>
-        <div class="cities">
-            <div class="city">Хабаровск</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">Ч</div>
-        <div class="cities">
-            <div class="city">Челябинск</div>
-            <div class="city">Чита</div>
-            <div class="city">Чебоксары</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">Я</div>
-        <div class="cities">
-            <div class="city">Якутск</div>
-            <div class="city">Ярославль</div>
         </div>
     </div>
 
     <h2>Международные рейсы</h2>
 
     <div class="letter-group">
-        <div class="letter-title">А</div>
+        <div class="letter">А</div>
         <div class="cities">
             <div class="city">Анталия</div>
             <div class="city">Астана</div>
@@ -647,7 +588,7 @@ window.addEventListener('DOMContentLoaded', updateUserArea);
     </div>
 
     <div class="letter-group">
-        <div class="letter-title">Б</div>
+        <div class="letter">Б</div>
         <div class="cities">
             <div class="city">Баку</div>
             <div class="city">Бангкок</div>
@@ -656,81 +597,16 @@ window.addEventListener('DOMContentLoaded', updateUserArea);
     </div>
 
     <div class="letter-group">
-        <div class="letter-title">В</div>
+        <div class="letter">В</div>
         <div class="cities">
             <div class="city">Вена</div>
         </div>
     </div>
 
     <div class="letter-group">
-        <div class="letter-title">Д</div>
+        <div class="letter">Д</div>
         <div class="cities">
             <div class="city">Дубай</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">Е</div>
-        <div class="cities">
-            <div class="city">Ереван</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">К</div>
-        <div class="cities">
-            <div class="city">Кишинёв</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">М</div>
-        <div class="cities">
-            <div class="city">Мадрид</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">Н</div>
-        <div class="cities">
-            <div class="city">Неаполь</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">П</div>
-        <div class="cities">
-            <div class="city">Пафос</div>
-            <div class="city">Пекин</div>
-            <div class="city">Пула</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">Р</div>
-        <div class="cities">
-            <div class="city">Рим</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">С</div>
-        <div class="cities">
-            <div class="city">Стамбул</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">Т</div>
-        <div class="cities">
-            <div class="city">Ташкент</div>
-        </div>
-    </div>
-
-    <div class="letter-group">
-        <div class="letter-title">Х</div>
-        <div class="cities">
-            <div class="city">Хошимин</div>
         </div>
     </div>
 
