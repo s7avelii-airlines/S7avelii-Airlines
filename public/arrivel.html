@@ -404,68 +404,338 @@ async function updateUserArea() {
 window.addEventListener('DOMContentLoaded', updateUserArea);
 </script>
 
- <!-- Прямоугольное изображение во всю ширину -->
-  <img src="images/photo_5253869756614833542_y.avif" alt="Header Banner" class="hero">
+<style>
+    body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        background: #f6f7f8;
+        color: #1a1a1a;
+    }
 
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Города S7avelii Airlines</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: white;
-            line-height: 1.6;
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    h1 {
+        font-size: 40px;
+        margin-bottom: 30px;
+        font-weight: 700;
+    }
+
+    h2 {
+        font-size: 28px;
+        margin: 50px 0 20px;
+        color: #00a651;
+    }
+
+    .letter-group {
+        margin-bottom: 30px;
+    }
+
+    .letter-title {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: #00a651;
+    }
+
+    .cities {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 10px 20px;
+    }
+
+    .city {
+        padding: 8px 0;
+        border-bottom: 1px solid #e3e3e3;
+        cursor: pointer;
+        transition: color 0.2s ease;
+    }
+
+    .city:hover {
+        color: #00a651;
+    }
+
+    @media (max-width: 600px) {
+        h1 {
+            font-size: 30px;
         }
         h2 {
-            color: #1b5e20;
-            font-size: 20px;
-            font-weight: bold;
+            font-size: 24px;
         }
-        p {
-            font-size: 16px;
-            color: #333;
-        }
-        .highlight {
-            color: #1b5e20;
-            font-weight: bold;
-        }
-        .buttons {
-            margin-top: 30px;
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-        }
-        .btn {
-            background: white;
-            border: 1px solid black;
-            padding: 12px 40px;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        .btn:hover {
-            background: #f5f5f5;
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
 
-    <h2>
-        Базовым аэропортом для S7avelii Airlines является международный аэропорт Гагарин Игрушечный, 
-        из него выполняются более 200 рейсов в день авиакомпанией S7avelii Airlines. 
-        Для прибытия предлагаем вам более 100 городов на выбор:
-    </h2>
+<div class="container">
+    <h1>Направления</h1>
 
-    <p>
-        <span class="highlight">Местные:</span> Москва, Самара, Симферополь, Сочи, Геленджик, Краснодар, Ставрополь, Махачкала, Грозный, Нальчик, Минеральные воды, Волгоград, Астрахань, Калининград, Ростов-на-Дону, Бабуля-Дедуля, Казань, Ульяновск, Чебоксары, Уфа, Санкт-Петербург, Нижний Новгород, Брянск, Пермь, Пенза, Ярославль, Архангельск, Мурманск, Тюмень, Челябинск, Екатеринбург, Омск, Томск, Новосибирск, Красноярск, Иркутск, Улан-Удэ, Чита, Якутск, Магадан, Хабаровск, Владивосток, Южно-Сахалинск, Благовещенск, Комсомольск на Амуре, Петропавловск Камчатский, Владикавказ, Петрозаводск, Апатиты, Анадырь, Барнаул, Якутск, Новый Уренгой, Абакан, Саббета, Чебоксары, Элиста
-    </p>
+    <h2>Россия</h2>
 
-    <p>
-        <span class="highlight">Международные:</span> Пула, Вена, Ереван, Баку, Астана, Неаполь, Рим, Пафос, Анталия, Стамбул, Дубай, Кишинев, Мадрид, Пекин, Хошимин, Бангкок, Батуми, Ташкент, Астана, Минск, Сухум
-    </p>
+    <div class="letter-group">
+        <div class="letter-title">А</div>
+        <div class="cities">
+            <div class="city">Абакан</div>
+            <div class="city">Анадырь</div>
+            <div class="city">Апатиты</div>
+            <div class="city">Архангельск</div>
+            <div class="city">Астрахань</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">Б</div>
+        <div class="cities">
+            <div class="city">Бабуля-Дедуля</div>
+            <div class="city">Барнаул</div>
+            <div class="city">Благовещенск</div>
+            <div class="city">Брянск</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">В</div>
+        <div class="cities">
+            <div class="city">Владикавказ</div>
+            <div class="city">Владивосток</div>
+            <div class="city">Волгоград</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">Г</div>
+        <div class="cities">
+            <div class="city">Геленджик</div>
+            <div class="city">Грозный</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">Е</div>
+        <div class="cities">
+            <div class="city">Екатеринбург</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">И</div>
+        <div class="cities">
+            <div class="city">Иркутск</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">К</div>
+        <div class="cities">
+            <div class="city">Казань</div>
+            <div class="city">Калининград</div>
+            <div class="city">Комсомольск-на-Амуре</div>
+            <div class="city">Краснодар</div>
+            <div class="city">Красноярск</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">М</div>
+        <div class="cities">
+            <div class="city">Магадан</div>
+            <div class="city">Махачкала</div>
+            <div class="city">Минеральные Воды</div>
+            <div class="city">Москва</div>
+            <div class="city">Мурманск</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">Н</div>
+        <div class="cities">
+            <div class="city">Нальчик</div>
+            <div class="city">Нижний Новгород</div>
+            <div class="city">Новосибирск</div>
+            <div class="city">Новый Уренгой</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">О</div>
+        <div class="cities">
+            <div class="city">Омск</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">П</div>
+        <div class="cities">
+            <div class="city">Пенза</div>
+            <div class="city">Пермь</div>
+            <div class="city">Петрозаводск</div>
+            <div class="city">Петропавловск-Камчатский</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">Р</div>
+        <div class="cities">
+            <div class="city">Ростов-на-Дону</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">С</div>
+        <div class="cities">
+            <div class="city">Самара</div>
+            <div class="city">Санкт-Петербург</div>
+            <div class="city">Саббета</div>
+            <div class="city">Симферополь</div>
+            <div class="city">Сочи</div>
+            <div class="city">Ставрополь</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">Т</div>
+        <div class="cities">
+            <div class="city">Томск</div>
+            <div class="city">Тюмень</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">У</div>
+        <div class="cities">
+            <div class="city">Улан-Удэ</div>
+            <div class="city">Ульяновск</div>
+            <div class="city">Уфа</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">Х</div>
+        <div class="cities">
+            <div class="city">Хабаровск</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">Ч</div>
+        <div class="cities">
+            <div class="city">Челябинск</div>
+            <div class="city">Чита</div>
+            <div class="city">Чебоксары</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">Я</div>
+        <div class="cities">
+            <div class="city">Якутск</div>
+            <div class="city">Ярославль</div>
+        </div>
+    </div>
+
+    <h2>Международные рейсы</h2>
+
+    <div class="letter-group">
+        <div class="letter-title">А</div>
+        <div class="cities">
+            <div class="city">Анталия</div>
+            <div class="city">Астана</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">Б</div>
+        <div class="cities">
+            <div class="city">Баку</div>
+            <div class="city">Бангкок</div>
+            <div class="city">Батуми</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">В</div>
+        <div class="cities">
+            <div class="city">Вена</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">Д</div>
+        <div class="cities">
+            <div class="city">Дубай</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">Е</div>
+        <div class="cities">
+            <div class="city">Ереван</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">К</div>
+        <div class="cities">
+            <div class="city">Кишинёв</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">М</div>
+        <div class="cities">
+            <div class="city">Мадрид</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">Н</div>
+        <div class="cities">
+            <div class="city">Неаполь</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">П</div>
+        <div class="cities">
+            <div class="city">Пафос</div>
+            <div class="city">Пекин</div>
+            <div class="city">Пула</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">Р</div>
+        <div class="cities">
+            <div class="city">Рим</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">С</div>
+        <div class="cities">
+            <div class="city">Стамбул</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">Т</div>
+        <div class="cities">
+            <div class="city">Ташкент</div>
+        </div>
+    </div>
+
+    <div class="letter-group">
+        <div class="letter-title">Х</div>
+        <div class="cities">
+            <div class="city">Хошимин</div>
+        </div>
+    </div>
+
+</div>
+
 <footer class="footer">
   <div class="footer-inner">
     <!-- Верхнее меню -->
