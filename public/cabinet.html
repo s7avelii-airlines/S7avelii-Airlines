@@ -1644,6 +1644,16 @@ document.addEventListener("DOMContentLoaded", () => {
   <!-- === ВНИЗУ: твой оригинальный скрипт (оставлен без изменений) === -->
   <!-- Я вставляю сюда ровно ту логику, что ты присылал ранее, чтобы всё работало -->
 <script>
+  function el(id) {
+  const isMobile = window.innerWidth < 768;
+  if (isMobile) {
+    return document.querySelector('.cabinet-mobile #' + id)
+        || document.querySelector('.cabinet-desktop #' + id);
+  }
+  return document.querySelector('.cabinet-desktop #' + id)
+      || document.querySelector('.cabinet-mobile #' + id);
+}
+
 /* ========== Конфигурация API ========== */
 const API = "https://s7avelii-airlines-1.onrender.com"; // <- поменяй, если другой бекенд
 function getToken(){ return localStorage.getItem('token'); }
