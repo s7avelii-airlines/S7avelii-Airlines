@@ -47,7 +47,7 @@
 
   <aside class="sidebar">
     <div class="logo">
-      <img src="/assets/logo.svg" alt="logo">
+      <img src="images/1761835463057.avif" alt="logo">
     </div>
 
     <nav class="menu">
@@ -226,6 +226,27 @@ body {
   border-radius: 20px;
   padding: 20px;
   text-align: center;
+}
+    /* ================= DEVICE VISIBILITY FIX ================= */
+
+/* по умолчанию — desktop */
+.cabinet-desktop {
+  display: flex !important;
+}
+
+.cabinet-mobile {
+  display: none !important;
+}
+
+/* мобильные устройства */
+@media (max-width: 767px) {
+  .cabinet-desktop {
+    display: none !important;
+  }
+
+  .cabinet-mobile {
+    display: block !important;
+  }
 }
     </style>
 </div>
