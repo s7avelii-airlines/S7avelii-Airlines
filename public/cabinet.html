@@ -248,10 +248,31 @@ body {
     display: block !important;
   }
 }
+    /* ===== FINAL VISIBILITY LOCK ===== */
+
+@media (min-width: 768px) {
+  .cabinet-desktop {
+    display: flex !important;
+  }
+
+  .cabinet-mobile {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .cabinet-desktop {
+    display: none !important;
+  }
+
+  .cabinet-mobile {
+    display: block !important;
+  }
+}
+
     </style>
 </div>
   
-  <div class="cabinet-mobile"> 
   <!-- Шапка -->
   <header class="fixed top-0 left-0 w-full flex justify-between items-center p-4 bg-white shadow z-50">
     <!-- Логотип -->
@@ -259,11 +280,12 @@ body {
 
     </div>
   </header>
-
+  
+ <div class="cabinet-mobile"> 
 <!-- Пробел между слайдером и акциями -->
     <div class="h-10"></div>
   
-<body class="bg-[#f3f5f8] min-h-screen flex justify-center">
+
   <div class="w-full max-w-md px-4 pt-6 pb-12">
 
     <!-- top row: left small avatar+options, center avatar and name, right edit -->
