@@ -434,149 +434,238 @@ window.addEventListener('DOMContentLoaded', updateUserArea);
   <!-- Пробел между слайдером и акциями -->
   <div class="h-20"></div>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Представительство</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #fff;
-            color: #000;
-        }
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 40px;
-        }
-        h1 {
-            color: #1d4e12;
-            font-size: 36px;
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        .office {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 20px;
-            padding-top: 10px;
-            border-top: 1px solid #ccc;
-        }
-        .office h2 {
-            font-size: 16px;
-            margin: 0 0 10px;
-            color: #7f8c8d;
-        }
-        .office p {
-            margin: 5px 0;
-            line-height: 1.4;
-        }
-        .highlight {
-            color: #b4d232;
-            font-weight: bold;
-        }
-        .bold {
-            font-weight: bold;
-        }
-        ul {
-            padding-left: 20px;
-        }
-        /* Блок "Не находитесь в этом городе?" */
-        .not-in-city {
-            margin-top: 60px;
-        }
-        .not-in-city h2 {
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .not-in-city p {
-            font-size: 16px;
-            margin-top: 20px;
-        }
-        .link-green {
-            color: #b4d232;
-            text-decoration: none;
-        }
-        .link-green:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Офисы продаж и представительства в Саратове</h1>
-        <ul>
-            <li><span class="bold">Представительство S7avelii Airlines</span></li>
-        </ul>
-        <div class="office">
-            <div>
-                <h2>Адрес</h2>
-                <p>Саратовская область,<br>
-                г. Саратов, Аэропорт Гагарин Игрушечный, 1 этаж</p>
-                <p class="highlight">Показать на карте</p>
-            </div>
-            <div>
-                <h2>Режим работы</h2>
-                <p class="highlight">пн, вт, ср, чт, пт, сб, вс</p>
-                <p>пн, ср, чт, пт 00:00-22:00<br>
-                   вт, вс, сб 02:30-00:00</p>
-                <p>Во время обслуживания рейсов продажа дополнительных услуг ведётся в зоне регистрации.</p>
-            </div>
-            <div>
-                <h2>Телефон</h2>
-                <p class="highlight">+7 9626298105</p>
-            </div>
-            <div>
-                <h2>Сервисы</h2>
-                <p>Продажа авиабилетов,<br> приобретение дополнительных услуг</p>
-            </div>
-        </div>
- <ul>
-            <li><span class="bold">Представительство и офис продаж S7avelii Airlines </span></li>
-        </ul>
-        <div class="office">
-            <div>
-                <h2>Адрес</h2>
-                <p>Саратовская область,<br>
-                г.Саратов, Киевский проезд 1, 1 этаж</p>
-                <p class="highlight">Показать на карте</p>
-            </div>
-            <div>
-                <h2>Режим работы</h2>
-                <p class="highlight">пн,вт, ср, чт, пт</p>
-                <p>пн, ср, чт, пт 10:00-18:00<br>
-                   вт, вс, сб 12:30-18:00</p>
-                <p>Во время обслуживания рейсов продажа дополнительных услуг ведётся в зоне регистрации.</p>
-            </div>
-            <div>
-                <h2>Телефон</h2>
-                <p class="highlight">+7 9626298105</p>
-            </div>
-            <div>
-                <h2>Сервисы</h2>
-                <p>Продажа авиабилетов,<br> приобретение дополнительных услуг</p>
-            </div>
-        </div>
+<title>Представительство</title>
 
-        <!-- Новый блок -->
-        <div class="not-in-city">
-            <h2>Не находитесь в этом городе?</h2>
-            <p>Вы можете <a href="#" class="link-green">купить авиабилет</a> на нашем сайте или обратиться в службу поддержки S7avelii Airlines.</p>
-        </div>
-    </div>
-    </div>
-      <div class="rounded-xl shadow-md bg-white p-6 flex flex-col justify-between">
-        <h3 class="text-xl font-bold mb-4">Мы вам напишем</h3>
-        <p class="text-gray-600 mb-4">Сообщим о скидках, поделимся идеями путешествий</p>
-        <input type="email" name="email" id="email" required class="border p-2 rounded mb-2">
-        <label class="text-sm text-gray-600 mb-2 block">
-          <input type="checkbox" class="mr-2">Хочу узнавать про скидки и идеи путешествий и соглашаюсь на
-          <a href="#" class="text-blue-600 underline">обработку персональных данных</a>
-        </label>
-  <button type="submit" class="gradient-green p-2 col-span-1 md:col-span-2 hover:opacity-90 rounded inline-block">Подписаться</button>
-</form>
-      </div>
+<!-- Яндекс Карты -->
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  color: #000;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px;
+}
+
+h1 {
+  color: #1d4e12;
+  font-size: 36px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.office {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.office h2 {
+  font-size: 16px;
+  margin: 0 0 10px;
+  color: #7f8c8d;
+}
+
+.office p {
+  margin: 5px 0;
+  line-height: 1.4;
+}
+
+.highlight {
+  color: #b4d232;
+  font-weight: bold;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+/* ===== popup карты (изолировано) ===== */
+#mapOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+#mapOverlay.active {
+  display: flex;
+}
+
+#mapBox {
+  width: 80%;
+  height: 80%;
+  background: #fff;
+  border-radius: 10px;
+  position: relative;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+#mapClose {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  z-index: 10;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Офисы продаж и представительства в Саратове</h1>
+
+<ul>
+  <li><span class="bold">Представительство S7avelii Airlines</span></li>
+</ul>
+
+<div class="office">
+  <div>
+    <h2>Адрес</h2>
+    <p>Саратовская область,<br>
+    г. Саратов, Аэропорт Гагарин Игрушечный, 1 этаж</p>
+
+    <!-- 🔴 адрес ТОЛЬКО здесь -->
+    <p class="highlight show-map"
+       data-address="Саратовская область, г. Саратов, Аэропорт Гагарин, 1 этаж">
+       Показать на карте
+    </p>
+  </div>
+
+  <div>
+    <h2>Режим работы</h2>
+    <p class="highlight">пн, вт, ср, чт, пт, сб, вс</p>
+    <p>пн, ср, чт, пт 00:00-22:00<br>
+       вт, вс, сб 02:30-00:00</p>
+  </div>
+
+  <div>
+    <h2>Телефон</h2>
+    <p class="highlight">+7 9626298105</p>
+  </div>
+
+  <div>
+    <h2>Сервисы</h2>
+    <p>Продажа авиабилетов,<br> приобретение дополнительных услуг</p>
+  </div>
+</div>
+
+<ul>
+  <li><span class="bold">Представительство и офис продаж S7avelii Airlines</span></li>
+</ul>
+
+<div class="office">
+  <div>
+    <h2>Адрес</h2>
+    <p>Саратовская область,<br>
+    г. Саратов, Киевский проезд 1, 1 этаж</p>
+
+    <!-- 🔴 второй адрес -->
+    <p class="highlight show-map"
+       data-address="Саратовская область, г. Саратов, Киевский проезд, 1">
+       Показать на карте
+    </p>
+  </div>
+
+  <div>
+    <h2>Режим работы</h2>
+    <p class="highlight">пн, вт, ср, чт, пт</p>
+    <p>пн, ср, чт, пт 10:00-18:00<br>
+       вт 12:30-18:00</p>
+  </div>
+
+  <div>
+    <h2>Телефон</h2>
+    <p class="highlight">+7 9626298105</p>
+  </div>
+
+  <div>
+    <h2>Сервисы</h2>
+    <p>Продажа авиабилетов,<br> приобретение дополнительных услуг</p>
+  </div>
+</div>
+
+</div>
+
+<!-- ===== popup карты ===== -->
+<div id="mapOverlay">
+  <div id="mapBox">
+    <span id="mapClose">✕</span>
+    <div id="map"></div>
+  </div>
+</div>
+
+<script>
+let map, placemark;
+
+document.querySelectorAll('.show-map').forEach(el => {
+  el.addEventListener('click', () => {
+    openMap(el.dataset.address);
+  });
+});
+
+function openMap(address) {
+  document.getElementById('mapOverlay').classList.add('active');
+
+  ymaps.ready(() => {
+    ymaps.geocode(address).then(res => {
+      const coords = res.geoObjects.get(0).geometry.getCoordinates();
+
+      if (!map) {
+        map = new ymaps.Map('map', {
+          center: coords,
+          zoom: 16
+        });
+
+        placemark = new ymaps.Placemark(
+          coords,
+          {},
+          {
+            iconLayout: 'default#image',
+            iconImageHref: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+            iconImageSize: [40, 40],
+            iconImageOffset: [-20, -20]
+          }
+        );
+
+        map.geoObjects.add(placemark);
+      } else {
+        map.setCenter(coords);
+        placemark.geometry.setCoordinates(coords);
+      }
+    });
+  });
+}
+
+document.getElementById('mapClose').onclick = () => {
+  document.getElementById('mapOverlay').classList.remove('active');
+};
+</script>
+ 
 <footer class="footer">
   <div class="footer-inner">
     <!-- Верхнее меню -->
