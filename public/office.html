@@ -434,6 +434,7 @@ window.addEventListener('DOMContentLoaded', updateUserArea);
   <!-- Пробел между слайдером и акциями -->
   <div class="h-20"></div>
 
+<meta charset="UTF-8">
 <title>Представительство</title>
 
 <!-- Яндекс Карты -->
@@ -493,19 +494,23 @@ ul {
   padding-left: 20px;
 }
 
-/* ===== popup карты (изолировано) ===== */
+/* ===== popup карты (НЕ ВЛИЯЕТ на дизайн) ===== */
 #mapOverlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.6);
-  display: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .3s ease;
+  display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
 }
 
 #mapOverlay.active {
-  display: flex;
+  visibility: visible;
+  opacity: 1;
 }
 
 #mapBox {
@@ -549,7 +554,6 @@ ul {
     <p>Саратовская область,<br>
     г. Саратов, Аэропорт Гагарин Игрушечный, 1 этаж</p>
 
-    <!-- 🔴 адрес ТОЛЬКО здесь -->
     <p class="highlight show-map"
        data-address="Саратовская область, г. Саратов, Аэропорт Гагарин, 1 этаж">
        Показать на карте
@@ -584,7 +588,6 @@ ul {
     <p>Саратовская область,<br>
     г. Саратов, Киевский проезд 1, 1 этаж</p>
 
-    <!-- 🔴 второй адрес -->
     <p class="highlight show-map"
        data-address="Саратовская область, г. Саратов, Киевский проезд, 1">
        Показать на карте
@@ -621,6 +624,7 @@ ul {
 
 <script>
 let map, placemark;
+let mapInitialized = false;
 
 document.querySelectorAll('.show-map').forEach(el => {
   el.addEventListener('click', () => {
@@ -629,13 +633,14 @@ document.querySelectorAll('.show-map').forEach(el => {
 });
 
 function openMap(address) {
-  document.getElementById('mapOverlay').classList.add('active');
+  const overlay = document.getElementById('mapOverlay');
+  overlay.classList.add('active');
 
   ymaps.ready(() => {
     ymaps.geocode(address).then(res => {
       const coords = res.geoObjects.get(0).geometry.getCoordinates();
 
-      if (!map) {
+      if (!mapInitialized) {
         map = new ymaps.Map('map', {
           center: coords,
           zoom: 16
@@ -653,10 +658,16 @@ function openMap(address) {
         );
 
         map.geoObjects.add(placemark);
+        mapInitialized = true;
       } else {
-        map.setCenter(coords);
+        map.setCenter(coords, 16);
         placemark.geometry.setCoordinates(coords);
       }
+
+      // 🔴 КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ
+      setTimeout(() => {
+        map.container.fitToViewport();
+      }, 100);
     });
   });
 }
