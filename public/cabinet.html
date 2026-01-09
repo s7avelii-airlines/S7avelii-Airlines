@@ -1983,5 +1983,52 @@ window.addToCart=addToCart;
 window.removeFromCart=removeFromCart;
 window.checkout=checkout;
 </script>
+
+
+<script>
+(function desktopMirror() {
+  if (window.innerWidth < 768) return;
+
+  const map = {
+    fio: '#fioHeader',
+    card: '#card_field',
+    bonusMiles: '#bonusMiles',
+    statusMiles: '#milesStatusStat',
+    cardType: '#cardTypeField',
+    statusLabel: '#status_label',
+    statusRange: '#status_range'
+  };
+
+  function sync() {
+    Object.entries(map).forEach(([key, sel]) => {
+      const src = document.querySelector(sel);
+      const dst = document.querySelector('[data-sync="'+key+'"]');
+      if (src && dst && src.textContent.trim()) {
+        dst.textContent = src.textContent;
+      }
+    });
+
+    const srcBar = document.getElementById('milesProgressBar');
+    const dstBar = document.querySelector('[data-sync="progress"]');
+    if (srcBar && dstBar && srcBar.style.width) {
+      dstBar.style.width = srcBar.style.width;
+    }
+  }
+
+  // 1️⃣ первая попытка
+  sync();
+
+  // 2️⃣ наблюдаем за изменениями (КЛЮЧЕВОЕ МЕСТО)
+  const observer = new MutationObserver(sync);
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    characterData: true
+  });
+
+})();
+</script>
+
+    
 </body>
 </html>
