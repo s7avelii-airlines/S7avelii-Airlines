@@ -40,6 +40,129 @@
     .small-muted { color: #8b94a3; font-size: 13px; }
     .big-title { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 34px; letter-spacing: 1px; }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; }
+
+    /* ================= DESKTOP CABINET ================= */
+@media (min-width: 1024px) {
+
+  body {
+    background: #f4f6fb;
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  .cabinet-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  /* ===== Sidebar ===== */
+  .cabinet-sidebar {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 12px 40px rgba(0,0,0,.08);
+    position: sticky;
+    top: 20px;
+    text-align: center;
+  }
+
+  .cabinet-sidebar .avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    object-fit: cover;
+  }
+
+  #fioHeader {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .card-box {
+    background: linear-gradient(135deg,#1e88e5,#42a5f5);
+    color: #fff;
+    padding: 16px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+  }
+
+  .logout {
+    background: #ff5252;
+    width: 100%;
+  }
+
+  /* ===== Main ===== */
+  .cabinet-main {
+    display: block;
+  }
+
+  /* ===== Tabs ===== */
+  .tabs {
+    display: flex;
+    gap: 12px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 24px;
+  }
+
+  .tabs a {
+    padding: 12px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 14px 14px 0 0;
+  }
+
+  .tabs a.active {
+    background: #fff;
+    border-bottom: 3px solid #2196f3;
+  }
+
+  /* ===== Sections ===== */
+  .grid section {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.06);
+  }
+
+  /* ===== Loyalty ===== */
+  .miles-stats {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 16px;
+  }
+
+  /* ===== Shop ===== */
+  #productGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+    gap: 20px;
+  }
+
+  #productGrid .card {
+    border-radius: 16px;
+    transition: .25s;
+  }
+
+  #productGrid .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0,0,0,.15);
+  }
+
+  /* ===== Buttons ===== */
+  .btn {
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 12px;
+  }
+
+}
   </style>
 </head>
   
