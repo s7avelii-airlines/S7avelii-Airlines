@@ -168,7 +168,28 @@
 }
   </style>
 </head>
-  
+   <style>
+  /* ПК адаптация */
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr); /* 4 колонки на ПК */
+    gap: 20px; /* увеличить отступы */
+    max-width: 1200px; /* расширить контейнер */
+    margin: 0 auto; /* центрирование */
+  }
+
+  /* увеличить аватар и имя */
+  #avatarWrap {
+    width: 160px;
+    height: 160px;
+  }
+
+  #fioHeader {
+    font-size: 36px;
+    text-align: left;
+  }
+}
+ </style>
   <!-- Шапка -->
   <header class="fixed top-0 left-0 w-full flex justify-between items-center p-4 bg-white shadow z-50">
     <!-- Логотип -->
