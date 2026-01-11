@@ -70,15 +70,37 @@ document.addEventListener("DOMContentLoaded", () => {
 <body class="bg-gray-50">
 
   <!-- Шапка -->
-  <header class="fixed top-0 left-0 w-full flex justify-between items-center p-4 bg-white shadow z-50">
-    <!-- Логотип -->
-    <img src="images/photo_5276207082657412564_y.avif" alt="S7" class="w-10 h-10">
+ <header class="fixed top-0 left-0 w-full flex justify-between items-center p-4 
+bg-white/80 backdrop-blur-md shadow z-50">
 
-    <!-- Кнопки -->
-    <div class="flex gap-2 items-center" id="userArea">
-      <!-- Вход / блок пользователя -->
+  <!-- ЛОГОТИП (НЕ ТРОГАЕМ) -->
+  <img src="images/photo_5276207082657412564_y.avif" alt="S7" class="w-10 h-10">
+
+  <!-- ПРАВАЯ ЧАСТЬ -->
+  <div class="flex items-center gap-3">
+
+    <!-- ИКОНКИ -->
+    <div class="flex items-center gap-2">
+
+      <!-- Иконка с окном -->
+      <button onclick="openMyWindow()"
+        class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition">
+        <img src="images/чатикнамобилку.avif" class="w-5 h-5" alt="">
+      </button>
+
+      <!-- Статичная иконка -->
+      <div
+        class="w-9 h-9 flex items-center justify-center rounded-full opacity-70">
+        <img src="images/рубликнашапку.avif" class="w-5 h-5" alt="">
+      </div>
+
     </div>
-  </header>
+
+    <!-- ПОЛЬЗОВАТЕЛЬ / ВОЙТИ -->
+    <div class="flex gap-2 items-center" id="userArea"></div>
+
+  </div>
+</header>
 
  <script>
   const API = 'https://s7avelii-airlines-1.onrender.com';
@@ -141,13 +163,12 @@ document.addEventListener("DOMContentLoaded", () => {
       console.warn(err);
       localStorage.removeItem('token');
       userArea.innerHTML = `
-        <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
-          Войти
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-            d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
-          </svg>
-        </a>
+        userArea.innerHTML = `
+  <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
+
+    <img src="images/войтинахуй.avif" class="w-4 h-4" alt="">
+  </a>
+`;
       `;
     }
   }
