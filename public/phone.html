@@ -33,34 +33,12 @@
     font-family: 'Open Sans', 'Segoe UI', Arial, sans-serif !important;
   }
   </style>
-<style>
-  body {
-        background: #F3F5F7;
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial;
-    }
-
-    /* HEADER */
-    .header {
-        background: white;
-        padding: 20px 16px 10px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-    .header img {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-    }
-    .header-name {
-        font-size: 20px;
-        font-weight: 700;
-    }
-    .header-miles {
-        color: #7AC943;
-        font-weight: 600;
-        font-size: 16px;
+   <style>
+ /* Body background */
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(90deg, #ffffff 0%, #f5f5f5 100%);
     }
     .mobile-wrapper {
       width: 430px;
@@ -68,69 +46,6 @@
       background: #f5f5f6;
       box-shadow: 0 0 20px rgba(0,0,0,0.1);
     }
-  /* ADD BOOKING */
-    .add-booking {
-        background: white;
-        margin: 0 16px 14px;
-        border-radius: 12px;
-        padding: 18px;
-        font-size: 17px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        cursor: pointer;
-    }
-
-    /* AD */
-    .ad {
-        margin: 0 16px 20px;
-        border-radius: 16px;
-        overflow: hidden;
-    }
-    .ad img {
-        width: 100%;
-        display: block;
-    }
-
-    .swiper-pagination-bullet {
-        background: #C7D0D8;
-        opacity: 1;
-    }
-    .swiper-pagination-bullet-active {
-        background: #7AC943;
-    }
-  /* USEFUL */
-    .useful {
-        background: white;
-        border-radius: 20px;
-        margin: 0 16px 100px;
-        padding: 16px;
-    }
-    .useful-title {
-        font-size: 22px;
-        font-weight: 700;
-        margin-bottom: 10px;
-    }
-    .useful-item {
-        display: flex;
-        align-items: center;
-        padding: 16px 0;
-        border-bottom: 1px solid #F0F0F0;
-        font-size: 17px;
-        font-weight: 500;
-        gap: 12px;
-        cursor: pointer;
-    }
-    .useful-item:last-child { border-bottom: none; }
-
-    .useful-item img {
-        width: 38px;
-        height: 38px;
-        border-radius: 10px;
-        object-fit: cover;
-    }
-
   </style>
 </head>
 
@@ -146,66 +61,44 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<title>S7avelii</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S7 — Шапка</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
 
-<body style="padding-top:70px">
+  <!-- Шапка -->
+  <header class="fixed top-0 left-0 w-full flex justify-between items-center p-4 bg-white shadow z-50">
+    <!-- Логотип -->
+    <img src="images/photo_5276207082657412564_y.avif" alt="S7" class="w-10 h-10">
 
-<!-- ================= HEADER ================= -->
-<header class="header">
+    <!-- Кнопки -->
+    <div class="flex gap-2 items-center" id="userArea">
+      <!-- Вход / блок пользователя -->
+    </div>
+  </header>
 
-  <!-- 1. ЛОГОТИП -->
-  <img src="images/logo.avif" width="40">
-
-  <div class="header-right">
-
-    <!-- 2. ВОЙТИ / ПРОФИЛЬ -->
-    <div id="userArea"></div>
-
-    <!-- 3. ИКОНКА БЕЗ ССЫЛКИ -->
-    <img src="images/рубликнашапку.avif" width="36">
-
-    <!-- 4. ИКОНКА ЧАТА -->
-    <button onclick="toggleChat()" style="background:none;border:none;padding:0">
-      <img src="images/чатикнамобилку.avif" width="36">
-    </button>
-
-  </div>
-</header>
-
-<!-- ================= CHAT FLOAT ================= -->
-<div id="chat-button" class="chat-button" onclick="toggleChat()">
-  <svg viewBox="0 0 24 24"><path fill="#fff"
-  d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-</div>
-
-<div id="chat-window">
-  <div class="chat-header">
-    <b>S7avelii SynAir</b>
-    <button onclick="toggleChat()" style="background:none;border:none;color:#fff;font-size:20px">✕</button>
-  </div>
-
-  <div id="chat-body" class="chat-body"></div>
-
-  <div class="chat-input">
-    <input id="chat-text" placeholder="Введите сообщение…">
-    <button onclick="sendMessage()">➤</button>
-  </div>
-</div>
-
-<script>
-/* ================= HEADER AUTH ================= */
-
- const API = 'https://s7avelii-airlines-1.onrender.com';
+ <script>
+  const API = 'https://s7avelii-airlines-1.onrender.com';
 
   async function updateUserArea() {
     const userArea = document.getElementById('userArea');
     const token = localStorage.getItem('token');
 
-     if(!token){
-    el.innerHTML=`<a href="auth.html"><img src="images/войтинахуй.avif" width="36"></a>`;
-    return;
-  }
+    if (!token) {
+      userArea.innerHTML = `
+        <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
+          Войти
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
+          </svg>
+        </a>
+      `;
+      return;
+    }
 
     try {
       const res = await fetch(`${API}/api/profile`, {
@@ -261,334 +154,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener('DOMContentLoaded', updateUserArea);
   window.__S7_UPDATE_USER_AREA = updateUserArea;
-
-/* ================= CHAT ================= */
-/* ==================== Полный автономный виджет ====================
-   - miniGPT-like локальная логика
-   - самообучение через localStorage
-   - поддержка падежей городов + словарь форм
-   - OpenWeather запросы (ключ вставлен)
-   - карточка погоды
-   - голосовой ввод/вывод
-==================================================================== */
-
-/* ---------- UI behavior ---------- */
-const chatButton = document.getElementById('chat-button');
-const chatWindow = document.getElementById('chat-window');
-const closeBtn = document.getElementById('close-chat');
-const sendBtn = document.getElementById('send-btn');
-const inputEl = document.getElementById('chat-text');
-const chatBody = document.getElementById('chat-body');
-const voiceBtn = document.getElementById('voice-btn');
-const openFullBtn = document.getElementById('open-full');
-const avatarImg = document.getElementById('widget-avatar');
-
-avatarImg.src = ''; // можно указать путь к аватару, если нужно
-
-chatButton.onclick = () => { chatWindow.style.display = 'flex'; inputEl.focus(); };
-closeBtn.onclick = () => { chatWindow.style.display = 'none'; };
-openFullBtn.onclick = () => {
-  // открывает отдельно окно с максимальной страницей, можно изменить URL
-  window.open(window.location.href, '_blank');
-};
-
-/* ---------- render helpers ---------- */
-function addUser(text){
-  const d = document.createElement('div'); d.className='msg user'; d.innerText = text;
-  chatBody.appendChild(d); chatBody.scrollTop = chatBody.scrollHeight;
-}
-function addAI(html, speak=true){
-  const d = document.createElement('div'); d.className='msg'; d.innerHTML = html;
-  chatBody.appendChild(d); chatBody.scrollTop = chatBody.scrollHeight;
-  if (speak) speakText(stripHtml(html));
-}
-function addSystem(text){
-  const d = document.createElement('div'); d.className='msg system'; d.innerText = text;
-  chatBody.appendChild(d); chatBody.scrollTop = chatBody.scrollHeight;
-}
-function stripHtml(html){ const tmp=document.createElement('DIV'); tmp.innerHTML=html; return tmp.textContent||tmp.innerText||''; }
-
-/* ---------- knowledge & learning ---------- */
-const knowledge = [
-    { key: ["купить","билет"], answer: "Купить настоящий билет пока нельзя — мы миниатюрная авиакомпания. Но вы можете отправиться в виртуальное путешествие, нажав кнопку «Купить билет»." },
-    { key: ["карта","priority"], answer: "Чтобы оформить карту S7avelii Priority — перейдите в соответствующий раздел, пролистайте вниз и заполните форму." },
-    { key: ["магазин","товар","купить"], answer: "Перейдите в раздел S7avelii Shop, выберите товар, нажмите «Купить» — и с вами свяжется менеджер." },
-    { key: ["зарегистрироваться","личный кабинет"], answer: "Нажмите «Вход» → «Зарегистрироваться». Нужно состоять в программе S7avelii Priority." },
-    { key: ["сколько","самолет","флот"], answer: "Флот S7avelii Airlines насчитывает 12 миниатюрных самолетов. Более подробно рассмотреть наш флот вы можете в разделе НАШ ФЛОТ" },
-    { key: ["сайт","заказать","тариф","бизнес"], answer: "Перейдите в раздел «Для бизнеса», выберите тариф — менеджер свяжется с вами." },
-    { key: ["питание","еда","кушать"], answer: "Питание на борт можно заказать заранее, за 48 часов до рейса." },
-    { key: ["мили","мили за рубли","зачем","нужны"], answer: "Мили это валюта нашей авиакомпании, их вы можете копить и выигрывать на распродажах или после покупки наших продуктов. Также вы можете купить мили или обменять их на реальные деньги. Копите мили, для впечатлений" },
-    { key: ["класс","бизнес","выбор класса","эконом"], answer: "Выбор класса осуществляется с началом регистрации, важно лишь успеть. !НАПОМИНАНИЕ: АВИАКОМПАНИЯ МИНИАТЮРНАЯ!" },
-    { key: ["представительство","офис","где офис"], answer: "Представительство S7avelii Airlines делится на два вида: Реальный офис, находящийся в г. Саратов, Саратовская область, Киевский проезд д.1 . Это считается флагманский офис. Второе - миниатюрное, находится практически во всех городах, в которые мы осуществляем рейсы." },
-    { key: ["о нас","о вас","авиакомпания", "кто вы?"], answer: "Авиакомпания S7avelii Airlines является молодой и развивающейся компанией на российском рынке с 2019 года. В данный момент, помимо миниатюрных авиаперевозок, мы создаем настоящие сайты и другие цифровые продукты, а также продаём наш фирменный мерч.Более подробно вы можете ознакомится в разделе О НАС" },
-    { key: ["полёт","направление","сеть", "маршруты", "сколько рейсов", "сколько направлений"], answer: "Наша авиакомпания представляет вам хоть и миниатюрную, но уникальную маршрутную сеть с направлениями в Европу, Азию, а также большинство российских городов. Подробнее можете ознакомиться в разделе НАПРАВЛЕНИЯ" },
-    { key: ["поддержка","служба","помощь"], answer: "Служба поддержки всегда доступна на главной странице, но я постараюсь помочь вам здесь и сейчас, что у вас случилось?" },
-    { key: ["партнёры","партнеры","с кем дружите", "кто у вас партнер"], answer: "Вы всегда можете посмотреть наших партнёров, пролистав в низ страницы и открыть раздел ПАРТНЁРЫ, если вы хотите стать нашим партнёром, то обязательно перейдите на страницу ПОДАТЬ ЗАЯВЛЕНИЕ НА ПАРТНЁРСТВО." },
-    { key: ["работа","хочу работать","вы крутые", "нужна работа", "вакансии",], answer: "Мы рады, что вы хотите стать частью нашей команды или только планируете, в разделе ВАКАНСИИ всегда можно подобрать интересующий вариант, скажу по секрету, работать здесь самый настоящий балдёж. Если вас позвали на собеседование или вы выбрали желаемую должность, но нужно написать на почту: s7avelii_airlines@mail.ru" },
-    { key: ["статьи","7PLANE7","про путешествие"], answer: "7PLANE7 место где вы сможете узнать о разных местах, и даже может быть, у вас появится желание туда отправиться." },
-    { key: ["новости","актуальность","что как у вас тут?"], answer: "Новости есть на главной странице, там регулярно публикуются самые актуальные новости компании" },
-    { key: ["регистрация","аэропорт","за сколько времени"], answer: "Онлайн-регистрация открывается за 40 часов до вылета, в аэропорт лучше приезжать за 2,5 часа. Лучше всего воспользоваться упаковкой багажа, чтобы обезопасить его от непредвиденных обстоятельств" },
-    { key: ["багаж","ручная кладь","размеры?"], answer: "Размеры ручной клади у нас стандартные 55x40x20 см с весом 7-10 кг, с багажом три тарифа: S до 23 M до 25 L до 28" },
-    { key: ["отели","гостиница"], answer: "Перейдите в раздел «ОТЕЛИ». Сейчас забронировать настоящий отель нельзя, мы миниатюрная авиакомпания." }
-];
-  
-let learnedDB = JSON.parse(localStorage.getItem('chat_widget_memory_v1') || '{}');
-function saveLearning(q, a){ learnedDB[q.toLowerCase()] = a; localStorage.setItem('chat_widget_memory_v1', JSON.stringify(learnedDB)); }
-function searchLearning(q){ const Q = q.toLowerCase(); for (const k in learnedDB) { if (similarity(Q,k) > 0.6) return learnedDB[k]; } return null; }
-
-/* ---------- CITY FORMS (частичный словарь) ---------- */
-/* Добавляй формы по мере необходимости — словарь повышает точность */
-const CITY_FORMS = {
-  "москва":"Москва","москве":"Москва","москвы":"Москва","москвой":"Москва",
-  "санкт-петербург":"Санкт-Петербург","санкт петербург":"Санкт-Петербург","питер":"Санкт-Петербург","питере":"Санкт-Петербург","спб":"Санкт-Петербург",
-  "екатеринбург":"Екатеринбург","екатеринбурге":"Екатеринбург",
-  "новосибирск":"Новосибирск","новосибирске":"Новосибирск",
-  "казань":"Казань","казани":"Казань",
-  "минск":"Минск","минске":"Минск",
-  "краснодар":"Краснодар","краснодаре":"Краснодар",
-  "сочи":"Сочи",
-  "нижний новгород":"Нizhny Novgorod","нижнем новгороде":"Nizhny Novgorod",
-  "самара":"Самара","самаре":"Самара",
-  "ростов-на-дону":"Ростов-на-Дону","ростове":"Ростов-на-Дону",
-  "уфа":"Уфа","уфе":"Уфа",
-  "воронеж":"Воронеж","воронеже":"Воронеж",
-  "нью-йорк":"New York","нью йорк":"New York","в нью-йорке":"New York",
-  "лондон":"London","в лондоне":"London",
-  "брюссель":"Brussels","в брюсселе":"Brussels",
-  "киев":"Kyiv","в киеве":"Kyiv","киеве":"Kyiv"
-};
-
-/* ---------- Нормализация и детект города ---------- */
-function cleanToken(t){
-  if(!t) return "";
-  return t.replace(/^[^а-яa-z0-9]+|[^а-яa-z0-9]+$/gi,"").replace(/\s+/g," ").toLowerCase();
-}
-
-function stripRussianCaseEndings(word){
-  if(!word) return word;
-  // простая эвристика удаления падежных окончаний
-  const endings = ["ами","ями","ами","ах","ях","ом","ем","ой","ей","у","ю","а","я","ы","и","ов","ев","ин","на","ного","ого"];
-  for (const end of endings){
-    if(word.endsWith(end) && word.length - end.length >= 3) return word.slice(0, -end.length);
-  }
-  return word;
-}
-
-function detectCity(text){
-  if(!text) return "";
-  const s = text.toLowerCase().replace(/[?!.(),;:«»"“”]/g," ");
-  const tokens = s.split(/\s+/).map(cleanToken).filter(Boolean);
-  // longest match multiword (4..1)
-  for (let len=4; len>=1; len--){
-    for (let i=0;i+len<=tokens.length;i++){
-      const slice = tokens.slice(i,i+len).join(' ').trim();
-      if(!slice) continue;
-      if(CITY_FORMS[slice]) return CITY_FORMS[slice];
-      if(slice.startsWith('в ')){
-        const cut = slice.replace(/^в\s+/,'');
-        if(CITY_FORMS[cut]) return CITY_FORMS[cut];
-      }
-    }
-  }
-  // single token direct
-  for (const t of tokens){
-    if(CITY_FORMS[t]) return CITY_FORMS[t];
-  }
-  // try stripped endings
-  for (const t of tokens){
-    const stripped = stripRussianCaseEndings(t);
-    if(stripped !== t && CITY_FORMS[stripped]) return CITY_FORMS[stripped];
-  }
-  // fallback: choose first long token and capitalize
-  for (const t of tokens){
-    if(t.length>=3) return t.charAt(0).toUpperCase() + t.slice(1);
-  }
-  return "";
-}
-
-/* ---------- OpenWeather (ключ уже вставлен) ---------- */
-const WEATHER_KEY = "579eff04697ae897da8e50ee33ee1645";
-
-async function fetchWeather(city){
-  if(!WEATHER_KEY || WEATHER_KEY.trim()==="") return {ok:false, message:"API-ключ не задан."};
-  if(!city) return {ok:false, message:"Город не указан."};
-  const q = encodeURIComponent(city.trim());
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${q}&appid=${WEATHER_KEY}&units=metric&lang=ru`;
-  try{
-    const res = await fetch(url);
-    if(!res.ok){
-      if(res.status===401) return {ok:false, message:"401 Unauthorized — неверный или неактивный API-ключ."};
-      if(res.status===404) return {ok:false, message:`Город «${city}» не найден (404). Попробуйте другую форму.`};
-      return {ok:false, message:`Ошибка сервера: ${res.status}`};
-    }
-    const d = await res.json();
-    return {ok:true, data:d};
-  }catch(e){
-    return {ok:false, message:"Сетевая ошибка при запросе погоды."};
-  }
-}
-
-function buildWeatherCard(d){
-  const icon = d.weather && d.weather[0] && d.weather[0].icon ? d.weather[0].icon : null;
-  const desc = d.weather && d.weather[0] && d.weather[0].description ? capitalize(d.weather[0].description) : "";
-  const temp = d.main && typeof d.main.temp === "number" ? Math.round(d.main.temp) : "—";
-  const feels = d.main && typeof d.main.feels_like === "number" ? Math.round(d.main.feels_like) : "—";
-  const humidity = d.main && d.main.humidity != null ? d.main.humidity : "—";
-  const wind = d.wind && d.wind.speed != null ? `${d.wind.speed} м/с` : "—";
-  const name = d.name || "";
-  const country = d.sys && d.sys.country ? `, ${d.sys.country}` : "";
-  const iconUrl = icon ? `https://openweathermap.org/img/wn/${icon}@2x.png` : "";
-
-  return `
-  <div class="weather-card" role="region" aria-label="Погода в ${escapeHtml(name)}">
-    <div class="weather-top">
-      <div class="weather-left">
-        ${iconUrl?`<img class="weather-icon" src="${iconUrl}" alt="${escapeHtml(desc)}">`:""}
-        <div>
-          <div style="font-size:14px;font-weight:600;">Погода в ${escapeHtml(name)}${escapeHtml(country)}</div>
-          <div class="weather-desc">${escapeHtml(desc)}</div>
-        </div>
-      </div>
-      <div style="text-align:right">
-        <div class="weather-temp">${temp}°C</div>
-        <div style="font-size:12px;color:#5b6f78">ощущается как ${feels}°C</div>
-      </div>
-    </div>
-    <div class="weather-meta">
-      <div>Влажность: ${humidity}%</div>
-      <div>Ветер: ${escapeHtml(wind)}</div>
-    </div>
-  </div>
-  `;
-}
-
-/* ---------- miniGPT core ---------- */
-let memory = [];
-function similarity(a,b){
-  const wa = String(a).toLowerCase().split(/\s+/).filter(Boolean);
-  const wb = String(b).toLowerCase().split(/\s+/).filter(Boolean);
-  const setB = new Set(wb); let match=0;
-  for(const w of wa) if(setB.has(w)) match++;
-  return match / Math.max(1, Math.max(wa.length, wb.length));
-}
-function generateContextAnswer(q){ return "Продолжаю по вашему вопросу: «" + escapeHtml(q) + "». Могу уточнить детали, если нужно."; }
-
-/* главная функция обработки */
-async function miniGPT(question){
-  const qRaw = question || "";
-  const q = String(qRaw).toLowerCase().trim();
-  memory.push(q); if(memory.length>20) memory.shift();
-
-  // 0. trained answers
-  const learned = searchLearning(q);
-  if(learned) return learned;
-
-  // 1. weather intent
-  if(q.includes("погода") || q.includes("температура") || q.includes("weather")){
-    const city = detectCity(qRaw);
-    if(!city) return "Уточните город, например: «Погода в Москве» или «Температура в Санкт-Петербурге».";
-    addSystem("Запрашиваю погоду для: " + city + " …");
-    const res = await fetchWeather(city);
-    if(!res.ok) return `Не удалось получить погоду: ${res.message}`;
-    const card = buildWeatherCard(res.data);
-    saveLearning(q, card);
-    return card;
-  }
-
-  // 2. exact knowledge
-  for(const item of knowledge){
-    let ok=true;
-    for(const k of item.key){ if(!q.includes(k)){ ok=false; break; } }
-    if(ok){ saveLearning(q,item.answer); return item.answer; }
-  }
-
-  // 3. partial match
-  for(const item of knowledge){
-    let count=0;
-    for(const k of item.key) if(q.includes(k)) count++;
-    if(count>=1){ saveLearning(q,item.answer); return item.answer; }
-  }
-
-  // 4. context continuation
-  if(memory.length>=2){
-    const last = memory[memory.length-2];
-    if(similarity(q,last) > 0.55){ const ans = generateContextAnswer(question); saveLearning(q,ans); return ans; }
-  }
-
-  // fallback
-  const fallback = "Я могу уточнить: что именно вас интересует по теме «" + escapeHtml(question) + "»?";
-  saveLearning(q,fallback);
-  return fallback;
-}
-
-/* ---------- send message ---------- */
-async function sendMessage(){
-  const text = inputEl.value.trim();
-  if(!text) return;
-  addUser(text);
-  inputEl.value = "";
-  try{
-    const ai = await miniGPT(text);
-    setTimeout(()=> addAI(ai), 120);
-  }catch(e){
-    console.error("Error in miniGPT:", e);
-    addAI("Произошла ошибка при обработке запроса.");
-  }
-}
-sendBtn.onclick = sendMessage;
-inputEl.onkeydown = e => { if(e.key === "Enter") sendMessage(); };
-
-/* ---------- voice TTS ---------- */
-let voice=null;
-function loadVoices(){
-  const voices = speechSynthesis.getVoices();
-  voice = voices.find(v=>v.lang==="ru-RU" && v.name && v.name.toLowerCase().includes("google")) ||
-          voices.find(v=>v.lang==="ru-RU") || voices[0];
-}
-speechSynthesis.onvoiceschanged = loadVoices;
-loadVoices();
-function speakText(text){
-  if(!text) return;
-  try{
-    const u = new SpeechSynthesisUtterance(text);
-    u.voice = voice;
-    u.rate = 1;
-    u.pitch = 1.02;
-    speechSynthesis.speak(u);
-  }catch(e){
-    console.warn("TTS error:", e);
-  }
-}
-
-/* ---------- voice input ---------- */
-voiceBtn.onclick = () => {
-  const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!Rec) return alert("Ваш браузер не поддерживает голосовой ввод.");
-  try{
-    const r = new Rec();
-    r.lang = "ru-RU";
-    r.interimResults = false;
-    r.maxAlternatives = 1;
-    r.onresult = e => {
-      const text = e.results[0][0].transcript;
-      inputEl.value = text;
-      sendMessage();
-    };
-    r.onerror = e => { console.warn("SpeechRecognition error", e); alert("Ошибка голосового ввода: " + (e.error || "unknown")); };
-    r.start();
-  }catch(e){
-    alert("Ошибка голосового ввода.");
-  }
-};
-
-/* ---------- utilities ---------- */
-function capitalize(s){ if(!s) return s; return s.charAt(0).toUpperCase() + s.slice(1); }
-function escapeHtml(u){ if(u==null) return ""; return String(u).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
-
-/* ---------- dev utilities ---------- */
-// localStorage.removeItem('chat_widget_memory_v1');
-
-/* ================= done ================= */
 </script>
 
 </body>
