@@ -146,44 +146,145 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>S7 — Шапка</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<title>S7avelii</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --accent:#9bd009;
+  --accent-dark:#7fb200;
+  --bg:#f1f4f8;
+  --card:#ffffff;
+  --text:#0b2b3a;
+}
+
+body{margin:0;font-family:Arial,Helvetica,sans-serif}
+
+/* ================= HEADER ================= */
+.header{
+  position:fixed;top:0;left:0;width:100%;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 16px;
+  background:rgba(255,255,255,.9);
+  backdrop-filter:blur(10px);
+  box-shadow:0 4px 18px rgba(0,0,0,.1);
+  z-index:100000;
+}
+.header img{display:block}
+.header-right{display:flex;align-items:center;gap:12px}
+
+/* ================= CHAT BUTTON ================= */
+.chat-button{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  width:64px;height:64px;
+  background:linear-gradient(180deg,var(--accent),var(--accent-dark));
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 28px rgba(0,0,0,.25);
+  cursor:pointer;
+  z-index:99999;
+}
+.chat-button svg{width:34px;height:34px}
+
+/* ================= CHAT WINDOW ================= */
+#chat-window{
+  position:fixed;
+  right:24px;
+  bottom:100px;
+  width:360px;
+  height:560px;
+  background:#fff;
+  border-radius:16px;
+  box-shadow:0 18px 48px rgba(0,0,0,.35);
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
+  z-index:99998;
+}
+.chat-header{
+  background:linear-gradient(90deg,var(--accent),var(--accent-dark));
+  padding:12px;
+  color:#fff;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.chat-body{
+  flex:1;padding:14px;overflow-y:auto;background:var(--bg);
+}
+.msg{
+  background:#fff;padding:10px 14px;border-radius:14px;
+  margin-bottom:10px;max-width:78%;
+}
+.msg.user{background:#c0eb5e;margin-left:auto}
+.chat-input{
+  display:flex;gap:8px;padding:10px;border-top:1px solid #eee;
+}
+.chat-input input{flex:1;padding:10px;border-radius:10px;border:1px solid #ddd}
+.chat-input button{
+  background:var(--accent-dark);color:#fff;border:none;
+  padding:8px 12px;border-radius:10px;cursor:pointer;
+}
+</style>
 </head>
-<body class="bg-gray-50">
 
-  <!-- Шапка -->
-  <header class="fixed top-0 left-0 w-full flex justify-between items-center p-4 bg-white shadow z-50">
-    <!-- Логотип -->
-    <img src="images/photo_5276207082657412564_y.avif" alt="S7" class="w-10 h-10">
+<body style="padding-top:70px">
 
-    <!-- Кнопки -->
-    <div class="flex gap-2 items-center" id="userArea">
-      <!-- Вход / блок пользователя -->
-    </div>
-  </header>
+<!-- ================= HEADER ================= -->
+<header class="header">
 
- <script>
-  const API = 'https://s7avelii-airlines-1.onrender.com';
+  <!-- 1. ЛОГОТИП -->
+  <img src="images/logo.avif" width="40">
+
+  <div class="header-right">
+
+    <!-- 2. ВОЙТИ / ПРОФИЛЬ -->
+    <div id="userArea"></div>
+
+    <!-- 3. ИКОНКА БЕЗ ССЫЛКИ -->
+    <img src="images/рубликнашапку.avif" width="36">
+
+    <!-- 4. ИКОНКА ЧАТА -->
+    <button onclick="toggleChat()" style="background:none;border:none;padding:0">
+      <img src="images/чатикнамобилку.avif" width="36">
+    </button>
+
+  </div>
+</header>
+
+<!-- ================= CHAT FLOAT ================= -->
+<div id="chat-button" class="chat-button" onclick="toggleChat()">
+  <svg viewBox="0 0 24 24"><path fill="#fff"
+  d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</div>
+
+<div id="chat-window">
+  <div class="chat-header">
+    <b>S7avelii SynAir</b>
+    <button onclick="toggleChat()" style="background:none;border:none;color:#fff;font-size:20px">✕</button>
+  </div>
+
+  <div id="chat-body" class="chat-body"></div>
+
+  <div class="chat-input">
+    <input id="chat-text" placeholder="Введите сообщение…">
+    <button onclick="sendMessage()">➤</button>
+  </div>
+</div>
+
+<script>
+/* ================= HEADER AUTH ================= */
+
+ const API = 'https://s7avelii-airlines-1.onrender.com';
 
   async function updateUserArea() {
     const userArea = document.getElementById('userArea');
     const token = localStorage.getItem('token');
 
-    if (!token) {
-      userArea.innerHTML = `
-        <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
-          Войти
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-            d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
-          </svg>
-        </a>
-      `;
-      return;
-    }
+     if(!token){
+    el.innerHTML=`<a href="auth.html"><img src="images/войтинахуй.avif" width="36"></a>`;
+    return;
+  }
 
     try {
       const res = await fetch(`${API}/api/profile`, {
@@ -239,438 +340,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener('DOMContentLoaded', updateUserArea);
   window.__S7_UPDATE_USER_AREA = updateUserArea;
-</script>
 
-</body>
-  
-<!-- Пробел между слайдером и акциями -->
-    <div class="h-20"></div>
-<style>
-  .slider-container {
-    position: relative;
-    width: 100%;
-    max-width: 400px;
-    height: 370px;
-    overflow: hidden;
-    border-radius: 16px;
-    margin: 20px auto;
-  }
-
-  .slide {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 1s;
-  }
-
-  .slide.active {
-    opacity: 1;
-  }
-
-  .slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .slide-text {
-    position: absolute;
-    bottom: 60px;
-    left: 20px;
-    color: white;
-    font-size: 20px;
-    font-weight: 700;
-    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
-  }
-
-  .slide-btn {
-    position: absolute;
-    bottom: 15px;
-    left: 15px;
-    background: rgba(0,0,0,0.55);
-    color: white;
-    padding: 8px 14px;
-    border-radius: 10px;
-    font-size: 14px;
-    text-decoration: none;
-    backdrop-filter: blur(4px);
-    transition: background .3s;
-  }
-
-  .slide-btn:hover {
-    background: rgba(0,0,0,0.75);
-  }
-
-  .dots {
-    position: absolute;
-    bottom: 12px;
-    right: 15px;
-    display: flex;
-    gap: 6px;
-    z-index: 10;
-  }
-
-  .dot {
-    width: 10px;
-    height: 10px;
-    background: white;
-    opacity: 0.4;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: opacity 0.3s;
-  }
-
-  .dot.active {
-    opacity: 1;
-  }
-</style>
-
-<div class="slider-container">
-
-  <!-- СЛАЙД 1 -->
-  <div class="slide active">
-    <img src="images/воблакахуспехмобила.avif">
-    <div class="slide-text"></div>
-    <a href="nebo.html" class="slide-btn">Подробнее</a>
-  </div>
-
-  <!-- СЛАЙД 3 -->
-  <div class="slide">
-    <img src="images/S7avelii Priority.avif">
-    <div class="slide-text"></div>
-    <a href="priority.html" class="slide-btn">Подробнее</a>
-  </div>
-
-  <!-- СЛАЙД 4 -->
-  <div class="slide">
-    <img src="images/1763208541542.avif">
-    <div class="slide-text">S7avelii — IT</div>
-    <a href="page4.html" class="slide-btn">Подробнее</a>
-  </div>
-
-  <!-- точки -->
-  <div class="dots"></div>
-</div>
-
-<script>
-  const slides = document.querySelectorAll(".slide");
-  const dotsContainer = document.querySelector(".dots");
-  let current = 0;
-
-  slides.forEach((_, i) => {
-    let dot = document.createElement("div");
-    dot.classList.add("dot");
-    if (i === 0) dot.classList.add("active");
-    dot.addEventListener("click", () => showSlide(i));
-    dotsContainer.appendChild(dot);
-  });
-
-  const dots = document.querySelectorAll(".dot");
-
-  function showSlide(i) {
-    slides[current].classList.remove("active");
-    dots[current].classList.remove("active");
-
-    slides[i].classList.add("active");
-    dots[i].classList.add("active");
-
-    current = i;
-  }
-
-  function autoSlide() {
-    showSlide((current + 1) % slides.length);
-  }
-
-  setInterval(autoSlide, 4000);
-</script>
-
-<style>
-    body {
-        margin: 0;
-        font-family: "Segoe UI", Tahoma, sans-serif;
-    }
-
-    /* Обёртка */
-    #cookie-banner {
-        position: fixed;
-        bottom: 40px;
-        left: 40px;
-        background: #2D333D; /* тёмно-серый как на скрине */
-        color: white;
-        padding: 25px 30px;
-        border-radius: 14px;
-        max-width: 380px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-        display: none; /* скрыт по умолчанию */
-        animation: fadeIn 0.4s ease-out;
-    }
-
-    /* Текст ссылки */
-    #cookie-banner a {
-        color: #74b9ff;
-    }
-
-    /* Кнопка "Хорошо" */
-    #cookie-ok {
-        margin-top: 16px;
-        background: #3F4A57;
-        padding: 10px 25px;
-        border-radius: 30px;
-        display: inline-block;
-        cursor: pointer;
-        color: white;
-        border: none;
-        font-size: 16px;
-        transition: 0.2s;
-    }
-
-    #cookie-ok:hover {
-        background: #4d5969;
-    }
-
-    /* Анимация появления */
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-</style>
-</head>
-<body>
-
-<!-- Баннер -->
-<div id="cookie-banner">
-    <div>
-        Мы используем куки, чтобы путешествовать по сайту было удобно. 
-        <a href="#" target="_blank">Как это работает</a>
-    </div>
-
-    <button id="cookie-ok">Хорошо</button>
-</div>
-
-
-<script>
-    // Если пользователь ещё не принял куки — показываем баннер
-    if (!localStorage.getItem("cookieAccepted")) {
-        document.getElementById("cookie-banner").style.display = "block";
-    }
-
-    // При нажатии кнопки — прячем и сохраняем согласие
-    document.getElementById("cookie-ok").onclick = function () {
-        localStorage.setItem("cookieAccepted", "true");
-        document.getElementById("cookie-banner").style.display = "none";
-    };
-</script>
-
- 
-<!-- Пробел между слайдером и акциями -->
-    <div class="h-15"></div>
-<body class="bg-[#f7f8fc] font-sans">
-
- <!-- Большая зелёная кнопка-ссылка -->
-    <a href="bilet.html"
-       class="bg-[#95c11f] hover:bg-[#85ab1a] text-white text-lg font-semibold w-full py-4 rounded-2xl shadow-sm flex justify-center items-center gap-2 transition">
-      Купить билет
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4l7 8-7 8M4 12h14" />
-      </svg>
-    </a>
- <a href="s7hop.html" class="add-booking">＋ Для путешествия</a>
-  </section>
-
-<!-- Пробел между слайдером и акциями -->
-    <div class="h-5"></div>
-  <section>
-<div class="useful">
-    <div class="useful-title">Полезное</div>
-
-    <!-- Используются ТВОИ ИКОНКИ -->
-    <div class="useful-item" onclick="location.href='priority.html'">
-    <img src="images/free-icon-font-wallet.avif"> S7avelii Priority
-</div>
-
-<div class="useful-item" onclick="location.href='business.html'">
-    <img src="images/free-icon-font-computer.avif"> Для бизнеса
-</div>
-
-<div class="useful-item" onclick="location.href='office.html'">
-    <img src="images/free-icon-font-boxes.avif"> Грузы
-</div>
-
-</section>
-
-<style>
-/* ---------- Стили виджета (всплывающее окно) ---------- */
-:root{
-  --accent:#9bd009;
-  --accent-dark:#7fb200;
-  --bg:#f1f4f8;
-  --card:#ffffff;
-  --text:#0b2b3a;
-}
-
-body{ margin:0; font-family: Arial, Helvetica, sans-serif; background:transparent; }
-
-/* кнопка */
-.chat-button {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  width: 64px;
-  height: 64px;
-  background: linear-gradient(180deg,var(--accent),var(--accent-dark));
-  border-radius: 50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow: 0 8px 28px rgba(0,0,0,0.25);
-  cursor:pointer;
-  z-index: 99999;
-  transition: transform .15s ease;
-}
-.chat-button:hover{ transform: scale(1.06); }
-.chat-button svg{ width:34px; height:34px; }
-
-/* окно */
-#chat-window {
-  position: fixed;
-  right: 24px;
-  bottom: 100px;
-  width: 360px;
-  max-width: calc(100% - 48px);
-  height: 560px;
-  background: var(--card);
-  border-radius: 16px;
-  box-shadow: 0 18px 48px rgba(0,0,0,0.35);
-  display: none;
-  flex-direction: column;
-  overflow: hidden;
-  z-index: 99998;
-}
-
-/* header */
-.chat-header {
-  background: linear-gradient(90deg,var(--accent),var(--accent-dark));
-  padding: 12px;
-  color: white;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-.header-left{ display:flex; align-items:center; gap:10px; }
-.avatar-header{
-  width:42px;height:42px;border-radius:50%;object-fit:cover;background:rgba(255,255,255,0.12);padding:3px;
-}
-.header-title b{ display:block; font-size:15px; }
-.header-title small{ opacity:.9; font-size:12px; }
-
-/* body */
-.chat-body{
-  flex:1;
-  padding:14px;
-  overflow-y:auto;
-  background: var(--bg);
-}
-.msg{
-  background: #fff;
-  padding:10px 14px;
-  border-radius:14px;
-  margin-bottom:10px;
-  max-width:78%;
-  display:inline-block;
-  color:var(--text);
-  box-shadow: 0 2px 6px rgba(12,30,40,0.04);
-  line-height:1.25;
-  word-break:break-word;
-}
-.msg.user{ background:#c0eb5e; margin-left:auto; }
-.msg.system{ background:transparent; font-style:italic; color:#4b5560; max-width:100%; }
-
-/* input */
-.chat-input{
-  display:flex;
-  gap:8px;
-  padding:10px;
-  background:#fff;
-  border-top:1px solid #eee;
-}
-.chat-input input{
-  flex:1;
-  padding:10px;
-  border-radius:10px;
-  border:1px solid #ddd;
-  outline:none;
-}
-.chat-input button{
-  background:var(--accent-dark);
-  color:#fff;
-  border:none;
-  padding:8px 12px;
-  border-radius:10px;
-  cursor:pointer;
-}
-
-/* карточка погоды */
-.weather-card{
-  background: linear-gradient(180deg,#fff,#fbfeff);
-  border-radius:12px;
-  padding:12px;
-  margin-bottom:10px;
-  box-shadow:0 6px 18px rgba(14,40,78,0.06);
-  max-width:78%;
-  color:var(--text);
-  font-size:14px;
-}
-.weather-top{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
-.weather-left{ display:flex; align-items:center; gap:10px; }
-.weather-icon{ width:56px; height:56px; }
-.weather-temp{ font-size:26px; font-weight:700; line-height:1; }
-.weather-desc{ font-size:13px; color:#3b5666; }
-.weather-meta{ margin-top:8px; display:flex; gap:10px; font-size:12px; color:#556b75; }
-
-/* responsive */
-@media (max-width:420px){
-  #chat-window{ right:12px; left:12px; width:auto; height:56vh; bottom:80px; }
-  .chat-button{ right:12px; bottom:18px; }
-}
-</style>
-</head>
-<body>
-
-<!-- Кнопка -->
-<div id="chat-button" class="chat-button" title="Открыть чат">
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" fill="#fff"/>
-  </svg>
-</div>
-
-<!-- Окно -->
-<div id="chat-window" role="dialog" aria-label="Чат с S7avelii SynAir">
-  <div class="chat-header">
-    <div class="header-left">
-      <img src="" alt="avatar" class="avatar-header" id="widget-avatar">
-      <div class="header-title">
-        <b>S7avelii SynAir</b>
-        <small id="header-status">Онлайн</small>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px;">
-      <button id="open-full" title="Открыть в новом окне" style="background:transparent;border:none;color:white;cursor:pointer;font-size:16px">⤢</button>
-      <button id="close-chat" title="Закрыть" style="background:transparent;border:none;color:white;font-size:20px;cursor:pointer">✕</button>
-    </div>
-  </div>
-
-  <div id="chat-body" class="chat-body" aria-live="polite"></div>
-
-  <div class="chat-input">
-    <input id="chat-text" type="text" placeholder="Напишите сообщение… (например: «Погода в Москве»)" aria-label="Сообщение">
-    <button id="send-btn" title="Отправить">➤</button>
-    <button id="voice-btn" title="Голосовой ввод">🎤</button>
-  </div>
-</div>
-
-<script>
+/* ================= CHAT ================= */
 /* ==================== Полный автономный виджет ====================
    - miniGPT-like локальная логика
    - самообучение через localStorage
@@ -997,7 +668,266 @@ function escapeHtml(u){ if(u==null) return ""; return String(u).replace(/&/g,'&a
 // localStorage.removeItem('chat_widget_memory_v1');
 
 /* ================= done ================= */
-   </script>
+</script>
+
+</body>
+  
+<!-- Пробел между слайдером и акциями -->
+    <div class="h-20"></div>
+<style>
+  .slider-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 370px;
+    overflow: hidden;
+    border-radius: 16px;
+    margin: 20px auto;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s;
+  }
+
+  .slide.active {
+    opacity: 1;
+  }
+
+  .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .slide-text {
+    position: absolute;
+    bottom: 60px;
+    left: 20px;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  }
+
+  .slide-btn {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background: rgba(0,0,0,0.55);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-decoration: none;
+    backdrop-filter: blur(4px);
+    transition: background .3s;
+  }
+
+  .slide-btn:hover {
+    background: rgba(0,0,0,0.75);
+  }
+
+  .dots {
+    position: absolute;
+    bottom: 12px;
+    right: 15px;
+    display: flex;
+    gap: 6px;
+    z-index: 10;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    background: white;
+    opacity: 0.4;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: opacity 0.3s;
+  }
+
+  .dot.active {
+    opacity: 1;
+  }
+</style>
+
+<div class="slider-container">
+
+  <!-- СЛАЙД 1 -->
+  <div class="slide active">
+    <img src="images/воблакахуспехмобила.avif">
+    <div class="slide-text"></div>
+    <a href="nebo.html" class="slide-btn">Подробнее</a>
+  </div>
+
+  <!-- СЛАЙД 3 -->
+  <div class="slide">
+    <img src="images/S7avelii Priority.avif">
+    <div class="slide-text"></div>
+    <a href="priority.html" class="slide-btn">Подробнее</a>
+  </div>
+
+  <!-- СЛАЙД 4 -->
+  <div class="slide">
+    <img src="images/1763208541542.avif">
+    <div class="slide-text">S7avelii — IT</div>
+    <a href="page4.html" class="slide-btn">Подробнее</a>
+  </div>
+
+  <!-- точки -->
+  <div class="dots"></div>
+</div>
+
+<script>
+  const slides = document.querySelectorAll(".slide");
+  const dotsContainer = document.querySelector(".dots");
+  let current = 0;
+
+  slides.forEach((_, i) => {
+    let dot = document.createElement("div");
+    dot.classList.add("dot");
+    if (i === 0) dot.classList.add("active");
+    dot.addEventListener("click", () => showSlide(i));
+    dotsContainer.appendChild(dot);
+  });
+
+  const dots = document.querySelectorAll(".dot");
+
+  function showSlide(i) {
+    slides[current].classList.remove("active");
+    dots[current].classList.remove("active");
+
+    slides[i].classList.add("active");
+    dots[i].classList.add("active");
+
+    current = i;
+  }
+
+  function autoSlide() {
+    showSlide((current + 1) % slides.length);
+  }
+
+  setInterval(autoSlide, 4000);
+</script>
+
+<style>
+    body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+    }
+
+    /* Обёртка */
+    #cookie-banner {
+        position: fixed;
+        bottom: 40px;
+        left: 40px;
+        background: #2D333D; /* тёмно-серый как на скрине */
+        color: white;
+        padding: 25px 30px;
+        border-radius: 14px;
+        max-width: 380px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        display: none; /* скрыт по умолчанию */
+        animation: fadeIn 0.4s ease-out;
+    }
+
+    /* Текст ссылки */
+    #cookie-banner a {
+        color: #74b9ff;
+    }
+
+    /* Кнопка "Хорошо" */
+    #cookie-ok {
+        margin-top: 16px;
+        background: #3F4A57;
+        padding: 10px 25px;
+        border-radius: 30px;
+        display: inline-block;
+        cursor: pointer;
+        color: white;
+        border: none;
+        font-size: 16px;
+        transition: 0.2s;
+    }
+
+    #cookie-ok:hover {
+        background: #4d5969;
+    }
+
+    /* Анимация появления */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+</head>
+<body>
+
+<!-- Баннер -->
+<div id="cookie-banner">
+    <div>
+        Мы используем куки, чтобы путешествовать по сайту было удобно. 
+        <a href="#" target="_blank">Как это работает</a>
+    </div>
+
+    <button id="cookie-ok">Хорошо</button>
+</div>
+
+
+<script>
+    // Если пользователь ещё не принял куки — показываем баннер
+    if (!localStorage.getItem("cookieAccepted")) {
+        document.getElementById("cookie-banner").style.display = "block";
+    }
+
+    // При нажатии кнопки — прячем и сохраняем согласие
+    document.getElementById("cookie-ok").onclick = function () {
+        localStorage.setItem("cookieAccepted", "true");
+        document.getElementById("cookie-banner").style.display = "none";
+    };
+</script>
+
+ 
+<!-- Пробел между слайдером и акциями -->
+    <div class="h-15"></div>
+<body class="bg-[#f7f8fc] font-sans">
+
+ <!-- Большая зелёная кнопка-ссылка -->
+    <a href="bilet.html"
+       class="bg-[#95c11f] hover:bg-[#85ab1a] text-white text-lg font-semibold w-full py-4 rounded-2xl shadow-sm flex justify-center items-center gap-2 transition">
+      Купить билет
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4l7 8-7 8M4 12h14" />
+      </svg>
+    </a>
+ <a href="s7hop.html" class="add-booking">＋ Для путешествия</a>
+  </section>
+
+<!-- Пробел между слайдером и акциями -->
+    <div class="h-5"></div>
+  <section>
+<div class="useful">
+    <div class="useful-title">Полезное</div>
+
+    <!-- Используются ТВОИ ИКОНКИ -->
+    <div class="useful-item" onclick="location.href='arrivel.html'">
+    <img src="images/free-icon-font-wallet.avif"> Регистрация на рейс
+</div>
+
+<div class="useful-item" onclick="location.href='auth.html'">
+    <img src="images/free-icon-font-computer.avif"> Мои бронирования
+</div>
+
+<div class="useful-item" onclick="location.href='https://t.me/S7saveliiairlines'">
+    <img src="images/free-icon-font-boxes.avif"> Впечатления в рейсах
+</div>
+
+</section>
  
 <style>
   :root{
