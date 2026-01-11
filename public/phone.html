@@ -85,13 +85,13 @@ bg-white/80 backdrop-blur-md shadow z-50">
       <!-- Иконка с окном -->
       <button onclick="openMyWindow()"
         class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition">
-        <img src="images/чатикнамобилку.avif" class="w-5 h-5" alt="">
+        <img src="images/чатикнамобилку.avif" class="w-7 h-7" alt="">
       </button>
 
       <!-- Статичная иконка -->
       <div
         class="w-9 h-9 flex items-center justify-center rounded-full opacity-70">
-        <img src="images/рубликнашапку.avif" class="w-5 h-5" alt="">
+        <img src="images/рубликнашапку.avif" class="w-7 h-7" alt="">
       </div>
 
     </div>
@@ -111,13 +111,10 @@ bg-white/80 backdrop-blur-md shadow z-50">
 
     if (!token) {
       userArea.innerHTML = `
-        <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
-          Войти
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-            d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
-          </svg>
-        </a>
+      <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
+
+    <img src="images/войтинахуй.avif" class="w-5 h-5" alt="">
+  </a>
       `;
       return;
     }
