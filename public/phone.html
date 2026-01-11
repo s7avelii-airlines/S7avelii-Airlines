@@ -391,28 +391,48 @@ document.addEventListener("DOMContentLoaded", () => {
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4l7 8-7 8M4 12h14" />
       </svg>
     </a>
- <a href="s7hop.html" class="add-booking">＋ Для путешествия</a>
   </section>
 
 <!-- Пробел между слайдером и акциями -->
     <div class="h-5"></div>
-  <section>
-<div class="useful">
-    <div class="useful-title">Полезное</div>
+  <!-- Пробел между слайдером и акциями -->
+    <div class="h-5"></div>
+  
+ <section class="px-4 mt-4">
+  <div class="bg-white rounded-3xl overflow-hidden shadow-sm">
 
-    <!-- Используются ТВОИ ИКОНКИ -->
-    <div class="useful-item" onclick="location.href='arrivel.html'">
-    <img src="images/free-icon-font-wallet.avif"> Регистрация на рейс
-</div>
+    <!-- 1. Наши рейсы -->
+    <a href="arrivel.html"
+       class="flex items-center p-4 active:bg-gray-50 transition">
+      <div class="w-12 h-12 flex items-center justify-center bg-[#e9f4d6] rounded-xl mr-4">
+        <img src="images/photo_5398063018606193773_y.avif" class="w-6 h-6" alt="">
+      </div>
+      <p class="text-gray-900 font-medium text-[16px]">Наши рейсы</p>
+    </a>
 
-<div class="useful-item" onclick="location.href='auth.html'">
-    <img src="images/free-icon-font-computer.avif"> Мои бронирования
-</div>
+    <div class="border-t border-gray-200"></div>
 
-<div class="useful-item" onclick="location.href='https://t.me/S7saveliiairlines'">
-    <img src="images/free-icon-font-boxes.avif"> Впечатления в рейсах
-</div>
+    <!-- 2. Отели -->
+    <a href="HOTEL.html"
+       class="flex items-center p-4 active:bg-gray-50 transition">
+      <div class="w-12 h-12 flex items-center justify-center bg-[#e5ecfd] rounded-xl mr-4">
+        <img src="images/photo_5398063018606193774_y.avif" class="w-6 h-6" alt="">
+      </div>
+      <p class="text-gray-900 font-medium text-[16px]">Отели</p>
+    </a>
 
+    <div class="border-t border-gray-200"></div>
+
+    <!-- 3. Для путешествия -->
+    <a href="s7hop.html"
+       class="flex items-center p-4 active:bg-gray-50 transition">
+      <div class="w-12 h-12 flex items-center justify-center bg-[#efe8fd] rounded-xl mr-4">
+        <img src="images/photo_5398063018606193772_y.avif" class="w-6 h-6" alt="">
+      </div>
+      <p class="text-gray-900 font-medium text-[16px]">Для путешествия</p>
+    </a>
+
+  </div>
 </section>
  
 <style>
