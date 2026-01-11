@@ -11,6 +11,345 @@
 <link rel="shortcut icon" href="images/IMG_20260111_155539.avif" type="image/png">
 <body>
 
+
+
+
+
+
+<body class="text-gray-900 font-sans">
+</style>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      padding: 0 60px;
+      height: 80px;
+      border-bottom: 1px solid #ccc;
+      position: fixed;      /* фиксируем */
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: #fff;
+    }
+
+    .logo-img {
+      height: 70px;
+      width: auto;
+      cursor: pointer;
+    }
+
+    .logo-circle {
+      background-color: #93bd0a;
+      color: white;
+      font-weight: 700;
+      font-size: 20px;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 9px;
+      font-family: Arial, sans-serif;
+    }
+
+    nav {
+      display: flex;
+      flex-grow: 1;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 40px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    nav li {
+      position: relative;
+    }
+
+    nav a {
+      position: relative;
+      color: #000;
+      text-decoration: none;
+      font-size: 16px;
+      padding: 28px 0;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background-color: #b3c900;
+      transition: width 0.3s ease;
+    }
+    nav li:hover > a::after {
+      width: 100%;
+    }
+
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #fff;
+      padding: 20px;
+      border-top: 2px solid #b3c900;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+      min-width: 240px;
+      z-index: 999;
+
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    nav li:hover .dropdown {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .dropdown a {
+      display: block;
+      padding: 8px 0;
+      color: #000;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .dropdown a:hover {
+      color: #b3c900;
+    }
+
+    .right-menu {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 16px;
+    }
+
+    .right-menu button,
+    .right-menu select {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .right-menu select {
+      border-left: 1px solid #ccc;
+      padding-left: 12px;
+      margin-left: 12px;
+      appearance: none;
+      background: none;
+    }
+
+    .icon-search {
+      width: 20px;
+      height: 20px;
+      stroke: black;
+      stroke-width: 2;
+      cursor: pointer;
+    }
+
+    .flag {
+      width: 20px;
+      height: 14px;
+      border-radius: 2px;
+      overflow: hidden;
+      box-shadow: 0 0 2px rgba(0,0,0,0.15);
+    }
+
+    .flag img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #userArea {
+      display: flex;
+      align-items: center;
+    }
+    #userArea a {
+      padding: 8px 14px;
+      border: 1px solid #7ad30d;
+      border-radius: 6px;
+      color: #6dd808;
+      text-decoration: none;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    /* фикс перекрытия */
+    .hero {
+      padding-top: 80px; /* отступ равен высоте header */
+    }
+
+    main {
+      height: 2000px;
+      background: linear-gradient(to bottom, #f9f9f9, #e1e1e1);
+      padding: 40px;
+    }
+  </style>
+
+<header>
+  <div class="logo">
+    <a href="index.html">
+      <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
+    </a>
+  </div>
+
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Покупка и управление</a>
+        <div class="dropdown">
+          <a href="bilet.html">Купить билет</a>
+          <a href="auth.html">Управление бронированием</a>
+          <a href="arrivel.html">Направления</a>
+          <a href="HOTEL.html">Отели</a>
+          <a href="class.html">Выбор класса</a>
+        </div>
+      </li>
+      <li>
+        <a href="priority.html">S7avelii Priority</a>
+        <div class="dropdown">
+          <a href="priority.html">О программе</a>
+          <a href="https://t.me/s7aveliihelper">Как копить</a>
+        </div>
+      </li>
+      <li>
+        <a href="#">Информация</a>
+        <div class="dropdown">
+          <a href="body.html">О нас</a>
+          <a href="office.html">Представительство</a>
+          <a href="plane.html">Наш флот</a>
+          <a href="eat.html">Питание</a>
+          <a href="https://t.me/s7aveliihelper">Контакты</a>
+        </div>
+      </li>
+      <li><a href="busines.html">Бизнесу</a></li>
+      <li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
+    </ul>
+  </nav>
+
+  <div class="right-menu">
+    <button aria-label="Search">
+      <circle cx="11" cy="11" r="7"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </button>
+    <button>RUB</button>
+    <div class="flag" title="Russian flag">
+      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" />
+    </div>
+    <div id="userArea"></div>
+  </div>
+
+  <div id="userArea"></div>
+  </div>
+</header>
+
+<script>
+  const API = 'https://s7avelii-airlines-1.onrender.com';
+
+  async function updateUserArea() {
+    const userArea = document.getElementById('userArea');
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      userArea.innerHTML = `
+        <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
+          Войти
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
+          </svg>
+        </a>
+      `;
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API}/api/profile`, {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+
+      if (!res.ok) throw new Error('Не авторизован');
+
+      const data = await res.json();
+      const user = data.user || data;
+
+      const avatar = user.avatar ? 
+        (user.avatar.startsWith('http') ? user.avatar : API + user.avatar) : 
+        'images/default-avatar.png';
+      const fioParts = (user.fio || 'Профиль').split(' ');
+      const name = fioParts[0] || 'Профиль';
+      const surnameInitial = fioParts[1] ? fioParts[1][0] + '.' : '';
+
+      // Универсальный поиск поля с милями
+      const miles = user.miles ?? user.miles_balance ?? user.bonus_miles ?? user.points ?? data.miles ?? 0;
+
+      // 🟢 путь к иконке миль — просто подставь свой
+      const mileIcon = 'images/1761237779917.avif';
+
+      userArea.innerHTML = `
+        <div class="flex items-center bg-white border rounded-2xl px-3 py-1.5 cursor-pointer hover:shadow-sm transition"
+             onclick="window.location.href='cabinet.html'">
+          <img src="${avatar}" alt="avatar" 
+            class="w-8 h-8 rounded-full object-cover mr-2 border">
+          <div class="flex flex-col mr-3">
+            <span class="text-sm font-semibold leading-tight">${name} ${surnameInitial}</span>
+            <span class="text-xs text-gray-500 flex items-center gap-1">
+              ${Number(miles).toLocaleString()}
+              <img src="${mileIcon}" alt="M" class="w-3 h-3 object-contain inline-block" />
+            </span>
+          </div>
+        </div>
+      `;
+    } catch (err) {
+      console.warn(err);
+      localStorage.removeItem('token');
+      userArea.innerHTML = `
+        <a href="auth.html" class="flex items-center gap-1 px-4 py-2 rounded-xl border text-sm font-semibold">
+          Войти
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zM12 12a4 4 0 100-8 4 4 0 000 8z"/>
+          </svg>
+        </a>
+      `;
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', updateUserArea);
+  window.__S7_UPDATE_USER_AREA = updateUserArea;
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 <style>
 /* ---------- Стили виджета (всплывающее окно) ---------- */
 :root{
