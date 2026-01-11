@@ -15,6 +15,42 @@
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+
+/* ПК адаптация */
+@media (min-width: 1024px) {
+
+  /* Главный контейнер мобильной версии */
+  .w-full.max-w-md {
+    max-width: 1200px;  /* растягиваем на ПК */
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  /* Сетка карточек */
+  .grid.grid-cols-2 {
+    grid-template-columns: repeat(4, 1fr); /* 4 колонки на ПК */
+    gap: 24px;
+  }
+
+  /* Увеличиваем аватар */
+  #avatarWrap {
+    width: 160px;
+    height: 160px;
+  }
+
+  /* Имя крупнее */
+  #fioHeader {
+    font-size: 36px;
+    text-align: left;
+  }
+
+  /* Промокод и блок баланса растягиваем */
+  #promoBlock, #cartItems, .mx-auto.w-full.max-w-[320px] {
+    max-width: 100%;
+  }
+}
+
+  
   *, *::before, *::after {
     box-sizing: border-box;
   }
