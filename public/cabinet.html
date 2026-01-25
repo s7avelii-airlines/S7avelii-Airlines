@@ -270,75 +270,10 @@
       </div>
     </div>
 
-<div class="w-full max-w-md mx-auto px-4 pb-24 space-y-4">
-
-  <!-- ===== FAMILY ACCOUNT ===== -->
-  <div class="bg-white rounded-2xl p-4 flex items-center justify-between shadow-sm">
-    <div class="pr-3">
-      <div class="font-semibold text-sm text-gray-900">
-        Создайте семейный счёт
-      </div>
-      <div class="text-xs text-gray-500 mt-1 leading-snug">
-        Объединяйтесь — копите мили вместе с близкими и друзьями
-      </div>
-      <button class="mt-3 text-xs font-semibold bg-gray-100 px-3 py-1 rounded-xl">
-        Подробнее
-      </button>
-    </div>
-    <img src="images/family.png" class="w-14 h-14 shrink-0" alt="">
-  </div>
-
-  <!-- ===== TOP GRID ===== -->
-  <div class="grid grid-cols-4 gap-3">
-
-    <!-- BALANCE -->
-    <div class="bg-white rounded-2xl p-4 shadow-sm col-span-1 flex flex-col justify-between">
-      <div class="text-xs text-gray-400">Баланс</div>
-      <div class="text-lg font-extrabold mt-1" id="bonusMiles">0</div>
-      <div class="mt-2 text-lime-500 font-bold text-xl">М</div>
-    </div>
-
-    <!-- ACTIONS -->
-    <div class="col-span-3 grid grid-cols-3 gap-3">
-
-      <!-- Управлять -->
-      <div class="bg-white rounded-2xl p-4 shadow-sm relative cursor-pointer open-loyalty-modal">
-        <img src="images/manage.png" class="w-8 h-8 absolute right-3 bottom-3" alt="">
-        <div class="text-sm font-semibold leading-tight">
-          Управлять<br>милями
-        </div>
-        <div class="text-xs text-gray-500 mt-1">
-          Купить или перевести
-        </div>
-      </div>
-
-      <!-- Пожертвовать -->
-      <div class="bg-white rounded-2xl p-4 shadow-sm relative cursor-pointer">
-        <img src="images/donate.png" class="w-8 h-8 absolute right-3 bottom-3" alt="">
-        <div class="text-sm font-semibold leading-tight">
-          Пожертвовать<br>мили
-        </div>
-        <div class="text-xs text-gray-500 mt-1">
-          Поддержать фонды
-        </div>
-      </div>
-
-      <!-- Узнать -->
-      <div class="bg-white rounded-2xl p-4 shadow-sm relative cursor-pointer open-accrual-modal">
-        <img src="images/info.png" class="w-8 h-8 absolute right-3 bottom-3" alt="">
-        <div class="text-sm font-semibold leading-tight">
-          Узнать<br>о милях
-        </div>
-        <div class="text-xs text-gray-500 mt-1">
-          Как копить и тратить
-        </div>
-      </div>
-
-    </div>
-  </div>
+<div class="grid grid-cols-2 gap-4">
 
   <!-- ===== ACCRUALS ===== -->
-  <div class="bg-white rounded-2xl p-4 shadow-sm">
+  <div class="bg-white rounded-2xl p-4 shadow-sm flex flex-col">
     <div class="flex justify-between items-center text-sm font-semibold mb-3">
       Начисления и списания
       <span class="text-gray-300 text-lg">›</span>
@@ -372,14 +307,14 @@
   </div>
 
   <!-- ===== PARTNERS ===== -->
-  <div class="bg-white rounded-2xl p-4 shadow-sm">
+  <div class="bg-white rounded-2xl p-4 shadow-sm flex flex-col">
     <div class="flex justify-between items-center text-sm font-semibold mb-3">
       Мили от партнёров
       <span class="text-gray-300 text-lg">›</span>
     </div>
 
-    <div class="flex gap-3 overflow-x-auto pb-1">
-      <div class="min-w-[160px]">
+    <div class="flex gap-3 overflow-x-auto">
+      <div class="min-w-[140px]">
         <img src="images/tripster.png" class="rounded-xl mb-2 w-full" alt="">
         <div class="text-sm font-semibold">Необычные экскурсии</div>
         <div class="text-xs text-gray-500">
@@ -387,7 +322,7 @@
         </div>
       </div>
 
-      <div class="min-w-[160px]">
+      <div class="min-w-[140px]">
         <img src="images/airo.png" class="rounded-xl mb-2 w-full" alt="">
         <div class="text-sm font-semibold">Уборка и химчистка</div>
         <div class="text-xs text-gray-500">
@@ -399,7 +334,6 @@
 
 </div>
 
-</div>
 
   <script>
 (async function initMilesUI(){
