@@ -288,22 +288,20 @@
     <img src="images/family.png" class="w-20 h-20" alt="">
   </div>
 
-  <!-- ===== TOP ROW ===== -->
-  <div class="grid grid-cols-4 gap-4">
+  <!-- ===== HORIZONTAL CARDS ===== -->
+  <div class="flex gap-4 overflow-x-auto pb-1">
 
     <!-- BALANCE -->
-    <div class="bg-white rounded-3xl p-5 flex flex-col justify-between">
-      <img src="images/m.png" class="w-12 h-12 mb-4" alt="">
+    <div class="min-w-[180px] bg-white rounded-3xl p-5 shrink-0">
+      <img src="images/m.png" class="w-14 h-14 mb-4" alt="">
       <div class="text-sm text-gray-400">Баланс</div>
-      <div class="text-2xl font-extrabold mt-1" id="bonusMiles">
-        1 598 М
-      </div>
+      <div class="text-2xl font-extrabold mt-1" id="bonusMiles">0</div>
     </div>
 
-    <!-- Управлять -->
-    <div class="bg-white rounded-3xl p-5">
-      <img src="images/manage.png" class="w-14 h-14 mb-4" alt="">
-      <div class="text-base font-semibold">
+    <!-- MANAGE -->
+    <div class="min-w-[220px] bg-white rounded-3xl p-5 shrink-0 open-loyalty-modal">
+      <img src="images/manage.png" class="w-16 h-16 mb-4" alt="">
+      <div class="text-lg font-semibold">
         Управлять милями
       </div>
       <div class="text-sm text-gray-500 mt-1">
@@ -311,10 +309,10 @@
       </div>
     </div>
 
-    <!-- Пожертвовать -->
-    <div class="bg-white rounded-3xl p-5">
-      <img src="images/donate.png" class="w-14 h-14 mb-4" alt="">
-      <div class="text-base font-semibold">
+    <!-- DONATE -->
+    <div class="min-w-[220px] bg-white rounded-3xl p-5 shrink-0">
+      <img src="images/donate.png" class="w-16 h-16 mb-4" alt="">
+      <div class="text-lg font-semibold">
         Пожертвовать мили
       </div>
       <div class="text-sm text-gray-500 mt-1">
@@ -322,10 +320,10 @@
       </div>
     </div>
 
-    <!-- Узнать -->
-    <div class="bg-white rounded-3xl p-5">
-      <img src="images/info.png" class="w-14 h-14 mb-4" alt="">
-      <div class="text-base font-semibold">
+    <!-- INFO -->
+    <div class="min-w-[220px] bg-white rounded-3xl p-5 shrink-0 open-accrual-modal">
+      <img src="images/info.png" class="w-16 h-16 mb-4" alt="">
+      <div class="text-lg font-semibold">
         Узнать о милях
       </div>
       <div class="text-sm text-gray-500 mt-1">
@@ -350,7 +348,7 @@
       <div class="space-y-4">
         <div class="flex justify-between items-center">
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center font-bold">+</div>
+            <div class="w-9 h-9 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center text-lg font-bold">+</div>
             <span class="text-base">Начисление</span>
           </div>
           <span class="text-base font-semibold">+158 М</span>
@@ -358,7 +356,7 @@
 
         <div class="flex justify-between items-center border-t pt-4">
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center font-bold">+</div>
+            <div class="w-9 h-9 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center text-lg font-bold">+</div>
             <span class="text-base">Начисление</span>
           </div>
           <span class="text-base font-semibold">+86 М</span>
@@ -366,7 +364,7 @@
 
         <div class="flex justify-between items-center border-t pt-4">
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center font-bold">+</div>
+            <div class="w-9 h-9 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center text-lg font-bold">+</div>
             <span class="text-base">Начисление</span>
           </div>
           <span class="text-base font-semibold">+179 М</span>
@@ -409,6 +407,7 @@
   </div>
 
 </div>
+
 
   <script>
 (async function initMilesUI(){
