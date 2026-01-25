@@ -585,6 +585,86 @@
   </div>
 
 </div>
+<script>
+(function () {
+  // ===== LOCAL CONFIG (НЕ ГЛОБАЛЬНО) =====
+  const BASE_API = "https://s7avelii-airlines-1.onrender.com";
+
+  function getTokenSafe() {
+    try {
+      return localStorage.getItem('token');
+    } catch {
+      return null;
+    }
+  }
+
+  async function safeFetch(endpoint, options = {}) {
+    const token = getTokenSafe();
+    options.headers = { ...(options.headers || {}) };
+
+    if (token) {
+      options.headers.Authorization = 'Bearer ' + token;
+    }
+
+    if (options.body && typeof options.body === 'object') {
+      options.headers['Content-Type'] = 'application/json';
+      options.body = JSON.stringify(options.body);
+    }
+
+    const res = await fetch(BASE_API + endpoint, options);
+
+    let data = null;
+    try {
+      const text = await res.text();
+      data = text ? JSON.parse(text) : null;
+    } catch {
+      data = null;
+    }
+
+    if (!res.ok) {
+      throw { status: res.status, data };
+    }
+
+    return data;
+  }
+
+  // ===== UI LOGIC =====
+  window.addCompanionSafe = async function (type) {
+    const phone = prompt(`Введите номер (${type})`);
+    if (!phone) return;
+
+    try {
+      const result = await safeFetch('/companions/add', {
+        method: 'POST',
+        body: { phone }
+      });
+
+      renderSafe(type, phone, result?.status || 'pending');
+    } catch (e) {
+      console.error('Add companion error:', e);
+      alert('Не удалось добавить попутчика');
+    }
+  };
+
+  function renderSafe(type, phone, status) {
+    const list = document.getElementById('companionsList');
+    if (!list) return;
+
+    const item = document.createElement('div');
+    item.className =
+      'bg-white rounded-2xl px-4 py-3 flex justify-between items-center';
+
+    item.innerHTML = `
+      <div class="text-sm">${type} · ${phone}</div>
+      <div class="text-xs text-gray-500">
+        ${status === 'linked' ? 'Добавлен' : 'Ожидает'}
+      </div>
+    `;
+
+    list.appendChild(item);
+  }
+})();
+</script>
 
     <!-- Telegram promo card -->
     <div class="mt-4">
