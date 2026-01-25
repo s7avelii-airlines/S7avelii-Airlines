@@ -270,70 +270,145 @@
       </div>
     </div>
 
-<div class="grid grid-cols-2 gap-4">
+<div class="w-full max-w-md mx-auto px-4 pb-24 space-y-5 bg-[#F4F6F8]">
 
-  <!-- ===== ACCRUALS ===== -->
-  <div class="bg-white rounded-2xl p-4 shadow-sm flex flex-col">
-    <div class="flex justify-between items-center text-sm font-semibold mb-3">
-      Начисления и списания
-      <span class="text-gray-300 text-lg">›</span>
+  <!-- ===== FAMILY ===== -->
+  <div class="bg-white rounded-3xl p-5 flex items-center justify-between">
+    <div class="max-w-[65%]">
+      <div class="text-base font-semibold text-gray-900">
+        Создайте семейный счёт
+      </div>
+      <div class="text-sm text-gray-500 mt-1 leading-snug">
+        Объединяйтесь — копите мили вместе с близкими и друзьями
+      </div>
+      <button class="mt-4 text-sm font-semibold bg-gray-100 px-4 py-2 rounded-2xl">
+        Подробнее
+      </button>
     </div>
-
-    <div class="space-y-3 text-sm">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-2">
-          <div class="w-6 h-6 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center text-xs font-bold">+</div>
-          Начисление
-        </div>
-        <div class="font-semibold">+158 М</div>
-      </div>
-
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-2">
-          <div class="w-6 h-6 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center text-xs font-bold">+</div>
-          Начисление
-        </div>
-        <div class="font-semibold">+86 М</div>
-      </div>
-
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-2">
-          <div class="w-6 h-6 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center text-xs font-bold">+</div>
-          Начисление
-        </div>
-        <div class="font-semibold">+179 М</div>
-      </div>
-    </div>
+    <img src="images/family.png" class="w-20 h-20" alt="">
   </div>
 
-  <!-- ===== PARTNERS ===== -->
-  <div class="bg-white rounded-2xl p-4 shadow-sm flex flex-col">
-    <div class="flex justify-between items-center text-sm font-semibold mb-3">
-      Мили от партнёров
-      <span class="text-gray-300 text-lg">›</span>
-    </div>
+  <!-- ===== TOP ROW ===== -->
+  <div class="grid grid-cols-4 gap-4">
 
-    <div class="flex gap-3 overflow-x-auto">
-      <div class="min-w-[140px]">
-        <img src="images/tripster.png" class="rounded-xl mb-2 w-full" alt="">
-        <div class="text-sm font-semibold">Необычные экскурсии</div>
-        <div class="text-xs text-gray-500">
-          Получайте мили за каждое бронирование
-        </div>
-      </div>
-
-      <div class="min-w-[140px]">
-        <img src="images/airo.png" class="rounded-xl mb-2 w-full" alt="">
-        <div class="text-sm font-semibold">Уборка и химчистка</div>
-        <div class="text-xs text-gray-500">
-          Скидка 20% на первый заказ
-        </div>
+    <!-- BALANCE -->
+    <div class="bg-white rounded-3xl p-5 flex flex-col justify-between">
+      <img src="images/m.png" class="w-12 h-12 mb-4" alt="">
+      <div class="text-sm text-gray-400">Баланс</div>
+      <div class="text-2xl font-extrabold mt-1" id="bonusMiles">
+        1 598 М
       </div>
     </div>
+
+    <!-- Управлять -->
+    <div class="bg-white rounded-3xl p-5">
+      <img src="images/manage.png" class="w-14 h-14 mb-4" alt="">
+      <div class="text-base font-semibold">
+        Управлять милями
+      </div>
+      <div class="text-sm text-gray-500 mt-1">
+        Купить или перевести
+      </div>
+    </div>
+
+    <!-- Пожертвовать -->
+    <div class="bg-white rounded-3xl p-5">
+      <img src="images/donate.png" class="w-14 h-14 mb-4" alt="">
+      <div class="text-base font-semibold">
+        Пожертвовать мили
+      </div>
+      <div class="text-sm text-gray-500 mt-1">
+        Поддержать работу фондов
+      </div>
+    </div>
+
+    <!-- Узнать -->
+    <div class="bg-white rounded-3xl p-5">
+      <img src="images/info.png" class="w-14 h-14 mb-4" alt="">
+      <div class="text-base font-semibold">
+        Узнать о милях
+      </div>
+      <div class="text-sm text-gray-500 mt-1">
+        Как копить и на что тратить
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== BOTTOM ROW ===== -->
+  <div class="grid grid-cols-2 gap-5">
+
+    <!-- ACCRUALS -->
+    <div class="bg-white rounded-3xl p-5">
+      <div class="flex justify-between items-center mb-4">
+        <div class="text-base font-semibold">
+          Начисления и списания
+        </div>
+        <span class="text-gray-300 text-2xl">›</span>
+      </div>
+
+      <div class="space-y-4">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center font-bold">+</div>
+            <span class="text-base">Начисление</span>
+          </div>
+          <span class="text-base font-semibold">+158 М</span>
+        </div>
+
+        <div class="flex justify-between items-center border-t pt-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center font-bold">+</div>
+            <span class="text-base">Начисление</span>
+          </div>
+          <span class="text-base font-semibold">+86 М</span>
+        </div>
+
+        <div class="flex justify-between items-center border-t pt-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center font-bold">+</div>
+            <span class="text-base">Начисление</span>
+          </div>
+          <span class="text-base font-semibold">+179 М</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PARTNERS -->
+    <div class="bg-white rounded-3xl p-5">
+      <div class="flex justify-between items-center mb-4">
+        <div class="text-base font-semibold">
+          Мили от партнёров
+        </div>
+        <span class="text-gray-300 text-2xl">›</span>
+      </div>
+
+      <div class="flex gap-4 overflow-x-auto">
+        <div class="min-w-[180px]">
+          <img src="images/tripster.png" class="rounded-2xl mb-3 w-full" alt="">
+          <div class="text-base font-semibold">
+            Необычные экскурсии
+          </div>
+          <div class="text-sm text-gray-500 mt-1">
+            Получайте мили за каждое бронирование
+          </div>
+        </div>
+
+        <div class="min-w-[180px]">
+          <img src="images/airo.png" class="rounded-2xl mb-3 w-full" alt="">
+          <div class="text-base font-semibold">
+            Уборка и химчистка
+          </div>
+          <div class="text-sm text-gray-500 mt-1">
+            Скидка 20% на первый заказ
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </div>
-
 
   <script>
 (async function initMilesUI(){
