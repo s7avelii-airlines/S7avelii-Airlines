@@ -270,91 +270,88 @@
       </div>
     </div>
 
-   <div class="w-full max-w-md mx-auto px-4 pb-24">
+ <div class="w-full max-w-md mx-auto px-4 pb-24">
 
-  <!-- ====== TOP BANNER ====== -->
+  <!-- ====== FAMILY ACCOUNT BANNER ====== -->
   <div class="bg-white rounded-2xl p-4 flex items-center justify-between shadow-sm mb-4">
     <div>
-      <div class="font-semibold text-gray-900">Создайте семейный счёт</div>
-      <div class="text-sm text-gray-500 mt-1">
-        Объединяйтесь — копите мили вместе с близкими и друзьями
-      </div>
-      <button class="mt-3 text-sm font-semibold bg-gray-100 px-4 py-2 rounded-xl">
-        Подробнее
-      </button>
+      <div class="font-semibold text-gray-900 text-sm">Создайте семейный счёт</div>
+      <div class="text-xs text-gray-500 mt-1">Объединяйтесь — копите мили вместе с близкими и друзьями</div>
+      <button class="mt-3 text-xs font-semibold bg-gray-100 px-3 py-1 rounded-xl">Подробнее</button>
     </div>
-    <img src="images/family.avif" class="w-16 h-16" />
+    <img src="images/family.png" class="w-12 h-12" alt="family icon">
   </div>
 
   <!-- ====== BALANCE ====== -->
   <div class="bg-white rounded-2xl p-4 shadow-sm mb-4">
-    <div class="text-sm text-gray-500">Баланс</div>
-    <div class="flex items-end gap-1 mt-2">
-      <div id="bonusMiles" class="text-2xl font-extrabold">0</div>
-      <div class="text-xl font-bold text-lime-500">М</div>
+    <div class="flex items-center justify-between">
+      <div>
+        <div class="text-xs text-gray-400">ваш баланс</div>
+        <div id="bonusMiles" class="text-lg font-extrabold mt-1">0</div>
+      </div>
+      <div class="text-2xl font-bold text-lime-500">М</div>
     </div>
   </div>
 
-  <!-- ====== ACTIONS ====== -->
+  <!-- ====== ACTION CARDS ====== -->
   <div class="grid grid-cols-2 gap-3 mb-4">
 
-    <!-- Управлять -->
-    <div class="bg-white rounded-2xl p-4 shadow-sm cursor-pointer open-loyalty-modal">
-      <img src="images/manage.avif" class="w-10 h-10 mb-3" />
-      <div class="font-semibold text-sm">Управлять милями</div>
-      <div class="text-xs text-gray-500 mt-1">Купить или перевести</div>
+    <!-- Управлять милями -->
+    <div class="bg-white rounded-2xl p-4 shadow-sm cursor-pointer open-loyalty-modal relative">
+      <img src="images/manage.png" class="w-8 h-8 absolute bottom-2 right-2" alt="manage icon">
+      <div class="text-xs text-gray-400">Управлять</div>
+      <div class="text-sm font-semibold mt-1">милиями</div>
     </div>
 
     <!-- Пожертвовать -->
-    <div class="bg-white rounded-2xl p-4 shadow-sm cursor-pointer">
-      <img src="images/donate.avif" class="w-10 h-10 mb-3" />
-      <div class="font-semibold text-sm">Пожертвовать мили</div>
-      <div class="text-xs text-gray-500 mt-1">Поддержать фонды</div>
+    <div class="bg-white rounded-2xl p-4 shadow-sm cursor-pointer relative">
+      <img src="images/donate.png" class="w-8 h-8 absolute bottom-2 right-2" alt="donate icon">
+      <div class="text-xs text-gray-400">Пожертвовать</div>
+      <div class="text-sm font-semibold mt-1">мили</div>
     </div>
 
-    <!-- Узнать -->
-    <div class="bg-white rounded-2xl p-4 shadow-sm cursor-pointer open-accrual-modal">
-      <img src="images/info.avif" class="w-10 h-10 mb-3" />
-      <div class="font-semibold text-sm">Узнать о милях</div>
-      <div class="text-xs text-gray-500 mt-1">Как копить и тратить</div>
+    <!-- Узнать о милях -->
+    <div class="bg-white rounded-2xl p-4 shadow-sm cursor-pointer open-accrual-modal relative">
+      <img src="images/info.png" class="w-8 h-8 absolute bottom-2 right-2" alt="info icon">
+      <div class="text-xs text-gray-400">Узнать</div>
+      <div class="text-sm font-semibold mt-1">о милях</div>
     </div>
 
-    <!-- Карта -->
-    <div class="bg-white rounded-2xl p-4 shadow-sm cursor-pointer open-loyalty-modal">
-      <img src="images/card.avif" class="w-10 h-10 mb-3" />
-      <div class="font-semibold text-sm">Моя карта</div>
-      <div class="text-xs text-gray-500 mt-1" id="status_label"></div>
+    <!-- Моя карта -->
+    <div class="bg-white rounded-2xl p-4 shadow-sm cursor-pointer open-loyalty-modal relative">
+      <img src="images/card.png" class="w-8 h-8 absolute bottom-2 right-2" alt="card icon">
+      <div class="text-xs text-gray-400">Моя карта</div>
+      <div class="text-sm font-semibold mt-1" id="status_label">Загрузка...</div>
     </div>
-
   </div>
 
   <!-- ====== ACCRUAL LIST ====== -->
   <div class="bg-white rounded-2xl p-4 shadow-sm mb-4">
-    <div class="font-semibold mb-3 flex items-center justify-between">
+    <div class="flex justify-between items-center font-semibold mb-3 text-sm">
       Начисления и списания
-      <span class="text-gray-400">›</span>
+      <span class="text-gray-300">›</span>
     </div>
 
-    <div class="space-y-3 text-sm">
-      <div class="flex items-center justify-between">
+    <div class="space-y-2 text-sm">
+      <div class="flex justify-between items-center">
         <div class="flex items-center gap-2">
-          <div class="w-6 h-6 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center">+</div>
+          <div class="w-5 h-5 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center text-xs">+</div>
           <span>Начисление</span>
         </div>
         <span class="font-semibold">+158 М</span>
       </div>
 
-      <div class="flex items-center justify-between">
+      <div class="flex justify-between items-center">
         <div class="flex items-center gap-2">
-          <div class="w-6 h-6 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center">+</div>
+          <div class="w-5 h-5 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center text-xs">+</div>
           <span>Начисление</span>
         </div>
         <span class="font-semibold">+86 М</span>
       </div>
 
-      <div class="flex items-center justify-between">
+      <div class="flex justify-between items-center">
         <div class="flex items-center gap-2">
-          <div class="w-6 h-6 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center">+</div>
+          <div class="w-5 h-5 rounded-full bg-lime-100 text-lime-600 flex items-center justify-center text-xs">+</div>
           <span>Начисление</span>
         </div>
         <span class="font-semibold">+179 М</span>
@@ -364,27 +361,28 @@
 
   <!-- ====== PARTNERS ====== -->
   <div class="bg-white rounded-2xl p-4 shadow-sm">
-    <div class="font-semibold mb-3 flex items-center justify-between">
+    <div class="flex justify-between items-center font-semibold mb-3 text-sm">
       Мили от партнёров
-      <span class="text-gray-400">›</span>
+      <span class="text-gray-300">›</span>
     </div>
 
     <div class="flex gap-3 overflow-x-auto">
       <div class="min-w-[140px]">
-        <img src="images/tripster.avif" class="rounded-xl mb-2" />
+        <img src="images/tripster.png" class="rounded-xl mb-2 w-full" alt="tripster">
         <div class="text-sm font-semibold">Необычные экскурсии</div>
         <div class="text-xs text-gray-500">Мили за бронирование</div>
       </div>
 
       <div class="min-w-[140px]">
-        <img src="images/airo.avif" class="rounded-xl mb-2" />
+        <img src="images/airo.png" class="rounded-xl mb-2 w-full" alt="airo">
         <div class="text-sm font-semibold">Уборка и химчистка</div>
-        <div class="text-xs text-gray-500">Скидка 20%</div>
+        <div class="text-xs text-gray-500">Скидка 20% на первый заказ</div>
       </div>
     </div>
   </div>
 
 </div>
+
   <script>
 (async function initMilesUI(){
   try {
