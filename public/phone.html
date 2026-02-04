@@ -46,19 +46,17 @@ body {
   background: linear-gradient(90deg, #ffffff 0%, #f5f5f5 100%);
 }
 
-/* ===== MOBILE WRAPPER (FIX) ===== */
+/* ===== MOBILE WRAPPER (FINAL) ===== */
 .mobile-wrapper {
   width: 100%;
-  max-width: 430px;          /* максимум, а не фикс */
+  max-width: 430px;
   margin: 0 auto;
 
-  min-height: 100svh;        /* ВАЖНО */
+  min-height: 100dvh;          /* КЛЮЧЕВО */
   background: #f5f5f6;
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
 
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-
+  padding-bottom: env(safe-area-inset-bottom); /* ТОЛЬКО НИЗ */
   overflow-x: hidden;
 }
 
