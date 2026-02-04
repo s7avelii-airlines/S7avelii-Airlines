@@ -2,7 +2,9 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover">
+
   <title>Купить онлайн продукцию S7avelii Airlines</title>
 <link rel="icon" href="images/IMG_20260111_155539.avif" sizes="180x180" type="image/png">
 <link rel="icon" href="images/IMG_20260111_155539.avif" sizes="256x256" type="image/png">
@@ -37,18 +39,29 @@
   }
   </style>
    <style>
- /* Body background */
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(90deg, #ffffff 0%, #f5f5f5 100%);
-    }
-    .mobile-wrapper {
-      width: 430px;
-      min-height: 100vh;
-      background: #f5f5f6;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
+ /* ===== BODY ===== */
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(90deg, #ffffff 0%, #f5f5f5 100%);
+}
+
+/* ===== MOBILE WRAPPER (FIX) ===== */
+.mobile-wrapper {
+  width: 100%;
+  max-width: 430px;          /* максимум, а не фикс */
+  margin: 0 auto;
+
+  min-height: 100svh;        /* ВАЖНО */
+  background: #f5f5f6;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+
+  overflow-x: hidden;
+}
+
   </style>
 </head>
 
