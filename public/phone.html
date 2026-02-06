@@ -694,110 +694,120 @@ function escapeHtml(u){ if(u==null) return ""; return String(u).replace(/&/g,'&a
     <div class="h-20"></div>
 <style>
   .slider-container {
-    position: relative;
-    width: 100%;
-    max-width: 400px;
-    height: 370px;
-    overflow: hidden;
-    border-radius: 16px;
-    margin: 20px auto;
-  }
+  position: relative;
+  max-width: 390px;
+  height: 360px;
+  margin: 20px auto;
+  border-radius: 22px;
+  overflow: hidden;
+}
 
-  .slide {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 1s;
-  }
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity .8s ease;
+  text-decoration: none;
+  color: #000;
+}
 
-  .slide.active {
-    opacity: 1;
-  }
+.slide.active {
+  opacity: 1;
+  z-index: 1;
+}
 
-  .slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-  .slide-text {
-    position: absolute;
-    bottom: 60px;
-    left: 20px;
-    color: white;
-    font-size: 20px;
-    font-weight: 700;
-    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
-  }
+.slide-content {
+  position: absolute;
+  inset: 0;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
 
-  .slide-btn {
-    position: absolute;
-    bottom: 15px;
-    left: 15px;
-    background: rgba(0,0,0,0.55);
-    color: white;
-    padding: 8px 14px;
-    border-radius: 10px;
-    font-size: 14px;
-    text-decoration: none;
-    backdrop-filter: blur(4px);
-    transition: background .3s;
-  }
+.slide-title {
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
 
-  .slide-btn:hover {
-    background: rgba(0,0,0,0.75);
-  }
+.slide-btn {
+  align-self: flex-start;
+  background: #fff;
+  color: #000;
+  padding: 10px 18px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 500;
+}
 
-  .dots {
-    position: absolute;
-    bottom: 12px;
-    right: 15px;
-    display: flex;
-    gap: 6px;
-    z-index: 10;
-  }
+/* точки */
+.dots {
+  position: absolute;
+  bottom: 18px;
+  left: 18px;
+  display: flex;
+  gap: 8px;
+  z-index: 5;
+}
 
-  .dot {
-    width: 10px;
-    height: 10px;
-    background: white;
-    opacity: 0.4;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: opacity 0.3s;
-  }
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.4);
+  cursor: pointer;
+}
 
-  .dot.active {
-    opacity: 1;
-  }
+.dot.active {
+  background: #fff;
+}
+
 </style>
 
 <div class="slider-container">
 
-  <!-- СЛАЙД 1 -->
-  <div class="slide active">
-    <img src="images/воблакахуспехмобила.avif">
-    <div class="slide-text"></div>
-    <a href="nebo.html" class="slide-btn">Подробнее</a>
-  </div>
+  <a class="slide active" href="nebo.html">
+    <img src="images/приложениеслайда.avif" alt="">
+    <div class="slide-content">
+      <div class="slide-title"><br></div>
+      <span class="slide-btn">Скачать</span>
+    </div>
+  </a>
 
-  <!-- СЛАЙД 3 -->
-  <div class="slide">
-    <img src="images/ва.avif">
-    <div class="slide-text"></div>
-    <a href="busines.html" class="slide-btn">Подробнее</a>
-  </div>
+ 
+  <a class="slide active" href="nebo.html">
+    <img src="images/увеличениеколичестваполётов.avif" alt="">
+    <div class="slide-content">
+      <div class="slide-title"><br></div>
+      <span class="slide-btn">Подробнее</span>
+    </div>
+  </a>
 
-  <!-- СЛАЙД 4 -->
-  <div class="slide">
-    <img src="images/вайвай.avif">
-    <div class="slide-text"></div>
-    <a href="priority.html" class="slide-btn">Подробнее</a>
-  </div>
+  <a class="slide" href="priority.html">
+    <img src="images/прайоретенаслайд.avif" alt="">
+    <div class="slide-content">
+      <div class="slide-title"> </div>
+      <span class="slide-btn">Подробнее</span>
+    </div>
+  </a>
 
-  <!-- точки -->
+  <a class="slide" href="busines.html">
+    <img src="images/ва.avif" alt="">
+    <div class="slide-content">
+      <div class="slide-title"> </div>
+      <span class="slide-btn">Подробнее</span>
+    </div>
+  </a>
+
   <div class="dots"></div>
 </div>
 
@@ -807,10 +817,9 @@ function escapeHtml(u){ if(u==null) return ""; return String(u).replace(/&/g,'&a
   let current = 0;
 
   slides.forEach((_, i) => {
-    let dot = document.createElement("div");
-    dot.classList.add("dot");
-    if (i === 0) dot.classList.add("active");
-    dot.addEventListener("click", () => showSlide(i));
+    const dot = document.createElement("div");
+    dot.className = "dot" + (i === 0 ? " active" : "");
+    dot.onclick = () => showSlide(i);
     dotsContainer.appendChild(dot);
   });
 
@@ -826,12 +835,11 @@ function escapeHtml(u){ if(u==null) return ""; return String(u).replace(/&/g,'&a
     current = i;
   }
 
-  function autoSlide() {
+  setInterval(() => {
     showSlide((current + 1) % slides.length);
-  }
-
-  setInterval(autoSlide, 4000);
+  }, 4500);
 </script>
+
 
 <style>
     body {
