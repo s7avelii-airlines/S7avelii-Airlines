@@ -12,56 +12,82 @@
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-:root { --green:#9cc42f; --green-dark:#8ab12a; }
-* { box-sizing:border-box; font-family:'Open Sans', Arial, sans-serif; }
+:root {
+  --green:#9cc42f;
+  --green-dark:#8ab12a;
+  --text:#111827;
+  --muted:#6b7280;
+  --bg:#f3f4f6;
+}
+
+* {
+  box-sizing:border-box;
+  font-family:'Open Sans', Arial, sans-serif;
+}
 
 body {
   margin:0;
   min-height:100vh;
-  background:#f4f6f8;
+  background:var(--bg);
   display:flex;
   justify-content:center;
   align-items:center;
+  padding:16px;
 }
 
 .card {
   width:100%;
-  max-width:420px;
+  max-width:440px;
   background:#fff;
-  border-radius:16px;
-  padding:24px;
-  box-shadow:0 12px 30px rgba(0,0,0,.15);
+  border-radius:20px;
+  padding:32px;
+  box-shadow:0 20px 40px rgba(0,0,0,.12);
 }
 
 h2 {
-  margin:0 0 10px;
-  font-size:22px;
+  margin:0 0 12px;
+  font-size:28px;
+  font-weight:700;
+  color:var(--text);
 }
 
 .subtitle {
+  font-size:16px;
+  color:var(--muted);
+  line-height:1.4;
+  margin-bottom:24px;
+}
+
+label {
   font-size:14px;
-  color:#6b7280;
-  margin-bottom:16px;
+  color:var(--muted);
+  margin-bottom:6px;
+  display:block;
 }
 
 input, select {
   width:100%;
-  padding:14px;
-  font-size:16px;
-  border-radius:12px;
+  padding:18px;
+  font-size:18px;
+  border-radius:14px;
   border:1px solid #d1d5db;
-  margin-bottom:14px;
+  margin-bottom:18px;
+  outline:none;
+}
+
+input:focus, select:focus {
+  border-color:var(--green);
 }
 
 .btn {
   width:100%;
   background:var(--green);
   color:#fff;
-  padding:14px;
-  border-radius:14px;
+  padding:18px;
+  border-radius:16px;
   border:none;
-  font-size:16px;
-  font-weight:600;
+  font-size:18px;
+  font-weight:700;
   cursor:pointer;
 }
 
@@ -69,9 +95,10 @@ input, select {
 .btn:disabled { opacity:.6; cursor:not-allowed; }
 
 .switch {
-  margin-top:16px;
+  margin-top:22px;
   text-align:center;
-  font-size:14px;
+  font-size:15px;
+  color:var(--muted);
 }
 
 .switch button {
@@ -79,22 +106,40 @@ input, select {
   border:0;
   color:var(--green);
   cursor:pointer;
-  font-weight:600;
+  font-weight:700;
 }
 
-.error { color:#dc2626; font-size:14px; margin-top:10px; }
-.success { color:#16a34a; font-size:14px; margin-top:10px; }
+.error {
+  color:#dc2626;
+  font-size:15px;
+  margin-top:10px;
+}
+
+.success {
+  color:#16a34a;
+  font-size:15px;
+  margin-top:10px;
+}
+
 .hidden { display:none; }
 
-.row { display:flex; gap:10px; flex-wrap:wrap; }
-.half { flex:1; min-width:120px; }
+.row {
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+}
+
+.half {
+  flex:1;
+  min-width:160px;
+}
 
 .card-type {
-  display:inline-flex;
+  display:flex;
   align-items:center;
-  gap:8px;
-  margin-top:8px;
-  margin-right:10px;
+  gap:10px;
+  margin-top:12px;
+  font-size:16px;
 }
 </style>
 </head>
@@ -127,7 +172,7 @@ input, select {
   </div>
 </div>
 
-<!-- ================= РЕГИСТРАЦИЯ (КАК БЫЛА) ================= -->
+<!-- ================= РЕГИСТРАЦИЯ ================= -->
 <div id="registerBlock" class="hidden">
   <h2>Регистрация</h2>
 
@@ -135,7 +180,7 @@ input, select {
   <input id="regEmail" type="email" placeholder="Email">
 
   <div class="row">
-    <div class="half"><input id="regPhone" placeholder="Телефон"></div>
+    <div class="half"><input id="regPhone" type="tel" placeholder="Телефон"></div>
     <div class="half"><input id="regPassword" type="password" placeholder="Пароль (мин. 6)"></div>
   </div>
 
@@ -201,7 +246,7 @@ const loginError = document.getElementById('loginError');
 
 sendCodeBtn.onclick = async () => {
   loginError.textContent = '';
-  const phone = document.getElementById('loginPhone').value.trim();
+  const phone = loginPhone.value.trim();
   if (!phone) return loginError.textContent = 'Введите телефон';
 
   try {
@@ -224,8 +269,8 @@ sendCodeBtn.onclick = async () => {
 
 verifyBtn.onclick = async () => {
   loginError.textContent = '';
-  const phone = document.getElementById('loginPhone').value.trim();
-  const code = document.getElementById('loginCode').value.trim();
+  const phone = loginPhone.value.trim();
+  const code = loginCode.value.trim();
 
   if (!code) return loginError.textContent = 'Введите код';
 
@@ -247,7 +292,7 @@ verifyBtn.onclick = async () => {
 };
 
 // --- РЕГИСТРАЦИЯ ---
-document.getElementById('registerBtn').onclick = async () => {
+registerBtn.onclick = async () => {
   const fio = regFio.value.trim();
   const email = regEmail.value.trim();
   const phone = regPhone.value.trim();
@@ -279,6 +324,7 @@ document.getElementById('registerBtn').onclick = async () => {
   }
 };
 </script>
+
 <script>
 function phoneMask(input) {
   let value = input.value.replace(/\D/g, '');
@@ -286,23 +332,24 @@ function phoneMask(input) {
   if (value.startsWith('8')) value = '7' + value.slice(1);
   if (!value.startsWith('7')) value = '7' + value;
 
-  let formatted = '+7';
+  let result = '+7';
 
-  if (value.length > 1) formatted += ' (' + value.slice(1,4);
-  if (value.length >= 5) formatted += ') ' + value.slice(4,7);
-  if (value.length >= 8) formatted += '-' + value.slice(7,9);
-  if (value.length >= 10) formatted += '-' + value.slice(9,11);
+  if (value.length > 1) result += ' (' + value.slice(1,4);
+  if (value.length >= 5) result += ') ' + value.slice(4,7);
+  if (value.length >= 8) result += '-' + value.slice(7,9);
+  if (value.length >= 10) result += '-' + value.slice(9,11);
 
-  input.value = formatted;
+  input.value = result;
 }
 
 document.querySelectorAll('input[type="tel"]').forEach(input => {
   input.addEventListener('input', () => phoneMask(input));
   input.addEventListener('focus', () => {
-    if (!input.value) input.value = '+7 ';
+    if (!input.value) input.value = '+7 (';
   });
 });
 </script>
 
 </body>
 </html>
+
