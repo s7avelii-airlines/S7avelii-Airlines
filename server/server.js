@@ -8,6 +8,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { Pool } = require('pg');
+const axios = require('axios');
+
 
 dotenv.config();
 
@@ -133,6 +135,11 @@ function normalizePayload(body) {
   return out;
 }
 
+// --- SMS AUTH STORAGE (in-memory, safe for now) ---
+const smsCodes = new Map();
+// phone -> { code, expires }
+
+
 // --- Routes ---
 
 app.get('/api/health', async (req, res) => {
@@ -143,6 +150,74 @@ app.get('/api/health', async (req, res) => {
     res.status(500).json({ ok: false, error: err.message });
   }
 });
+app.post('/api/auth/request-code', async (req, res) => {
+  try {
+    const { phone } = req.body;
+    if (!phone) return res.status(400).json({ error: 'Телефон обязателен' });
+
+    const code = Math.floor(1000 + Math.random() * 9000).toString();
+
+    smsCodes.set(phone, {
+      code,
+      expires: Date.now() + 5 * 60 * 1000
+    });
+
+    await axios.get('https://sms.ru/sms/send', {
+      params: {
+        api_id: process.env.SMS_RU_KEY,
+        to: phone.replace(/\D/g, ''),
+        msg: `S7avelii: код входа ${code}`,
+        json: 1
+      }
+    });
+
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('sms send error', err);
+    res.status(500).json({ error: 'SMS error' });
+  }
+});
+app.post('/api/auth/verify-code', async (req, res) => {
+  try {
+    const { phone, code } = req.body;
+    if (!phone || !code) {
+      return res.status(400).json({ error: 'Телефон и код обязательны' });
+    }
+
+    const record = smsCodes.get(phone);
+    if (!record) return res.status(400).json({ error: 'Код не найден' });
+    if (record.expires < Date.now()) {
+      smsCodes.delete(phone);
+      return res.status(400).json({ error: 'Код истёк' });
+    }
+    if (record.code !== code) {
+      return res.status(400).json({ error: 'Неверный код' });
+    }
+
+    smsCodes.delete(phone);
+
+    // ⬇️ ИЩЕМ ПОЛЬЗОВАТЕЛЯ В ТВОЕЙ БД
+    const r = await pool.query(
+      'SELECT id, fio FROM users WHERE phone=$1',
+      [phone]
+    );
+    const user = r.rows[0];
+    if (!user) {
+      return res.status(404).json({ error: 'Пользователь не найден' });
+    }
+
+    const token = signToken(user.id);
+
+    res.json({
+      token,
+      fio: user.fio
+    });
+  } catch (err) {
+    console.error('verify code error', err);
+    res.status(500).json({ error: 'Verify failed' });
+  }
+});
+
 
 // Register
 app.post('/api/register', async (req, res) => {
