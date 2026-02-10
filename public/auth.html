@@ -65,7 +65,10 @@ h1{
   border:1px solid #d1d5db;
 }
 
-.field input:focus{border-color:var(--green);outline:none}
+.field input:focus{
+  border-color:var(--green);
+  outline:none;
+}
 
 .flag{
   position:absolute;
@@ -89,7 +92,6 @@ h1{
   background:var(--green);
   color:#fff;
 }
-
 .btn-primary:hover{background:var(--green-dark)}
 
 .btn-secondary{
@@ -113,9 +115,12 @@ h1{
 }
 
 .hidden{display:none}
+.center{text-align:center}
 
-.center{
-  text-align:center;
+.error{
+  color:#dc2626;
+  font-size:14px;
+  margin-top:12px;
 }
 
 /* welcome animation */
@@ -146,13 +151,15 @@ h1{
     <input id="phoneInput" type="tel" placeholder="+7 (___) ___-__-__">
   </div>
 
-  <button id="sendCodeBtn" class="btn btn-primary">Получить код</button>
+  <button id="sendCodeBtn" class="btn btn-primary">
+    Получить код
+  </button>
 
-  <button class="btn btn-secondary">Войти через пароль</button>
+  <div id="phoneError" class="error"></div>
 
   <div class="switch">
     Нет аккаунта?
-    <button id="toRegister">Зарегистрироваться</button>
+    <button onclick="location.href='register.html'">Зарегистрироваться</button>
   </div>
 </div>
 
@@ -161,10 +168,17 @@ h1{
   <h1>Подтверждение</h1>
   <div class="subtitle">Введите код из SMS</div>
 
-  <input id="codeInput" inputmode="numeric" maxlength="4"
+  <input id="codeInput"
+         inputmode="numeric"
+         maxlength="4"
+         placeholder="••••"
          style="text-align:center;font-size:28px;padding:20px;border-radius:16px;border:1px solid #d1d5db">
 
-  <button id="verifyBtn" class="btn btn-primary" style="margin-top:24px">Войти</button>
+  <button id="verifyBtn" class="btn btn-primary" style="margin-top:24px">
+    Войти
+  </button>
+
+  <div id="codeError" class="error"></div>
 </div>
 
 <!-- ===== WELCOME ===== -->
@@ -176,49 +190,91 @@ h1{
 </div>
 
 <script>
-const API='https://s7avelii-airlines-1.onrender.com';
+const API = 'https://s7avelii-airlines-1.onrender.com';
 
-// phone mask
-const phoneInput=document.getElementById('phoneInput');
-phoneInput.addEventListener('input',()=>{
-  let v=phoneInput.value.replace(/\D/g,'');
-  if(v.startsWith('8'))v='7'+v.slice(1);
-  if(!v.startsWith('7'))v='7'+v;
-  let r='+7';
-  if(v.length>1)r+=' ('+v.slice(1,4);
-  if(v.length>=5)r+=') '+v.slice(4,7);
-  if(v.length>=8)r+='-'+v.slice(7,9);
-  if(v.length>=10)r+='-'+v.slice(9,11);
-  phoneInput.value=r;
+const phoneInput = document.getElementById('phoneInput');
+const codeInput = document.getElementById('codeInput');
+
+const phoneScreen = document.getElementById('phoneScreen');
+const codeScreen = document.getElementById('codeScreen');
+const welcomeScreen = document.getElementById('welcomeScreen');
+
+const phoneError = document.getElementById('phoneError');
+const codeError = document.getElementById('codeError');
+const welcomeName = document.getElementById('welcomeName');
+
+// --- phone mask ---
+phoneInput.addEventListener('input', () => {
+  let v = phoneInput.value.replace(/\D/g,'');
+  if (v.startsWith('8')) v = '7' + v.slice(1);
+  if (!v.startsWith('7')) v = '7' + v;
+  let r = '+7';
+  if (v.length > 1) r += ' (' + v.slice(1,4);
+  if (v.length >= 5) r += ') ' + v.slice(4,7);
+  if (v.length >= 8) r += '-' + v.slice(7,9);
+  if (v.length >= 10) r += '-' + v.slice(9,11);
+  phoneInput.value = r;
 });
 
-sendCodeBtn.onclick=async()=>{
-  await fetch(API+'/api/auth/request-code',{
+// --- send sms ---
+sendCodeBtn.onclick = async () => {
+  phoneError.textContent = '';
+  if (phoneInput.value.replace(/\D/g,'').length < 11) {
+    phoneError.textContent = 'Введите корректный номер';
+    return;
+  }
+
+  const res = await fetch(API + '/api/auth/request-code', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({phone:phoneInput.value})
+    body:JSON.stringify({ phone: phoneInput.value })
   });
+
+  if (!res.ok) {
+    phoneError.textContent = 'Ошибка отправки SMS';
+    return;
+  }
+
   phoneScreen.classList.add('hidden');
   codeScreen.classList.remove('hidden');
 };
 
-verifyBtn.onclick=async()=>{
-  const res=await fetch(API+'/api/auth/verify-code',{
+// --- verify code ---
+verifyBtn.onclick = async () => {
+  codeError.textContent = '';
+  if (codeInput.value.length !== 4) {
+    codeError.textContent = 'Введите 4-значный код';
+    return;
+  }
+
+  const res = await fetch(API + '/api/auth/verify-code', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({phone:phoneInput.value,code:codeInput.value})
+    body:JSON.stringify({
+      phone: phoneInput.value,
+      code: codeInput.value
+    })
   });
-  const data=await res.json();
-  localStorage.setItem('token',data.token);
 
-  // decode jwt to get name
-  const payload=JSON.parse(atob(data.token.split('.')[1]));
-  welcomeName.textContent=payload.fio||'';
+  const data = await res.json();
+
+  if (!res.ok) {
+    codeError.textContent = data.error || 'Неверный код';
+    return;
+  }
+
+  // ✅ сохраняем токен
+  localStorage.setItem('token', data.token);
+
+  // ✅ имя из сервера (НЕ из JWT)
+  welcomeName.textContent = data.fio || '';
 
   codeScreen.classList.add('hidden');
   welcomeScreen.classList.remove('hidden');
 
-  setTimeout(()=>location.href='cabinet.html',2000);
+  setTimeout(() => {
+    location.href = 'cabinet.html';
+  }, 2000);
 };
 </script>
 
