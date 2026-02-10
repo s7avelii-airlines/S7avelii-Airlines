@@ -3,29 +3,24 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Вход / Регистрация — S7avelii</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
+<title>Вход — S7avelii</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-:root {
+:root{
   --green:#9cc42f;
   --green-dark:#8ab12a;
+  --bg:#f4f6f8;
   --text:#111827;
   --muted:#6b7280;
-  --bg:#f3f4f6;
 }
 
-* {
-  box-sizing:border-box;
-  font-family:'Open Sans', Arial, sans-serif;
-}
+*{box-sizing:border-box;font-family:'Inter',sans-serif}
 
-body {
+body{
   margin:0;
   min-height:100vh;
   background:var(--bg);
@@ -35,111 +30,102 @@ body {
   padding:16px;
 }
 
-.card {
+.card{
   width:100%;
-  max-width:440px;
+  max-width:420px;
   background:#fff;
   border-radius:20px;
-  padding:32px;
+  padding:32px 28px;
   box-shadow:0 20px 40px rgba(0,0,0,.12);
 }
 
-h2 {
-  margin:0 0 12px;
+h1{
   font-size:28px;
   font-weight:700;
-  color:var(--text);
+  margin:0 0 12px;
 }
 
-.subtitle {
+.subtitle{
   font-size:16px;
   color:var(--muted);
   line-height:1.4;
-  margin-bottom:24px;
+  margin-bottom:28px;
 }
 
-label {
-  font-size:14px;
-  color:var(--muted);
-  margin-bottom:6px;
-  display:block;
+.field{
+  position:relative;
+  margin-bottom:20px;
 }
 
-input, select {
+.field input{
   width:100%;
-  padding:18px;
+  padding:20px 20px 20px 68px;
   font-size:18px;
-  border-radius:14px;
-  border:1px solid #d1d5db;
-  margin-bottom:18px;
-  outline:none;
-}
-
-input:focus, select:focus {
-  border-color:var(--green);
-}
-
-.btn {
-  width:100%;
-  background:var(--green);
-  color:#fff;
-  padding:18px;
   border-radius:16px;
-  border:none;
+  border:1px solid #d1d5db;
+}
+
+.field input:focus{border-color:var(--green);outline:none}
+
+.flag{
+  position:absolute;
+  left:18px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:22px;
+}
+
+.btn{
+  width:100%;
+  padding:20px;
   font-size:18px;
-  font-weight:700;
+  font-weight:600;
+  border-radius:18px;
+  border:none;
   cursor:pointer;
 }
 
-.btn:hover { background:var(--green-dark); }
-.btn:disabled { opacity:.6; cursor:not-allowed; }
+.btn-primary{
+  background:var(--green);
+  color:#fff;
+}
 
-.switch {
-  margin-top:22px;
+.btn-primary:hover{background:var(--green-dark)}
+
+.btn-secondary{
+  background:#eef2f7;
+  margin-top:14px;
+}
+
+.switch{
   text-align:center;
+  margin-top:26px;
   font-size:15px;
   color:var(--muted);
 }
 
-.switch button {
+.switch button{
   background:none;
   border:0;
   color:var(--green);
+  font-weight:600;
   cursor:pointer;
-  font-weight:700;
 }
 
-.error {
-  color:#dc2626;
-  font-size:15px;
-  margin-top:10px;
+.hidden{display:none}
+
+.center{
+  text-align:center;
 }
 
-.success {
-  color:#16a34a;
-  font-size:15px;
-  margin-top:10px;
+/* welcome animation */
+.welcome{
+  animation:fadeIn 0.8s ease;
 }
 
-.hidden { display:none; }
-
-.row {
-  display:flex;
-  gap:14px;
-  flex-wrap:wrap;
-}
-
-.half {
-  flex:1;
-  min-width:160px;
-}
-
-.card-type {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-top:12px;
-  font-size:16px;
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:none}
 }
 </style>
 </head>
@@ -148,23 +134,21 @@ input:focus, select:focus {
 
 <div class="card">
 
-<!-- ================= ВХОД ПО SMS ================= -->
-<div id="loginBlock">
-  <h2>Вход в профиль</h2>
+<!-- ===== ЭКРАН ТЕЛЕФОНА ===== -->
+<div id="phoneScreen">
+  <h1>Вход в профиль</h1>
   <div class="subtitle">
     Введите телефон. Если вы ещё не регистрировались — только телефон
   </div>
 
-  <input id="loginPhone" type="tel" placeholder="Телефон">
-
-  <button id="sendCodeBtn" class="btn">Получить код</button>
-
-  <div id="codeBlock" class="hidden">
-    <input id="loginCode" type="text" placeholder="Код из SMS">
-    <button id="verifyBtn" class="btn">Войти</button>
+  <div class="field">
+    <span class="flag">🇷🇺</span>
+    <input id="phoneInput" type="tel" placeholder="+7 (___) ___-__-__">
   </div>
 
-  <div id="loginError" class="error"></div>
+  <button id="sendCodeBtn" class="btn btn-primary">Получить код</button>
+
+  <button class="btn btn-secondary">Войти через пароль</button>
 
   <div class="switch">
     Нет аккаунта?
@@ -172,184 +156,71 @@ input:focus, select:focus {
   </div>
 </div>
 
-<!-- ================= РЕГИСТРАЦИЯ ================= -->
-<div id="registerBlock" class="hidden">
-  <h2>Регистрация</h2>
+<!-- ===== ЭКРАН КОДА ===== -->
+<div id="codeScreen" class="hidden">
+  <h1>Подтверждение</h1>
+  <div class="subtitle">Введите код из SMS</div>
 
-  <input id="regFio" placeholder="ФИО">
-  <input id="regEmail" type="email" placeholder="Email">
+  <input id="codeInput" inputmode="numeric" maxlength="4"
+         style="text-align:center;font-size:28px;padding:20px;border-radius:16px;border:1px solid #d1d5db">
 
-  <div class="row">
-    <div class="half"><input id="regPhone" type="tel" placeholder="Телефон"></div>
-    <div class="half"><input id="regPassword" type="password" placeholder="Пароль (мин. 6)"></div>
-  </div>
+  <button id="verifyBtn" class="btn btn-primary" style="margin-top:24px">Войти</button>
+</div>
 
-  <div class="row">
-    <div class="half">
-      <label>Дата рождения</label>
-      <input id="regDob" type="date">
-    </div>
-    <div class="half">
-      <label>Пол</label>
-      <select id="regGender">
-        <option value="">Не указан</option>
-        <option value="Мужской">Мужской</option>
-        <option value="Женский">Женский</option>
-        <option value="Другое">Другое</option>
-      </select>
-    </div>
-  </div>
-
-  <input id="regCard" placeholder="Номер карты S7avelii Priority">
-
-  <div>
-    <label class="card-type"><input type="radio" name="cardType" value="VIP"> VIP</label>
-    <label class="card-type"><input type="radio" name="cardType" value="Classic"> Classic</label>
-    <label class="card-type"><input type="radio" name="cardType" value="None" checked> Нет</label>
-  </div>
-
-  <button id="registerBtn" class="btn">Зарегистрироваться</button>
-
-  <div id="regError" class="error"></div>
-  <div id="regSuccess" class="success"></div>
-
-  <div class="switch">
-    Уже есть аккаунт?
-    <button id="toLogin">Войти</button>
-  </div>
+<!-- ===== WELCOME ===== -->
+<div id="welcomeScreen" class="hidden center welcome">
+  <h1>✈️ Добро пожаловать на борт</h1>
+  <div id="welcomeName" class="subtitle"></div>
 </div>
 
 </div>
 
 <script>
-const API = 'https://s7avelii-airlines-1.onrender.com';
+const API='https://s7avelii-airlines-1.onrender.com';
 
-// --- Переключение ---
-const loginBlock = document.getElementById('loginBlock');
-const registerBlock = document.getElementById('registerBlock');
-
-document.getElementById('toRegister').onclick = () => {
-  loginBlock.classList.add('hidden');
-  registerBlock.classList.remove('hidden');
-};
-
-document.getElementById('toLogin').onclick = () => {
-  registerBlock.classList.add('hidden');
-  loginBlock.classList.remove('hidden');
-};
-
-// --- ВХОД ПО SMS ---
-const sendCodeBtn = document.getElementById('sendCodeBtn');
-const verifyBtn = document.getElementById('verifyBtn');
-const codeBlock = document.getElementById('codeBlock');
-const loginError = document.getElementById('loginError');
-
-sendCodeBtn.onclick = async () => {
-  loginError.textContent = '';
-  const phone = loginPhone.value.trim();
-  if (!phone) return loginError.textContent = 'Введите телефон';
-
-  try {
-    const res = await fetch(`${API}/api/auth/request-code`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ phone })
-    });
-    const data = await res.json();
-    if (!res.ok) return loginError.textContent = data.error || 'Ошибка';
-
-    codeBlock.classList.remove('hidden');
-    sendCodeBtn.disabled = true;
-    sendCodeBtn.textContent = 'Код отправлен';
-
-  } catch {
-    loginError.textContent = 'Ошибка сети';
-  }
-};
-
-verifyBtn.onclick = async () => {
-  loginError.textContent = '';
-  const phone = loginPhone.value.trim();
-  const code = loginCode.value.trim();
-
-  if (!code) return loginError.textContent = 'Введите код';
-
-  try {
-    const res = await fetch(`${API}/api/auth/verify-code`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ phone, code })
-    });
-    const data = await res.json();
-    if (!res.ok) return loginError.textContent = data.error || 'Неверный код';
-
-    localStorage.setItem('token', data.token);
-    window.location.href = 'cabinet.html';
-
-  } catch {
-    loginError.textContent = 'Ошибка сети';
-  }
-};
-
-// --- РЕГИСТРАЦИЯ ---
-registerBtn.onclick = async () => {
-  const fio = regFio.value.trim();
-  const email = regEmail.value.trim();
-  const phone = regPhone.value.trim();
-  const password = regPassword.value;
-  const dob = regDob.value || null;
-  const gender = regGender.value || null;
-  const cardNumber = regCard.value.trim();
-  const cardType = document.querySelector('input[name="cardType"]:checked').value;
-
-  if (!fio || !email || !phone || password.length < 6) {
-    return regError.textContent = 'Заполните обязательные поля';
-  }
-
-  try {
-    const res = await fetch(`${API}/api/register`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ fio,email,phone,password,dob,gender,cardNumber,cardType })
-    });
-    const data = await res.json();
-    if (!res.ok) return regError.textContent = data.error || 'Ошибка';
-
-    localStorage.setItem('token', data.token);
-    regSuccess.textContent = 'Регистрация успешна';
-    setTimeout(()=>window.location.href='cabinet.html',700);
-
-  } catch {
-    regError.textContent = 'Ошибка сети';
-  }
-};
-</script>
-
-<script>
-function phoneMask(input) {
-  let value = input.value.replace(/\D/g, '');
-
-  if (value.startsWith('8')) value = '7' + value.slice(1);
-  if (!value.startsWith('7')) value = '7' + value;
-
-  let result = '+7';
-
-  if (value.length > 1) result += ' (' + value.slice(1,4);
-  if (value.length >= 5) result += ') ' + value.slice(4,7);
-  if (value.length >= 8) result += '-' + value.slice(7,9);
-  if (value.length >= 10) result += '-' + value.slice(9,11);
-
-  input.value = result;
-}
-
-document.querySelectorAll('input[type="tel"]').forEach(input => {
-  input.addEventListener('input', () => phoneMask(input));
-  input.addEventListener('focus', () => {
-    if (!input.value) input.value = '+7 (';
-  });
+// phone mask
+const phoneInput=document.getElementById('phoneInput');
+phoneInput.addEventListener('input',()=>{
+  let v=phoneInput.value.replace(/\D/g,'');
+  if(v.startsWith('8'))v='7'+v.slice(1);
+  if(!v.startsWith('7'))v='7'+v;
+  let r='+7';
+  if(v.length>1)r+=' ('+v.slice(1,4);
+  if(v.length>=5)r+=') '+v.slice(4,7);
+  if(v.length>=8)r+='-'+v.slice(7,9);
+  if(v.length>=10)r+='-'+v.slice(9,11);
+  phoneInput.value=r;
 });
+
+sendCodeBtn.onclick=async()=>{
+  await fetch(API+'/api/auth/request-code',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({phone:phoneInput.value})
+  });
+  phoneScreen.classList.add('hidden');
+  codeScreen.classList.remove('hidden');
+};
+
+verifyBtn.onclick=async()=>{
+  const res=await fetch(API+'/api/auth/verify-code',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({phone:phoneInput.value,code:codeInput.value})
+  });
+  const data=await res.json();
+  localStorage.setItem('token',data.token);
+
+  // decode jwt to get name
+  const payload=JSON.parse(atob(data.token.split('.')[1]));
+  welcomeName.textContent=payload.fio||'';
+
+  codeScreen.classList.add('hidden');
+  welcomeScreen.classList.remove('hidden');
+
+  setTimeout(()=>location.href='cabinet.html',2000);
+};
 </script>
 
 </body>
 </html>
-
