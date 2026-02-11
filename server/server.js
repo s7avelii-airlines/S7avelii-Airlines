@@ -355,13 +355,6 @@ app.post('/api/checkout', authMiddleware, async (req, res) => {
 // Fallback static (if you host frontend from same server)
 app.use(express.static('public'));
 
-// Start
-app.listen(PORT, () => console.log(`✅ Server started on ${PORT}`));
-const express = require('express');
-const mysql = require('mysql2/promise');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const jwt = require('jsonwebtoken'); // опционально, если используешь JWT
 
 const app = express();
 app.use(cors());
