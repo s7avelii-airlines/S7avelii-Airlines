@@ -12,6 +12,7 @@ const axios = require('axios');
 
 dotenv.config();
 
+
 // --- Настройки ---
 const PORT = process.env.PORT || 10000;
 const JWT_SECRET = process.env.JWT_SECRET || 'change_this_secret';
