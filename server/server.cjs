@@ -1,4 +1,4 @@
-// server.cjs  (CommonJS — запускай `node server.cjs`)
+// server.cjs (CommonJS — запускай `node server.cjs`)
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -10,24 +10,24 @@ const fs = require('fs');
 const { Pool } = require('pg');
 const axios = require('axios');
 
-
 dotenv.config();
 
+// --- Настройки ---
 const PORT = process.env.PORT || 10000;
 const JWT_SECRET = process.env.JWT_SECRET || 'change_this_secret';
 const STATIC_ORIGIN = process.env.STATIC_ORIGIN || '*'; // можно указать сайт фронта
 
-// Postgres pool (Render/Neon-friendly)
+// --- Postgres pool (один для всего) ---
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.DATABASE_SSL === 'false' ? false : { rejectUnauthorized: false },
 });
 
-// Ensure uploads dir
+// --- Создание папки uploads ---
 const UPLOAD_DIR = path.join(__dirname, 'uploads');
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
-// Multer
+// --- Multer для загрузки файлов ---
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, UPLOAD_DIR),
   filename: (req, file, cb) => {
@@ -37,69 +37,17 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Express
+// --- Express ---
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: (origin, cb) => { cb(null, true); }, // разрешаем любые источники; для продакшн укажи конкретный домен
+  origin: (origin, cb) => cb(null, true), // разрешаем любые источники
   methods: ["GET","POST","PUT","DELETE","OPTIONS"],
   allowedHeaders: ["Content-Type","Authorization","Accept"],
   credentials: true
 }));
 app.use('/uploads', express.static(UPLOAD_DIR));
-
-// --- DB init ---
-async function initDB() {
-  // create tables if not exists. Columns named to match frontend expectations.
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS users (
-      id SERIAL PRIMARY KEY,
-      fio TEXT,
-      full_name TEXT,
-      email TEXT UNIQUE,
-      phone TEXT UNIQUE,
-      password TEXT,
-      avatar TEXT,
-      dob DATE,
-      gender TEXT,
-      vk TEXT,
-      telegram TEXT,
-      card_number TEXT,
-      card_type TEXT,
-      bonus_miles INTEGER DEFAULT 0,
-      status_miles INTEGER DEFAULT 0,
-      cart JSONB DEFAULT '[]'
-    );
-  `);
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS products (
-      id SERIAL PRIMARY KEY,
-      name TEXT NOT NULL,
-      price INTEGER NOT NULL
-    );
-  `);
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS orders (
-      id SERIAL PRIMARY KEY,
-      user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
-      items JSONB,
-      created_at TIMESTAMP DEFAULT NOW()
-    );
-  `);
-
-  // seed products
-  const r = await pool.query('SELECT COUNT(*) FROM products');
-  if (Number(r.rows[0].count) === 0) {
-    await pool.query(`
-      INSERT INTO products (name,price) VALUES
-      ('Брелок S7avelii',500),
-      ('Футболка S7avelii',1200),
-      ('Кружка S7avelii',800),
-      ('Модель самолёта',2500)
-    `);
-  }
-}
-initDB().then(()=>console.log('DB ready')).catch(err=>console.error('DB init failed', err));
+app.use(express.static('public'));
 
 // --- Helpers ---
 function signToken(userId) {
@@ -124,7 +72,6 @@ function authMiddleware(req, res, next) {
   }
 }
 
-// camelCase -> snake_case mapping helper
 function normalizePayload(body) {
   const out = {};
   for (const k of Object.keys(body || {})) {
@@ -135,13 +82,81 @@ function normalizePayload(body) {
   return out;
 }
 
-// --- SMS AUTH STORAGE (in-memory, safe for now) ---
+// --- SMS codes in-memory ---
 const smsCodes = new Map();
-// phone -> { code, expires }
 
+// --- DB init ---
+async function initDB() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        fio TEXT,
+        full_name TEXT,
+        email TEXT UNIQUE,
+        phone TEXT UNIQUE,
+        password TEXT,
+        avatar TEXT,
+        dob DATE,
+        gender TEXT,
+        vk TEXT,
+        telegram TEXT,
+        card_number TEXT,
+        card_type TEXT,
+        bonus_miles INTEGER DEFAULT 0,
+        status_miles INTEGER DEFAULT 0,
+        cart JSONB DEFAULT '[]'
+      );
+    `);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS products (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        price INTEGER NOT NULL
+      );
+    `);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS orders (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+        items JSONB,
+        created_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS notifications (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        type TEXT,
+        title TEXT NOT NULL,
+        message TEXT NOT NULL,
+        data JSONB,
+        is_read BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
+
+    const r = await pool.query('SELECT COUNT(*) FROM products');
+    if (Number(r.rows[0].count) === 0) {
+      await pool.query(`
+        INSERT INTO products (name,price) VALUES
+        ('Брелок S7avelii',500),
+        ('Футболка S7avelii',1200),
+        ('Кружка S7avelii',800),
+        ('Модель самолёта',2500)
+      `);
+    }
+
+    console.log('DB ready');
+  } catch (err) {
+    console.error('DB init failed', err);
+  }
+}
+initDB();
 
 // --- Routes ---
 
+// Health
 app.get('/api/health', async (req, res) => {
   try {
     await pool.query('SELECT 1');
@@ -150,26 +165,26 @@ app.get('/api/health', async (req, res) => {
     res.status(500).json({ ok: false, error: err.message });
   }
 });
+
+// SMS auth
 app.post('/api/auth/request-code', async (req, res) => {
   try {
     const { phone } = req.body;
     if (!phone) return res.status(400).json({ error: 'Телефон обязателен' });
 
     const code = Math.floor(1000 + Math.random() * 9000).toString();
+    smsCodes.set(phone, { code, expires: Date.now() + 5 * 60 * 1000 });
 
-    smsCodes.set(phone, {
-      code,
-      expires: Date.now() + 5 * 60 * 1000
-    });
-
-    await axios.get('https://sms.ru/sms/send', {
-      params: {
-        api_id: process.env.SMS_RU_KEY,
-        to: phone.replace(/\D/g, ''),
-        msg: `S7avelii: код входа ${code}`,
-        json: 1
-      }
-    });
+    if (process.env.SMS_RU_KEY) {
+      await axios.get('https://sms.ru/sms/send', {
+        params: {
+          api_id: process.env.SMS_RU_KEY,
+          to: phone.replace(/\D/g, ''),
+          msg: `S7avelii: код входа ${code}`,
+          json: 1
+        }
+      });
+    }
 
     res.json({ ok: true });
   } catch (err) {
@@ -177,12 +192,11 @@ app.post('/api/auth/request-code', async (req, res) => {
     res.status(500).json({ error: 'SMS error' });
   }
 });
+
 app.post('/api/auth/verify-code', async (req, res) => {
   try {
     const { phone, code } = req.body;
-    if (!phone || !code) {
-      return res.status(400).json({ error: 'Телефон и код обязательны' });
-    }
+    if (!phone || !code) return res.status(400).json({ error: 'Телефон и код обязательны' });
 
     const record = smsCodes.get(phone);
     if (!record) return res.status(400).json({ error: 'Код не найден' });
@@ -190,34 +204,21 @@ app.post('/api/auth/verify-code', async (req, res) => {
       smsCodes.delete(phone);
       return res.status(400).json({ error: 'Код истёк' });
     }
-    if (record.code !== code) {
-      return res.status(400).json({ error: 'Неверный код' });
-    }
+    if (record.code !== code) return res.status(400).json({ error: 'Неверный код' });
 
     smsCodes.delete(phone);
 
-    // ⬇️ ИЩЕМ ПОЛЬЗОВАТЕЛЯ В ТВОЕЙ БД
-    const r = await pool.query(
-      'SELECT id, fio FROM users WHERE phone=$1',
-      [phone]
-    );
+    const r = await pool.query('SELECT id, fio FROM users WHERE phone=$1', [phone]);
     const user = r.rows[0];
-    if (!user) {
-      return res.status(404).json({ error: 'Пользователь не найден' });
-    }
+    if (!user) return res.status(404).json({ error: 'Пользователь не найден' });
 
     const token = signToken(user.id);
-
-    res.json({
-      token,
-      fio: user.fio
-    });
+    res.json({ token, fio: user.fio });
   } catch (err) {
     console.error('verify code error', err);
     res.status(500).json({ error: 'Verify failed' });
   }
 });
-
 
 // Register
 app.post('/api/register', async (req, res) => {
@@ -225,7 +226,6 @@ app.post('/api/register', async (req, res) => {
     const { fio, email, phone, password, dob, gender, cardNumber, cardType } = req.body;
     if (!fio || !email || !password) return res.status(400).json({ error: 'fio,email,password required' });
 
-    // check existing
     const check = await pool.query('SELECT id FROM users WHERE email=$1 OR phone=$2', [email, phone || null]);
     if (check.rows.length) return res.status(400).json({ error: 'User exists' });
 
@@ -248,11 +248,10 @@ app.post('/api/register', async (req, res) => {
 // Login
 app.post('/api/login', async (req, res) => {
   try {
-    const { identifier, phone, email, password } = req.body;
-    const key = identifier || phone || email;
-    if (!key || !password) return res.status(400).json({ error: 'identifier/password required' });
+    const { identifier, password } = req.body;
+    if (!identifier || !password) return res.status(400).json({ error: 'identifier/password required' });
 
-    const r = await pool.query('SELECT * FROM users WHERE email=$1 OR phone=$1', [key]);
+    const r = await pool.query('SELECT * FROM users WHERE email=$1 OR phone=$1', [identifier]);
     const userRow = r.rows[0];
     if (!userRow) return res.status(400).json({ error: 'User not found' });
 
@@ -268,7 +267,7 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Get profile
+// Profile
 app.get('/api/profile', authMiddleware, async (req, res) => {
   try {
     const user = await getUserById(req.userId);
@@ -280,11 +279,9 @@ app.get('/api/profile', authMiddleware, async (req, res) => {
   }
 });
 
-// Update profile (accepts camelCase or snake_case)
 app.put('/api/profile', authMiddleware, async (req, res) => {
   try {
     const raw = normalizePayload(req.body);
-    // allowed fields
     const allowed = ['fio','email','phone','dob','gender','avatar','card_number','card_type','bonus_miles','status_miles'];
     const sets = [];
     const vals = [];
@@ -296,7 +293,6 @@ app.put('/api/profile', authMiddleware, async (req, res) => {
     }
     if (!sets.length) return res.json({ ok: true, message: 'Nothing to update' });
 
-    // if fio present -> also update full_name
     if ('fio' in raw) {
       sets.push(`full_name=$${i++}`);
       vals.push(raw.fio);
@@ -314,7 +310,7 @@ app.put('/api/profile', authMiddleware, async (req, res) => {
   }
 });
 
-// Upload avatar
+// Avatar upload
 app.post('/api/profile/avatar', authMiddleware, upload.single('avatar'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'No file' });
@@ -328,7 +324,7 @@ app.post('/api/profile/avatar', authMiddleware, upload.single('avatar'), async (
   }
 });
 
-// Products / shop
+// Shop
 app.get('/api/shop', async (req, res) => {
   try {
     const r = await pool.query('SELECT * FROM products ORDER BY id');
@@ -339,7 +335,7 @@ app.get('/api/shop', async (req, res) => {
   }
 });
 
-// Checkout -> create order, clear cart and add bonus miles
+// Checkout
 app.post('/api/checkout', authMiddleware, async (req, res) => {
   try {
     const items = req.body.items || [];
@@ -352,96 +348,26 @@ app.post('/api/checkout', authMiddleware, async (req, res) => {
   }
 });
 
-// Fallback static (if you host frontend from same server)
-app.use(express.static('public'));
-
-
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
-
-// Настройки - берём из env (Render: задаёшь в UI)
-const {
-  DB_HOST,
-  DB_PORT = 3306,
-  DB_USER,
-  DB_PASSWORD,
-  DB_NAME,
-  JWT_SECRET // если используешь JWT
-} = process.env;
-
-// Создаём pool
-const pool = mysql.createPool({
-  host: DB_HOST,
-  port: DB_PORT,
-  user: DB_USER,
-  password: DB_PASSWORD,
-  database: DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
-
-/*
-  AUTH MIDDLEWARE
-  - В демонстрации: пытается достать userId из JWT токена в Authorization: Bearer <token>
-  - Если JWT_SECRET не задан, попробуем header 'x-user-id' для упрощённой разработки.
-  Замените на вашу реальную аутентификацию.
-*/
-async function authMiddleware(req, res, next) {
-  try {
-    const auth = req.headers.authorization;
-    if (auth && auth.startsWith('Bearer ') && JWT_SECRET) {
-      const token = auth.split(' ')[1];
-      const payload = jwt.verify(token, JWT_SECRET);
-      // предполагается, что payload содержит userId
-      req.userId = payload.userId || payload.id || null;
-    } else if (req.headers['x-user-id']) {
-      req.userId = req.headers['x-user-id'];
-    } else {
-      req.userId = null;
-    }
-
-    if (!req.userId) {
-      return res.status(401).json({ error: 'Unauthorized: user id not provided' });
-    }
-    next();
-  } catch (err) {
-    console.error('auth error', err);
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-}
-
-/* ---------- API Endpoints ---------- */
-
-/**
- * GET /notifications/unread-count
- * Возвращает число непрочитанных уведомлений для текущего пользователя
- */
+// Notifications
 app.get('/notifications/unread-count', authMiddleware, async (req, res) => {
   try {
-    const [rows] = await pool.query(
-      'SELECT COUNT(*) AS cnt FROM notifications WHERE user_id = ? AND is_read = 0',
+    const { rows } = await pool.query(
+      'SELECT COUNT(*) AS cnt FROM notifications WHERE user_id=$1 AND is_read=false',
       [req.userId]
     );
-    res.json({ unread: rows[0].cnt });
+    res.json({ unread: Number(rows[0].cnt) });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'db error' });
   }
 });
 
-/**
- * GET /notifications
- * Параметры: ?limit=20&offset=0
- * Возвращает список уведомлений (по убыванию времени)
- */
 app.get('/notifications', authMiddleware, async (req, res) => {
   try {
     const limit = Math.min(parseInt(req.query.limit || '20'), 100);
     const offset = parseInt(req.query.offset || '0');
-    const [rows] = await pool.query(
-      'SELECT id, type, title, message, data, is_read, created_at FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?',
+    const { rows } = await pool.query(
+      'SELECT * FROM notifications WHERE user_id=$1 ORDER BY created_at DESC LIMIT $2 OFFSET $3',
       [req.userId, limit, offset]
     );
     res.json({ items: rows });
@@ -451,20 +377,14 @@ app.get('/notifications', authMiddleware, async (req, res) => {
   }
 });
 
-/**
- * POST /notifications/mark-read
- * body: { ids: [1,2,3] }  - пометить указанные уведомления прочитанными
- */
 app.post('/notifications/mark-read', authMiddleware, async (req, res) => {
   try {
     const ids = req.body.ids;
-    if (!Array.isArray(ids) || ids.length === 0) {
-      return res.status(400).json({ error: 'ids required' });
-    }
-    // безопасно: передаем массив в набор
-    const placeholders = ids.map(()=>'?').join(',');
-    const sql = `UPDATE notifications SET is_read = 1 WHERE user_id = ? AND id IN (${placeholders})`;
-    await pool.query(sql, [req.userId, ...ids]);
+    if (!Array.isArray(ids) || !ids.length) return res.status(400).json({ error: 'ids required' });
+
+    const placeholders = ids.map((_, idx) => `$${idx+2}`).join(',');
+    await pool.query(`UPDATE notifications SET is_read=true WHERE user_id=$1 AND id IN (${placeholders})`, [req.userId, ...ids]);
+
     res.json({ ok: true });
   } catch (err) {
     console.error(err);
@@ -472,18 +392,15 @@ app.post('/notifications/mark-read', authMiddleware, async (req, res) => {
   }
 });
 
-/**
- * POST /notifications/add
- * body: { user_id, title, message, type?, data? } - только для серверной части (можно защитить)
- */
 app.post('/notifications/add', async (req, res) => {
   try {
-    // В проде защищай этот endpoint (только серверные вызовы)
     const { user_id, title, message, type = null, data = null } = req.body;
     if (!user_id || !title) return res.status(400).json({ error: 'user_id and title required' });
-    await pool.query('INSERT INTO notifications (user_id, type, title, message, data) VALUES (?, ?, ?, ?, ?)', [
-      user_id, type, title, message, data ? JSON.stringify(data) : null
-    ]);
+
+    await pool.query(
+      'INSERT INTO notifications (user_id, type, title, message, data) VALUES ($1,$2,$3,$4,$5)',
+      [user_id, type, title, message, data ? JSON.stringify(data) : null]
+    );
     res.json({ ok: true });
   } catch (err) {
     console.error(err);
@@ -491,10 +408,9 @@ app.post('/notifications/add', async (req, res) => {
   }
 });
 
-/* простой health */
+// Простой health endpoint
 app.get('/health', (req, res) => res.json({ ok: true }));
 
-/* запуск */
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, ()=> console.log(`Notifications API running on ${PORT}`));
+// --- Start server ---
+app.listen(PORT, () => console.log(`✅ Server running on ${PORT}`));
 
