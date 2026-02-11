@@ -2,10 +2,10 @@
   "name": "s7avelii-server",
   "version": "1.0.0",
   "description": "S7avelii Airlines Backend (Auth + Profile + Shop + Notifications + SMS)",
-  "main": "server.cjs",
+  "main": "server.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node server.cjs"
+    "start": "node server.js"
   },
   "engines": {
     "node": ">=18"
