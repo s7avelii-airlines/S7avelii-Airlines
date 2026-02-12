@@ -1219,71 +1219,99 @@ function escapeHtml(u){ if(u==null) return ""; return String(u).replace(/&/g,'&a
     <div class="h-10"></div>
  
   <section class="mt-6 px-4">
-  <div class="bg-gray-100 rounded-3xl p-6">
+  <div class="bg-[#F3F4F6] rounded-[32px] p-6 max-w-md mx-auto">
 
-    <h2 class="text-2xl font-bold mb-5">Рейсы из г. Савелий</h2>
+    <!-- Заголовок -->
+    <h2 class="text-[28px] font-bold text-gray-800 mb-6 leading-tight">
+      Рейсы из г. Савелий
+    </h2>
 
-    <div class="space-y-4">
+    <div class="space-y-5">
 
-      <!-- Карточка 1 -->
-      <div class="bg-white rounded-2xl p-4 flex items-center shadow-sm">
-        <img src="images/images (3).avif" class="w-20 h-20 rounded-xl object-cover mr-4">
+      <!-- Карточка -->
+      <div class="bg-white rounded-3xl px-5 py-4 flex items-center">
+        <img src="images/images (5).avif"
+             class="w-20 h-20 rounded-2xl object-cover mr-4">
+
         <div>
-          <h3 class="font-semibold text-lg text-gray-800">Пхукет</h3>
-          <p class="text-sm text-gray-500 mt-1">туда и обратно</p>
-          <p class="text-sm font-medium text-green-600 mt-1">от 3 рейсов</p>
+          <h3 class="text-xl font-semibold text-gray-800">
+            Волгоград
+          </h3>
+          <p class="text-sm text-gray-400 mt-1">
+            только туда
+          </p>
+          <p class="text-base font-medium text-gray-800 mt-2">
+            от 2 рейсов в день
+          </p>
         </div>
       </div>
 
-      <!-- Карточка 2 -->
-      <div class="bg-white rounded-2xl p-4 flex items-center shadow-sm">
-        <img src="images/Без названия.avif" class="w-20 h-20 rounded-xl object-cover mr-4">
+      <!-- Карточка -->
+      <div class="bg-white rounded-3xl px-5 py-4 flex items-center">
+        <img src="images/images (6).avif"
+             class="w-20 h-20 rounded-2xl object-cover mr-4">
+
         <div>
-          <h3 class="font-semibold text-lg text-gray-800">Ульяновск</h3>
-          <p class="text-sm text-gray-500 mt-1">туда и обратно</p>
-          <p class="text-sm font-medium text-green-600 mt-1">от 1 рейса</p>
+          <h3 class="text-xl font-semibold text-gray-800">
+            Екатеринбург
+          </h3>
+          <p class="text-sm text-gray-400 mt-1">
+             туда и обратно
+          </p>
+          <p class="text-base font-medium text-gray-800 mt-2">
+            от 1 рейса
+          </p>
         </div>
       </div>
 
-      <!-- Карточка 3 -->
-      <div class="bg-white rounded-2xl p-4 flex items-center shadow-sm">
-        <img src="images/images (4).avif" class="w-20 h-20 rounded-xl object-cover mr-4">
+      <!-- Карточка -->
+      <div class="bg-white rounded-3xl px-5 py-4 flex items-center">
+        <img src="images/Без названия.avif"
+             class="w-20 h-20 rounded-2xl object-cover mr-4">
+
         <div>
-          <h3 class="font-semibold text-lg text-gray-800">Благовещенск</h3>
-          <p class="text-sm text-gray-500 mt-1">туда и обратно</p>
-          <p class="text-sm font-medium text-green-600 mt-1">от 2 рейсов</p>
+          <h3 class="text-xl font-semibold text-gray-800">
+            Ульяновск
+          </h3>
+          <p class="text-sm text-gray-400 mt-1">
+            только туда
+          </p>
+          <p class="text-base font-medium text-gray-800 mt-2">
+            от 2 рейсов
+          </p>
         </div>
       </div>
 
-      <!-- Карточка 4 -->
-      <div class="bg-white rounded-2xl p-4 flex items-center shadow-sm">
-        <img src="images/images (5).avif" class="w-20 h-20 rounded-xl object-cover mr-4">
-        <div>
-          <h3 class="font-semibold text-lg text-gray-800">Волгоград</h3>
-          <p class="text-sm text-gray-500 mt-1">туда и обратно</p>
-          <p class="text-sm font-medium text-green-600 mt-1">от 1 рейса</p>
-        </div>
-      </div>
+      <!-- Карточка -->
+      <div class="bg-white rounded-3xl px-5 py-4 flex items-center">
+        <img src="images/images (3).avif"
+             class="w-20 h-20 rounded-2xl object-cover mr-4">
 
-      <!-- Карточка 5 -->
-      <div class="bg-white rounded-2xl p-4 flex items-center shadow-sm">
-        <img src="images/images (6).avif" class="w-20 h-20 rounded-xl object-cover mr-4">
         <div>
-          <h3 class="font-semibold text-lg text-gray-800">Екатеринбург</h3>
-          <p class="text-sm text-gray-500 mt-1">туда и обратно</p>
-          <p class="text-sm font-medium text-green-600 mt-1">от 2 рейсов</p>
+          <h3 class="text-xl font-semibold text-gray-800">
+           Пхукет
+          </h3>
+          <p class="text-sm text-gray-400 mt-1">
+            только туда
+          </p>
+          <p class="text-base font-medium text-gray-800 mt-2">
+            от 3 рейсов
+          </p>
         </div>
       </div>
 
     </div>
 
     <!-- Кнопка -->
-    <button class="mt-6 w-full bg-lime-500 hover:bg-lime-600 text-white font-semibold py-3 rounded-2xl">
-      Показать ещё
+    <button
+      class="mt-8 w-full bg-[#8DC63F] hover:bg-[#7CB42F]
+             text-white text-lg font-semibold py-4 rounded-2xl transition">
+      Показать еще
     </button>
 
   </div>
 </section>
+
 
 <!-- Chat Widget -->
 <iframe 
