@@ -167,7 +167,8 @@ app.get('/api/health', async (req, res) => {
   }
 });
 
-// SMS auth
+
+
 app.post('/api/auth/request-code', async (req, res) => {
   try {
     const { phone } = req.body;
@@ -177,7 +178,7 @@ app.post('/api/auth/request-code', async (req, res) => {
     smsCodes.set(phone, { code, expires: Date.now() + 5 * 60 * 1000 });
 
     if (process.env.SMS_RU_KEY) {
-      await axios.get('https://sms.ru/sms/send', {
+      const response = await axios.get('https://sms.ru/sms/send', {
         params: {
           api_id: process.env.SMS_RU_KEY,
           to: phone.replace(/\D/g, ''),
@@ -185,6 +186,10 @@ app.post('/api/auth/request-code', async (req, res) => {
           json: 1
         }
       });
+
+      console.log("SMS RU RESPONSE:", response.data);
+    } else {
+      console.log("SMS_RU_KEY не задан. Код:", code);
     }
 
     res.json({ ok: true });
