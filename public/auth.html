@@ -5,133 +5,66 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>S7avelii — ID</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/imask"></script>
 
 <style>
 :root{
   --green:#9cc42f;
   --green-dark:#8ab12a;
   --bg:#f4f6f8;
-  --text:#111827;
   --muted:#6b7280;
 }
-
 *{box-sizing:border-box;font-family:'Inter',sans-serif}
-
 body{
   margin:0;
-  min-height:100vh;
   background:var(--bg);
   display:flex;
   justify-content:center;
   align-items:center;
+  min-height:100vh;
   padding:16px;
 }
-
 .card{
   width:100%;
   max-width:420px;
   background:#fff;
-  border-radius:20px;
-  padding:32px 28px;
-  box-shadow:0 20px 40px rgba(0,0,0,.12);
+  border-radius:24px;
+  padding:28px;
+  box-shadow:0 20px 50px rgba(0,0,0,.12);
 }
-
-h1{
-  font-size:28px;
-  font-weight:700;
-  margin:0 0 12px;
-}
-
-.subtitle{
-  font-size:16px;
-  color:var(--muted);
-  line-height:1.4;
-  margin-bottom:28px;
-}
-
-.field{
-  position:relative;
-  margin-bottom:20px;
-}
-
-.field input{
+h1{margin:0 0 10px;font-size:22px}
+.subtitle{color:var(--muted);margin-bottom:18px}
+.field{margin-bottom:14px}
+input{
   width:100%;
-  padding:20px 20px 20px 68px;
-  font-size:18px;
-  border-radius:16px;
-  border:1px solid #d1d5db;
+  padding:16px;
+  border-radius:14px;
+  border:1px solid #ddd;
+  font-size:15px;
 }
-
-.field input:focus{
-  border-color:var(--green);
-  outline:none;
-}
-
-.flag{
-  position:absolute;
-  left:18px;
-  top:50%;
-  transform:translateY(-50%);
-  font-size:22px;
-}
-
+input:focus{border-color:var(--green);outline:none}
 .btn{
   width:100%;
-  padding:20px;
-  font-size:18px;
-  font-weight:600;
-  border-radius:18px;
+  padding:16px;
   border:none;
+  border-radius:14px;
+  font-weight:600;
   cursor:pointer;
 }
-
-.btn-primary{
-  background:var(--green);
-  color:#fff;
-}
+.btn-primary{background:var(--green);color:#fff}
 .btn-primary:hover{background:var(--green-dark)}
-
-.btn-secondary{
-  background:#eef2f7;
-  margin-top:14px;
-}
-
+.btn-secondary{background:#eef2f7;margin-top:8px}
 .switch{
   text-align:center;
-  margin-top:26px;
-  font-size:15px;
-  color:var(--muted);
-}
-
-.switch button{
-  background:none;
-  border:0;
-  color:var(--green);
-  font-weight:600;
-  cursor:pointer;
-}
-
-.hidden{display:none}
-.center{text-align:center}
-
-.error{
-  color:#dc2626;
+  margin-top:14px;
   font-size:14px;
-  margin-top:12px;
 }
-
-/* welcome animation */
-.welcome{
-  animation:fadeIn 0.8s ease;
+.switch button{
+  background:none;border:0;color:var(--green);cursor:pointer;
 }
-
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:none}
-}
+.hidden{display:none}
+.error{color:#dc2626;font-size:13px;margin-top:6px}
 </style>
 </head>
 
@@ -139,142 +72,177 @@ h1{
 
 <div class="card">
 
-<!-- ===== ЭКРАН ТЕЛЕФОНА ===== -->
-<div id="phoneScreen">
-  <h1>Вход в профиль</h1>
-  <div class="subtitle">
-    Введите телефон. Если вы ещё не регистрировались — только телефон
-  </div>
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <h1>Вход</h1>
+  <div class="subtitle">Телефон</div>
 
   <div class="field">
-    <span class="flag">🇷🇺</span>
-    <input id="phoneInput" type="tel" placeholder="+7 (___) ___-__-__">
+    <input id="loginPhone">
   </div>
 
-  <button id="sendCodeBtn" class="btn btn-primary">
-    Получить код
-  </button>
-
-  <div id="phoneError" class="error"></div>
+  <button id="smsBtn" class="btn btn-primary">Получить код</button>
+  <button id="showPassBtn" class="btn btn-secondary">Войти по паролю</button>
 
   <div class="switch">
     Нет аккаунта?
-    <button onclick="location.href='register.html'">Зарегистрироваться</button>
+    <button onclick="showRegister()">Зарегистрироваться</button>
   </div>
+
+  <div id="loginError" class="error"></div>
 </div>
 
-<!-- ===== ЭКРАН КОДА ===== -->
+<!-- PASSWORD LOGIN -->
+<div id="passwordScreen" class="hidden">
+  <h1>Вход по паролю</h1>
+
+  <div class="field">
+    <input id="passPhone">
+  </div>
+
+  <div class="field">
+    <input id="passInput" type="password" placeholder="Пароль">
+  </div>
+
+  <button id="loginPassBtn" class="btn btn-primary">Войти</button>
+  <button onclick="showLogin()" class="btn btn-secondary">Назад</button>
+
+  <div id="passError" class="error"></div>
+</div>
+
+<!-- CODE SCREEN -->
 <div id="codeScreen" class="hidden">
-  <h1>Подтверждение</h1>
-  <div class="subtitle">Введите код из SMS</div>
+  <h1>Код из SMS</h1>
 
-  <input id="codeInput"
-         inputmode="numeric"
-         maxlength="4"
-         placeholder="••••"
-         style="text-align:center;font-size:28px;padding:20px;border-radius:16px;border:1px solid #d1d5db">
+  <div class="field">
+    <input id="codeInput" maxlength="4" inputmode="numeric" style="text-align:center;font-size:20px">
+  </div>
 
-  <button id="verifyBtn" class="btn btn-primary" style="margin-top:24px">
-    Войти
-  </button>
-
+  <button id="verifyBtn" class="btn btn-primary">Подтвердить</button>
   <div id="codeError" class="error"></div>
 </div>
 
-<!-- ===== WELCOME ===== -->
-<div id="welcomeScreen" class="hidden center welcome">
-  <h1>✈️ Добро пожаловать на борт</h1>
-  <div id="welcomeName" class="subtitle"></div>
+<!-- REGISTER -->
+<div id="registerScreen" class="hidden">
+  <h1>Регистрация</h1>
+
+  <div class="field">
+    <input id="regFio" placeholder="ФИО">
+  </div>
+
+  <div class="field">
+    <input id="regPhone">
+  </div>
+
+  <div class="field">
+    <input id="regBirth" placeholder="Дата рождения">
+  </div>
+
+  <div class="field">
+    <input id="regPriority" placeholder="Priority">
+  </div>
+
+  <div class="field">
+    <input id="regPassword" type="password" placeholder="Пароль">
+  </div>
+
+  <button id="registerBtn" class="btn btn-primary">Создать аккаунт</button>
+  <button onclick="showLogin()" class="btn btn-secondary">Назад</button>
+
+  <div id="regError" class="error"></div>
 </div>
 
 </div>
 
 <script>
-const API = 'https://s7avelii-airlines-1.onrender.com';
+const API='https://s7avelii-airlines-1.onrender.com';
 
-const phoneInput = document.getElementById('phoneInput');
-const codeInput = document.getElementById('codeInput');
+/* МАСКИ */
+IMask(loginPhone,{mask:'+{7} (000) 000-00-00'});
+IMask(passPhone,{mask:'+{7} (000) 000-00-00'});
+IMask(regPhone,{mask:'+{7} (000) 000-00-00'});
+IMask(regBirth,{mask:'00.00.0000'});
+IMask(regPriority,{mask:'000 000 000'});
 
-const phoneScreen = document.getElementById('phoneScreen');
-const codeScreen = document.getElementById('codeScreen');
-const welcomeScreen = document.getElementById('welcomeScreen');
+/* ПЕРЕКЛЮЧЕНИЕ */
+function showRegister(){
+  loginScreen.classList.add('hidden');
+  registerScreen.classList.remove('hidden');
+}
+function showLogin(){
+  registerScreen.classList.add('hidden');
+  passwordScreen.classList.add('hidden');
+  codeScreen.classList.add('hidden');
+  loginScreen.classList.remove('hidden');
+}
 
-const phoneError = document.getElementById('phoneError');
-const codeError = document.getElementById('codeError');
-const welcomeName = document.getElementById('welcomeName');
-
-// --- phone mask ---
-phoneInput.addEventListener('input', () => {
-  let v = phoneInput.value.replace(/\D/g,'');
-  if (v.startsWith('8')) v = '7' + v.slice(1);
-  if (!v.startsWith('7')) v = '7' + v;
-  let r = '+7';
-  if (v.length > 1) r += ' (' + v.slice(1,4);
-  if (v.length >= 5) r += ') ' + v.slice(4,7);
-  if (v.length >= 8) r += '-' + v.slice(7,9);
-  if (v.length >= 10) r += '-' + v.slice(9,11);
-  phoneInput.value = r;
-});
-
-// --- send sms ---
-sendCodeBtn.onclick = async () => {
-  phoneError.textContent = '';
-  if (phoneInput.value.replace(/\D/g,'').length < 11) {
-    phoneError.textContent = 'Введите корректный номер';
-    return;
-  }
-
-  const res = await fetch(API + '/api/auth/request-code', {
+/* SMS LOGIN */
+smsBtn.onclick=async()=>{
+  const res=await fetch(API+'/api/auth/request-code',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({ phone: phoneInput.value })
+    body:JSON.stringify({phone:loginPhone.value})
   });
-
-  if (!res.ok) {
-    phoneError.textContent = 'Ошибка отправки SMS';
-    return;
-  }
-
-  phoneScreen.classList.add('hidden');
+  if(!res.ok){loginError.textContent='Ошибка';return;}
+  loginScreen.classList.add('hidden');
   codeScreen.classList.remove('hidden');
 };
 
-// --- verify code ---
-verifyBtn.onclick = async () => {
-  codeError.textContent = '';
-  if (codeInput.value.length !== 4) {
-    codeError.textContent = 'Введите 4-значный код';
-    return;
-  }
-
-  const res = await fetch(API + '/api/auth/verify-code', {
+/* VERIFY */
+verifyBtn.onclick=async()=>{
+  const res=await fetch(API+'/api/auth/verify-code',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
-      phone: phoneInput.value,
-      code: codeInput.value
+      phone:loginPhone.value,
+      code:codeInput.value
     })
   });
+  const data=await res.json();
+  if(!res.ok){codeError.textContent=data.error;return;}
+  localStorage.setItem('token',data.token);
+  location.href='cabinet.html';
+};
 
-  const data = await res.json();
+/* PASSWORD SCREEN */
+showPassBtn.onclick=()=>{
+  loginScreen.classList.add('hidden');
+  passwordScreen.classList.remove('hidden');
+};
 
-  if (!res.ok) {
-    codeError.textContent = data.error || 'Неверный код';
-    return;
-  }
+/* PASSWORD LOGIN */
+loginPassBtn.onclick=async()=>{
+  const res=await fetch(API+'/api/auth/login',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      phone:passPhone.value,
+      password:passInput.value
+    })
+  });
+  const data=await res.json();
+  if(!res.ok){passError.textContent=data.error;return;}
+  localStorage.setItem('token',data.token);
+  location.href='cabinet.html';
+};
 
-  // ✅ сохраняем токен
-  localStorage.setItem('token', data.token);
-
-  // ✅ имя из сервера (НЕ из JWT)
-  welcomeName.textContent = data.fio || '';
-
-  codeScreen.classList.add('hidden');
-  welcomeScreen.classList.remove('hidden');
-
-  setTimeout(() => {
-    location.href = 'cabinet.html';
-  }, 2000);
+/* REGISTER */
+registerBtn.onclick=async()=>{
+  const res=await fetch(API+'/api/auth/register',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      fio:regFio.value,
+      phone:regPhone.value,
+      birth:regBirth.value,
+      priority:regPriority.value,
+      password:regPassword.value
+    })
+  });
+  const data=await res.json();
+  if(!res.ok){regError.textContent=data.error;return;}
+  alert('Аккаунт создан');
+  showLogin();
 };
 </script>
 
