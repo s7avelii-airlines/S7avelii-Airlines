@@ -157,6 +157,29 @@ input:focus{border-color:var(--green);outline:none}
 <script>
 const API='https://s7avelii-airlines-1.onrender.com';
 
+const loginPhone = document.getElementById('loginPhone');
+const passPhone = document.getElementById('passPhone');
+const regPhone = document.getElementById('regPhone');
+const regBirth = document.getElementById('regBirth');
+const regPriority = document.getElementById('regPriority');
+
+const loginScreen = document.getElementById('loginScreen');
+const passwordScreen = document.getElementById('passwordScreen');
+const codeScreen = document.getElementById('codeScreen');
+const registerScreen = document.getElementById('registerScreen');
+
+const smsBtn = document.getElementById('smsBtn');
+const verifyBtn = document.getElementById('verifyBtn');
+const loginPassBtn = document.getElementById('loginPassBtn');
+const registerBtn = document.getElementById('registerBtn');
+const showPassBtn = document.getElementById('showPassBtn');
+
+const loginError = document.getElementById('loginError');
+const passError = document.getElementById('passError');
+const codeError = document.getElementById('codeError');
+const regError = document.getElementById('regError');
+const codeInput = document.getElementById('codeInput');
+
 /* МАСКИ */
 IMask(loginPhone,{mask:'+{7} (000) 000-00-00'});
 IMask(passPhone,{mask:'+{7} (000) 000-00-00'});
@@ -164,7 +187,11 @@ IMask(regPhone,{mask:'+{7} (000) 000-00-00'});
 IMask(regBirth,{mask:'00.00.0000'});
 IMask(regPriority,{mask:'000 000 000'});
 
-/* ПЕРЕКЛЮЧЕНИЕ */
+/* ВСПОМОГАТЕЛЬНОЕ */
+function cleanPhone(v){
+  return v.replace(/\D/g,'');
+}
+
 function showRegister(){
   loginScreen.classList.add('hidden');
   registerScreen.classList.remove('hidden');
@@ -176,14 +203,16 @@ function showLogin(){
   loginScreen.classList.remove('hidden');
 }
 
-/* SMS LOGIN */
+/* SMS */
 smsBtn.onclick=async()=>{
   const res=await fetch(API+'/api/auth/request-code',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({phone:loginPhone.value})
+    body:JSON.stringify({phone:cleanPhone(loginPhone.value)})
   });
-  if(!res.ok){loginError.textContent='Ошибка';return;}
+
+  if(!res.ok){loginError.textContent='Ошибка отправки';return;}
+
   loginScreen.classList.add('hidden');
   codeScreen.classList.remove('hidden');
 };
@@ -194,12 +223,15 @@ verifyBtn.onclick=async()=>{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
-      phone:loginPhone.value,
+      phone:cleanPhone(loginPhone.value),
       code:codeInput.value
     })
   });
+
   const data=await res.json();
+
   if(!res.ok){codeError.textContent=data.error;return;}
+
   localStorage.setItem('token',data.token);
   location.href='cabinet.html';
 };
@@ -216,12 +248,15 @@ loginPassBtn.onclick=async()=>{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
-      phone:passPhone.value,
+      phone:cleanPhone(passPhone.value),
       password:passInput.value
     })
   });
+
   const data=await res.json();
+
   if(!res.ok){passError.textContent=data.error;return;}
+
   localStorage.setItem('token',data.token);
   location.href='cabinet.html';
 };
@@ -233,14 +268,17 @@ registerBtn.onclick=async()=>{
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
       fio:regFio.value,
-      phone:regPhone.value,
+      phone:cleanPhone(regPhone.value),
       birth:regBirth.value,
       priority:regPriority.value,
       password:regPassword.value
     })
   });
+
   const data=await res.json();
+
   if(!res.ok){regError.textContent=data.error;return;}
+
   alert('Аккаунт создан');
   showLogin();
 };
