@@ -304,27 +304,32 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// Login
-app.post('/api/login', async (req, res) => {
-  try {
-    const { identifier, password } = req.body;
-    if (!identifier || !password) return res.status(400).json({ error: 'identifier/password required' });
+app.post('/api/auth/login', async (req,res)=>{
+  try{
+    const {phone,password}=req.body;
+    if(!phone||!password)
+      return res.status(400).json({error:'Данные обязательны'});
 
-    const r = await pool.query('SELECT * FROM users WHERE email=$1 OR phone=$1', [identifier]);
-    const userRow = r.rows[0];
-    if (!userRow) return res.status(400).json({ error: 'User not found' });
+    const normalized=phone.replace(/\D/g,'');
 
-    const ok = await bcrypt.compare(password, userRow.password);
-    if (!ok) return res.status(400).json({ error: 'Wrong password' });
+    const r=await pool.query(
+      'SELECT id,fio,password FROM users WHERE phone=$1',
+      [normalized]
+    );
 
-    const token = signToken(userRow.id);
-    const user = await getUserById(userRow.id);
-    res.json({ token, user });
-  } catch (err) {
-    console.error('login err', err);
-    res.status(500).json({ error: 'Login failed' });
+    const user=r.rows[0];
+    if(!user) return res.status(404).json({error:'Пользователь не найден'});
+
+    const ok=await bcrypt.compare(password,user.password);
+    if(!ok) return res.status(400).json({error:'Неверный пароль'});
+
+    const token=signToken(user.id);
+    res.json({token});
+  }catch(e){
+    res.status(500).json({error:'Login error'});
   }
 });
+
 
 // Profile
 app.get('/api/profile', authMiddleware, async (req, res) => {
