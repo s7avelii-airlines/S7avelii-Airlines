@@ -1357,6 +1357,7 @@ window.addEventListener("message", (e) => {
   </div>
 </section>  
    
+
 <body class="bg-gray-100 flex justify-center py-10">
 
 <section class="bg-white rounded-3xl shadow-xl p-6 w-full max-w-md">
@@ -1364,7 +1365,7 @@ window.addEventListener("message", (e) => {
   <!-- Логотип -->
   <div class="flex justify-center mb-5">
     <div class="px-4 py-1 bg-purple-200 rounded-full">
-      <img src="images/logo.svg" class="h-5">
+      <img src="images/1770905897516.avif" class="h-5">
     </div>
   </div>
 
@@ -1373,7 +1374,7 @@ window.addEventListener("message", (e) => {
     Идеи для вашего путешествия
   </h2>
 
-  <!-- Верхняя статья (редактируешь вручную) -->
+  <!-- Верхняя статья -->
   <a href="#" class="block mb-6">
     <div class="rounded-3xl overflow-hidden mb-4">
       <img src="images/top.jpg" class="w-full h-56 object-cover">
@@ -1390,17 +1391,32 @@ window.addEventListener("message", (e) => {
     </div>
   </a>
 
-  <!-- Карусель -->
+  <!-- Telegram карусель -->
   <div class="swiper">
-    <div class="swiper-wrapper" id="carousel-content"></div>
+    <div class="swiper-wrapper">
+
+      <div class="swiper-slide">
+        <iframe src="https://t.me/S7saveliiairlines/150?embed=1"
+          width="100%" height="250" frameborder="0"></iframe>
+      </div>
+
+      <div class="swiper-slide">
+        <iframe src="https://t.me/S7saveliiairlines/149?embed=1"
+          width="100%" height="250" frameborder="0"></iframe>
+      </div>
+
+      <div class="swiper-slide">
+        <iframe src="https://t.me/S7saveliiairlines/148?embed=1"
+          width="100%" height="250" frameborder="0"></iframe>
+      </div>
+
+    </div>
   </div>
 
 </section>
 
 <script>
-/* =====================
-   1 устройство = 1 просмотр
-===================== */
+/* 1 устройство = 1 просмотр */
 const articleId = "top-article-001";
 
 if (!localStorage.getItem("viewed_" + articleId)) {
@@ -1413,46 +1429,15 @@ if (!localStorage.getItem("viewed_" + articleId)) {
 document.getElementById("view-count").innerText =
   localStorage.getItem("views_" + articleId) || 1;
 
-
-/* =====================
-   Telegram через виджет
-===================== */
-
-// ВАЖНО: канал должен быть публичным
-const channel = "https://t.me/S7saveliiairlines"; // без @
-const postsCount = 5;
-
-// создаём iframe для каждого поста
-for (let i = 1; i <= postsCount; i++) {
-  const slide = document.createElement("div");
-  slide.className = "swiper-slide";
-
-  slide.innerHTML = `
-    <div class="rounded-2xl overflow-hidden">
-      <iframe
-        src="https://t.me/${channel}/${i}?embed=1&mode=tme"
-        width="100%"
-        height="250"
-        frameborder="0"
-        scrolling="no">
-      </iframe>
-    </div>
-  `;
-
-  document.getElementById("carousel-content").appendChild(slide);
-}
-
-// запускаем карусель
+/* Swiper */
 new Swiper('.swiper', {
-  slidesPerView: 1.1,
+  slidesPerView: 1.05,
   spaceBetween: 12,
   loop: true,
-  autoplay: {
-    delay: 4000,
-    disableOnInteraction: false,
-  },
+  autoplay: { delay: 3500 }
 });
 </script>
+
  
 <footer class="footer">
   <div class="footer-inner">
