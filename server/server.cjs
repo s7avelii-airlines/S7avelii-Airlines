@@ -283,7 +283,9 @@ app.post('/api/auth/verify-code', async (req, res) => {
 app.post('/api/register', async (req, res) => {
   try {
     const { fio, email, phone, password, dob, gender, cardNumber, cardType } = req.body;
-    if (!fio || !email || !password) return res.status(400).json({ error: 'fio,email,password required' });
+    if (!fio || !phone || !password) {
+  return res.status(400).json({ error: "fio,phone,password required" });
+}
 
     const check = await pool.query('SELECT id FROM users WHERE email=$1 OR phone=$2', [email, phone || null]);
     if (check.rows.length) return res.status(400).json({ error: 'User exists' });
