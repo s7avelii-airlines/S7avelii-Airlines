@@ -135,6 +135,9 @@ sendSmsBtn.onclick=async()=>{
   const code=prompt('Введите код из SMS');
   const verify=await fetch(API+'/api/auth/verify-code',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,code})});
   const data=await verify.json();
+  if(verify.ok && data.token){
+    localStorage.setItem('token',data.token);
+  }
   if(!verify.ok){smsError.textContent=data.error||'Ошибка';return;}
   welcomeName.textContent=data.fio||'';
   smsLoginScreen.classList.add('hidden');
@@ -186,6 +189,34 @@ registerBtn.onclick=async()=>{
   welcomeScreen.classList.remove('hidden');
   setTimeout(()=>location.href='cabinet.html',2000);
 };
+
+
+// ===== AUTO LOGIN IF TOKEN EXISTS =====
+(function(){
+  const token=localStorage.getItem('token');
+  if(!token) return;
+
+  fetch(API+'/api/profile',{
+    headers:{'Authorization':'Bearer '+token}
+  })
+  .then(r=>{
+    if(!r.ok) throw new Error();
+    return r.json();
+  })
+  .then(user=>{
+    welcomeName.textContent=user.fio||'';
+    smsLoginScreen.classList.add('hidden');
+    passwordLoginScreen.classList.add('hidden');
+    registerScreen.classList.add('hidden');
+    welcomeScreen.classList.remove('hidden');
+
+    setTimeout(()=>location.href='cabinet.html',1000);
+  })
+  .catch(()=>{
+    localStorage.removeItem('token');
+  });
+})();
+
 </script>
 </body>
 </html>
