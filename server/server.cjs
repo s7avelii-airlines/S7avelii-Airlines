@@ -140,6 +140,16 @@ async function initDB() {
         created_at TIMESTAMP DEFAULT NOW()
       );
     `);
+await pool.query(`
+  CREATE TABLE IF NOT EXISTS miles_transactions (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    type TEXT,
+    amount INTEGER NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT NOW()
+  );
+`);
 
     const r = await pool.query('SELECT COUNT(*) FROM products');
     if (Number(r.rows[0].count) === 0) {
@@ -442,6 +452,140 @@ app.post('/api/checkout', authMiddleware, async (req, res) => {
     res.status(500).json({ error: 'Checkout error' });
   }
 });
+
+
+// --- Routes ---
+
+app.get('/api/health', async (req, res) => {
+  try {
+    await pool.query('SELECT 1');
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ ok: false });
+  }
+});
+
+// =======================
+// TOPUP MILES
+// =======================
+app.post('/api/miles/topup', async (req, res) => {
+  try {
+    let { card_number, amount, description } = req.body;
+
+    if (!card_number)
+      return res.status(400).json({ error: 'card_number обязателен' });
+
+    amount = Math.floor(Number(amount));
+    if (amount <= 0)
+      return res.status(400).json({ error: 'Некорректное количество миль' });
+
+    const userRes = await pool.query(
+      'SELECT id, bonus_miles FROM users WHERE card_number=$1',
+      [card_number]
+    );
+
+    if (!userRes.rows.length)
+      return res.status(404).json({ error: 'Карта не найдена' });
+
+    const user = userRes.rows[0];
+
+    await pool.query(
+      `INSERT INTO miles_transactions (user_id, type, amount, description)
+       VALUES ($1,$2,$3,$4)`,
+      [user.id, 'topup', amount, description || 'Пополнение миль']
+    );
+
+    await pool.query(
+      `UPDATE users 
+       SET bonus_miles = COALESCE(bonus_miles,0) + $1 
+       WHERE id=$2`,
+      [amount, user.id]
+    );
+
+    res.json({
+      ok: true,
+      new_balance: user.bonus_miles + amount
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Ошибка пополнения миль' });
+  }
+});
+
+// =======================
+// COMMAND
+// =======================
+app.post('/api/miles/command', async (req, res) => {
+  try {
+    const parsed = parseCommand(req.body.text);
+
+    if (!parsed)
+      return res.status(400).json({ error: 'Команда не распознана' });
+
+    const userRes = await pool.query(
+      'SELECT id FROM users WHERE card_number=$1',
+      [parsed.card_number]
+    );
+
+    if (!userRes.rows.length)
+      return res.status(404).json({ error: 'Карта не найдена' });
+
+    const user = userRes.rows[0];
+
+    await pool.query(
+      `INSERT INTO miles_transactions (user_id, type, amount, description)
+       VALUES ($1,$2,$3,$4)`,
+      [user.id, 'topup', parsed.amount, 'Пополнение через команду']
+    );
+
+    await pool.query(
+      `UPDATE users 
+       SET bonus_miles = COALESCE(bonus_miles,0) + $1 
+       WHERE id=$2`,
+      [parsed.amount, user.id]
+    );
+
+    res.json({ ok: true });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Ошибка команды' });
+  }
+});
+
+// =======================
+// HISTORY
+// =======================
+app.get('/api/miles/history/:card', async (req, res) => {
+  try {
+    const card_number = req.params.card;
+
+    const userRes = await pool.query(
+      'SELECT id FROM users WHERE card_number=$1',
+      [card_number]
+    );
+
+    if (!userRes.rows.length)
+      return res.status(404).json({ error: 'Карта не найдена' });
+
+    const history = await pool.query(
+      `SELECT id, type, amount, description, created_at
+       FROM miles_transactions
+       WHERE user_id=$1
+       ORDER BY created_at DESC`,
+      [userRes.rows[0].id]
+    );
+
+    res.json(history.rows);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Ошибка истории' });
+  }
+});
+
+
 
 // Notifications
 app.get('/notifications/unread-count', authMiddleware, async (req, res) => {
