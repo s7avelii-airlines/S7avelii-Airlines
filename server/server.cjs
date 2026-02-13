@@ -52,7 +52,11 @@ app.use(express.static('public'));
 
 // --- Helpers ---
 function signToken(userId) {
-  return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign(
+    { id: userId },
+    JWT_SECRET,
+    { expiresIn: '30d' } // ← 30 дней
+  );
 }
 
 async function getUserById(id) {
