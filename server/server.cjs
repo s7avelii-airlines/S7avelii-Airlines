@@ -584,6 +584,35 @@ app.get('/api/miles/history/:card', async (req, res) => {
     res.status(500).json({ error: 'Ошибка истории' });
   }
 });
+// Пополнение милей
+app.post('/api/miles/topup', authMiddleware, async (req, res) => {
+  try {
+    const { cardNumber, amount } = req.body;
+    if (!cardNumber || !amount) return res.status(400).json({ error: 'cardNumber и amount обязательны' });
+
+    // Находим пользователя по карте
+    const { rows } = await pool.query('SELECT id, bonus_miles FROM users WHERE card_number=$1', [cardNumber]);
+    if (!rows.length) return res.status(404).json({ error: 'Пользователь не найден' });
+
+    const userId = rows[0].id;
+    const newMiles = (rows[0].bonus_miles || 0) + Number(amount);
+
+    // Обновляем мили
+    await pool.query('UPDATE users SET bonus_miles=$1 WHERE id=$2', [newMiles, userId]);
+
+    // Добавляем запись в блок пополнений (можно в notifications или отдельную таблицу)
+    await pool.query(
+      'INSERT INTO notifications (user_id, type, title, message) VALUES ($1,$2,$3,$4)',
+      [userId, 'miles_topup', `Пополнение ${amount} миль`, `Счёт вашей карты пополнен на ${amount} миль.`]
+    );
+
+    res.json({ ok: true, newMiles });
+
+  } catch (err) {
+    console.error('topup err', err);
+    res.status(500).json({ error: 'Ошибка начисления милей' });
+  }
+});
 
 
 
