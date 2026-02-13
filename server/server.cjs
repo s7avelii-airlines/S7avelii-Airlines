@@ -172,54 +172,69 @@ app.get('/api/health', async (req, res) => {
 // =======================
 // REQUEST CODE
 // =======================
+// ===== REQUEST SMS CODE =====
 app.post('/api/auth/request-code', async (req, res) => {
   try {
-    const { phone } = req.body;
-    if (!phone) {
+
+    let { phone } = req.body;
+
+    if (!phone)
       return res.status(400).json({ error: 'Телефон обязателен' });
-    }
 
-    const normalizedPhone = phone.replace(/\D/g, '');
+    // приводим к формату 79626298105
+    phone = phone.replace(/\D/g, '');
 
-    const existing = smsCodes.get(normalizedPhone);
+    if (phone.startsWith('8'))
+      phone = '7' + phone.slice(1);
 
-    // Если код уже есть и не истёк — не создаём новый
-    if (existing && existing.expires > Date.now()) {
-      console.log("Код уже существует:", existing.code);
-      return res.json({ ok: true });
-    }
+    if (!phone.startsWith('7') || phone.length !== 11)
+      return res.status(400).json({ error: 'Неверный формат телефона' });
 
-    // Генерация нового кода
+    // генерируем код
     const code = Math.floor(1000 + Math.random() * 9000).toString();
 
-    console.log(`SMS CODE для ${normalizedPhone}:`, code);
+    console.log(`SMS CODE для ${phone}: ${code}`);
 
-    smsCodes.set(normalizedPhone, {
-      code,
-      expires: Date.now() + 15 * 60 * 1000 // 15 минут
-    });
+    // сохраняем код в БД
+    await pool.query(`
+      INSERT INTO sms_codes (phone, code, created_at)
+      VALUES ($1,$2,NOW())
+      ON CONFLICT (phone)
+      DO UPDATE SET
+        code = EXCLUDED.code,
+        created_at = NOW()
+    `, [phone, code]);
 
-    if (process.env.SMS_RU_KEY) {
-      const response = await axios.get('https://sms.ru/sms/send', {
-        params: {
-          api_id: process.env.SMS_RU_KEY,
-          to: normalizedPhone,
-          msg: `S7avelii-ID: код входа ${code}`,
-          from: 's7avelii-ID',
-          json: 1
-        }
+
+    // отправляем SMS БЕЗ await (максимально быстро)
+    const url =
+      `https://sms.ru/sms/send?api_id=${process.env.SMSRU_API_KEY}` +
+      `&to=${phone}` +
+      `&msg=${encodeURIComponent("S7avelii: код входа " + code)}` +
+      `&json=1`;
+
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        console.log("SMS RU RESPONSE:", data);
+      })
+      .catch(err => {
+        console.log("SMS ERROR:", err.message);
       });
 
-      console.log("SMS RU RESPONSE:", response.data);
-    } else {
-      console.log("SMS_RU_KEY не задан. Код:", code);
-    }
 
+    // сразу отвечаем клиенту
     res.json({ ok: true });
 
-  } catch (err) {
-    console.error('sms send error', err);
-    res.status(500).json({ error: 'SMS error' });
+  }
+  catch (err) {
+
+    console.log('request-code err', err);
+
+    res.status(500).json({
+      error: 'Ошибка отправки кода'
+    });
+
   }
 });
 
@@ -228,55 +243,65 @@ app.post('/api/auth/request-code', async (req, res) => {
 // VERIFY CODE
 // =======================
 app.post('/api/auth/verify-code', async (req, res) => {
+
   try {
-    const { phone, code } = req.body;
-    if (!phone || !code) {
-      return res.status(400).json({ error: 'Телефон и код обязательны' });
-    }
 
-    const normalizedPhone = phone.replace(/\D/g, '');
+    let { phone, code } = req.body;
 
-    const record = smsCodes.get(normalizedPhone);
+    phone = phone.replace(/\D/g, '');
 
-    if (!record) {
-      return res.status(400).json({ error: 'Код не найден' });
-    }
-
-    if (record.expires < Date.now()) {
-      smsCodes.delete(normalizedPhone);
-      return res.status(400).json({ error: 'Код истёк' });
-    }
-
-    if (record.code !== code) {
-      return res.status(400).json({ error: 'Неверный код' });
-    }
-
-    // Удаляем код после успешной проверки
-    smsCodes.delete(normalizedPhone);
-
-    const r = await pool.query(
-      'SELECT id, fio FROM users WHERE phone=$1',
-      [normalizedPhone]
+    const result = await pool.query(
+      `SELECT * FROM sms_codes WHERE phone=$1`,
+      [phone]
     );
 
-    const user = r.rows[0];
+    if (!result.rows.length)
+      return res.status(400).json({
+        error: 'Код не найден'
+      });
 
-    if (!user) {
-      return res.status(404).json({ error: 'Пользователь не найден' });
-    }
+    if (result.rows[0].code !== code)
+      return res.status(400).json({
+        error: 'Неверный код'
+      });
 
-    const token = signToken(user.id);
+
+    const user = await pool.query(
+      `SELECT * FROM users WHERE phone=$1`,
+      [phone]
+    );
+
+    if (!user.rows.length)
+      return res.status(400).json({
+        error: 'Пользователь не найден'
+      });
+
+
+    const token = jwt.sign(
+      { id: user.rows[0].id },
+      process.env.JWT_SECRET,
+      { expiresIn: '30d' }
+    );
+
 
     res.json({
       token,
-      fio: user.fio
+      fio: user.rows[0].fio
     });
 
-  } catch (err) {
-    console.error('verify code error', err);
-    res.status(500).json({ error: 'Verify failed' });
   }
+  catch (err) {
+
+    console.log('verify-code err', err);
+
+    res.status(500).json({
+      error: 'Ошибка'
+    });
+
+  }
+
 });
+
 
 
 // Register
