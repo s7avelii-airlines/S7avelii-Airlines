@@ -16,6 +16,86 @@
 
 <style>
 
+
+/* ===== UNIVERSAL MOBILE FIX ===== */
+
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Safe area для iPhone / вырезов */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 90px);
+}
+
+/* Контейнеры */
+.safe-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Flex анти-поломка */
+.flex {
+  min-width: 0;
+}
+
+.min-w-0 {
+  min-width: 0;
+}
+
+/* Текст */
+p, h1, h2, h3, h4, h5, span {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Картинки */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Иконки внутри flex */
+.flex img {
+  flex-shrink: 0;
+}
+
+/* Адаптивный заголовок */
+.big-title {
+  font-size: clamp(24px, 5vw, 34px);
+}
+
+/* Grid анти-поломка */
+.grid {
+  width: 100%;
+}
+
+/* Кнопки */
+button {
+  max-width: 100%;
+}
+
+/* Модалки */
+.modal-dialog {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Убираем случайные переполнения */
+* {
+  max-width: 100%;
+}
+
+  
+
+
+  
 /* ПК адаптация */
 @media (min-width: 1024px) {
 
