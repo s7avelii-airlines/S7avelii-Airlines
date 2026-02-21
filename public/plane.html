@@ -187,11 +187,36 @@ main {
 </header>
 
 <!-- ================= MOBILE ================= -->
-<header class="header-mobile">
-  <img src="images/IMG_20260111_155539.avif" class="logo-mobile">
+<header class="fixed top-0 left-0 w-full flex justify-between items-center p-4 
+bg-white/80 backdrop-blur-md shadow z-50">
 
-  <div id="userAreaMobile"></div>
+  <!-- ЛОГОТИП (НЕ ТРОГАЕМ) -->
+  <img src="images/IMG_20260111_155539.avif" alt="S7avelii" class="w-10 h-10">
+
+  <!-- ПРАВАЯ ЧАСТЬ -->
+  <div class="flex items-center gap-3">
+    <!-- ПОЛЬЗОВАТЕЛЬ / ВОЙТИ -->
+    <div class="flex gap-2 items-center" id="userArea"></div>
+    <!-- ИКОНКИ -->
+    <div class="flex items-center gap-2">
+    <!-- КНОПКА ЧАТА -->
+    <button id="chat-button"
+      class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition">
+      <img src="images/чатикнамобилку.avif"
+           class="w-10 h-10 object-contain"
+           alt="Чат">
+    </button>
+     
+<div class="w-13 h-13 flex items-center justify-center opacity-80">
+  <img src="images/рубликнашапку.avif" class="w-12 h-12 object-contain" alt="">
+</div>
+
+
+    </div>
+
+  </div>
 </header>
+
 
 <!-- ================= SCRIPT ================= -->
 <script>
