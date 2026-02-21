@@ -586,71 +586,10 @@ function escapeHtml(u){ if(u==null) return ""; return String(u).replace(/&/g,'&a
 /* ================= done ================= */
    </script>
  
-<header>
-  <div class="logo">
-    <a href="index.html">
-      <img src="images/1757683264306.avif" alt="S7avelii Airlines" class="logo-img" />
-    </a>
-  </div>
-
-  <!-- Кнопка-бургер -->
-  <button class="burger" aria-label="Открыть меню">
-    <span></span><span></span><span></span>
-  </button>
-
-  <!-- Главное меню -->
-  <nav class="nav">
-    <ul>
-      <li>
-        <a href="index.html">Покупка и управление</a>
-        <div class="dropdown">
-          <a href="bilet.html">Купить билет</a>
-          <a href="auth.html">Управление бронированием</a>
-          <a href="arrivel.html">Направления</a>
-          <a href="HOTEL.html">Отели</a>
-          <a href="class.html">Выбор класса</a>
-        </div>
-      </li>
-      <li>
-        <a href="priority.html">S7avelii Priority</a>
-        <div class="dropdown">
-          <a href="priority.html">О программе</a>
-          <a href="https://t.me/s7aveliihelper">Как копить</a>
-        </div>
-      </li>
-      <li>
-        <a href="#">Информация</a>
-        <div class="dropdown">
-          <a href="body.html">О нас</a>
-          <a href="office.html">Представительство</a>
-          <a href="plane.html">Наш флот</a>
-          <a href="eat.html">Питание</a>
-          <a href="https://t.me/s7aveliihelper">Контакты</a>
-        </div>
-      </li>
-      <li><a href="busines.html">Бизнесу</a></li>
-      <li><a href="https://t.me/S7saveliiairlines">7PLANE7</a></li>
-    </ul>
-  </nav>
-
-  <div class="right-menu">
-    <button aria-label="Search">
-      <svg class="icon-search" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle cx="11" cy="11" r="7"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
-    </button>
-    <button>RUB</button>
-    <div class="flag" title="Russian flag">
-      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="Russia" />
-    </div>
-    <div id="userArea"></div>
-  </div>
-</header>
-
 <style>
-/* === БАЗОВЫЙ СТИЛЬ ДЛЯ ПК === */
-header {
+/* ================= DESKTOP HEADER ================= */
+
+.header-desktop {
   display: flex;
   align-items: center;
   padding: 0 60px;
@@ -662,20 +601,16 @@ header {
   width: 100%;
   z-index: 1000;
   background: #fff;
-  justify-content: space-between;
-  box-sizing: border-box;
 }
 
 .logo-img {
   height: 70px;
-  width: auto;
   cursor: pointer;
 }
 
 nav {
   display: flex;
   flex-grow: 1;
-  justify-content: center;
 }
 
 nav ul {
@@ -691,11 +626,11 @@ nav li {
 }
 
 nav a {
+  position: relative;
   color: #000;
   text-decoration: none;
   font-size: 16px;
   padding: 28px 0;
-  position: relative;
 }
 
 nav a::after {
@@ -708,6 +643,7 @@ nav a::after {
   background-color: #b3c900;
   transition: width 0.3s ease;
 }
+
 nav li:hover > a::after {
   width: 100%;
 }
@@ -719,194 +655,195 @@ nav li:hover > a::after {
   background: #fff;
   padding: 20px;
   border-top: 2px solid #b3c900;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
   min-width: 240px;
-  z-index: 999;
   opacity: 0;
   transform: translateY(-10px);
   pointer-events: none;
-  transition: all 0.3s ease;
+  transition: 0.3s;
 }
+
 nav li:hover .dropdown {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
 }
+
 .dropdown a {
   display: block;
   padding: 8px 0;
-  color: #000;
   font-size: 14px;
-}
-.dropdown a:hover {
-  color: #b3c900;
 }
 
 .right-menu {
   display: flex;
   align-items: center;
   gap: 16px;
-  font-size: 16px;
 }
-.right-menu button,
-.right-menu select {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-}
-.flag {
+
+.flag img {
   width: 20px;
   height: 14px;
-  border-radius: 2px;
-  overflow: hidden;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
-}
-.flag img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
-#userArea a {
-  padding: 8px 14px;
-  border: 1px solid #7ad30d;
-  border-radius: 6px;
-  color: #6dd808;
-  text-decoration: none;
-  font-size: 14px;
-}
+/* ================= MOBILE HEADER ================= */
 
-/* === КНОПКА-БУРГЕР === */
-.burger {
+.header-mobile {
   display: none;
-  flex-direction: column;
-  justify-content: center;
-  width: 28px;
-  height: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  gap: 4px;
-  z-index: 1001;
-}
-.burger span {
-  display: block;
-  height: 3px;
-  background: #000;
-  border-radius: 2px;
-  transition: 0.3s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: #ffffff;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e6e6e6;
+  align-items: center;
+  justify-content: space-between;
 }
 
-/* === МЕДИА (адаптация под мобилки) === */
-@media (max-width: 992px) {
-  header {
-    padding: 0 20px;
-  }
-
-  nav ul {
-    gap: 24px;
-  }
+.header-mobile img.logo-mobile {
+  height: 32px;
 }
+
+/* ================= ADAPTIVE ================= */
 
 @media (max-width: 768px) {
-  .burger {
+  .header-desktop {
+    display: none;
+  }
+
+  .header-mobile {
     display: flex;
   }
+}
 
-  nav {
-    position: fixed;
-    top: 80px;
-    left: 0;
-    right: 0;
-    background: white;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 20px 30px;
-    border-top: 1px solid #eee;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    transform: translateY(-120%);
-    transition: transform 0.3s ease;
-  }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
 
-  nav.open {
-    transform: translateY(0);
-  }
-
-  nav ul {
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-  }
-
-  .dropdown {
-    position: static;
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    display: none;
-  }
-
-  nav li:hover .dropdown {
-    display: block;
-  }
-
-  .right-menu {
-    display: none;
-  }
-
-  /* Анимация крестика */
-  .burger.active span:nth-child(1) {
-    transform: rotate(45deg) translateY(8px);
-  }
-  .burger.active span:nth-child(2) {
-    opacity: 0;
-  }
-  .burger.active span:nth-child(3) {
-    transform: rotate(-45deg) translateY(-8px);
-  }
+main {
+  padding-top: 90px;
 }
 </style>
+</head>
+<body>
 
+<!-- ================= DESKTOP ================= -->
+<header class="header-desktop">
+  <a href="index.html">
+    <img src="images/1757683264306.avif" class="logo-img">
+  </a>
+
+  <nav>
+    <ul>
+      <li>
+        <a href="#">Покупка и управление</a>
+        <div class="dropdown">
+          <a href="bilet.html">Купить билет</a>
+          <a href="auth.html">Управление бронированием</a>
+          <a href="arrivel.html">Направления</a>
+        </div>
+      </li>
+      <li><a href="priority.html">S7avelii Priority</a></li>
+      <li><a href="body.html">О нас</a></li>
+    </ul>
+  </nav>
+
+  <div class="right-menu">
+    <div id="userAreaDesktop"></div>
+  </div>
+</header>
+
+<header class="header-mobile">
+  <img src="images/IMG_20260111_155539.avif" class="logo-mobile">
+
+  <div id="userAreaMobile"></div>
+</header>
+
+
+
+<!-- ================= SCRIPT ================= -->
 <script>
-  // --- Бургер-меню ---
-  const burger = document.querySelector(".burger");
-  const nav = document.querySelector("nav");
+const API = 'https://s7avelii-airlines-1.onrender.com';
 
-  burger.addEventListener("click", () => {
-    burger.classList.toggle("active");
-    nav.classList.toggle("open");
-  });
+async function updateUserArea() {
+  const token = localStorage.getItem('token');
 
-  // --- Авторизация ---
-  async function updateUserArea() {
-    const userArea = document.getElementById("userArea");
-    try {
-      const res = await fetch("/api/profile");
-      if (!res.ok) throw new Error("Не авторизован");
-      const data = await res.json();
-      const user = data.user;
+  const desktop = document.getElementById('userAreaDesktop');
+  const mobile = document.getElementById('userAreaMobile');
 
-      if (user.avatar) {
-        userArea.innerHTML = `
-          <img src="${user.avatar}" alt="avatar"
-            style="width:36px;height:36px;border-radius:50%;cursor:pointer;object-fit:cover;"
-            onclick="window.location.href='cabinet.html'" />
-        `;
-      } else {
-        userArea.innerHTML = `
-          <span style="cursor:pointer;color:#2196f3;font-weight:500;"
-            onclick="window.location.href='cabinet.html'">${user.fio.split(" ")[0]}</span>`;
-      }
-    } catch {
-      userArea.innerHTML = `<a href="auth.html">Вход</a>`;
-    }
+  function renderNotAuth(el) {
+    if (!el) return;
+    el.innerHTML = `
+      <a href="auth.html" style="padding:8px 14px;border:1px solid #7ad30d;border-radius:6px;color:#6dd808;text-decoration:none;font-size:14px;">
+        Войти
+      </a>
+    `;
   }
-  window.addEventListener("DOMContentLoaded", updateUserArea);
+
+  if (!token) {
+    renderNotAuth(desktop);
+    renderNotAuth(mobile);
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/api/profile`, {
+      headers: { Authorization: 'Bearer ' + token }
+    });
+
+    if (!res.ok) throw new Error();
+
+    const data = await res.json();
+    const user = data.user || data;
+
+    const avatar = user.avatar
+      ? (user.avatar.startsWith('http') ? user.avatar : API + user.avatar)
+      : 'images/default-avatar.png';
+
+    const fioParts = (user.fio || 'Профиль').split(' ');
+    const name = fioParts[0] || 'Профиль';
+    const surnameInitial = fioParts[1] ? fioParts[1][0] + '.' : '';
+
+    const miles =
+      user.miles ??
+      user.miles_balance ??
+      user.bonus_miles ??
+      user.points ??
+      data.miles ??
+      0;
+
+    const html = `
+      <div style="display:flex;align-items:center;cursor:pointer;"
+           onclick="window.location.href='cabinet.html'">
+        <img src="${avatar}" 
+             style="width:32px;height:32px;border-radius:50%;object-fit:cover;margin-right:8px;">
+        <div style="display:flex;flex-direction:column;">
+          <span style="font-size:14px;font-weight:600;">
+            ${name} ${surnameInitial}
+          </span>
+          <span style="font-size:12px;color:#666;">
+            ${Number(miles).toLocaleString()} миль
+          </span>
+        </div>
+      </div>
+    `;
+
+    if (desktop) desktop.innerHTML = html;
+    if (mobile) mobile.innerHTML = html;
+
+  } catch {
+    localStorage.removeItem('token');
+    renderNotAuth(desktop);
+    renderNotAuth(mobile);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', updateUserArea);
 </script>
+
 
 
 <!-- Фоновое изображение -->
