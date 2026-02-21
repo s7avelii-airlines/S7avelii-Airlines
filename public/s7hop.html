@@ -1157,41 +1157,114 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 
-<nav class="hidden md:flex fixed bottom-0 left-0 w-full bg-white/85 backdrop-blur-md border-t border-gray-200 shadow z-50">
-  <div class="flex justify-around py-2 w-full">
+<style>
+    /* По умолчанию скрыто (мобильные) */
+    .desktop-menu {
+      display: none;
+    }
 
-    <a href="phone.html"
-       class="flex flex-col items-center text-xs font-medium text-lime-600">
-      <img src="images/house.avif" class="w-7 h-7 mb-1 opacity-90" alt="Главная">
-      Главная
-    </a>
+    /* Показываем только на ПК (768px и больше) */
+    @media (min-width: 768px) {
+      .desktop-menu {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        display: block;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(8px);
+        border-top: 1px solid #e5e7eb;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        z-index: 1000;
+      }
 
-    <a href="priority.html"
-       class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600 transition">
-      <img src="images/airplane.avif" class="w-7 h-7 mb-1 opacity-70 hover:opacity-100 transition" alt="Priority">
-      Priority
-    </a>
+      .menu-container {
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+      }
 
-    <a href="bilet.html"
-       class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600 transition">
-      <img src="images/ticket.avif" class="w-7 h-7 mb-1 opacity-70 hover:opacity-100 transition" alt="Купить">
-      Купить
-    </a>
+      .menu-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        color: #6b7280;
+        transition: 0.3s;
+      }
 
-    <a href="helper.html"
-       class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600 transition">
-      <img src="images/question.avif" class="w-7 h-7 mb-1 opacity-70 hover:opacity-100 transition" alt="Информация">
-      Информация
-    </a>
+      .menu-item img {
+        width: 28px;
+        height: 28px;
+        margin-bottom: 4px;
+        opacity: 0.7;
+        transition: 0.3s;
+      }
 
-    <a href="auth.html"
-       class="flex flex-col items-center text-xs font-medium text-gray-500 hover:text-lime-600 transition">
-      <img src="images/card.avif" class="w-7 h-7 mb-1 opacity-70 hover:opacity-100 transition" alt="Профиль">
-      Профиль
-    </a>
+      .menu-item:hover {
+        color: #84cc16;
+      }
 
-  </div>
-</nav>
+      .menu-item:hover img {
+        opacity: 1;
+      }
+
+      .menu-item.active {
+        color: #84cc16;
+      }
+
+      .menu-item.active img {
+        opacity: 1;
+      }
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      padding-bottom: 70px; /* чтобы контент не перекрывался меню */
+    }
+  </style>
+</head>
+<body>
+
+  <h1 style="text-align:center; margin-top:100px;">
+    Контент страницы
+  </h1>
+
+  <!-- Нижнее меню (только ПК) -->
+  <nav class="desktop-menu">
+    <div class="menu-container">
+
+      <a href="phone.html" class="menu-item active">
+        <img src="images/house.avif" alt="Главная">
+        <span>Главная</span>
+      </a>
+
+      <a href="priority.html" class="menu-item">
+        <img src="images/airplane.avif" alt="Priority">
+        <span>Priority</span>
+      </a>
+
+      <a href="bilet.html" class="menu-item">
+        <img src="images/ticket.avif" alt="Купить">
+        <span>Купить</span>
+      </a>
+
+      <a href="helper.html" class="menu-item">
+        <img src="images/question.avif" alt="Информация">
+        <span>Информация</span>
+      </a>
+
+      <a href="auth.html" class="menu-item">
+        <img src="images/card.avif" alt="Профиль">
+        <span>Профиль</span>
+      </a>
+
+    </div>
+  </nav>
+
 
   
 </body>
