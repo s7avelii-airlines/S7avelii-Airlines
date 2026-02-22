@@ -1845,16 +1845,44 @@ function renderProfileFields(){
     fioHeader.textContent = firstName + (lastInitial ? ' ' + lastInitial + '.' : '');
   }
 
-  // avatar
-  const avatarImg = document.getElementById('avatar');
-  const avatarInitial = document.getElementById('avatarInitial');
-  if(currentUser.avatar && avatarImg){
-    const url = (currentUser.avatar.startsWith('http') ? currentUser.avatar : API + currentUser.avatar);
-    avatarImg.src = url; avatarImg.classList.remove('hidden'); if(avatarInitial) avatarInitial.style.display='none';
-  } else {
-    if(avatarImg) avatarImg.classList.add('hidden'); if(avatarInitial) avatarInitial.style.display='block';
-  }
+  const avatarInput = document.getElementById('avatarInput');
+const avatarImg = document.getElementById('avatar');
+const avatarInitial = document.getElementById('avatarInitial');
 
+avatarInput.addEventListener('change', async () => {
+  const file = avatarInput.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('avatar', file);
+
+  try {
+    const res = await fetch('/api/profile/avatar', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (data.avatar) {
+      avatarImg.src = data.avatar + '?v=' + Date.now(); // чтобы кэш не мешал
+      avatarImg.classList.remove('hidden');
+      avatarInitial.style.display = 'none';
+    }
+  } catch (err) {
+    console.error('Avatar upload error:', err);
+  }
+});
+// допустим, currentUser приходит с API /me
+if (currentUser.avatar) {
+  avatarImg.src = currentUser.avatar + '?v=' + Date.now();
+  avatarImg.classList.remove('hidden');
+  avatarInitial.style.display = 'none';
+} else {
+  avatarImg.classList.add('hidden');
+  avatarInitial.style.display = 'block';
+  avatarInitial.textContent = currentUser.name[0].toUpperCase();
+}
+
+  
   // card number
   const cf = document.getElementById('card_field'); if(cf) cf.textContent = currentUser.card_number || '—';
 
