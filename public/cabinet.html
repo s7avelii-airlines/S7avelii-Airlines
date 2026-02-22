@@ -470,21 +470,80 @@ bg-white/80 backdrop-blur-md shadow z-50">
 
 <div class="w-full max-w-md mx-auto px-4 pb-24 space-y-5 bg-[#F4F6F8]">
 
-  <!-- ===== FAMILY ===== -->
-  <div class="bg-white rounded-3xl p-5 flex items-center justify-between">
-    <div class="max-w-[65%]">
-      <div class="text-base font-semibold text-gray-900">
-        Создайте совместный счёт
-      </div>
-      <div class="text-sm text-gray-500 mt-1 leading-snug">
-        Объединяйтесь — копите мили вместе с близкими и друзьями
-      </div>
-      <button class="mt-4 text-sm font-semibold bg-gray-100 px-4 py-2 rounded-2xl">
-        Подробнее
+  <!-- ===== FAMILY / Shared Account ===== -->
+<div class="bg-white rounded-3xl p-5 flex items-center justify-between">
+  <div class="max-w-[65%] space-y-2">
+
+    <div class="text-base font-semibold text-gray-900">
+      Совместный счёт
+    </div>
+
+    <div class="text-sm text-gray-500 leading-snug">
+      Приглашайте друзей и близких, чтобы копить мили вместе
+    </div>
+
+    <!-- список участников -->
+    <div id="familyMembers" class="flex flex-col gap-1 mt-2 text-sm text-gray-700">
+      <!-- динамически заполняется -->
+      <div>Алексей — 500 М</div>
+      <div>Мария — 1200 М</div>
+    </div>
+
+    <!-- сумма всех миль -->
+    <div class="text-sm font-semibold mt-2">
+      Всего миль: <span id="totalMiles">1700</span> М
+    </div>
+
+    <!-- приглашение нового участника -->
+    <div class="flex gap-2 mt-2">
+      <input id="inviteInput" type="text" placeholder="Введите имя пользователя"
+             class="flex-1 px-3 py-1 border border-gray-300 rounded-2xl text-sm" />
+      <button id="inviteBtn" class="text-sm font-semibold bg-gray-100 px-4 py-1 rounded-2xl">
+        Пригласить
       </button>
     </div>
-    <img src="images/СЕМЕЙНЫЙТАРИФНАХ.avif" class="w-20 h-20" alt="">
+
   </div>
+
+  <img src="images/СЕМЕЙНЫЙТАРИФНАХ.avif" class="w-20 h-20" alt="">
+</div>
+
+<script>
+const members = [
+  { name: 'Алексей', miles: 500 },
+  { name: 'Мария', miles: 1200 },
+];
+
+const familyContainer = document.getElementById('familyMembers');
+const totalMilesEl = document.getElementById('totalMiles');
+const inviteInput = document.getElementById('inviteInput');
+const inviteBtn = document.getElementById('inviteBtn');
+
+function renderFamily() {
+  familyContainer.innerHTML = '';
+  let total = 0;
+  members.forEach(m => {
+    total += m.miles;
+    const div = document.createElement('div');
+    div.textContent = `${m.name} — ${m.miles} М`;
+    familyContainer.appendChild(div);
+  });
+  totalMilesEl.textContent = total;
+}
+
+inviteBtn.addEventListener('click', () => {
+  const name = inviteInput.value.trim();
+  if (!name) return alert('Введите имя пользователя');
+  
+  // проверка уникальности и наличие пользователя можно делать через API
+  const newMember = { name, miles: 0 };
+  members.push(newMember);
+  renderFamily();
+  inviteInput.value = '';
+});
+
+renderFamily();
+</script>
 
   <!-- ===== HORIZONTAL CARDS ===== -->
   <div class="flex gap-4 overflow-x-auto pb-1">
