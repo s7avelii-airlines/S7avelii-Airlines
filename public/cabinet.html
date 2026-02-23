@@ -470,79 +470,134 @@ bg-white/80 backdrop-blur-md shadow z-50">
 
 <div class="w-full max-w-md mx-auto px-4 pb-24 space-y-5 bg-[#F4F6F8]">
 
-  <!-- ===== FAMILY / Shared Account ===== -->
-<div class="bg-white rounded-3xl p-5 flex items-center justify-between">
-  <div class="max-w-[65%] space-y-2">
+<!-- ===== FAMILY ===== --> <div class="bg-white rounded-3xl p-5 flex items-center justify-between">
+  <div class="max-w-[65%]"> 
+    <div class="text-base font-semibold text-gray-900"> Создайте совместный счёт </div> 
+    <div class="text-sm text-gray-500 mt-1 leading-snug"> Объединяйтесь — копите мили вместе с близкими и друзьями </div> 
+    <button id="familyOpenBtn" class="mt-4 text-sm font-semibold bg-gray-100 px-4 py-2 rounded-2xl">
+  Подробнее
+</button>
+  </div> 
+  <img src="images/СЕМЕЙНЫЙТАРИФНАХ.avif" class="w-20 h-20" alt=""> 
+</div>
 
-    <div class="text-base font-semibold text-gray-900">
-      Совместный счёт
+
+<!-- ===== FAMILY MODAL ===== -->
+<div id="familyModal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-3xl p-6 w-[90%] max-w-md">
+
+    <div class="flex justify-between items-center mb-4">
+      <div class="text-base font-semibold">Совместный счёт</div>
+      <button id="closeFamilyModal" class="text-gray-400 text-xl">✕</button>
     </div>
 
-    <div class="text-sm text-gray-500 leading-snug">
-      Приглашайте друзей и близких, чтобы копить мили вместе
-    </div>
-
-    <!-- список участников -->
-    <div id="familyMembers" class="flex flex-col gap-1 mt-2 text-sm text-gray-700">
-      <!-- динамически заполняется -->
-      <div>Алексей — 500 М</div>
-      <div>Мария — 1200 М</div>
-    </div>
-
-    <!-- сумма всех миль -->
-    <div class="text-sm font-semibold mt-2">
-      Всего миль: <span id="totalMiles">1700</span> М
-    </div>
-
-    <!-- приглашение нового участника -->
-    <div class="flex gap-2 mt-2">
-      <input id="inviteInput" type="text" placeholder="Введите имя пользователя"
-             class="flex-1 px-3 py-1 border border-gray-300 rounded-2xl text-sm" />
-      <button id="inviteBtn" class="text-sm font-semibold bg-gray-100 px-4 py-1 rounded-2xl">
-        Пригласить
+    <!-- состояние если счёта нет -->
+    <div id="familyNoAccount" class="space-y-4">
+      <div class="text-sm text-gray-500">
+        У вас пока нет совместного счёта
+      </div>
+      <button id="createFamilyAccount"
+        class="w-full bg-black text-white py-2 rounded-2xl text-sm font-semibold">
+        Открыть совместный счёт
       </button>
     </div>
 
-  </div>
+    <!-- состояние если счёт есть -->
+    <div id="familyHasAccount" class="hidden space-y-4">
 
-  <img src="images/СЕМЕЙНЫЙТАРИФНАХ.avif" class="w-20 h-20" alt="">
+      <div id="familyMembersList" class="text-sm space-y-1"></div>
+
+      <div class="text-sm font-semibold">
+        Всего миль: <span id="familyTotalMiles">0</span> М
+      </div>
+
+      <div class="flex gap-2">
+        <input id="loyaltyInput"
+          type="text"
+          placeholder="Введите номер карты лояльности"
+          class="flex-1 px-3 py-2 border border-gray-300 rounded-2xl text-sm" />
+        <button id="addMemberBtn"
+          class="bg-gray-100 px-4 py-2 rounded-2xl text-sm font-semibold">
+          +
+        </button>
+      </div>
+
+    </div>
+
+  </div>
 </div>
 
+  
 <script>
-const members = [
-  { name: 'Алексей', miles: 500 },
-  { name: 'Мария', miles: 1200 },
-];
+const familyModal = document.getElementById('familyModal');
+const openBtn = document.getElementById('familyOpenBtn');
+const closeBtn = document.getElementById('closeFamilyModal');
 
-const familyContainer = document.getElementById('familyMembers');
-const totalMilesEl = document.getElementById('totalMiles');
-const inviteInput = document.getElementById('inviteInput');
-const inviteBtn = document.getElementById('inviteBtn');
+const noAccount = document.getElementById('familyNoAccount');
+const hasAccount = document.getElementById('familyHasAccount');
 
-function renderFamily() {
-  familyContainer.innerHTML = '';
+const createBtn = document.getElementById('createFamilyAccount');
+const addMemberBtn = document.getElementById('addMemberBtn');
+
+const membersList = document.getElementById('familyMembersList');
+const totalMilesEl = document.getElementById('familyTotalMiles');
+
+openBtn.onclick = async () => {
+  familyModal.classList.remove('hidden');
+  familyModal.classList.add('flex');
+
+  const res = await fetch('/api/family');
+  const data = await res.json();
+
+  if (!data.exists) {
+    noAccount.classList.remove('hidden');
+    hasAccount.classList.add('hidden');
+  } else {
+    renderFamily(data);
+  }
+};
+
+closeBtn.onclick = () => {
+  familyModal.classList.add('hidden');
+  familyModal.classList.remove('flex');
+};
+
+createBtn.onclick = async () => {
+  const res = await fetch('/api/family/create', { method: 'POST' });
+  const data = await res.json();
+  renderFamily(data);
+};
+
+addMemberBtn.onclick = async () => {
+  const loyalty = document.getElementById('loyaltyInput').value.trim();
+  if (!loyalty) return;
+
+  const res = await fetch('/api/family/add', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ loyalty })
+  });
+
+  const data = await res.json();
+  renderFamily(data);
+};
+
+function renderFamily(data) {
+  noAccount.classList.add('hidden');
+  hasAccount.classList.remove('hidden');
+
+  membersList.innerHTML = '';
   let total = 0;
-  members.forEach(m => {
+
+  data.members.forEach(m => {
     total += m.miles;
     const div = document.createElement('div');
     div.textContent = `${m.name} — ${m.miles} М`;
-    familyContainer.appendChild(div);
+    membersList.appendChild(div);
   });
+
   totalMilesEl.textContent = total;
 }
-
-inviteBtn.addEventListener('click', () => {
-  const name = inviteInput.value.trim();
-  if (!name) return alert('Введите имя пользователя');
-  
-  // проверка уникальности и наличие пользователя можно делать через API
-  const newMember = { name, miles: 0 };
-  members.push(newMember);
-  renderFamily();
-  inviteInput.value = '';
-});
-
-renderFamily();
 </script>
 
   <!-- ===== HORIZONTAL CARDS ===== -->
