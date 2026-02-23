@@ -604,12 +604,86 @@ function renderFamily(data) {
   <div class="flex gap-4 overflow-x-auto pb-1">
 
     <!-- BALANCE -->
-    <div class="min-w-[180px] bg-white rounded-3xl p-5 shrink-0">
-      <img src="images/миллиондвестибаланс.avif" class="w-14 h-14 mb-4" alt="">
-      <div class="text-sm text-gray-400">Баланс</div>
-      <div class="text-2xl font-extrabold mt-1" id="bonusMiles"> </div>
+<div id="balanceCard" class="min-w-[180px] bg-white rounded-3xl p-5 shrink-0 cursor-pointer">
+  <img src="images/миллиондвестибаланс.avif" class="w-14 h-14 mb-4" alt="">
+  <div class="text-sm text-gray-400">Баланс</div>
+  <div class="text-2xl font-extrabold mt-1" id="bonusMiles"></div>
+</div>
+
+
+<!-- ===== BALANCE MODAL ===== -->
+<div id="balanceModal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-3xl p-6 w-[90%] max-w-md">
+
+    <div class="flex justify-between items-center mb-4">
+      <div class="text-base font-semibold">Ваш баланс</div>
+      <button id="closeBalanceModal" class="text-gray-400 text-xl">✕</button>
     </div>
 
+    <div class="text-3xl font-extrabold mb-2" id="modalMiles">0 М</div>
+
+    <div class="text-sm mb-2">
+      Статус: <span id="statusLabel" class="font-semibold"></span>
+    </div>
+
+    <!-- шкала -->
+    <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+      <div id="statusBar" class="h-full bg-black transition-all duration-300" style="width:0%"></div>
+    </div>
+
+    <div class="text-xs text-gray-400 mt-2">
+      0 — Classic — 5000 — VIP — 20000
+    </div>
+
+  </div>
+</div>
+
+<script>
+const balanceCard = document.getElementById('balanceCard');
+const balanceModal = document.getElementById('balanceModal');
+const closeBalanceModal = document.getElementById('closeBalanceModal');
+
+const modalMiles = document.getElementById('modalMiles');
+const statusLabel = document.getElementById('statusLabel');
+const statusBar = document.getElementById('statusBar');
+
+balanceCard.onclick = async () => {
+  balanceModal.classList.remove('hidden');
+  balanceModal.classList.add('flex');
+
+  const res = await fetch('/api/profile'); // твой API, который возвращает пользователя
+  const user = await res.json();
+
+  const miles = user.miles || 0;
+
+  modalMiles.textContent = miles + ' М';
+
+  // логика статуса
+  let status = 'Classic';
+  let percent = 0;
+
+  if (miles >= 20000) {
+    status = 'VIP';
+    percent = 100;
+  } else if (miles >= 5000) {
+    status = 'VIP';
+    percent = ((miles - 5000) / 15000) * 100;
+  } else {
+    status = 'Classic';
+    percent = (miles / 5000) * 100;
+  }
+
+  statusLabel.textContent = status;
+  statusBar.style.width = percent + '%';
+};
+
+closeBalanceModal.onclick = () => {
+  balanceModal.classList.add('hidden');
+  balanceModal.classList.remove('flex');
+};
+  </script>
+    
+    
     <!-- MANAGE -->
     <div class="min-w-[220px] bg-white rounded-3xl p-5 shrink-0 open-manage-modal">
       <img src="images/кошельдлякрутых.avif" class="w-16 h-16 mb-4" alt="">
