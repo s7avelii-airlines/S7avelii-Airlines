@@ -686,15 +686,89 @@ closeBalanceModal.onclick = () => {
     
     <!-- MANAGE -->
     <div class="min-w-[220px] bg-white rounded-3xl p-5 shrink-0 open-manage-modal">
-      <img src="images/кошельдлякрутых.avif" class="w-16 h-16 mb-4" alt="">
-      <div class="text-lg font-semibold">
-        Управлять милями
-      </div>
-      <div class="text-sm text-gray-500 mt-1">
-        Покупка или перевод
+  <img src="images/кошельдлякрутых.avif" class="w-16 h-16 mb-4" alt="">
+  <div class="text-lg font-semibold">
+    Управлять милями
+  </div>
+  <div class="text-sm text-gray-500 mt-1">
+    Покупка или перевод
+  </div>
+</div>
+
+    <!-- ===== MANAGE MILES MODAL ===== -->
+<div id="manageModal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-3xl p-6 w-[90%] max-w-md">
+
+    <div class="flex justify-between items-center mb-4">
+      <div class="text-base font-semibold">Управление милями</div>
+      <button id="closeManageModal" class="text-gray-400 text-xl">✕</button>
+    </div>
+
+    <!-- баланс -->
+    <div class="mb-4">
+      <div class="text-sm text-gray-400">Ваш баланс</div>
+      <div id="manageBalance" class="text-2xl font-extrabold mt-1">0 М</div>
+    </div>
+
+    <!-- последние начисления -->
+    <div>
+      <div class="text-sm font-semibold mb-2">Последние начисления</div>
+      <div id="manageTransactions" class="space-y-2 text-sm">
+        <!-- сюда подгружаются операции -->
       </div>
     </div>
 
+  </div>
+</div>
+
+
+<script>
+const manageCard = document.querySelector('.open-manage-modal');
+const manageModal = document.getElementById('manageModal');
+const closeManageModal = document.getElementById('closeManageModal');
+
+const manageBalance = document.getElementById('manageBalance');
+const manageTransactions = document.getElementById('manageTransactions');
+
+manageCard.onclick = async () => {
+  manageModal.classList.remove('hidden');
+  manageModal.classList.add('flex');
+
+  const res = await fetch('/api/profile/full'); 
+  // должен вернуть: { miles: number, transactions: [] }
+
+  const data = await res.json();
+
+  manageBalance.textContent = (data.miles || 0) + ' М';
+
+  manageTransactions.innerHTML = '';
+
+  if (!data.transactions || data.transactions.length === 0) {
+    manageTransactions.innerHTML = '<div class="text-gray-400">Начислений пока нет</div>';
+    return;
+  }
+
+  data.transactions.forEach(t => {
+    const row = document.createElement('div');
+    row.className = 'flex justify-between border-b pb-1';
+
+    row.innerHTML = `
+      <span>${t.title}</span>
+      <span class="font-semibold ${t.miles > 0 ? 'text-green-600' : 'text-red-600'}">
+        ${t.miles > 0 ? '+' : ''}${t.miles} М
+      </span>
+    `;
+
+    manageTransactions.appendChild(row);
+  });
+};
+
+closeManageModal.onclick = () => {
+  manageModal.classList.add('hidden');
+  manageModal.classList.remove('flex');
+};
+  </script>
+    
     <!-- DONATE -->
     <div class="min-w-[220px] bg-white rounded-3xl p-5 shrink-0 open-donate-modal">
       <img src="images/сердечкосмилейнах.avif" class="w-16 h-16 mb-4" alt="">
@@ -777,7 +851,7 @@ closeBalanceModal.onclick = () => {
 
       <div class="flex gap-4 overflow-x-auto">
         <div class="min-w-[180px]">
-          <img src="images/photo_5382275805452826341_w.avif" class="rounded-2xl mb-3 w-full" alt="">
+          <img src="images/photo_5197610388026424051_y.avif" class="rounded-2xl mb-3 w-full" alt="">
           <div class="text-base font-semibold">
             Необычные колаборации
           </div>
